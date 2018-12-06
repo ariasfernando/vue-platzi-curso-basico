@@ -8,21 +8,21 @@
           </slot>
           <h4>Code</h4>
           <div class="modal-body">
-            <slot name="body" v-if="shouldDisplay('html')">
+            <slot name="body" v-if="shouldDisplay === 'html'">
               <b-tabs>
-                <b-tab title="HTML">
+                <b-tab :title="html.title">
                   <div class="html_minify_toggle pull-right">
                     <label for="htmlMinify">Minify Code</label>
-                    <toggle-button :value="this.minified.normal_html.toggle" :sync="false" id="htmlMinify" active-color="#78DCD6" @change="htmlMinifyChange('normal_html')"></toggle-button>
+                    <toggle-button :value="html.toggle" :sync="false" id="htmlMinify" active-color="#78DCD6" @change="htmlMinifyChange()" />
                   </div>
-                  <textarea ref="normal_html" v-html="this.minified.normal_html.output"></textarea>
+                  <textarea :ref="textareaType" v-model="html.output" readonly />
                 </b-tab>
               </b-tabs>
             </slot>
-            <slot name="body" v-if="shouldDisplay('plaintext')">
+            <slot name="body" v-if="shouldDisplay === 'plaintext'">
               <b-tabs>
                 <b-tab title="Plaintext">
-                  <textarea ref="plaintext" v-html="this.plainText"></textarea>
+                  <textarea ref="plaintext" v-html="plainText" readonly />
                 </b-tab>
               </b-tabs>
             </slot>
@@ -39,27 +39,30 @@
 </template>
 
 <script>
+  import _ from 'lodash'
   import BootstrapVue from 'bootstrap-vue';
   import CopyToClipboard from './partials/CopyToClipboard.vue';
+  import ModalMixin from './partials/ModalMixin.js'
 
   export default {
     components: {
       BootstrapVue,
       CopyToClipboard,
     },
+    mixins: [ ModalMixin ],
     data () {
       return {
+        shouldDisplay: 'html',
         textareaType: 'normal_html',
         plainText: '',
-        minified: {
-          normal_html: {
-            toggle: false,
-            output: '',
-            initial_html: '',
-            minified_html: ''
+        html: {
+          title: '',
+          toggle: false,
+          output: '',
+          initial_html: '',
+          minified_html: ''
           }
         }
-      }
     },
     props: {
       type: {
@@ -73,27 +76,36 @@
       },
       campaign() {
         return this.$store.state.campaign.campaign;
-      },
-      code() {
-        if (this.type === 'plaintext') {
-          return this.$store.state.campaign.campaign.campaign_data.plain_text;
-        } else if (this.type === 'html_minified') {
-          return this.$options.filters.charConvert(this.$store.state.campaign.campaign.campaign_data.body_html_minified);
-        }
-        return this.$store.state.campaign.campaign.campaign_data.body_html;
       }
     },
     watch: {
       campaign: {
         handler: function(value) {
-          this.textareaType =  this.type === 'html' ? 'normal_html' : 'plaintext';
-          this.minified.normal_html.initial_html = value.campaign_data.body_html;
-          this.minified.normal_html.minified_html = this.$options.filters.charConvert(value.campaign_data.body_html_minified);
-          this.minified.normal_html.output = this.minified.normal_html.initial_html;
+          this.textareaType = this.type;
+          if (this.type === 'plaintext') {
           this.plainText = value.campaign_data.plain_text;
+            this.shouldDisplay = 'plaintext';
+          } else {
+            let fieldOnCampaign = this.type === 'normal_html' ? 'body_html' : this.type;
+            this.shouldDisplay = 'html';
+            this.html.title = this.type.replace('_', ' ').toUpperCase();
+            this.html.initial_html = this.$options.filters.charConvert(value.campaign_data[fieldOnCampaign]);
+            this.html.minified_html = this.$options.filters.charConvert(value.campaign_data[fieldOnCampaign + '_minified']);
+            this.html.output = this.html.initial_html;
+          }
         },
         deep: true
       },
+      modalCode(value) {
+        if (!value) {
+          // Reset values when close the modal
+          this.html.title = '';
+          this.html.toggle = false;
+          this.html.output = '';
+          this.html.initial_html = '';
+          this.html.minified_html = '';
+        }
+      }
     },
     methods: {
       close () {
@@ -103,21 +115,12 @@
         this.$refs[this.textareaType].select();
         document.execCommand('copy');
       },
-      htmlMinifyChange(key) {
-        this.minified[key].toggle = !this.minified[key].toggle;
-        this.minified[key].output = this.minified[key].initial_html;
-        if(this.minified[key].toggle){
-          this.minified[key].output = this.minified[key].minified_html;
+      htmlMinifyChange() {
+        this.html.toggle = !this.html.toggle;
+        this.html.output = this.html.initial_html;
+        if (this.html.toggle) {
+          this.html.output = this.html.minified_html;
         }
-      },
-      shouldDisplay(key) {
-        return this.type === key;
-      }
-    },
-    filters: {
-      charConvert: function (value) {
-        if (!value) return '';
-        return value.replace(/&amp;/g, '&');
       }
     }
   };

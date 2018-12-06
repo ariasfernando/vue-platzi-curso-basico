@@ -1,3 +1,4 @@
+import { hooks } from 'customer';
 /*
 * -- CAMPAIGN CLEANER ---
 */
@@ -32,7 +33,9 @@ export default {
       'data-mce-style',
       'id',
       'module',
-      'context'
+      'column',
+      'draggable',
+      'context',
     ],
     blockSelectors: [
       '.module-toolbar',
@@ -49,6 +52,10 @@ export default {
 
     // Clone content
     $cleanedHtml = $canvas.clone(true);
+
+    if (typeof hooks === 'object' && _.has(hooks, 'campaignCleaner.preCleanHook')) {
+      $cleanedHtml = hooks.campaignCleaner.preCleanHook($cleanedHtml);
+    }
 
     // Remove attr tags function clean
     const $removeAttr = this.removeDataHtml($cleanedHtml, this.cleanOptions.attrSelectors, 'attr');
@@ -69,7 +76,7 @@ export default {
       $cleanedHtml.find(selector).remove();
     });
 
-    // Remove wrappers
+    // Remove wrappers element ( .stx-wrapper )
     $cleanedHtml = Application.utils.removeWrappers($cleanedHtml);
 
     // Remove every class starting with "stx-"
@@ -80,6 +87,9 @@ export default {
 
     // Remove attr style if it's empty.
     $cleanedHtml.find("[style='']").removeAttr('style');
+
+    // Remove attr bgcolor if it's empty.
+    $cleanedHtml.find("[bgcolor='']").removeAttr('bgcolor');
 
     // Remove tooltip
     $cleanedHtml.find('.actions-buttons-tooltip').remove();
@@ -111,31 +121,39 @@ export default {
         // Remove data-tag-before
         $element.removeAttr('data-tag-before');
       });
-    };
+    }
 
     // Convert and add data-persist-styles to css property inline in styles attribute
     if ($cleanedHtml.find('[data-persist-styles]').length) {
-      const $toPersistArray = $cleanedHtml.find("[data-persist-styles]");
+      const $toPersistArray = $cleanedHtml.find('[data-persist-styles]');
       $.each($toPersistArray, (i, element) => {
         const $element = $(element);
         // Add inline data-saved CSS hacks
         this.addCSSHacks(
           $element,
-          Application.utils.objToCss($element.data('persist-styles'))
+          Application.utils.objToCss($element.data('persist-styles')),
         );
         $element.removeAttr('data-persist-styles');
       });
     }
+    // Remove Comment Divs
+    $cleanedHtml = this.removeCommentDivs($cleanedHtml);
 
     // Skip <% %> Tags
     if ($cleanedHtml.find('a').length) {
       const $links = $cleanedHtml.find('a');
       $.each($links, (i, element) => {
         const $element = $(element);
-        const href = $element.attr("href");
-        $element.attr("href", href.replace("<%","LT%").replace("%>","%GT"));
+        const href = $element.attr('href');
+        if (href) {
+          $element.attr('href', href.replace('<%', 'LT%').replace('%>', '%GT'));
+        } else {
+          $element.replaceWith($element.html());
+        }
       });
     }
+
+    $cleanedHtml = this.addMediaQueryHack($cleanedHtml);
 
     // Convert special chars to html entities ---
     $cleanedHtml = this.encodeHtmlEntities($cleanedHtml);
@@ -167,20 +185,18 @@ export default {
 
   addCSSHacks($target, newStyles) {
       newStyles.replace(';','');
-      var originalStyles = $target.attr('style');
-      var originalStylesArray = originalStyles.split(';');
+    const originalStyles = $target.attr('style');
+    let originalStylesArray = originalStyles.split(';');
 
       if(!originalStyles.includes(newStyles)){
           originalStylesArray.push(newStyles);
       }
 
-      for (var i = 0; i < originalStylesArray.length; i++) {
+    for (let i = 0; i < originalStylesArray.length; i++) {
           originalStylesArray[i] = originalStylesArray[i].replace(' ','');
       }
 
-      originalStylesArray = originalStylesArray.filter(function(item) {
-          return item !== '';
-      })
+    originalStylesArray = originalStylesArray.filter(item => item !== '');
       newStyles = originalStylesArray.join('; ');
       $target.attr('style', newStyles);
   },
@@ -195,6 +211,14 @@ export default {
       }
     });
 
+    return $cleanedHtml;
+  },
+
+  removeCommentDivs($cleanedHtml) {
+    const all = $cleanedHtml.find('.st-comment');
+    $.map(all, (el) => {
+      $(el).replaceWith($(el).html());
+    });
     return $cleanedHtml;
   },
 
@@ -231,6 +255,7 @@ export default {
     const codesToCharsTags = {
       '&quot;': "'",
       '&#039;': "'",
+      '<!---->': '',
     };
 
     const rex = new RegExp('(<[^>]*>)|(&[a-zA-Z0-9#]+;)', 'gm');
@@ -458,6 +483,26 @@ export default {
     });
 
     return str;
-  }
-
+  },
+  /*
+  * Hack for devices with media queries unsupported
+  */
+  addMediaQueryHack(htmlStructure) {
+    const width = htmlStructure.find('.st-wrapper-table').width() || 600;
+    if (!htmlStructure.hasClass('st-hide-hack')) {
+      const $hack = $(`<tr>
+              <td class="st-hide-hack">
+                  <table cellpadding="0" cellspacing="0" border="0" align="center" width="${width}">
+                      <tr>
+                          <td cellpadding="0" cellspacing="0" border="0" height="1" style="background-color:#ffffff; line-height:1px; height: 1px; min-width: ${width}px;">
+                              <img src="${Application.globals.baseUrl}/_common/images/en_us/spacer.gif" height="1" width="${width}" style="max-height:1px; min-height:1px; display:block; width:${width}px; min-width:${width}px; border: 0;"/>
+                          </td>
+                      </tr>
+                  </table>
+              </td>
+          </tr>`)[0];
+      htmlStructure.find('.st-wrapper-table').append($hack);
+    }
+    return htmlStructure;
+  },
 };

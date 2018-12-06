@@ -31,11 +31,15 @@ class Restore extends Command
     {
         $options = $this->option();
         $email = is_null($options["email"])
-            ? $this->ask('What is the user email that you want restore?')
+            ? $this->ask('What is the user email that you want to restore?')
             : $options["email"];
 
         if ($email == "") {
             return $this->error('The email is required.');
+        }
+
+        if (User::where('email', '=', $email)->first()) {
+            return $this->error('There\'s already an active user with this email.');
         }
 
         $user_data = User::onlyTrashed()->where('email', '=', $email)->first();

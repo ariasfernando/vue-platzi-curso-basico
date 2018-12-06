@@ -15,6 +15,7 @@
           :terms="terms"
           @add-search-tag="addSearchTag"
           @add-search-term="addSearchTerm"
+          @add-filter-param="addFilterParam"
           @update-campaigns="updateCampaigns"
           @reset-page="resetPage"
           @reset-search="resetSearch"
@@ -31,6 +32,11 @@
     <div class="dash-campaigns">
       <div class="row" id="draft-emails-campaign">
         <div class="col-xs-12">
+          <filter-result
+            :filters="filters"
+            @remove-filter-term="removeFilterTerm"
+          >
+          </filter-result>
           <search-result
             :tags="tags"
             :terms="terms"
@@ -58,6 +64,11 @@
       </div>
       <div class="row" id="finished-campaign">
         <div class="col-xs-12">
+          <filter-result
+            :filters="filters"
+            @remove-filter-term="removeFilterTerm"
+          >
+          </filter-result>
           <search-result
             :tags="tags"
             :terms="terms"
@@ -86,6 +97,11 @@
       </div>
       <div class="row" v-if="config.enable_templating" id="templates-campaign">
         <div class="col-xs-12">
+          <filter-result
+            :filters="filters"
+            @remove-filter-term="removeFilterTerm"
+          >
+          </filter-result>
           <search-result
             :tags="tags"
             :terms="terms"
@@ -131,6 +147,7 @@
   import TemplateCampaigns from './TemplateCampaigns.vue';
   import DashboardMenu from './DashboardMenu.vue';
   import SearchResult from './partials/SearchResult.vue';
+  import FilterResult from './partials/FilterResult.vue';
   import Spinner from '../common/Spinner.vue';
   import ModalProof from '../campaign/modals/ModalProof.vue';
   import ModalProofTrack from '../campaign/modals/ModalProofTrack.vue';
@@ -145,12 +162,13 @@
       DashboardMenu,
       Spinner,
       SearchResult,
+      FilterResult,
       ModalProof,
       ModalProofTrack
     },
     created: function() {
       this.updateCampaigns();
-  
+
       switch(this.flashMessage) {
         case 'campaign_lock':
           this.$root.$toast(
@@ -192,6 +210,7 @@
           finished: [],
           template: []
         },
+        filters: [],
         terms: [],
         tags: [],
         pagination: {
@@ -246,6 +265,14 @@
           this.updateCampaigns();
         }
       },
+      addFilterParam: function(filter) {
+        if (this.getIndex(this.filters, filter) < 0) {
+          this.filters = [];
+          this.filters.push(filter);
+          this.resetPage();
+          this.updateCampaigns();
+        }
+      },
       addSearchTerm: function(term) {
         if (this.checkTagLimit() && term.length > 0 && this.getIndex(this.terms, term) < 0) {
           this.search = '';
@@ -277,7 +304,8 @@
           page: this.pagination[type].page,
           tags: this.tags,
           terms: this.terms,
-          sort: this.pagination[type].sortBy
+          sort: this.pagination[type].sortBy,
+          filters: this.filters
         };
 
         let url = '/dashboard/campaigns/';
@@ -304,6 +332,12 @@
       removeSearchTerm: function(term) {
         const index = this.getIndex(this.terms, term);
         this.terms.splice(index, 1);
+        this.resetPage();
+        this.updateCampaigns();
+      },
+      removeFilterTerm: function(filter) {
+        const index = this.getIndex(this.filters, filter);
+        this.filters.splice(index, 1);
         this.resetPage();
         this.updateCampaigns();
       },

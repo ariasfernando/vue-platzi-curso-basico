@@ -1,10 +1,12 @@
-import configService from '../services/config'
+/* eslint no-console: 0 */
+
+import configService from '../services/config';
 
 function configStore() {
   return {
     namespaced: true,
     state: {
-      config: {}
+      config: {},
     },
     getters: {
       config(state) {
@@ -15,7 +17,7 @@ function configStore() {
       loadConfigData(state, data) {
         state.config[data[0]] = data[1];
       },
-      error(err) {
+      error(state, err) {
         console.error(err);
       },
     },

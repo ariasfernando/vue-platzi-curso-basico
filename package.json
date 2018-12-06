@@ -10,6 +10,7 @@
   "license": "Propietary",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
     "bootstrap": "^3.3.7",
     "bootstrap-colorpicker": "2.5.2",
     "bootstrap-select": "^1.7.5",
@@ -38,6 +39,7 @@
     "less-loader": "^4.1.0",
     "lodash": "^4.17.4",
     "magnific-popup": "^1.1.0",
+    "malihu-custom-scrollbar-plugin": "^3.1.5",
     "node-sass": "^4.9.3",
     "noty": "^2.3.8",
     "npm": "^5.8.0",
@@ -46,7 +48,7 @@
     "popper.js": "^1.14.0",
     "q": "^1.5.0",
     "readdir": "0.0.13",
-    "stensul-sie-vue": "0.0.45",
+    "stensul-sie-vue": "0.0.46",
     "stringify": "^5.1.0",
     "tinymce": "~4.2.1",
     "tinymce-vue-2": "0.0.2",
@@ -57,6 +59,7 @@
     "vue": "^2.5.15",
     "vue-checkbox-radio": "^0.6.0",
     "vue-clickaway": "^2.1.0",
+    "vue-codemirror": "^4.0.5",
     "vue-color": "^2.4.3",
     "vue-debug": "0.0.1",
     "vue-easy-toast": "^1.0.4",
@@ -90,6 +93,7 @@
     "cz-conventional-changelog": "^2.0.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
+    "eslint-import-resolver-webpack": "^0.10.1",
     "eslint-plugin-import": "^2.3.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-vue": "^5.0.0-beta.3",
@@ -99,11 +103,19 @@
     "jest-vue-preprocessor": "^1.4.0",
     "nock": "^9.3.3",
     "pre-commit": "^1.2.2",
-    "stackup": "1.0.1"
+    "pre-commit-with-lint": "^1.2.5",
+    "stackup": "1.0.1",
+    "stylelint": "^9.6.0"
   },
-  "pre-commit": [
-    "cover"
-  ],
+  "pre-commit": {
+    "lint": {
+      "stylelint": ".(s?css|less)$",
+      "eslint": ".(js|vue)$"
+    },
+    "run": [
+      "cover"
+    ]
+  },
   "jest": {
     "setupFiles": [
       "./.jestrc.js"
@@ -138,6 +150,7 @@
     "production": "NODE_ENV=production webpack --progress --hide-modules --config=./webpack.config.js",
     "watch:test": "npm t -- --watch",
     "cover": "npm t -- --coverage",
-    "test": "jest"
+    "test": "jest",
+    "eslint": "./node_modules/.bin/eslint ./resources/**/*.{js,vue} || echo \"\n$(tput setaf 1) CORRECT CODE IN THE ABOVE FILES AND TRY AGAIN $(tput sgr 0)\n\""
   }
 }

@@ -3,7 +3,7 @@ import campaignSettings from './campaignSettings.vue';
 
 export default {
   name: 'style-image-editor',
-  title: 'style Image Editor',
+  title: 'Image Editable',
   version: '0.0.11',
   author: 'ximena.garcia@stensul.com',
   target: ['image'],

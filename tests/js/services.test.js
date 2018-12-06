@@ -1,6 +1,7 @@
 /* eslint-env node, jest, es6 */
 /* eslint import/no-unresolved: 0 */
 /* eslint import/extensions: 0 */
+/* eslint max-nested-callbacks: 0 */
 /* global Application */
 
 import nock from 'nock';
@@ -15,7 +16,7 @@ process.env.APP_ENV = 'test';
  * == Test: Services
  */
 describe('== Services ==', () => {
-  let baseUrl;
+  let baseUrl = '';
   beforeAll(() => {
     baseUrl = process.env.APP_BASE_URL || Application.globals.baseUrl;
   });

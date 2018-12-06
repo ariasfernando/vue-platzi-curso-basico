@@ -40,7 +40,7 @@
             </tr>
             </thead>
             <tbody v-if="ready">
-            <tr v-for="(module, id) in modules" :data-module="id">
+            <tr v-for="(module, id) in modules" :data-module="id" :key="id">
               <td :title="module.title">{{ module.title }}</td>
               <td :title="module.type">{{ module.type }}</td>
               <td :title="module.status">{{ module.status }}</td>
