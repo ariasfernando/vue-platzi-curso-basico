@@ -121,39 +121,7 @@
       stylesProps() {
         return {
           library: this.library,
-          fontsOptions: this.fontsOptions,
-          listLinkDecoration: this.listLinkDecoration,
         };
-      },
-      fontsOptions() {
-        const fontsOptions = [];
-        const temp = {};
-        _.each(this.$_app.config.fonts, (group, index) => {
-          group.map(font => {
-            if (index === 'custom') {
-              temp[font.name] = font.name;
-            } else {
-              temp[font] = font;
-            }
-          });
-        });
-        Object.keys(temp).forEach((name) => {
-          fontsOptions.push({
-            value: name,
-            label: name,
-          });
-        });
-        return fontsOptions;
-      },
-      listLinkDecoration() {
-        return [
-          {
-            label: 'Underline',
-            enable: 'underline',
-            disabled: 'none',
-            icon: 'fa fa-underline',
-          },
-        ];
       },
     },
     methods: {
