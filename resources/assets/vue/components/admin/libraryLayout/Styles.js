@@ -13,7 +13,7 @@ export default [
       },
       {
         name: 'templateMobileWidth',
-        aclName: 'library-advance-settings',
+        aclName: 'library-basic-settings',
         path: 'library.config',
         type: 'stui-input-number',
         settingSlot: 'setting-half',
@@ -29,35 +29,6 @@ export default [
         label: 'Template BG',
       },
       {
-        name: 'fontFamily',
-        aclName: 'library-basic-settings',
-        path: 'library.config',
-        type: 'stui-select',
-        isNumbered: true,
-        multiple: true,
-        getSplit: ', ',
-        setJoin: ', ',
-        listPath: 'fontsOptions',
-        label: 'Font Family',
-      },
-      {
-        name: 'linkColor',
-        path: 'library.config',
-        type: 'stui-color-picker',
-        aclName: 'library-basic-settings',
-        settingSlot: 'setting-half',
-        label: 'Link Color',
-      },
-      {
-        name: 'linkDecoration',
-        aclName: 'library-basic-settings',
-        path: 'library.config',
-        type: 'stui-icon-checklist',
-        listPath: 'listLinkDecoration',
-        settingSlot: 'setting-half',
-        label: 'Link Decoration',
-      },
-      {
         name: 'externalCssLink',
         aclName: 'library-basic-settings',
         path: 'library.config',
@@ -67,7 +38,7 @@ export default [
       },
       {
         name: 'colorPalettes',
-        aclName: 'library-basic-settings',
+        aclName: 'library-advance-settings',
         path: 'library.config',
         type: 'stui-input-text',
         placeholder:
