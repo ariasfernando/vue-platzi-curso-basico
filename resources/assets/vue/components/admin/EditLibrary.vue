@@ -26,21 +26,21 @@
       </div>
     </div>
     <div v-if="ready" class="row">
-      <column-bar-container side="left" class="edit-library-column">
+      <column-bar-container class="edit-library-column">
         <label-item-container v-b-toggle.library-settings label="Settings" icon="glyphicon-cog" />
         <b-collapse id="library-settings" visible accordion="library">
           <b-card class="control">
-            <settings-group-container :settings-group="settingsLayout" :get-value="getValue" :set-value="setValue" />
+            <settings-group-container :settings-layout="settingsLayout" :settings="settingsProps" @set-value="setValue" />
           </b-card>
         </b-collapse>
         <label-item-container v-b-toggle.library-styles label="Styles" icon="glyphicon-cog" />
         <b-collapse id="library-styles" accordion="library">
           <b-card class="control">
-            <settings-group-container :settings-group="stylesLayout" :get-value="getValue" :set-value="setValue" />
+            <settings-group-container :settings-layout="stylesLayout" :settings="stylesProps" @set-value="setValue" @openPropietaryStyles="openPropietaryStyles" />
           </b-card>
         </b-collapse>
       </column-bar-container>
-      <column-bar-container side="left" class="edit-library-column is-center-column">
+      <column-bar-container class="edit-library-column is-center-column">
         <dummy-module :config="library.config" :building-mode="buildingMode" />
       </column-bar-container>
     </div>
@@ -112,11 +112,24 @@
       stylesLayout() {
         return stylesLayout;
       },
+      settingsProps() {
+        return {
+          library: this.library,
+          campaignConfig: this.campaignConfig,
+        };
+      },
+      stylesProps() {
+        return {
+          library: this.library,
+          fontsOptions: this.fontsOptions,
+          listLinkDecoration: this.listLinkDecoration,
+        };
+      },
       fontsOptions() {
         const fontsOptions = [];
         const temp = {};
         _.each(this.$_app.config.fonts, (group, index) => {
-          group.map((font) => {
+          group.map(font => {
             if (index === 'custom') {
               temp[font.name] = font.name;
             } else {
@@ -144,24 +157,6 @@
       },
     },
     methods: {
-      getSettings(settings) {
-        return settings.filter(this.getDependsOn);
-      },
-      getStyles(styles) {
-        return styles.filter(this.getDependsOn);
-      },
-      getDependsOn(element) {
-        let show = true;
-        _.forEach(element.dependsOn, (dependOn) => {
-          if (!_.get(this, dependOn.path)) {
-            show = false;
-          }
-        });
-        return show;
-      },
-      getValue(path) {
-        return _.get(this, path);
-      },
       setValue({ value, path, name }) {
         const completePath = (path !== undefined ? `${path}.` : '') + name;
         _.set(this, completePath, value);

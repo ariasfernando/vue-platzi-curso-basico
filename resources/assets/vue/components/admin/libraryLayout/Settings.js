@@ -4,6 +4,7 @@ export default [
     settings: [
       {
         name: 'name',
+        aclName: 'library-basic-settings',
         path: 'library',
         type: 'stui-input-text',
         validate: 'required',
@@ -12,6 +13,7 @@ export default [
       },
       {
         name: 'description',
+        aclName: 'library-basic-settings',
         path: 'library',
         type: 'stui-input-text',
         placeholder: 'Enter description here.',
@@ -19,6 +21,7 @@ export default [
       },
       {
         name: 'esp',
+        aclName: 'library-basic-settings',
         path: 'library.config',
         type: 'stui-toggle-button',
         settingSlot: 'setting-right',
@@ -26,6 +29,7 @@ export default [
       },
       {
         name: 'espProvider',
+        aclName: 'library-basic-settings',
         path: 'library.config',
         listPath: 'espList',
         type: 'stui-select',
@@ -35,6 +39,7 @@ export default [
       },
       {
         name: 'preheader',
+        aclName: 'library-basic-settings',
         path: 'library.config',
         type: 'stui-toggle-button',
         label: 'Preheader',
@@ -43,6 +48,7 @@ export default [
       },
       {
         name: 'preheaderDefault',
+        aclName: 'library-basic-settings',
         label: 'Preheader default',
         path: 'library.config',
         type: 'stui-input-text',
@@ -54,6 +60,7 @@ export default [
       },
       {
         name: 'plainText',
+        aclName: 'library-basic-settings',
         type: 'stui-toggle-button',
         path: 'library.config',
         label: 'Plain text',
@@ -62,6 +69,7 @@ export default [
       },
       {
         name: 'tagging',
+        aclName: 'library-basic-settings',
         type: 'stui-toggle-button',
         path: 'library.config',
         label: 'Tags',
@@ -70,6 +78,7 @@ export default [
       },
       {
         name: 'templating',
+        aclName: 'library-basic-settings',
         type: 'stui-toggle-button',
         label: 'Enable templating',
         path: 'library.config',
@@ -78,6 +87,7 @@ export default [
       },
       {
         name: 'tracking',
+        aclName: 'library-basic-settings',
         type: 'stui-toggle-button',
         label: 'Enable Tracking',
         path: 'library.config',
@@ -86,6 +96,7 @@ export default [
       },
       {
         name: 'htmlToPdf',
+        aclName: 'library-basic-settings',
         type: 'stui-toggle-button',
         label: 'PDF Download',
         path: 'library.config',

@@ -1,7 +1,7 @@
 <template>
   <div>
     <group-container
-      v-for="(settingGroup, groupKey) in settingsGroup"
+      v-for="(settingGroup, groupKey) in settingsLayout"
       :key="`groupKey-${groupKey}`">
       <settings-container
         :no-label="!settingGroup.groupLabel"
@@ -27,8 +27,8 @@
                 :text="setting.text"
                 :type="setting.propType"
                 :width="setting.width"
-                @click="getValue(setting.click)()"
-                @change="(value)=>{setValue({value, path:setting.path, name:setting.name})}" />
+                @click="()=>{$emit(setting.click); $emit('click', setting.click)}"
+                @change="(value)=>{$emit('set-value', {value, path:setting.path, name:setting.name})}" />
               <span
                 v-show="errors.has(setting.name)"
                 class="help is-danger">
@@ -44,6 +44,7 @@
 <script>
 import GroupContainer from './GroupContainer.vue';
 import SettingsContainer from '../settings/containers/SettingsContainer.vue';
+import AclMixing from 'stensul/components/admin/mixins/AclMixin';
 
 export default {
   name: 'SettingsGroupContainer',
@@ -51,19 +52,26 @@ export default {
     GroupContainer,
     SettingsContainer,
   },
-  props: ['settingsGroup', 'getValue', 'setValue'],
+  mixins: [AclMixing],
+  props: ['settings', 'settings-layout'],
   methods: {
     getSettings(settings) {
-      return settings.filter(this.getDependsOn);
+      return settings.filter(this.filterElements);
     },
-    getDependsOn(element) {
+    filterElements(element) {
       let show = true;
       _.forEach(element.dependsOn, (dependOn) => {
         if (!this.getValue(dependOn.path)) {
           show = false;
         }
       });
+      if (!this.$can(element.aclName)) {
+        show = false;
+      }
       return show;
+    },
+    getValue(path) {
+      return _.get(this.settings, path);
     },
   },
 };

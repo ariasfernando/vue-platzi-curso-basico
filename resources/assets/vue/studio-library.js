@@ -10,6 +10,7 @@ import VeeValidate from 'vee-validate';
 import Bootstrap from './bootstrap';
 import interceptors from './interceptors';
 import store from './store';
+import acl from './resources/plugins/acl';
 import { studioLibraryRoutes } from './router';
 
 Vue.use(BootstrapVue);
@@ -22,6 +23,7 @@ Vue.use(Toast, {
   duration: 5000,
   closeable: true,
 });
+Vue.use(acl);
 Vue.use(VueResource);
 Vue.use(interceptors);
 Vue.use(ElementUI, { locale });
