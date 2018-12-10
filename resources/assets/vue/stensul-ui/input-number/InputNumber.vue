@@ -2,10 +2,11 @@
   <el-input-number
     v-bind="$attrs"
     class="stui-input-number"
-    :value="value"
+    :value="Number(value)"
     size="mini"
     :controls="true"
     controls-position="right"
+    @blur="$emit('blur')"
     @change="(value)=>change(value)" />
 </template>
 
