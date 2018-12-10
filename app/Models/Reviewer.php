@@ -2,8 +2,6 @@
 
 namespace Stensul\Models;
 
-use UserModel as User;
-
 class Reviewer extends User
 {
 	/**
