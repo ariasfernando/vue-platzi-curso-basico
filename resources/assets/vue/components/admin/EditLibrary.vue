@@ -221,7 +221,10 @@
           return element.name === '' || element.moduleId === '';
         });
 
-        if (emptyModules) return;
+        if (emptyModules) {
+          this.$root.$toast('To continue, please complete all fields before saving.', { className: 'et-error' });
+          return;
+        }
 
         this.library.modules = this.libraryCopy.modules;
         this.library.config.fixedModules = this.libraryCopy.config.fixedModules;
