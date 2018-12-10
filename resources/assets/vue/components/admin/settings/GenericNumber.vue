@@ -1,13 +1,10 @@
 <template>
   <settings-container :label="label">
     <template :slot="settingSlot || 'setting-right'">
-      <el-input-number
+      <stui-input-number
         v-model="mainSettingNumeric"
         v-validate="'required'"
-        :controls="true"
         :class="isPercentage || isPixel ? 'width-unit' : 'without-unit'"
-        size="mini"
-        controls-position="right"
         :min="minValue"
         :max="maxCalculated" />
       <el-button

@@ -8,11 +8,10 @@
         disabled
         @click="toggleAutoWidth">auto</el-button>
 
-      <el-input-number
+      <stui-input-number
         v-else
         v-model="width"
         class="control control--left is-expanded"
-        size="mini"
         :step="1"
         :min="1" />
 

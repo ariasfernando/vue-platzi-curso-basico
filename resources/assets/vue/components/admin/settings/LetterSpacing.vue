@@ -8,16 +8,15 @@
           disabled
         >normal</el-button>
 
-        <el-input-number
+        <stui-input-number
           v-else
           class="custom-col is-letter-spacing"
-          size="mini"
           :step="0.05"
           :min="-5"
           :max="5"
           v-model="letterSpacingInputValue"
           @change="(newValue)=>updateLetterSpacing(newValue)"
-          ></el-input-number>
+          />
 
         <el-button
           size="mini"
