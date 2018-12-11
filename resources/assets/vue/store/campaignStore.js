@@ -285,8 +285,7 @@ function campaignStore() {
       },
       saveElementProperty(state, { moduleIdInstance, elementId, property, value, ...scope }) {
         const module = getModule(state.modules, moduleIdInstance);
-        const element = elementId === undefined ? module : getElement(module, elementId);
-        if (element.structure) scope.subComponent = 'structure';
+        const element = elementId === undefined ? module.structure : getElement(module, elementId);
         let properties = getProperties(element, scope);
         if (Array.isArray(properties) && isNaN(property)) {
           // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
