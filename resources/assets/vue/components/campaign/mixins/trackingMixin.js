@@ -64,56 +64,75 @@ export default {
         return null;
       }
 
+      const trackingConfigGroups = { replace: {}, replaceLinks: {} };
+      Object.keys(trackingConfig).forEach((param) => {
+        if (trackingConfig[param].replaceString) {
+          trackingConfigGroups.replace[param] = trackingConfig[param];
+        } else {
+          trackingConfigGroups.replaceLinks[param] = trackingConfig[param];
+        }
+      });
+
       const parser = new DOMParser();
       const dom = parser.parseFromString(html, 'text/html');
       const links = Array.from(dom.querySelectorAll('a'));
 
-      links.forEach((link) => {
-        if (link.classList.contains('st-no-tracking')) {
-          return false;
-        }
+      if (Object.keys(trackingConfigGroups.replaceLinks).length > 0) {
+        links.forEach((link) => {
+          if (link.classList.contains('st-no-tracking')) {
+            return false;
+          }
 
-        let linkHref = link.getAttribute('href');
+          let linkHref = link.getAttribute('href');
 
-        if (linkHref === '' || linkHref === '#') {
-          return false;
-        }
+          if (linkHref === '' || linkHref === '#') {
+            return false;
+          }
 
-        let anchor = '';
-        const anchorPos = linkHref.indexOf('#');
+          let anchor = '';
+          const anchorPos = linkHref.indexOf('#');
 
-        if (anchorPos !== -1) {
-          anchor   = linkHref.substring(anchorPos);
-          linkHref = linkHref.replace(anchor, '');
-        }
+          if (anchorPos !== -1) {
+            anchor   = linkHref.substring(anchorPos);
+            linkHref = linkHref.replace(anchor, '');
+          }
 
-        if (linkHref.length > 0) {
-          Object.keys(trackingConfig).forEach((param) => {
-            let key = `trk-${param}`;
-            let separator = linkHref.indexOf('?') !== -1 ? '&' : '?';
-            let value = typeof trackingData[key] !== 'undefined' ? trackingData[key] : '';
-            linkHref += `${separator}${param}=${value}`;
-          });
-        }
+          if (linkHref.length > 0) {
+            Object.keys(trackingConfigGroups.replaceLinks).forEach((param) => {
+              let key = `trk-${param}`;
+              let separator = linkHref.indexOf('?') !== -1 ? '&' : '?';
+              let value = typeof trackingData[key] !== 'undefined' ? trackingData[key] : '';
+              linkHref += `${separator}${param}=${value}`;
+            });
+          }
 
-        if (anchor.length) {
-          linkHref += anchor;
-        }
+          if (anchor.length) {
+            linkHref += anchor;
+          }
 
-        link.setAttribute('href', linkHref);
-      });
-
-      let serializer = new XMLSerializer();
-      if (dom.body.childNodes.length > 1) {
-        let result = '';
-        dom.body.childNodes.forEach((child) => {
-          result += serializer.serializeToString(child);
+          link.setAttribute('href', linkHref);
         });
-
-        return result;
       }
 
-      return serializer.serializeToString(dom.body.firstChild);
+      if (Object.keys(trackingConfigGroups.replace).length > 0) {
+        Object.keys(trackingConfigGroups.replace).forEach((param) => {
+          const search = trackingConfigGroups.replace[param].replaceString;
+          const replacement = trackingConfigGroups.replace[param].values;
+          dom.body.firstChild.innerHTML = dom.body.firstChild.innerHTML.replace(new RegExp(search, 'g'), replacement)
+        });
+      }
+
+      const tmpWrapper = document.createElement('div');
+      if (dom.body.childNodes.length > 1) {
+        Array.from(dom.body.childNodes).forEach((child) => {
+          tmpWrapper.appendChild(child);
+        });
+
+        return tmpWrapper.innerHTML;
+      }
+
+      tmpWrapper.appendChild(dom.body.firstChild);
+      return tmpWrapper.innerHTML;
     },
   },
 };
