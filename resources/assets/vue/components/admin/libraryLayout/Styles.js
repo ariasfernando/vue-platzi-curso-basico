@@ -4,6 +4,7 @@ export default [
     settings: [
       {
         name: 'templateWidth',
+        aclName: 'library-basic-settings',
         path: 'library.config',
         type: 'stui-input-number',
         validate: 'required',
@@ -12,6 +13,7 @@ export default [
       },
       {
         name: 'templateMobileWidth',
+        aclName: 'library-basic-settings',
         path: 'library.config',
         type: 'stui-input-number',
         settingSlot: 'setting-half',
@@ -20,39 +22,15 @@ export default [
       },
       {
         name: 'templateBackgroundColor',
+        aclName: 'library-basic-settings',
         path: 'library.config',
         settingSlot: 'setting-right',
         type: 'stui-color-picker',
         label: 'Template BG',
       },
       {
-        name: 'fontFamily',
-        path: 'library.config',
-        type: 'stui-select',
-        isNumbered: true,
-        multiple: true,
-        getSplit: ', ',
-        setJoin: ', ',
-        listPath: 'fontsOptions',
-        label: 'Font Family',
-      },
-      {
-        name: 'linkColor',
-        path: 'library.config',
-        type: 'stui-color-picker',
-        settingSlot: 'setting-half',
-        label: 'Link Color',
-      },
-      {
-        name: 'linkDecoration',
-        path: 'library.config',
-        type: 'stui-icon-checklist',
-        listPath: 'listLinkDecoration',
-        settingSlot: 'setting-half',
-        label: 'Link Decoration',
-      },
-      {
         name: 'externalCssLink',
+        aclName: 'library-basic-settings',
         path: 'library.config',
         type: 'stui-input-text',
         placeholder: 'http://www.example.com/css/styles.css',
@@ -60,6 +38,7 @@ export default [
       },
       {
         name: 'colorPalettes',
+        aclName: 'library-advance-settings',
         path: 'library.config',
         type: 'stui-input-text',
         placeholder:
@@ -70,24 +49,28 @@ export default [
         name: 'templateBackgroundPalettes',
         path: 'library.config',
         type: 'stui-input-text',
+        aclName: 'library-advance-settings',
         placeholder:
           '{ "default": "#FFFFFF", "options": { "White": "#FFFFFF", "Black": "#000000" } }',
         label: 'Template background palettes',
       },
       {
         name: 'prependHtml',
+        aclName: 'library-advance-settings',
         path: 'library.config',
         type: 'stui-input-text',
         label: 'Prepend to body',
       },
       {
         name: 'appendHtml',
+        aclName: 'library-advance-settings',
         path: 'library.config',
         type: 'stui-input-text',
         label: 'Append to body',
       },
       {
         click: 'openPropietaryStyles',
+        aclName: 'library-basic-settings',
         type: 'stui-button',
         width: 'full',
         propType: 'secondary',

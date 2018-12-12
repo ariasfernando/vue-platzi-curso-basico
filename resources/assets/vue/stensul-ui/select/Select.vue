@@ -64,8 +64,8 @@ export default {
         }
         this.$emit('input', value);
         this.$emit('change', value);
-      }
-    }
+      },
+    },
   },
 };
 </script>
