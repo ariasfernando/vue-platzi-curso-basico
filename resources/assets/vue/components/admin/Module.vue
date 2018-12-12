@@ -29,13 +29,11 @@
             <template slot-scope="{columnData}">
               <draggable
                 v-model="columnData.column.components"
-                cellpadding="0"
-                cellspacing="0"
-                border="0"
                 width="100%"
-                element="table"
+                element="div"
                 :options="options"
                 :data-col="columnData.columnId"
+                style="display: table; width: 100%;"
                 :class="!columnData.column.components.length ? 'empty-table' : ''"
                 @add="onAdd">
                 <template v-if="columnData.column.components.length">
