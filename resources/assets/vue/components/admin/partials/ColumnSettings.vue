@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label-item-container v-b-toggle.column-settings-styles :label="`Column ${currentComponent.columnId + 1} Styles`" icon="glyphicon-pause" />
+    <label-item-container v-b-toggle.column-settings-styles :label="columnLabel" icon="glyphicon-pause" />
     <b-collapse id="column-settings-styles" visible accordion="general-settings">
       <b-card class="control" no-block>
         <group-container v-for="(settingGroup, groupKey) in settings" v-if="hasPermissionsInGroup(settingGroup, 'std-column_')" :key="groupKey">
@@ -84,18 +84,32 @@ export default {
     settings() {
       return settingsDefault['column-element']().componentSettings;
     },
+    isInvertedStacking() {
+      return this.module.structure.columnsStacking === 'invertedStacking';
+    },
     pluginsGroups() {
       return pluginsLayout['column-element']().componentPlugins;
     },
     _() {
       return _;
     },
+    columnLabel() {
+      let columnindex = this.currentComponent.columnId;
+      if (this.isInvertedStacking) {
+        columnindex = this.module.structure.columns.length - columnindex;
+      } else {
+        ++columnindex;
+      }
+      return `Column ${columnindex} Styles`;
+    },
   },
   methods: {
     pluginFilter(plugins) {
-      return plugins.filter(plugin => {
-        return this.$can(`std-column-plugin-${plugin.aclName}`) && this.column.plugins[_.camelCase(plugin.name)];
-      });
+      return plugins.filter(
+        plugin =>
+          this.$can(`std-column-plugin-${plugin.aclName}`) &&
+          this.column.plugins[_.camelCase(plugin.name)],
+      );
     },
     settingUpdatedHandler(eventData) {
       this.saveColumnProperty(

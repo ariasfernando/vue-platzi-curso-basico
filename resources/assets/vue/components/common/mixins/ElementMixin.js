@@ -134,7 +134,11 @@ export default {
         }
       }
     },
-    columnSelect(columnId) {
+    columnSelect(columnIndex) {
+      let columnId = columnIndex;
+      if (this.isInvertedStacking) {
+        columnId = this.module.structure.columns.length - columnId - 1;
+      }
       this.$emit('select-component', {
         columnId,
         componentId: undefined,
@@ -156,7 +160,11 @@ export default {
         });
       }, 100);
     },
-    isColumnSelect(columnId) {
+    isColumnSelect(columnIndex) {
+      let columnId = columnIndex;
+      if (this.isInvertedStacking) {
+        columnId = this.module.structure.columns.length - columnId - 1;
+      }
       return this.currentComponent.columnId === columnId && this.currentComponent.componentId === undefined;
     },
     elementBackground(element) {

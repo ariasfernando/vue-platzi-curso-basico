@@ -29,11 +29,8 @@
             <template slot-scope="{columnData}">
               <draggable
                 v-model="columnData.column.components"
-                cellpadding="0"
-                cellspacing="0"
-                border="0"
-                width="100%"
-                element="table"
+                style="display: table; width: 100%;"
+                element="div"
                 :options="options"
                 :data-col="columnData.columnId"
                 :class="!columnData.column.components.length ? 'empty-table' : ''"
@@ -79,16 +76,15 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import clone from 'clone';
+import Draggable from 'vuedraggable';
 import BackgroundImage from '../common/BackgroundImage.vue';
 import ButtonElement from './elements/ButtonElement.vue';
-import clone from 'clone';
 import ColumnManager from '../common/containers/ColumnManager.vue';
 import CustomCodeElement from './elements/CustomCodeElement.vue';
 import DividerElement from './elements/DividerElement.vue';
-import Draggable from 'vuedraggable';
 import Element from '../../models/Element';
-import ElementMixin from '../common/mixins/ElementMixin.js';
+import ElementMixin from '../common/mixins/ElementMixin';
 import ElementSelector from '../common/ElementSelector.vue';
 import ImageElement from './elements/ImageElement.vue';
 import TextElement from './elements/TextElement.vue';
