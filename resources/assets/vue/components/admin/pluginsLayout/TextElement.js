@@ -2,13 +2,13 @@ function textDefault() {
   return {
     componentPlugins: [
       {
-        groupLabel: '',
-        showLabel: false,
-        plugins: [{
-          name: 'alignment',
-          title: 'Alignment',
-          aclName: 'alignment',
-        }],
+        plugins: [
+          {
+            name: 'alignment',
+            title: 'Alignment',
+            aclName: 'alignment',
+          },
+        ],
       },
       {
         groupLabel: 'Background',
@@ -27,10 +27,7 @@ function textDefault() {
         ],
       },
       {
-        groupLabel: 'Destination URL',
-        showLabel: false,
-        plugins:
-        [
+        plugins: [
           {
             name: 'destination-url',
             title: 'Destination URL',
@@ -39,8 +36,6 @@ function textDefault() {
         ],
       },
       {
-        groupLabel: '',
-        showLabel: false,
         plugins: [
           {
             name: 'font-family',
@@ -50,8 +45,6 @@ function textDefault() {
         ],
       },
       {
-        groupLabel: '',
-        showLabel: false,
         plugins: [
           {
             name: 'text-options',
@@ -61,8 +54,6 @@ function textDefault() {
         ],
       },
       {
-        groupLabel: '',
-        showLabel: false,
         plugins: [
           {
             name: 'toggle-element-setter',

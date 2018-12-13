@@ -1,12 +1,10 @@
 function buttonDefault() {
   return {
-    componentPlugins:
-    [
+    componentPlugins: [
       {
         groupLabel: 'Background',
         showLabel: true,
-        plugins:
-        [
+        plugins: [
           {
             name: 'background-color',
             title: 'background Color',
@@ -20,10 +18,7 @@ function buttonDefault() {
         ],
       },
       {
-        groupLabel: 'Alignment',
-        showLabel: false,
-        plugins:
-        [
+        plugins: [
           {
             name: 'alignment',
             title: 'Alignment',
@@ -32,10 +27,7 @@ function buttonDefault() {
         ],
       },
       {
-        groupLabel: 'Destination URL',
-        showLabel: false,
-        plugins:
-        [
+        plugins: [
           {
             name: 'destination-url',
             title: 'Destination URL',
@@ -44,10 +36,7 @@ function buttonDefault() {
         ],
       },
       {
-        groupLabel: 'Font family',
-        showLabel: false,
-        plugins:
-        [
+        plugins: [
           {
             name: 'font-family',
             title: 'Font family',
@@ -56,14 +45,20 @@ function buttonDefault() {
         ],
       },
       {
-        groupLabel: 'Text Editable',
-        showLabel: false,
-        plugins:
-        [
+        plugins: [
           {
             name: 'text-options',
             title: 'Text Editable',
             aclName: 'text-options',
+          },
+        ],
+      },
+      {
+        plugins: [
+          {
+            name: 'toggle-element-setter',
+            title: 'Toggle element',
+            aclName: 'toggle-element-setter',
           },
         ],
       },

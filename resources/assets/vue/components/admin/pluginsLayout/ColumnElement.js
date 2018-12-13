@@ -4,8 +4,7 @@ function columnDefault() {
       {
         groupLabel: 'Background',
         showLabel: true,
-        plugins:
-        [
+        plugins: [
           {
             name: 'column-background-color',
             title: 'Background color',
@@ -19,10 +18,7 @@ function columnDefault() {
         ],
       },
       {
-        groupLabel: '',
-        showLabel: false,
-        plugins:
-        [
+        plugins: [
           {
             name: 'text-color-by-background',
             title: 'Text Color by Background',
@@ -31,10 +27,7 @@ function columnDefault() {
         ],
       },
       {
-        groupLabel: '',
-        showLabel: false,
-        plugins:
-        [
+        plugins: [
           {
             name: 'vertical-alignment',
             title: 'Vertical alignment',
