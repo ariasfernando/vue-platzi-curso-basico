@@ -110,6 +110,13 @@
             </template>
           </settings-container>
         </group-container>
+        <group-container>
+          <settings-container label="Advanced Settings" v-if="true || canAccessAppendBody">
+            <template slot="setting-bottom">
+              <AdvancedSettings />
+            </template>
+          </settings-container>
+        </group-container>
       </div>
     </b-collapse>
   </div>
@@ -121,6 +128,7 @@
   import secondarySpinner from '../common/secondarySpinner.vue';
   import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
   import GroupContainer from "../common/containers/GroupContainer.vue";
+  import AdvancedSettings from './partials/AdvancedSettings.vue';
 
   export default {
     components: {
@@ -128,7 +136,8 @@
       secondarySpinner,
       LabelItemContainer,
       GroupContainer,
-      'compact-picker': Compact
+      'compact-picker': Compact,
+      AdvancedSettings,
     },
     name: 'CampaignConfiguration',
     data () {

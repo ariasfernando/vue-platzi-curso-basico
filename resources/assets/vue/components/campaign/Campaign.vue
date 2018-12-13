@@ -44,6 +44,8 @@
     <modal-proof v-if="campaignReady"></modal-proof>
     <modal-enable-templating v-if="campaignReady"></modal-enable-templating>
     <modal-proof-track v-if="campaignReady"></modal-proof-track>
+    <modal-insert-body title="append" />
+    <modal-insert-body title="prepend" />
 
     <spinner></spinner>
 
@@ -73,6 +75,7 @@
   import Spinner from '../common/Spinner.vue'
   import Tracking from './Tracking.vue'
   import VueSticky from 'vue-sticky'
+  import ModalInsertBody from './modals/ModalInsertBody.vue';
 
   export default {
     name: 'Campaign',
@@ -91,6 +94,7 @@
       ModalPreview,
       ModalProof,
       ModalProofTrack,
+      ModalInsertBody,
       ModuleBackgroundSettings,
       ModuleSettings,
       ScrollbarContainer,
