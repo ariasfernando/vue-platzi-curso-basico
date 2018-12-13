@@ -9,15 +9,15 @@
       cellpadding="0"
       cellspacing="0">
       <tr>
-        <td
+        <td 
           width="100%"
           :valign="component.image.attribute.valign || 'top'"
           :align="component.image.attribute.align"
           :bgcolor="component.image.attribute.bgcolor"
           style="width:100%;"
           :style="elementBorderAndPadding(component.image)">
-          <a
-            :href="component.image.attribute.href"
+          <a 
+            :href="component.image.attribute.href" 
             :alt="component.image.attribute.alt"
             :title="component.image.attribute.title"
             :target="component.image.attribute.target || '_blank'"
@@ -61,9 +61,10 @@
 
 <script>
 import ComponentToolbar from './ComponentToolbar.vue';
-import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
-import ElementMixin from '../../common/mixins/ElementMixin';
 import ElementContainer from '../../common/containers/ElementContainer.vue';
+import ElementMixin from '../../common/mixins/ElementMixin';
+import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
+import PlaceholderMixin from "../../common/mixins/PlaceholderMixin";
 
 export default {
   name: 'ImageElement',
@@ -71,18 +72,26 @@ export default {
     ComponentToolbar,
     ElementContainer,
   },
-  mixins: [MobileStylesMixin, ElementMixin],
-  data() {
-    return {
-      imageUrl(imagePath) {
-        return this.$_app.config.imageUrl + imagePath;
-      },
-    };
+  mixins: [MobileStylesMixin, ElementMixin, PlaceholderMixin],
+  methods: {
+    imageUrl(imagePath) {
+      if (imagePath === "" || imagePath.includes("default/")) {
+        let width = this.component.image.attribute.width;
+        if (width === "100%") {
+          width = this.columnWidth(this.columnId);
+        }
+        return this.createPlaceholder(
+          width,
+          this.component.image.attribute.height
+        );
+      }
+      return this.$_app.config.imageUrl + imagePath;
+    }
   },
   computed: {
     mobileStretch() {
       return this.component.image.styleOption.noMobileStretch !== true;
-    },
+    }
   },
 };
 </script>

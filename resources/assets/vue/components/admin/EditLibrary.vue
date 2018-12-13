@@ -199,6 +199,17 @@
           module.name === '' || module.moduleId === ''
         ));
       },
+      savePropietaryStyles() {
+        this.library.config.propietaryCss = this.propietaryStyles;
+        this.editPropietaryStyles = false;
+      },
+      closePropietaryStyles() {
+        this.editPropietaryStyles = false;
+      },
+      openPropietaryStyles() {
+        this.propietaryStyles = this.library.config.propietaryCss;
+        this.editPropietaryStyles = true;
+      },
       saveLibrary() {
         const formData = {
           name: this.library.name,

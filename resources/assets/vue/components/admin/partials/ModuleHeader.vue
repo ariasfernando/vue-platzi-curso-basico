@@ -3,7 +3,7 @@
     <div class="col-xs-3 header-col">
       <div class="beta-btn-secondary pull-left" @click="$router.push('/')">
         <i class="glyphicon glyphicon-menu-left"></i>
-          <a href="#" >Back</a>
+        <a href="#">Back</a>
       </div>
       <div class="col-xs-8 section-title vertical-center">New Module</div>
     </div>

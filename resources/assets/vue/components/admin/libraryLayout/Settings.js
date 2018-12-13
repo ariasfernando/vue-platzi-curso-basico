@@ -87,12 +87,23 @@ export default [
       },
       {
         name: 'tracking',
-        aclName: 'library-basic-settings',
+        aclName: 'library-advance-settings',
         type: 'stui-toggle-button',
         label: 'Enable Tracking',
         path: 'library.config',
         settingSlot: 'setting-right',
-        dependsOn: [{ path: 'campaignConfig.enable_tracking' }],
+      },
+      {
+        name: 'trackingConfig',
+        aclName: 'library-advance-settings',
+        validate: 'required|isValidJson',
+        type: 'textarea',
+        label: 'Enable Tracking',
+        path: 'library.config',
+        placeholder: '"Add the tracking configuration in JSON format...',
+        settingSlot: 'setting-right',
+        dependsOn: [
+          { path: 'library.config.tracking' }],
       },
       {
         name: 'htmlToPdf',
