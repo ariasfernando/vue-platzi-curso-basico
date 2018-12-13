@@ -231,7 +231,15 @@ export default {
         firstTextNode = firstTextElement;
       }
 
-      const lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
+      let lineHeight = 0;
+
+      if (firstTextNode.nodeName === 'SUP') {
+        // if the first node is a superscript, we should check with the line-height of the container
+        lineHeight = parseInt(this.$textElement.css('line-height').replace('px', ''));
+      } else {
+        // otherwise, check with the line-height of the first text
+        lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
+      }
 
       // note: to perform the correct calculation, actualLines must be an integer
       const actualLines = Math.floor(divHeight / lineHeight);
