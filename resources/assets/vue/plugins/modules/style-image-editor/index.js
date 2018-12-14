@@ -153,6 +153,12 @@ export default {
           value: false,
           type: 'switch',
         },
+        square: {
+          label: 'Force square output',
+          key: 'square',
+          value: false,
+          type: 'switch',
+        },
         round: {
           label: 'Circle Cropping',
           key: 'cropper_roundCrop',
