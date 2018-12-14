@@ -770,11 +770,9 @@ describe('== Module Store ==', () => {
       done();
     });
     xit('"attachPlugins", ', () => {});
-    it('"removeComponents" with data, expect of the state "module" has been removed the component data', (done) => {
+    it('"removeElement" with data, expect of the state "module" has been removed the component data', (done) => {
       let data = {
-        index: 0,
-        number: 1,
-        colId: 0,
+        elementId: 731844,
       };
       let dataComponent = {
         el: {
@@ -1110,7 +1108,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', newStruct);
       store.commit('module/addComponent', dataComponent);
-      store.commit('module/removeComponents', data);
+      store.commit('module/removeElement', data);
 
       let stateComponent = store.state.module.module.structure.columns[0].components;
 
@@ -2061,7 +2059,6 @@ describe('== Module Store ==', () => {
       const objectModule = {
         moduleId: undefined,
         name: 'Untitled module',
-        description: null,
         title: undefined,
         description: '',
         created_by: '',

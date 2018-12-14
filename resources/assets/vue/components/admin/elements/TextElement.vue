@@ -28,7 +28,6 @@
               :text-dirty="component.data.textDirty"
               :config="textOptions"
               @changeText="changeText" />
-            <component-toolbar v-if="isStudio" :component-id="componentId" :column-id="columnId" />
           </td>
         </tr>
       </table>
@@ -37,7 +36,6 @@
 </template>
 
 <script>
-import ComponentToolbar from './ComponentToolbar.vue';
 import ElementMixin from '../../common/mixins/ElementMixin';
 import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import ElementContainer from '../../common/containers/ElementContainer.vue';
@@ -46,7 +44,6 @@ import TinyMce from '../../common/tinyMce.vue';
 export default {
   name: 'TextElement',
   components: {
-    ComponentToolbar,
     ElementContainer,
     TinyMce,
   },

@@ -116,7 +116,7 @@ module.exports = {
           name: 'componentsBox',
           put: ['componentsList', 'componentsBox'],
         },
-        handle: '.icon-move',
+        handle: '.move',
         ghostClass: 'ghost-component', // Class name for the drop placeholder
         chosenClass: 'chosen-component', // Class name for the chosen item
         dragClass: 'drag-component', // Class name for the dragging item
@@ -241,13 +241,6 @@ module.exports = {
 .st-content-component {
   outline: 1px dashed $color-secondary;
   border: none !important;
-
-  .st-component:hover {
-    .icon-move,
-    .icon-remove {
-      display: block;
-    }
-  }
 }
 
 .empty-table {
