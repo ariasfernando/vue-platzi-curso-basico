@@ -22,12 +22,12 @@
           cellspacing="0"
           border="0"
           style="width: 100%;">
-          <column-manager
+          <ColumnManager
             :key="module.structure.columnsStacking"
             :module="module"
             @select-component="selectComponent">
             <template slot-scope="{columnData}">
-              <draggable
+              <Draggable
                 v-model="columnData.column.components"
                 style="display: table; width: 100%;"
                 element="div"
@@ -36,7 +36,7 @@
                 :class="!columnData.column.components.length ? 'empty-table' : ''"
                 @add="onAdd">
                 <template v-if="columnData.column.components.length">
-                  <component
+                  <Component
                     :is="component.type"
                     v-for="(component, componentId) in columnData.column.components"
                     :key="component.id"
@@ -58,16 +58,20 @@
                     Drag content here
                   </div>
                 </div>
-              </draggable>
+              </Draggable>
             </template>
-          </column-manager>
+          </ColumnManager>
         </table>
       </td>
     </tr>
-    <element-selector
+    <HighlightOfElement
+      v-if="isStudio"
+      class="highlight-row"
+      :active="isActiveGeneralSettings" />
+    <ElementSelector
       v-if="isStudio"
       :left-position="templateWidth/2"
-      :bottom="-90"
+      :bottom="-70"
       label="Row"
       :active="isActiveGeneralSettings"
       selector-icon="fa fa-cog"
@@ -86,6 +90,7 @@ import DividerElement from './elements/DividerElement.vue';
 import Element from '../../models/Element';
 import ElementMixin from '../common/mixins/ElementMixin';
 import ElementSelector from '../common/ElementSelector.vue';
+import HighlightOfElement from '../common/HighlightOfElement.vue';
 import ImageElement from './elements/ImageElement.vue';
 import TextElement from './elements/TextElement.vue';
 
@@ -100,6 +105,7 @@ module.exports = {
     DividerElement,
     Draggable,
     ElementSelector,
+    HighlightOfElement,
     ImageElement,
     TextElement,
   },
@@ -210,14 +216,22 @@ module.exports = {
 };
 </script>
 
-<style lang="less">
-@focus: #78dcd6;
-@focus-light: lighten(@focus, 30%);
-@hover: @focus-light;
-@icon-option: #78dcd6;
-
+<style lang="scss" scoped>
+@import '../../stensul-ui/scss/stui.scss';
+.highlight-row {
+  top: 0px;
+  left: -40px;
+  bottom: -50px;
+  right: -40px;
+  outline-style: solid;
+  outline-color: $color-grey;
+  outline-width: 2px;
+}
+</style>
+<style lang="scss">
+@import '../../stensul-ui/scss/stui.scss';
 .empty-col {
-  background-color: @focus-light;
+  background-color: lighten($color-secondary, 30%);
 }
 
 .alignRight {
@@ -225,32 +239,30 @@ module.exports = {
 }
 
 .st-content-component {
-  outline: 1px dashed @icon-option;
+  outline: 1px dashed $color-secondary;
   border: none !important;
 
   .st-component:hover {
-      .icon-move,
-      .icon-remove {
-        display: block;
-      }
+    .icon-move,
+    .icon-remove {
+      display: block;
     }
+  }
 }
 
 .empty-table {
-  outline: 1px dashed @icon-option;
-  background-color: @hover;
+  outline: 1px dashed $color-secondary;
+  background-color: lighten($color-secondary, 30%);
   display: table;
   width: 100%;
-
   &:hover {
     div.empty-cell {
       font-size: 13px;
     }
   }
-
   div.empty-cell {
     font-weight: normal;
-    color: @focus;
+    color: $color-secondary;
     display: table-cell;
     height: 80px;
     width: 100%;
@@ -258,12 +270,11 @@ module.exports = {
     font-size: 0px;
   }
 }
-
 .module-wrapper {
   li.ghost-component-menu {
-    outline: 2px dashed @icon-option;
-    color: @focus;
-    background-color: @hover;
+    outline: 2px dashed $color-secondary;
+    color: $color-secondary;
+    background-color: lighten($color-secondary, 30%);
     height: 80px;
     line-height: 80px;
     width: 100%;
@@ -285,10 +296,9 @@ module.exports = {
       display: none;
     }
   }
-
   tr.ghost-component {
-    color: @focus;
-    background-color: @hover;
+    color: $color-secondary;
+    background-color: lighten($color-secondary, 30%);
     text-align: center;
     height: 20px;
     line-height: 20px;
@@ -297,13 +307,13 @@ module.exports = {
       display: flex;
       justify-content: center;
       border: none;
-      color: @focus;
-      background-color: @hover;
+      color: $color-secondary;
+      background-color: lighten($color-secondary, 30%);
       height: 80px;
       line-height: 80px;
       font-family: 'Open Sans', Arial, serif;
       opacity: 1;
-      outline: 2px dashed @icon-option;
+      outline: 2px dashed $color-secondary;
       outline-offset: -10px;
     }
     td {
