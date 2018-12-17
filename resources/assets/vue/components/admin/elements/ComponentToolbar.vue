@@ -30,7 +30,7 @@ export default {
   position: absolute;
   height: 22px;
   width: 22px;
-  top: -23px;
+  top: -1px;
   background-color: #78dcd6;
   text-align: center;
   color: #fff;
@@ -39,11 +39,11 @@ export default {
   z-index: 5;
 }
 .move {
-  right: 21px;
+  right: -23px;
   cursor: move;
 }
 .remove {
-  right: -1px;
+  right: -45px;
 }
 .component-toolbar {
   position: relative;
