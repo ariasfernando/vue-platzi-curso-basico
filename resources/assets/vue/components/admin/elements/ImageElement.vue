@@ -8,22 +8,22 @@
       border="0"
       cellpadding="0"
       cellspacing="0">
-      <tr>
-        <td
-          width="100%"
-          :valign="component.image.attribute.valign || 'top'"
-          :align="component.image.attribute.align"
-          :bgcolor="component.image.attribute.bgcolor"
-          style="width:100%;"
+        <tr>
+          <td 
+            width="100%"
+            :valign="component.image.attribute.valign || 'top'"
+            :align="component.image.attribute.align"
+            :bgcolor="component.image.attribute.bgcolor"
+            style="width:100%;"
           :style="elementBorderAndPadding(component.image)">
-          <a
-            :href="component.image.attribute.href"
-            :alt="component.image.attribute.alt"
-            :title="component.image.attribute.title"
-            :target="component.image.attribute.target || '_blank'"
+            <a 
+              :href="component.image.attribute.href" 
+              :alt="component.image.attribute.alt"
+              :title="component.image.attribute.title"
+              :target="component.image.attribute.target || '_blank'"
             @click.prevent>
-            <img
-              :class="{ 'st-hide-mobile' : component.image.attribute.placeholderMobile,
+              <img
+                :class="{ 'st-hide-mobile' : component.image.attribute.placeholderMobile,
                         'st-resize' : mobileStretch,
                         'st-mobile-width-constraint' : !mobileStretch }"
               style="border: 0; display: block;"
@@ -63,6 +63,7 @@
 import ComponentToolbar from './ComponentToolbar.vue';
 import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import ElementMixin from '../../common/mixins/ElementMixin';
+import PlaceholderMixin from '../../common/mixins/PlaceholderMixin';
 import ElementContainer from '../../common/containers/ElementContainer.vue';
 
 export default {
@@ -71,18 +72,26 @@ export default {
     ComponentToolbar,
     ElementContainer,
   },
-  mixins: [MobileStylesMixin, ElementMixin],
-  data() {
-    return {
-      imageUrl(imagePath) {
-        return this.$_app.config.imageUrl + imagePath;
-      },
-    };
+  mixins: [MobileStylesMixin, ElementMixin, PlaceholderMixin],
+  methods: {
+    imageUrl(imagePath) {
+      if (imagePath === "" || imagePath.includes("default/")) {
+        let width = this.component.image.attribute.width;
+        if (width === "100%") {
+          width = this.columnWidth(this.columnId);
+        }
+        return this.createPlaceholder(
+          width,
+          this.component.image.attribute.height
+        );
+      }
+      return this.$_app.config.imageUrl + imagePath;
+    }
   },
   computed: {
     mobileStretch() {
       return this.component.image.styleOption.noMobileStretch !== true;
-    },
+    }
   },
 };
 </script>
