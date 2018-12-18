@@ -51,11 +51,12 @@
 import _ from 'lodash';
 import SettingMixin from '../mixins/SettingMixin';
 import SettingsContainer from '../../common/settings/containers/SettingsContainer.vue';
+import ElementMixin from '../../common/mixins/ElementMixin';
 
 export default {
   name: 'ImageSize',
   components: { SettingsContainer },
-  mixins: [SettingMixin],
+  mixins: [SettingMixin, ElementMixin],
   data() {
     return {
       min: this.minValue ? this.minValue : 10,
@@ -151,6 +152,8 @@ export default {
             this.height = 'auto';
             this.isBlockHeight = !this.isBlockHeight;
           }
+        } else {
+          width = this.imageWidth;
         }
 
         this.isPxWidth = isPxWidth;
@@ -318,7 +321,7 @@ export default {
       .el-input-number__increase {
         background: #f8f8f8;
         &:hover {
-          color:#78dcd6;
+          color: #78dcd6;
           &:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled),
           &:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled) {
             border: 1px solid #78dcd6;

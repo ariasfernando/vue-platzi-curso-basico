@@ -17,6 +17,9 @@ export default {
     'setting-slot',
     'showSetting',
     'sub-component',
+    'component',
+    'module',
+    'column-id',
     'type',
     'setting-position',
     'autosize',
@@ -26,21 +29,8 @@ export default {
     this.setDefaultValue();
   },
   computed: {
-    module() {
-      return this.$store.getters['module/module'];
-    },
     currentComponent() {
       return this.$store.getters['module/currentComponent'];
-    },
-    component() {
-      if (this.module.structure.columns[this.currentComponent.columnId]) {
-        const component =
-          this.module.structure
-          .columns[this.currentComponent.columnId]
-          .components[this.currentComponent.componentId];
-        return component;
-      }
-      return null;
     },
     mainSetting: {
       get() {
