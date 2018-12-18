@@ -9,6 +9,7 @@
             v-for="setting in settingGroup.settings"
             v-if="$can('std-module_'+setting.aclName)"
             :key="setting.name"
+            :module="module"
             :setting="setting.type"
             :name="setting.name"
             :type="setting.type"
