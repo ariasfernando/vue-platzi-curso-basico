@@ -16,7 +16,7 @@ class AddInsertBodyPermission extends Migration
     public function up()
     {   
         foreach ($this->permissions as $permission) {            # code...
-            Permission::create($this->permission);
+            Permission::create($permission);
         }
     }
 
