@@ -15,10 +15,6 @@ const state = {
   currentComponent: {},
   buildingMode: 'desktop',
   showRaw: false,
-  changeSettingComponent: {
-    style: {},
-    attribute: {},
-  },
   loading: false,
   secondaryLoading: false,
 };
@@ -106,9 +102,6 @@ const getters = {
   currentComponent(state) {
     return state.currentComponent;
   },
-  changeSettingComponent(state) {
-    return state.changeSettingComponent;
-  },
   buildingMode(state) {
     return state.buildingMode;
   },
@@ -131,10 +124,6 @@ const mutations = {
     _.each(data, (value, field) => {
       state.module[field] = value;
     });
-  },
-  setChangeSettingComponent(state, data) {
-    state.changeSettingComponent.style = data.style;
-    state.changeSettingComponent.attribute = data.attribute;
   },
   setCurrentComponent(state, data) {
     state.currentComponent = data;

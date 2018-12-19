@@ -105,7 +105,6 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    xit('"setChangeSettingComponent" with data, expect of the "changeSettingComponent" state has been same to passed data', () => {});
     it('"setCurrentComponent" with data, expect of the "currentComponent" state has been same to passed data', (done) => {
       let dataSetting = {
         columnId: 0,
@@ -4236,7 +4235,6 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    xit('"changeSettingComponent", expect state module has 1', () => {});
     it('"buildingMode", expect state buildingMode has \'mobile\'', (done) => {
       store.commit('module/setBuildingMode', 'mobile');
 

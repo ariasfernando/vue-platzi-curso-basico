@@ -186,17 +186,6 @@ module.exports = {
         cloneItem.parentNode.removeChild(cloneItem);
         e.clone.style.opacity = '1';
       }
-
-      // ?
-      this.$store.commit('module/setChangeSettingComponent', {
-        style:
-          this.module.structure.columns[colId].components[componentId].style ||
-          {},
-        attribute:
-          this.module.structure.columns[colId].components[componentId]
-            .attribute || {},
-      });
-
       // Set dropped element as selected
       this.selectComponent({
         columnId: +colId,
