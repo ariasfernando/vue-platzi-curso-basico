@@ -8,7 +8,8 @@ use Stensul\Models\Permission;
 class AddInsertBodyPermission extends Migration
 {
     protected $permissions = [
-        ['name' => 'access_insert_body', 'description' => 'Allow user to prepend\/append body HTML on the campaign editor']
+        ['name' => 'access_append_body', 'description' => 'Allow user to append body HTML on the campaign editor'],
+        ['name' => 'access_prepend_body', 'description' => 'Allow user to prepend body HTML on the campaign editor'],
     ];
     /**
      * Run the migrations.
@@ -17,7 +18,7 @@ class AddInsertBodyPermission extends Migration
      */
     public function up()
     {   
-        foreach ($this->permissions as $permission) {            # code...
+        foreach ($this->permissions as $permission) {
             Permission::create($permission);
         }
     }
