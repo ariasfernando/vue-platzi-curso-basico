@@ -18,25 +18,47 @@
                   <el-input
                     v-model="fontFamilyName"
                     v-validate="'required'"
+                    class="font-name"
                     name="fontFamilyName"
                     placeholder="Enter name here."
+                    size="small"
                     :class="{'is-danger': errors.has('name') }" />
+                  <el-button icon="el-icon-circle-plus-outline" size="small" @click="addType">Add Type</el-button>
                   <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
                 </p>
               </div>
+              <div v-for="(type, key) in fontTypes" class="font-types-container">
+                <el-upload
+                  ref="upload"
+                  class="upload-demo"
+                  multiple
+                  accept=".eot,.ttf,.woff,.woff2"
+                  :action="uploadEndpoint"
+                  :headers="headerCSRF"
+                  :on-success="(r, f, fl)=>handleSuccess(r, f, fl, key)"
+                  :on-remove="(f, fl)=>handleRemove(f, fl, key)"
+                  :before-remove="beforeRemove"
+                  :file-list="type.files">
 
-              <el-upload
-                ref="upload"
-                class="upload-demo"
-                :action="uploadEndpoint"
-                :headers="headerCSRF"
-                :before-remove="beforeRemove"
-                :on-success="handleSuccess"
-                :on-remove="handleRemove"
-                :file-list="fileList">
-                <el-button size="small" type="primary">Upload font</el-button>
-              </el-upload>
-
+                  <el-select v-model="type.style" placeholder="Type" size="small">
+                    <el-option
+                      v-for="item in fontStyles"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                  <el-select v-model="type.weight" placeholder="Weight" size="small">
+                    <el-option
+                      v-for="item in fontWeights"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
+                  </el-select>
+                  <el-button size="small" type="primary">Upload font</el-button>
+                </el-upload>
+                <hr>
+                <i v-if="fontTypes.length > 1" class="el-icon-remove-outline remove-type" @click="removeType(key)" />
+              </div>
             </slot>
           </div>
 
@@ -62,7 +84,52 @@
     data() {
       return {
         fontFamilyName: '',
-        fileList: [],
+        fontTypes: [{
+          weight: '400',
+          style: 'normal',
+          files: [],
+        }],
+        fontStyles: [{
+          value: 'normal',
+          label: 'Normal',
+        }, {
+          value: 'italic',
+          label: 'Italic',
+        }, {
+          value: 'oblique',
+          label: 'Oblique',
+        }, {
+          value: 'initial',
+          label: 'Initial',
+        }],
+        fontWeights: [{
+          value: '100',
+          label: '100',
+        }, {
+          value: '200',
+          label: '200',
+        }, {
+          value: '300',
+          label: '300',
+        }, {
+          value: '400',
+          label: '400',
+        }, {
+          value: '500',
+          label: '500',
+        }, {
+          value: '600',
+          label: '600',
+        }, {
+          value: '700',
+          label: '700',
+        }, {
+          value: '800',
+          label: '800',
+        }, {
+          value: '900',
+          label: '900',
+        }],
       };
     },
     computed: {
@@ -86,26 +153,32 @@
       currentFont(val) {
         if (val !== undefined) {
           this.fontFamilyName = this.fontFamilyList[val].name;
-          this.fileList = this.fontFamilyList[val].fonts;
+          this.fontTypes = this.fontFamilyList[val].types;
         } else {
           this.fontFamilyName = '';
-          this.fileList = [];
+          this.fontTypes= [{
+            weight: '400',
+            style: 'normal',
+            files: [],
+          }];
         }
       },
     },
     created() {
       if (this.currentFont !== undefined) {
         this.fontFamilyName = this.fontFamilyList[this.currentFont].name;
-        this.fileList = this.fontFamilyList[this.currentFont].fonts;
+        this.fontTypes = this.fontFamilyList[this.currentFont].fonts;
       }
     },
     methods: {
-      handleSuccess(r, f, fl) {
-        this.fileList = fl.map(v => v.path = v.response.path);
-        this.fileList = fl;
+      handleSuccess(r, f, fl, key) {
+        fl.map(v => {
+          v.file = v.name.split('.').pop();
+          });
+        this.fontTypes[key].files = fl;
       },
-      handleRemove(f, fl) {
-        this.fileList = fl;
+      handleRemove(f, fl, key) {
+        this.fontTypes[key].files = fl;
       },
       beforeRemove(f, fl) {
         return this.$confirm('Are you sure?');
@@ -129,7 +202,7 @@
           });
       },
       saveFontFamily() {
-        const fontFamilyData = { name: this.fontFamilyName, fonts: this.fileList };
+        const fontFamilyData = { name: this.fontFamilyName, types: this.fontTypes };
         const fontFamilyList = _.cloneDeep(this.fontFamilyList)
         if (this.currentFont !== undefined) {
           fontFamilyList[this.currentFont] = fontFamilyData;
@@ -139,6 +212,18 @@
         this.$store.commit('setting/setCustomFontsList', fontFamilyList);
         this.saveSetting('custom_fonts', fontFamilyList);
         this.close();
+      },
+      addType() {
+        const newType = {
+          weight: '400',
+          style: 'normal',
+          files: []
+        };
+        this.fontTypes.push(newType);
+      },
+      removeType(typeKey) {
+        this.fontTypes.splice(typeKey, 1);
+        return false;
       },
     },
   };
@@ -151,17 +236,26 @@
       width: 750px;
   }
 }
-
 .modal-mask {
   z-index: 100 !important;
 }
-
 input[type="file"] {
   display: none !important;
 }
-
 .el-upload__input {
   display: none !important;
+}
+.font-name {
+  width: 84%;
+}
+.font-types-container {
+  padding-left: 30px;
+  margin-bottom: 10px;
+}
+.remove-type {
+  float:right;
+  margin-top: -39px;
+  margin-right: 5px;
 }
 </style>
 

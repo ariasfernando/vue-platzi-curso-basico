@@ -37,7 +37,14 @@
                 <tr v-for="(fontFamily, key) in fonts">
                   <td :title="fontFamily.name">{{ fontFamily.name }}</td>
                   <td>
-                    <p v-for="font in fontFamily.fonts">{{ font.path }}</p>
+                    <div v-for="type in fontFamily.types">
+                      <i>Style: {{ type.style }} - Weight: {{ type.weight }}</i>
+                      <ul>
+                        <li v-for="file in type.files">
+                          {{ file.name }}
+                        </li>
+                      </ul>
+                    </div>
                   </td>
                   <td class="text-right actions icons">
                     <a
