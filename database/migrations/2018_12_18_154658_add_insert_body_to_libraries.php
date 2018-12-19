@@ -16,7 +16,7 @@ class AddInsertBodyToLibraries extends Migration
     {
         $libraries = Library::all();
         foreach ($libraries as $library) {
-            if ($library->insertBody == undefined) {
+            if (!isset($library->insertBody)) {
                 $library->insertBody = true;
                 $library->timestamps = false;
                 $library->save();
