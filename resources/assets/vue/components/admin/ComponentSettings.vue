@@ -5,7 +5,7 @@
       v-b-toggle.style
       :label="`${_.startCase(component.type.replace('-element', ''))} Styles`"
       icon="glyphicon-pencil" />
-    <b-collapse id="style" visible accordion="module-right">
+    <b-collapse id="style" visible accordion="component-setting">
       <b-card class="default-settings">
         <group-container v-for="(settingGroup, groupKey) in settings" v-if="hasPermissionsInGroup(settingGroup, 'std-'+component.type+'_')" :label="settingGroup.showLabel ? settingGroup.groupLabel : null" :key="groupKey">
           <component
@@ -48,7 +48,7 @@
       label="Editor Settings"
       icon="glyphicon-tasks"
       title="Settings available in the Email Editor" />
-    <b-collapse id="functionalities" accordion="module-settings-accordion-right">
+    <b-collapse id="functionalities" accordion="component-setting">
       <b-card class="plugins">
         <group-container
           v-for="(pluginGroup, groupKey) in pluginsGroups"

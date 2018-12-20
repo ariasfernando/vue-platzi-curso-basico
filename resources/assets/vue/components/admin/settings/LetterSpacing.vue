@@ -1,12 +1,12 @@
 <template>
-    <settings-container label="Letter Spacing">
+    <SettingsContainer label="Letter Spacing">
       <template slot="setting-right">
-        <el-button
+        <ElButton
           v-if="isNormalLetterSpacing"
           class="custom-col"
           size="mini"
           disabled
-        >normal</el-button>
+        >normal</ElButton>
 
         <el-input-number
           v-else
@@ -16,16 +16,15 @@
           :min="-5"
           :max="5"
           v-model="letterSpacingInputValue"
-          @change="(newValue)=>updateLetterSpacing(newValue)"
-          ></el-input-number>
+          @change="(newValue)=>updateLetterSpacing(newValue)"/>
 
-        <el-button
+        <ElButton
           size="mini"
           :class="{'el-icon-setting': isNormalLetterSpacing,'active': !isNormalLetterSpacing}"
           @click="toggleNormalLetterSpacing"
-        ><span v-if="!isNormalLetterSpacing">{{ this.unit }}</span></el-button>
+        ><span v-if="!isNormalLetterSpacing">{{ this.unit }}</span></ElButton>
       </template>
-    </settings-container>
+    </SettingsContainer>
 </template>
 
 <script>
@@ -193,7 +192,7 @@ export default {
     .el-input-number__increase{
       border-radius: 0px;
       background: #f8f8f8;
-    } 
+    }
     .el-input__inner{
       text-align: center;
       border-top-right-radius: 0px;
@@ -205,6 +204,10 @@ export default {
     .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled), 
     .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){
       border: 1px solid #78dcd6;
+    }
+    .el-input-number__decrease,
+    .el-input-number__increase {
+      width: 17px;
     }
   }
 </style>

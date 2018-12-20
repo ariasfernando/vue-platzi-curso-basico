@@ -22,7 +22,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.el-input-number {
-    width: 100%;
+.el-input-number /deep/ {
+  width: 100%;
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    width: 17px;
+  }
 }
 </style>

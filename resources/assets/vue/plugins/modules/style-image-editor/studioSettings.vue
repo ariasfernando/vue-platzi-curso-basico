@@ -220,12 +220,19 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .config-inner {
-    padding-left: 10px;
+  padding-left: 10px;
 }
 
 .config-inner > * {
-    padding-bottom: 5px;
+  padding-bottom: 5px;
+}
+
+.el-input-number /deep/ {
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    width: 17px;
+  }
 }
 </style>

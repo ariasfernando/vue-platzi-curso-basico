@@ -1,26 +1,27 @@
 <template>
   <div>
-    <settings-container label="Image Size" class="is-normal-setting">
+    <SettingsContainer label="Image Size" class="is-normal-setting">
       <template slot="setting-right">
-        <el-button class="cog-left" size="mini" disabled>
+        <ElButton class="cog-left" size="mini" disabled>
           {{ !isPxWidth ? 'Full Width' : 'Custom' }}
-        </el-button>
-        <el-button
+        </ElButton>
+        <ElButton
           size="mini"
           class="el-icon-setting cog-right"
           :class="{'is-active': isPxWidth}"
           @click="onTogglePxWidth" />
       </template>
-    </settings-container>
+    </SettingsContainer>
 
-    <settings-container
+    <SettingsContainer
       v-if="isPxWidth"
       label-right="Height (px)"
       label-left="Width (px)"
       class="is-advanced-setting">
       <template slot="setting-half-left">
-        <el-input-number
+        <ElInputNumber
           v-model="width"
+          controls-position="right"
           class="generic-number"
           size="mini"
           :min="min"
@@ -31,24 +32,24 @@
         </span>
       </template>
       <template slot="setting-half-right">
-        <el-input-number
+        <ElInputNumber
           v-if="!isBlockHeight"
           v-model="height"
+          controls-position="right"
           class="generic-number"
           size="mini"
           :min="min" />
-        <el-input
+        <ElInput
           v-else
           v-model="height"
           size="mini"
           class="clearfix"
           disabled="disabled" />
       </template>
-    </settings-container>
+    </SettingsContainer>
   </div>
 </template>
 <script>
-import _ from 'lodash';
 import SettingMixin from '../mixins/SettingMixin';
 import SettingsContainer from '../../common/settings/containers/SettingsContainer.vue';
 import ElementMixin from '../../common/mixins/ElementMixin';
@@ -93,8 +94,9 @@ export default {
       get() {
         return _.parseInt(this.element.attribute.width);
       },
-      set(value) {
-        value = isNaN(value) || value < this.min ? this.min : value;
+      set(newValue) {
+        let value =
+          isNaN(newValue) || newValue < this.min ? this.min : newValue;
         value =
           this.isDisablePercentage || this.isPxWidth ? `${value}` : '100%';
         this.$emit('setting-updated', {
@@ -111,11 +113,11 @@ export default {
           ? 'auto'
           : _.parseInt(this.element.attribute.height);
       },
-      set(value) {
-        value =
-          (isNaN(value) || value < this.min) && value !== 'auto'
+      set(newValue) {
+        let value =
+          (isNaN(newValue) || newValue < this.min) && newValue !== 'auto'
             ? this.min
-            : value;
+            : newValue;
         value = `${value}`;
         this.$emit('setting-updated', {
           subComponent: this.subComponent,
@@ -144,7 +146,7 @@ export default {
     onTogglePxWidth() {
       if (!this.isDisablePercentage) {
         const isPxWidth = !this.isPxWidth;
-        let width;
+        let width = 0;
         if (!isPxWidth) {
           width = Math.min(100, this.width);
           // set height to auto;
@@ -171,10 +173,10 @@ export default {
     },
     defineStyleOption() {
       // set styleOption to default if is undefined
-      if (this.element.styleOption['isBlockHeight'] === undefined) {
+      if (this.element.styleOption.isBlockHeight === undefined) {
         this.isBlockHeight = false;
       }
-      if (this.element.styleOption['isPxWidth'] === undefined) {
+      if (this.element.styleOption.isPxWidth === undefined) {
         if (this.isDisablePercentage) {
           this.isPxWidth = true;
         } else {
@@ -195,6 +197,16 @@ export default {
   }
 }
 
+.el-input-number /deep/ {
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    width: 17px;
+  }
+  &.is-controls-right .el-input__inner {
+    padding-left: 0px;
+    padding-right: 16px;
+  }
+}
 .height-icon-auto {
   position: absolute;
   left: 100%;

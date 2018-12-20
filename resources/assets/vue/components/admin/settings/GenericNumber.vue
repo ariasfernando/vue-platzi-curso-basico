@@ -1,7 +1,7 @@
 <template>
-  <settings-container :label="label">
+  <SettingsContainer :label="label">
     <template :slot="settingSlot || 'setting-right'">
-      <el-input-number
+      <ElInputNumber
         v-model="mainSettingNumeric"
         v-validate="'required'"
         :controls="true"
@@ -20,7 +20,7 @@
         {{ isNumberPercentage ? "%": "px" }}
       </el-button>
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 <script>
 import SettingsContainer from '../../common/settings/containers/SettingsContainer.vue';
@@ -87,13 +87,12 @@ export default {
   padding-left: 0;
   padding-right: 21px;
 }
-.el-input-number /deep/ .el-input__inner {
+.ErIdeepN.el-input__inner {
   padding: 0;
   border-radius: 2px 0px 0px 2px;
 }
-.el-input-number /deep/ {
-  .el-input-number__decrease,
-  .el-input-number__increase {
+.ErIdeepN{
+  .ErIdecreaseN  .el-input-number__increase {
     right: 0;
     border: 1px solid #dcdfe6;
     border-left: 1px solid #dcdfe6;
@@ -128,6 +127,10 @@ export default {
   .el-input-number__increase {
     background: #f8f8f8;
   }
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    width: 17px;
+  }
 }
 .el-button.is-active .el-input__inner,
 .el-input__inner:focus {
@@ -151,7 +154,7 @@ export default {
 .el-input-number--mini.width-unit {
   width: 95px;
   margin-right: 25px;
-  padding-right: 26px;
+  padding-right: 16px;
   float: right;
 }
 .half-style-setting-padding {
@@ -168,7 +171,7 @@ export default {
 }
 .without-unit {
   width: 127px;
-  padding-right: 28px;
+  padding-right: 16px;
 }
 .is-setting-half .el-input-number--mini.width-unit {
   float: left;
