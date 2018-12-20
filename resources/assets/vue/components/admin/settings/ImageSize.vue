@@ -19,10 +19,9 @@
       label-left="Width (px)"
       class="is-advanced-setting">
       <template slot="setting-half-left">
-        <el-input-number
+        <stui-input-number
           v-model="width"
           class="generic-number"
-          size="mini"
           :min="min"
           :max="maxValueWidth" />
         <span class="height-icon-auto" @click="onToggleBlockheight">
@@ -31,11 +30,10 @@
         </span>
       </template>
       <template slot="setting-half-right">
-        <el-input-number
+        <stui-input-number
           v-if="!isBlockHeight"
           v-model="height"
           class="generic-number"
-          size="mini"
           :min="min" />
         <el-input
           v-else
