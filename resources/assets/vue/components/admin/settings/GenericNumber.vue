@@ -9,7 +9,7 @@
         size="mini"
         controls-position="right"
         :min="minValue"
-        :max="maxCaluculate" />
+        :max="maxCalculated" />
       <el-button
         v-if="isPercentage || isPixel"
         slot="append"
@@ -39,8 +39,8 @@ export default {
         if (typeof this.mainSetting === 'string' && this.mainSetting.endsWith('%')) {
           this.mainSetting = `${Math.min(this.maxPercentage || 100, newValue)}%`;
         } else {
-          const parceSetting = parseFloat(newValue);
-          this.mainSetting = this.link === 'style' ? `${parceSetting}px` : parceSetting;
+          const parseSetting = parseFloat(newValue);
+          this.mainSetting = this.link === 'style' ? `${parseSetting}px` : parseSetting;
         }
       },
     },
@@ -49,18 +49,18 @@ export default {
         typeof this.mainSetting === 'string' && this.mainSetting.endsWith('%')
       );
     },
-    maxCaluculate() {
+    maxCalculated() {
       return this.isNumberPercentage ? this.maxPercentage || 100 : this.maxValue;
     },
   },
   methods: {
     onToggleUnit() {
       if (this.isPercentage && this.isPixel) {
-        const parceSetting = parseFloat(this.mainSetting);
+        const parseSetting = parseFloat(this.mainSetting);
         if (this.isNumberPercentage) {
-          this.mainSetting = this.link === 'attribute' ? parceSetting : `${parceSetting}px`;
+          this.mainSetting = this.link === 'attribute' ? parseSetting : `${parseSetting}px`;
         } else {
-          this.mainSetting = `${Math.min(100, parceSetting)}%`;
+          this.mainSetting = `${Math.min(100, parseSetting)}%`;
         }
       }
     },
