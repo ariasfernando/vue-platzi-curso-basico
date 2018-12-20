@@ -7,6 +7,7 @@ import modules from '../modules';
 import fonts from './fonts';
 import utils from '../utils';
 import dictionary from '../resources/dictionary';
+import configService from '../services/config';
 
 export default {
   install(Vue) {
@@ -61,51 +62,67 @@ export default {
     if (customer.config && customer.config.fonts) {
       _.assign(fonts, customer.config.fonts);
     }
-
-    // Fonts path
-    const fontPath = `${this.Vue.prototype.$_app.config.baseUrl}/fonts/`;
-
-    let custom = {};
-
-    fonts.custom.map(font => {
-      custom[font.name] = true;
-      if (font.folder) {
-        const style = document.createElement('style');
-        style.type = 'text/css';
-        let definition = '';
-        let ie = '';
-        font.types.map(typeFont => {
-          typeFont.files.map(fileFont => {
-            if (fileFont.file === 'eot') {
-              ie = `src: url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}?#iefix');`;
-            }
-          });
-        });
-        font.types.map(typeFont => {
-          definition += `@font-face {font-family: '${font.name}';`;
-          definition += ie;
-          definition += 'src: ';
-          typeFont.files.map((fileFont, index) => {
-            definition += `url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}') format('${fileFont.file}')`;
-            if (index < typeFont.files.length - 1) {
-              definition += ',';
-            } else {
-              definition += ';';
-            }
-          });
-          definition += `font-weight: ${typeFont.weight};}`;
-        });
-        style.appendChild(document.createTextNode(definition));
-        document.head.appendChild(style);
-      } else if (font.url) {
-        const link = document.createElement('link');
-        link.href = font.url;
-        link.rel="stylesheet";
-        link.type="text/css";
-        document.head.insertBefore(link, document.head.childNodes[0]);
+    // Check first if there are fonts load from studio
+    configService.getConfig('global_settings').then((response) => {
+      let studioFonts = response.custom_fonts;
+      if(studioFonts && studioFonts.length > 0) {
+        fonts.custom = fonts.custom.concat(studioFonts);
       }
+
+      this.Vue.prototype.$_app.utils = utils;
+      // Fonts path
+      const fontPath = `${this.Vue.prototype.$_app.config.baseUrl}/fonts/`;
+  
+      let custom = {};
+  
+      fonts.custom.map(font => {
+        custom[font.name] = true;
+        if (font.folder || font.source === 'studio') {
+          const style = document.createElement('style');
+          style.type = 'text/css';
+          let definition = '';
+          let ie = '';
+          font.types.map(typeFont => {
+            typeFont.files.map(fileFont => {
+              if (fileFont.file === 'eot') {
+                if (font.folder) {
+                  ie = `src: url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}?#iefix');`;
+                } else {
+                  ie = `src: url('${fontPath}customer/${fileFont.name}?#iefix');`;
+                }
+              }
+            });
+          });
+          font.types.map(typeFont => {
+            definition += `@font-face {font-family: '${font.name}';`;
+            definition += ie;
+            definition += 'src: ';
+            typeFont.files.map((fileFont, index) => {
+              if (font.folder) {
+                definition += `url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}') format('${fileFont.file}')`;
+              } else {
+                definition += `url('${fontPath}customer/${fileFont.name}') format('${fileFont.file}')`;
+              }
+              if (index < typeFont.files.length - 1) {
+                definition += ',';
+              } else {
+                definition += ';';
+              }
+            });
+            definition += `font-weight: ${typeFont.weight};}`;
+          });
+          style.appendChild(document.createTextNode(definition));
+          document.head.appendChild(style);
+        } else if (font.url) {
+          const link = document.createElement('link');
+          link.href = font.url;
+          link.rel="stylesheet";
+          link.type="text/css";
+          document.head.insertBefore(link, document.head.childNodes[0]);
+        }
+      });
+      this.Vue.prototype.$_app.config.fonts = fonts;
     });
-    this.Vue.prototype.$_app.config.fonts = fonts;
   },
   initFilters() {
     // Register Global Filters
