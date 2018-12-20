@@ -23,12 +23,11 @@ class FileManager
         $file_path = $file->getClientOriginalName();
 
         try {
-            $success = $storage->put($file_path, $file);
+            $success = $storage->put($file_path, file_get_contents($file));
         } catch (Exception $e) {
             Log::warning(
                 sprintf(
                     "[%s] font storage for file %s failed. Attempting one more time",
-                    $this->getCampaign()->id,
                     $file_path
                 )
             );

@@ -202,7 +202,7 @@
           });
       },
       saveFontFamily() {
-        const fontFamilyData = { name: this.fontFamilyName, types: this.fontTypes };
+        const fontFamilyData = { name: this.fontFamilyName, source: 'studio', types: this.fontTypes };
         const fontFamilyList = _.cloneDeep(this.fontFamilyList)
         if (this.currentFont !== undefined) {
           fontFamilyList[this.currentFont] = fontFamilyData;
