@@ -3,6 +3,7 @@
 namespace Stensul\Http\Controllers\Admin;
 
 use Auth;
+use FileManager;
 use Stensul\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use SettingModel as Setting;
@@ -40,7 +41,7 @@ class SettingController extends Controller
         return $this->renderView('admin.settings', ['global_settings' => $global_settings]);
     }
 
-        /**
+    /**
      * Show the settings admin view.
      *
      * @return View
@@ -59,5 +60,25 @@ class SettingController extends Controller
         }
 
         return $response_message;
+    }
+
+    /**
+     * Get all global settings
+     *
+     * @return array of settings
+     */
+    public function getAll()
+    {
+        return Setting::all(['name', 'key', 'value', 'properties'])->toArray();
+    }
+
+    /**
+     * Upload a custom font.
+     *
+     * @return array
+     */
+    public function postUploadFont(Request $request)
+    {
+        return FileManager::saveFont($request->file('file'));
     }
 }

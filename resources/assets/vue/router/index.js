@@ -2,6 +2,8 @@ import Libraries from '../components/admin/Libraries.vue';
 import EditLibrary from '../components/admin/EditLibrary.vue';
 import Modules from '../components/admin/Modules.vue';
 import EditModule from '../components/admin/EditModule.vue';
+import GlobalSettings from '../components/admin/GlobalSettings.vue';
+import CustomFonts from '../components/admin/CustomFonts.vue';
 
 export const studioLibraryRoutes = [
   {
@@ -38,5 +40,17 @@ export const studioModuleRoutes = [
   {
     path: '/clone/:id',
     component: EditModule,
+  },
+];
+
+export const globalSettingeRoutes = [
+  {
+    path: '/',
+    component: GlobalSettings,
+    props: true,
+  },
+  {
+    path: '/fonts',
+    component: CustomFonts,
   },
 ];
