@@ -6,7 +6,8 @@
       :module="module"
       :module-id="moduleId"
       :column-id="columnId"
-      :component-id="componentId" />
+      :component-id="componentId"
+      :editor-id="`idInstance-${module.idInstance}-componentId-${component.id}`" />
     <div v-if="hasBorderRadius" class="stx-wrapper" v-html="notMsoStartingComment" />
     <a
       :data-contenteditable-href="component.button.attribute.href || ''"
