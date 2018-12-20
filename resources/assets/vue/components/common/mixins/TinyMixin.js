@@ -2,7 +2,7 @@
 import Adapter from './tinymce/Adapter';
 
 export default {
-  props: ['editor-id', 'textDirty', 'type', 'config', 'fontStyles', 'text'],
+  props: ['editor-id', 'textDirty', 'type', 'config', 'fontStyles', 'text', 'tinyClass'],
   mixins: [
     Adapter,
   ],

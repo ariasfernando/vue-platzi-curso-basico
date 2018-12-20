@@ -5,6 +5,7 @@
     <div
       :id="editorId"
       class="stx-edit-text stx-wrapper"
+      :class="tinyClass"
       style="width: 100%; display: inline-block !important; vertical-align: middle"
       :style="fontStyles"
       @keyup="changeContent"
