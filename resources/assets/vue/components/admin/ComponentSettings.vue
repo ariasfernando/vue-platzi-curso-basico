@@ -22,6 +22,7 @@
             :type="setting.type"
             :setting-slot="setting.settingSlot"
             :max-percentage="setting.maxPercentage"
+            :is-inverted="setting.isInverted"
             :link="setting.link"
             :label="setting.label"
             :placeholder="setting.placeholder"

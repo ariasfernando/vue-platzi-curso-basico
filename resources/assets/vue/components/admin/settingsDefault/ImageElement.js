@@ -19,6 +19,15 @@ function imageDefault() {
           subComponent: 'image',
         },
         {
+          link: 'styleOption',
+          label: 'Full Width In Mobile',
+          name: 'noMobileStretch',
+          aclName: 'placeholder_placeholder-desktop',
+          type: 'generic-switch',
+          isInverted: true,
+          subComponent: 'image',
+        },
+        {
           name: 'classes',
           aclName: 'placeholder_classes',
           type: 'class-input',

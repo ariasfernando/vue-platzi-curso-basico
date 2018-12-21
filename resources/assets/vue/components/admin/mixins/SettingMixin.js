@@ -1,9 +1,13 @@
 export default {
   props: [
+    'autosize',
+    'column-id',
+    'component',
     'default-value',
     'element',
     'is-disable',
     'isDisablePercentage',
+    'isInverted',
     'isPercentage',
     'isPixel',
     'label',
@@ -11,19 +15,16 @@ export default {
     'max-percentage',
     'max-value',
     'min-value',
+    'module',
     'name',
     'options',
     'placeholder',
+    'resize',
+    'setting-position',
     'setting-slot',
     'showSetting',
     'sub-component',
-    'component',
-    'module',
-    'column-id',
     'type',
-    'setting-position',
-    'autosize',
-    'resize',
   ],
   mounted() {
     this.setDefaultValue();
@@ -51,8 +52,11 @@ export default {
   },
   methods: {
     setDefaultValue() {
-      if (this.link !== undefined && this.defaultValue !== undefined
-        && this.element[this.link][this.name] === undefined) {
+      if (
+        this.link !== undefined &&
+        this.defaultValue !== undefined &&
+        this.element[this.link][this.name] === undefined
+      ) {
         // set styleOption to default if is undefined
         this.mainSetting = this.defaultValue;
       }
