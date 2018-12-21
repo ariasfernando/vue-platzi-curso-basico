@@ -35,6 +35,7 @@ function campaignStore() {
       showImageEditor: false,
       fieldErrors: [],
       showModuleSettings: false,
+      processing: false,
     },
     getters: {
       modules(state) {
@@ -73,6 +74,9 @@ function campaignStore() {
       },
       currentCustomModule(state) {
         return state.currentCustomModuleId;
+      },
+      isProcessing(state) {
+        return state.processing;
       },
       buildingMode(state) {
         return state.buildingMode;
@@ -178,6 +182,9 @@ function campaignStore() {
       removeModule(state, moduleId) {
         state.modules.splice(moduleId, 1);
         state.dirty = true;
+      },
+      setProcessingStatus(state, processing = true) {
+        state.processing = processing;
       },
       setProcessStatus(state, processed = true) {
         state.campaign.campaign_data.processed = processed;
