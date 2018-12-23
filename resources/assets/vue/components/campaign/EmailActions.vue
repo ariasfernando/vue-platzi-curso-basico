@@ -422,8 +422,10 @@
       },
     },
     created () {
+      // Reset campaign processing status
+      this.$store.commit('campaign/setProcessingStatus', false);
       this.autoSave();
-      this.campaignConfig = this.$store.getters["config/config"].campaign;
+      this.campaignConfig = this.$store.getters['config/config'].campaign;
       this.trackingEnabled = (_.has(this.campaign.campaign_data.library_config, 'tracking') && this.campaign.campaign_data.library_config.tracking);
       let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.templating);
       let isTemplate = this.campaign.campaign_data.template;
