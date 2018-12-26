@@ -105,7 +105,7 @@
     "pre-commit": "^1.2.2",
     "pre-commit-with-lint": "^1.2.5",
     "stackup": "1.0.1",
-    "stensul-coverage-metrics": "^1.0.2",
+    "stensul-coverage-metrics": "^1.0.6",
     "stylelint": "^9.6.0"
   },
   "pre-commit": {
@@ -151,7 +151,7 @@
     "production": "NODE_ENV=production webpack --progress --hide-modules --config=./webpack.config.js",
     "watch:test": "npm t -- --watch",
     "cover": "npm t -- --coverage",
-    "metricOfCover": "./node_modules/stensul-coverage-metrics/dist/index",
+    "metricOfCover": "npx metricCover",
     "test": "jest",
     "eslint": "./node_modules/.bin/eslint ./resources/**/*.{js,vue} || echo \"\n$(tput setaf 1) CORRECT CODE IN THE ABOVE FILES AND TRY AGAIN $(tput sgr 0)\n\""
   },
@@ -160,9 +160,9 @@
       "pathReporter": "./ci/storage/tmp/coverage/clover.xml",
       "output": {
         "conexion": {
-          "type": "mongodb",
+          "type": "mongoDb",
           "dbName": "coverage_reports",
-          "collectionName": "coveragesLog",
+          "collectionName": "coverages",
           "pathEnv": "./.env"
         }
       }
