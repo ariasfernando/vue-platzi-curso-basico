@@ -320,6 +320,9 @@
           'indent_size': 2
         });
 
+        // Set campaign as processing
+        this.$store.commit('campaign/setProcessingStatus');
+
         // Save Request
         this._save(bodyHtml).then(() => {
           // Process Campaign
@@ -363,7 +366,7 @@
       },
       autoSave() {
         setInterval(() => {
-          if (this.dirty && this.campaign.campaign_data.auto_save !== false) {
+          if (this.dirty && this.campaign.campaign_data.auto_save !== false && this.$store.getters['campaign/isProcessing'] === false) {
             this.$store.commit("global/setSecondaryLoader", true);
             this._save().then(response => {
               this.$store.commit("global/setSecondaryLoader", false);
@@ -419,8 +422,10 @@
       },
     },
     created () {
+      // Reset campaign processing status
+      this.$store.commit('campaign/setProcessingStatus', false);
       this.autoSave();
-      this.campaignConfig = this.$store.getters["config/config"].campaign;
+      this.campaignConfig = this.$store.getters['config/config'].campaign;
       this.trackingEnabled = (_.has(this.campaign.campaign_data.library_config, 'tracking') && this.campaign.campaign_data.library_config.tracking);
       let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.templating);
       let isTemplate = this.campaign.campaign_data.template;

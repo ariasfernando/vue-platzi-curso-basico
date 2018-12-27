@@ -90,6 +90,7 @@ function campaignStore() {
       showImageEditor: false,
       fieldErrors: [],
       showModuleSettings: false,
+      processing: false,
     },
     getters: {
       modules(state) {
@@ -128,6 +129,9 @@ function campaignStore() {
       },
       currentCustomModule(state) {
         return state.currentCustomModuleId;
+      },
+      isProcessing(state) {
+        return state.processing;
       },
       buildingMode(state) {
         return state.buildingMode;
@@ -173,7 +177,11 @@ function campaignStore() {
         state.buildingMode = buildingMode;
       },
       setDirty(state, dirty) {
-        state.dirty = dirty;
+        if (state.processing === false) {
+          state.dirty = dirty;
+        } else {
+          state.dirty = false;
+        }
       },
       setUpdatedAt(state, updatedAt) {
         state.campaign.campaign_data.updated_at = updatedAt;
@@ -186,24 +194,24 @@ function campaignStore() {
       },
       addModule(state, moduleData) {
         state.modules.push(moduleData);
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
       },
       insertModule(state, { index, moduleData }) {
         state.modules.splice(index, 0, moduleData);
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
       },
       cloneModule(state, moduleId) {
         const cloned = _.cloneDeep(state.modules[moduleId]);
         cloned.idInstance = Math.floor(100000 + (Math.random() * 900000));
         state.modules.push(cloned);
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
       },
       updateCustomElement(state, payload) {
         // DEPRECATED
         if (!_.isUndefined(payload.moduleId)) {
           const update = { ...state.modules[payload.moduleId].data, ...payload.data };
           state.modules[payload.moduleId].data = update;
-          state.dirty = true;
+          this.commit('campaign/setDirty', true);
         }
       },
       updateCustomElementProperty(state, payload) {
@@ -211,14 +219,14 @@ function campaignStore() {
           const dataComponent = state.modules[payload.moduleId].data;
           const subComponent = payload.subComponent ? dataComponent[payload.subComponent] : dataComponent;
           Vue.set(subComponent, payload.property, payload.value);
-          state.dirty = true;
+          this.commit('campaign/setDirty', true);
         } else {
           throw new Error('moduleId is undefined');
         }
       },
       saveSetting(state, { name, value }) {
         Vue.set(state.editedSettings, name, value);
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
       },
       saveCampaignData(state, payload) {
         const update = {};
@@ -232,7 +240,10 @@ function campaignStore() {
       },
       removeModule(state, moduleId) {
         state.modules.splice(moduleId, 1);
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
+      },
+      setProcessingStatus(state, processing = true) {
+        state.processing = processing;
       },
       setProcessStatus(state, processed = true) {
         state.campaign.campaign_data.processed = processed;
@@ -263,7 +274,7 @@ function campaignStore() {
         const columnId = data.columnId;
         const componentId = data.componentId;
         state.modules[moduleId].structure.columns[columnId].components[componentId] = data.component;
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
       },
       savePlugin(state, payload) {
         let plugin = state.modules[payload.moduleId];
@@ -281,7 +292,7 @@ function campaignStore() {
           ...plugin.data,
           ...payload.data,
         };
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
       },
       saveElementProperty(state, { moduleIdInstance, elementId, property, value, ...scope }) {
         const module = getModule(state.modules, moduleIdInstance);
@@ -308,7 +319,7 @@ function campaignStore() {
         const subComponent = data.subComponent ? component[data.subComponent] : component;
         const properties = data.link ? subComponent[data.link] : subComponent;
         Vue.set(properties, data.property, data.value);
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
       },
       saveColumnAttribute(state, data) {
         // DEPRECATE
@@ -319,7 +330,7 @@ function campaignStore() {
           .modules[data.moduleId]
           .structure.columns[data.columnId]
           .container.attribute = { ...attributes, ...newData };
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
       },
       saveColumnProperty(state, data) {
         const columns = state.modules[data.moduleId].structure.columns;
@@ -328,7 +339,7 @@ function campaignStore() {
         const subComponent = data.subComponent ? column[data.subComponent] : column;
         const properties = data.link ? subComponent[data.link] : subComponent;
         Vue.set(properties, data.property, data.value);
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
         // hack to make the column array reactive
         // note: for more info check vue documentation #Array-Change-Detection
         if (!_.isEqual(columnClone, column)) {
@@ -339,13 +350,13 @@ function campaignStore() {
         // DEPRECATE
         const attributes = state.modules[data.moduleId].structure.attribute;
         attributes[data.attribute] = data.attributeValue;
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
       },
       saveModuleProperty(state, data) {
         const module = state.modules[data.moduleId].structure;
         const properties = data.link ? module[data.link] : module;
         Vue.set(properties, data.property, data.value);
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
       },
       saveModuleData(state, data) {
         // TODO: Migrate saveCustomModuleData to this method
@@ -357,7 +368,7 @@ function campaignStore() {
         // This workaround is because Vue cannot react on changes when you set an item inside an array with its index
         const newData = _.extend(clone(state.modules[data.moduleId].data), data.data);
         state.modules[data.moduleId].data = newData;
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
       },
       saveCustomModuleData(state, data) {
         // Prevent empty arrays returned by php-mongo
@@ -368,7 +379,7 @@ function campaignStore() {
         // This workaround is because Vue cannot react on changes when you set an item inside an array with its index
         const newData = _.extend(clone(state.modules[data.moduleId].data), data.data);
         Vue.set(state.modules[data.moduleId], 'data', newData);
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
       },
       saveCustomModuleImageData(state, data) {
         if (_.isArray(state.modules[data.moduleId].data)) {
@@ -402,7 +413,7 @@ function campaignStore() {
         const newData = _.extend(clone(state.modules[data.moduleId].data[data.field][data.index]), data.value);
         state.modules[data.moduleId].data[data.field][data.index] = newData;
         state.modules[data.moduleId].data[data.field] = clone(state.modules[data.moduleId].data[data.field]);
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
       },
       saveCustomModuleDataField(state, data) {
         // Prevent empty arrays returned by php-mongo
@@ -424,7 +435,7 @@ function campaignStore() {
           state.modules[data.moduleId].data[data.field] = data.value;
         }
 
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
       },
       saveCustomModuleParamsField(state, param) {
         // Prevent empty arrays returned by php-mongo
@@ -440,7 +451,7 @@ function campaignStore() {
         } else {
           Vue.set(state.modules[param.moduleId].params, param.field, param.value);
         }
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
       },
       setEditorOptions(state, toolbar) {
         state.editorToolbar = toolbar;
