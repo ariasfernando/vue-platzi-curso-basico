@@ -116,9 +116,10 @@ export default {
 
       if (Object.keys(trackingConfigGroups.replace).length > 0) {
         Object.keys(trackingConfigGroups.replace).forEach((param) => {
+          const key = `trk-${param}`;
           const search = trackingConfigGroups.replace[param].replaceString;
-          const replacement = trackingConfigGroups.replace[param].values;
-          dom.body.firstChild.innerHTML = dom.body.firstChild.innerHTML.replace(new RegExp(search, 'g'), replacement)
+          const replacement = trackingData[key];
+          dom.body.firstChild.innerHTML = dom.body.firstChild.innerHTML.replace(new RegExp(search, 'g'), replacement);
         });
       }
 
