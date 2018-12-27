@@ -12,16 +12,20 @@ import imageService from '../services/image';
 
 const state = {
   module: {},
-  currentComponent: {},
+  currentElementId: false,
   buildingMode: 'desktop',
   showRaw: false,
   loading: false,
   secondaryLoading: false,
 };
 
-const getColumnIndexByComponentId = (module, elementId) => {
+const getColumnIndexByElementId = (elementId) => {
   let columnIndex = false;
-  _.forEach(module.structure.columns, (column, currentColumnIndex) => {
+  _.forEach(state.module.structure.columns, (column, currentColumnIndex) => {
+    if (column.id === elementId) {
+      columnIndex = currentColumnIndex;
+      return false;
+    }
     _.forEach(column.components, (currentComponent) => {
       if (currentComponent.id === elementId) {
         columnIndex = currentColumnIndex;
@@ -33,9 +37,9 @@ const getColumnIndexByComponentId = (module, elementId) => {
   });
   return columnIndex;
 };
-const getComponentIndexByComponentId = (module, elementId) => {
+const getComponentIndexByComponentId = (elementId) => {
   let componentIndex = false;
-  _.forEach(module.structure.columns, (column) => {
+  _.forEach(state.module.structure.columns, (column) => {
     _.forEach(column.components, (currentComponent, currentComponentIndex) => {
       if (currentComponent.id === elementId) {
         componentIndex = currentComponentIndex;
@@ -48,7 +52,7 @@ const getComponentIndexByComponentId = (module, elementId) => {
   return componentIndex;
 };
 const getElement = (module, elementId) => {
-  let element = {};
+  let element = false;
   _.forEach(module.structure.columns, (column) => {
     if (column.id === elementId) {
       element = column;
@@ -100,7 +104,17 @@ const getters = {
     return state.module;
   },
   currentComponent(state) {
-    return state.currentComponent;
+    if (state.currentElementId) {
+      let columnId = getColumnIndexByElementId(state.currentElementId);
+      let componentId = getComponentIndexByComponentId(state.currentElementId);
+      columnId = columnId === false ? undefined : columnId;
+      componentId = componentId === false ? undefined : componentId;
+      return {
+        columnId,
+        componentId,
+      };
+    }
+    return {};
   },
   buildingMode(state) {
     return state.buildingMode;
@@ -126,7 +140,16 @@ const mutations = {
     });
   },
   setCurrentComponent(state, data) {
-    state.currentComponent = data;
+    if (data.componentId >= 0) {
+      state.currentElementId =
+        state.module.structure.columns[data.columnId].components[
+          data.componentId
+        ].id;
+    } else if (data.columnId >= 0) {
+      state.currentElementId = state.module.structure.columns[data.columnId].id;
+    } else {
+      state.currentElementId = {};
+    }
   },
   clearCurrentComponent(state) {
     state.currentComponent = {};
@@ -165,6 +188,17 @@ const mutations = {
     // Set attribute
     column.container.attribute.width = `${data.width}%`;
   },
+  saveElementProperty(state, { moduleIdInstance, elementId, property, value, ...scope }) {
+    const element = elementId === undefined ? state.module : getElement(state.module, elementId);
+    if (element.structure) scope.subComponent = 'structure';
+    let properties = getProperties(element, scope);
+    if (Array.isArray(properties) && isNaN(property)) {
+      // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
+      properties = convertArrayToObject(element, scope);
+    }
+    Vue.set(properties, property, value);
+    state.dirty = true;
+  },
   saveColumnProperty(state, data) {
     const column = state.module.structure.columns[data.colId];
     let properties = getProperties(column, data);
@@ -188,9 +222,9 @@ const mutations = {
   },
   removeElement(state, { elementId }) {
     state.module.structure.columns[
-      getColumnIndexByComponentId(state.module, elementId)
+      getColumnIndexByElementId(elementId)
     ].components.splice(
-      getComponentIndexByComponentId(state.module, elementId),
+      getComponentIndexByComponentId(elementId),
       1,
     );
   },
