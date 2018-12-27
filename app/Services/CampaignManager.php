@@ -177,13 +177,15 @@ class CampaignManager
 
         if ($campaign_data = Campaign::find($campaign_id)) {
             $campaign_data->status = 2;
-            $campaign_data->deleted_at = Carbon::now();
+
             $campaign_data->deleted_by = [
                 'id' => new ObjectID(Auth::id()),
                 'email' => Auth::user()->email
             ];
 
-            if ($campaign_data->save()) {
+            $campaign_data->save();
+
+            if ($campaign_data->delete()) {
                 Activity::log('Campaign deleted', array('properties' => ['campaign_id' => new ObjectId($campaign_id)]));
                 // Check proof
                 if ($campaign_data->has_active_proof) {
@@ -196,6 +198,7 @@ class CampaignManager
                         dispatch(new SendReviewersEmail($proof, 'deleted_proof'));
                     }
                 }
+
                 return array('success' => $campaign_id);
             }
         }
@@ -778,5 +781,42 @@ class CampaignManager
         $campaign = Campaign::findOrFail($campaign_id);
         $assets = new Assets($campaign);
         return $assets->trimImage($options);
+    }
+
+    /**
+     * Toggle archive flag on a campaign.
+     *
+     * @param  array $inputs
+     *
+     * @return array
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public static function archive($inputs)
+    {
+        $campaign_id = $inputs['campaign_id'];
+
+        if (isset($campaign_id)) {
+            // Retrieve the campaign
+            $campaign = Campaign::findOrFail($campaign_id);
+
+            // Toogle the archive status of the campaign
+            if ($campaign->archive) {
+                $campaign->archive = false;
+                $log_message = 'Archive campaign';
+            } else {
+                $campaign->archive = true;
+                $log_message = 'Unarchive campaign';
+            }
+
+            $campaign->save();
+
+            Activity::log($log_message, array('properties' =>
+                ['campaign_id' => new ObjectId($campaign_id)]
+            ));
+            return ['success' => $campaign_id];
+        }
+
+        return ['error' => $campaign_id];
     }
 }

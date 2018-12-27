@@ -159,7 +159,7 @@
         var cleanHtml = campaignCleaner.clean('.section-canvas-container');
 
         if (this.trackingEnabled) {
-          cleanHtml = this.addTrackingParams($(cleanHtml)).prop('outerHTML');
+          cleanHtml = this.addTrackingParams(cleanHtml);
         }
 
         const bodyHtml = html_beautify(cleanHtml, {
@@ -176,12 +176,6 @@
         });
       },
       _save(bodyHtml = undefined) {
-        // Add hack for devices that do not detect media queries on save action.
-        // So we need to have the fix if we want to send a preview before complete a campaign.
-        this.$_app.utils.hackMediaQuery(
-          '.section-canvas-container',
-          this.campaign.campaign_data.library_config.templateWidth);
-
         const promise = this.$store.dispatch("campaign/saveCampaign", {
           campaign: this.campaign,
           bodyHtml
@@ -311,8 +305,6 @@
         // Show Loader
         this.$store.commit("global/setLoader", true);
 
-        this.$_app.utils.hackMediaQuery('.section-canvas-container', this.campaign.campaign_data.library_config.templateWidth);
-
         // Obtain current html
         var cleanHtml = campaignCleaner.clean('.section-canvas-container');
 
@@ -321,7 +313,7 @@
             this.$store.commit("global/setLoader", false);
             return false;
           }
-          cleanHtml = this.addTrackingParams($(cleanHtml)).prop('outerHTML');
+          cleanHtml = this.addTrackingParams(cleanHtml);
         }
 
         const bodyHtml = html_beautify(cleanHtml, {
@@ -429,7 +421,7 @@
     created () {
       this.autoSave();
       this.campaignConfig = this.$store.getters["config/config"].campaign;
-      this.trackingEnabled = (this.campaignConfig.enable_tracking && _.has(this.campaign.campaign_data.library_config, 'tracking') && this.campaign.campaign_data.library_config.tracking);
+      this.trackingEnabled = (_.has(this.campaign.campaign_data.library_config, 'tracking') && this.campaign.campaign_data.library_config.tracking);
       let saveAsTemplate = (!this.campaign.processed && this.campaign.campaign_data.library_config.templating);
       let isTemplate = this.campaign.campaign_data.template;
 

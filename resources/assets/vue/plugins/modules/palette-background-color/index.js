@@ -2,7 +2,7 @@ const studioSettings = require('./studioSettings.vue');
 const campaignSettings = require('./campaignSettings.vue');
 
 module.exports = {
-  name: 'pallete-background-color',
+  name: 'palette-background-color',
   title: 'Palette Background color',
   version: '0.0.1',
   author: 'matias@stensul.com',

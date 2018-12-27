@@ -4,6 +4,7 @@ namespace Stensul\Http\Controllers;
 
 use Auth;
 use Cache;
+use Stensul\Http\Requests\Campaign\PostLockRequest;
 use StensulLocale;
 use Activity;
 use Campaign;
@@ -453,7 +454,7 @@ class CampaignController extends Controller
      *
      * @return array
      */
-    public function postLock(Request $request)
+    public function postLock(PostLockRequest $request)
     {
         return Campaign::lock($request->input('campaign_id'), $request->input('window_id'));
     }
@@ -650,5 +651,24 @@ class CampaignController extends Controller
             $params['background_image'] = public_path() . str_replace(config('app.url'), '', $params['background_image']);
         }
         return Campaign::trimImage($params);
+    }
+
+    /**
+     * Set campaigns as archive or not.
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return string
+     *
+     * @throws
+     */
+    public function postArchive(Request $request)
+    {
+        if (!Auth::user()->can("access_archive")) {
+            return response()->json([
+                'error'   => 'Forbidden'
+            ], 403);
+        }
+        return Campaign::archive($request->input());
     }
 }

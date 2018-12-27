@@ -29,7 +29,7 @@
 
           <settings-container label="Preheader Text" v-if="enablePreheader" title="The best practice is to limit preheaders to 50 characters." key="preheader-text">
             <template slot="setting-bottom">
-              <el-input size="mini" placeholder="Preheader Text" name="campaignPreheader" maxlength="140" :value="form.campaignPreheader" @blur="saveSettings"/>
+              <el-input v-model="campaignPreheader" size="mini" placeholder="Preheader Text" maxlength="140" />
             </template>
           </settings-container>
 
@@ -114,7 +114,6 @@
         enableTitle: false,
         form: {
           campaignName: '',
-          campaignPreheader: '',
           campaignProcess: false,
           emailTitle: '',
           tags: []
@@ -133,6 +132,9 @@
       }
     },
     computed: {
+      editedSettings() {
+        return this.$store.getters['campaign/editedSettings'];
+      },
       locked() {
         return this.$store.getters["campaign/campaign"].campaign_data.locked;
       },
@@ -171,6 +173,17 @@
         },
         set(value) {
           this.saveCampaignName(value);
+        },
+      },
+      campaignPreheader: {
+        get() {
+          return this.editedSettings.campaignPreheader;
+        },
+        set(value) {
+          this.$store.commit('campaign/saveSetting', {
+            name: 'campaignPreheader',
+            value,
+          });
         },
       },
       templateBackgroundColor: {
