@@ -138,14 +138,6 @@ module.exports = {
     },
   },
   methods: {
-    onSort(e) {
-      const colId = e.clone.getAttribute('data-column');
-      this.$store.commit('module/sortColumn', {
-        newIndex: e.newIndex,
-        oldIndex: e.oldIndex,
-        colId,
-      });
-    },
     onAdd(e) {
       const componentId = e.newIndex;
       const colId = e.to.getAttribute('data-col');

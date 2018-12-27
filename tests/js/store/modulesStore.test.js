@@ -353,7 +353,6 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    xit('"sortColumn" ', () => {});
     it('"setColumnWidth" with data, expect in the "module" state of each column width has modified with the new value', (done) => {
       let data = {
         colId: 0,
@@ -1607,7 +1606,6 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    xit('"sortColumn"', () => {});
     it('"normalizeColumns", expect to columns are equal in width', (done) => {
       let Columns = [
         {
