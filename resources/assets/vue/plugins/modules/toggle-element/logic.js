@@ -115,10 +115,10 @@ export default {
     applyLogicUpdates(settings) {
       let applyLogicUpdates = false;
 
-      if (_.isEmpty(settings.ids)) {
+      if (_.isEmpty(settings.ids) && typeof settings.target !== 'undefined') {
         applyLogicUpdates = this.applyIf(settings);
-      } else if (_.indexOf(settings.ids, settings.target.elementId) !== -1) {
-        // if ids array is not empty, only apply logic` if elementId matches an id in ids
+      } else if (typeof settings.target !== 'undefined' && _.indexOf(settings.ids, settings.target.elementId) !== -1) {
+        // if ids array is not empty, only apply logic if elementId matches and id in ids
         applyLogicUpdates = this.applyIf(settings);
       }
 

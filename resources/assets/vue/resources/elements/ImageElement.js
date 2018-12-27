@@ -11,13 +11,15 @@ function imageDefault() {
     },
     image: {
       attribute: {
-        placeholder: 'default/placeholder-16-9-1000x563.jpg',
+        placeholder: '',
         href: '',
         width: '100%',
         height: 'auto',
       },
       style: {},
-      styleOption: {},
+      styleOption: {
+        noMobileStretch: true,
+      },
     },
     plugins: {},
     data: {},

@@ -103,7 +103,7 @@
       },
       campaign: {
         handler: function(value) {
-          this.minified.normal_html.initial_html = value.campaign_data.body_html;
+          this.minified.normal_html.initial_html = this.$options.filters.charConvert(value.campaign_data.body_html);
           this.minified.normal_html.minified_html = this.$options.filters.charConvert(value.campaign_data.body_html_minified);
           this.minified.normal_html.output = this.minified.normal_html.initial_html;
           this.plainText = value.campaign_data.plain_text;

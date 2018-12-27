@@ -1,6 +1,6 @@
 <template>
   <!-- DIVIDER ELEMENT -->
-  <module-container :component="component" @select-component="selectComponentHandler">
+  <module-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
     <table
       :width="component.divider.attribute.width || '100%'"
       :style="tableStyle"

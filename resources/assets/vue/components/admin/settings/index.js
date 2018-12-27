@@ -1,5 +1,6 @@
 import BorderGroup from './BorderGroup.vue';
 import ButtonCaret from './ButtonCaret.vue';
+import HorizontalPaddingGroup from './HorizontalPaddingGroup.vue';
 import ButtonWidth from './ButtonWidth.vue';
 import ClassInput from './ClassInput.vue';
 import ColumnsStacking from './ColumnsStacking.vue';
@@ -22,6 +23,7 @@ import Width from './Width.vue';
 const Settings = {
   BorderGroup,
   ButtonCaret,
+  HorizontalPaddingGroup,
   ButtonWidth,
   ClassInput,
   ColumnsStacking,
