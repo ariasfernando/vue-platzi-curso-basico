@@ -303,7 +303,7 @@ function campaignStore() {
           properties = convertArrayToObject(element, scope);
         }
         Vue.set(properties, property, value);
-        state.dirty = true;
+        this.commit('campaign/setDirty', true);
       },
       saveElementPluginData(state, { moduleIdInstance, elementId, type, plugin, path, value }) {
         const module = getModule(state.modules, moduleIdInstance);
