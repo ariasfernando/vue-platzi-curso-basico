@@ -91,9 +91,6 @@ export default {
     pluginsGroups() {
       return pluginsLayout['column-element']().componentPlugins;
     },
-    _() {
-      return _;
-    },
     columnLabel() {
       let columnindex = this.currentComponent.columnId;
       if (this.isInvertedStacking) {

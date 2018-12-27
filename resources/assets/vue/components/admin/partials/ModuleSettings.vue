@@ -85,9 +85,6 @@ export default {
     pluginsGroups() {
       return pluginsLayout['Module']().componentPlugins;
     },
-    _() {
-      return _;
-    },
   },
   methods: {
     pluginFilter(plugins) {

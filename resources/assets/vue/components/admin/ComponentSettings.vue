@@ -117,9 +117,6 @@ export default {
       return this.module.structure.columns[this.currentComponent.columnId]
         .components[this.currentComponent.componentId];
     },
-    _() {
-      return _;
-    },
   },
   methods: {
     pluginFilter(plugins) {
