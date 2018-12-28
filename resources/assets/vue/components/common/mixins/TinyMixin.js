@@ -1,5 +1,6 @@
 /* eslint camelcase:0 */
 import Adapter from './tinymce/Adapter';
+import listStylesFix from './tinymce/listStyles.fix';
 
 export default {
   props: ['editor-id', 'textDirty', 'type', 'config', 'fontStyles', 'text'],
@@ -233,7 +234,15 @@ export default {
         firstTextNode = firstTextElement;
       }
 
-      const lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
+      let lineHeight = 0;
+
+      if (firstTextNode.nodeName === 'SUP') {
+        // if the first node is a superscript, we should check with the line-height of the container
+        lineHeight = parseInt(this.$textElement.css('line-height').replace('px', ''));
+      } else {
+        // otherwise, check with the line-height of the first text
+        lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
+      }
 
       // note: to perform the correct calculation, actualLines must be an integer
       const actualLines = Math.floor(divHeight / lineHeight);
@@ -559,6 +568,7 @@ export default {
                 _this.setLinkStyles();
               }
             });
+            listStylesFix(editor);
         },
         paste_preprocess: (plugin, args) => {
           const editor = tinymce.get(this.editorId);
