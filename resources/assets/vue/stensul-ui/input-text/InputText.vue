@@ -4,6 +4,7 @@
     class="stui-input-text"
     :value="value"
     size="mini"
+    @blur="$emit('blur')"
     @change="(value)=>change(value)" />
 </template>
 

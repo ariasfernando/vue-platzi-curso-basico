@@ -1,15 +1,14 @@
 <template>
     <settings-container :label="label" custom-class="width-setting">
       <template slot="setting-right">
-          <el-input-number
-            size="mini" 
+          <stui-input-number
             v-validate="'required'"
             v-model="mainSettingNumeric"
             :min="minValueCalculated"
             :max="maxValueCalculated"
             class="padding-custom align-element"
             :controls="false"
-          ></el-input-number>
+          />
         <el-button
           slot="append"
           class="button icon-disable"

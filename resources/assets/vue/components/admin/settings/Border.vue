@@ -17,13 +17,10 @@
             :label="item.label"
             :value="item.value" />
         </el-select>
-        <el-input-number
+        <stui-input-number
           v-model="width"
           v-validate="'required'"
-          size="mini"
           :min="min"
-          :controls="true"
-          controls-position="right"
           class="float-left" />
         <el-button
           class="button float-left"
