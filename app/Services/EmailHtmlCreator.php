@@ -100,6 +100,8 @@ class EmailHtmlCreator
 
         $this->body = $this->replaceViewInBrowserLink();
 
+        $this->body = $this->updateBrTag();
+
         if (!env('CDN_UPLOAD_PRETEND', false)) {
             $this->body = $this->replaceImagesPath();
             $this->body = $this->replaceFontPath();
@@ -426,6 +428,19 @@ class EmailHtmlCreator
             $body = preg_replace($r[1], $r[2], $body, -1, $count);
         }
 
+        return $body;
+    }
+
+    /**
+     * Replace <br> tags by &zwnj;<br />
+     * Needed to prevent tag deletion on ESP upload.
+     *
+     * @return string
+     */
+    public function updateBrTag() {
+        $body = $this->body;
+        $body = str_replace('<br></p>', '<br />', $body);
+        $body = str_replace('<br /></p>', '&zwnj;<br /></p>', $body);
         return $body;
     }
 
