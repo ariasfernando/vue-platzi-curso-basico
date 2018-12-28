@@ -55,7 +55,7 @@
     "underscore": "1.8.3",
     "underscore-contrib": "^0.3.0",
     "url-search-params-polyfill": "^2.0.2",
-    "vee-validate": "^2.0.0-rc.23",
+    "vee-validate": "2.0.9",
     "vue": "^2.5.15",
     "vue-checkbox-radio": "^0.6.0",
     "vue-clickaway": "^2.1.0",
