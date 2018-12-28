@@ -22,43 +22,27 @@
           cellspacing="0"
           border="0"
           style="width: 100%;">
-          <ColumnManager
-            :key="module.structure.columnsStacking"
-            :module="module"
-            @select-component="selectComponent">
+          <ColumnManager :module="module">
             <template slot-scope="{columnData}">
-              <Draggable
-                v-model="columnData.column.components"
-                style="display: table; width: 100%;"
-                element="div"
-                :options="options"
-                :data-col="columnData.columnId"
-                :class="!columnData.column.components.length ? 'empty-table' : ''"
-                @add="onAdd">
-                <template v-if="columnData.column.components.length">
-                  <Component
-                    :is="component.type"
-                    v-for="(component, componentId) in columnData.column.components"
-                    :key="component.id"
-                    :module="module"
-                    class="st-component"
-                    :component="component"
-                    :module-id="moduleId"
-                    :column-id="columnData.columnId"
-                    :is-active="currentElement.id === component.id"
-                    :component-id="componentId"
-                    @select-component="selectComponent" />
-                </template>
-                <div v-else style="display:table-row;">
-                  <div
-                    align="center"
-                    class="empty-cell empty-col"
-                    height="80"
-                    :data-col="columnData.columnId">
-                    Drag content here
-                  </div>
-                </div>
-              </Draggable>
+              <ColumnDraggable
+                :module="module"
+                :column-id="columnData.columnId"
+                :column="columnData.column"
+                :column-area-styles="columnData.columnAreaStyles"
+                @select-component="selectComponent">
+                <Component
+                  :is="component.type"
+                  v-for="(component, componentId) in columnData.column.components"
+                  :key="component.id"
+                  :module="module"
+                  class="st-component"
+                  :component="component"
+                  :module-id="moduleId"
+                  :column-id="columnData.columnId"
+                  :is-active="currentElement.id === component.id"
+                  :component-id="componentId"
+                  @select-component="selectComponent" />
+              </ColumnDraggable>
             </template>
           </ColumnManager>
         </table>
@@ -80,18 +64,16 @@
 </template>
 
 <script>
-import clone from 'clone';
-import Draggable from 'vuedraggable';
 import BackgroundImage from '../common/BackgroundImage.vue';
 import ButtonElement from './elements/ButtonElement.vue';
 import ColumnManager from '../common/containers/ColumnManager.vue';
 import CustomCodeElement from './elements/CustomCodeElement.vue';
 import DividerElement from './elements/DividerElement.vue';
-import Element from '../../models/Element';
 import ElementMixin from '../common/mixins/ElementMixin';
 import ElementSelector from '../common/ElementSelector.vue';
 import HighlightOfElement from '../common/HighlightOfElement.vue';
 import ImageElement from './elements/ImageElement.vue';
+import ColumnDraggable from './ColumnDraggable.vue';
 import TextElement from './elements/TextElement.vue';
 
 module.exports = {
@@ -103,25 +85,11 @@ module.exports = {
     ColumnManager,
     CustomCodeElement,
     DividerElement,
-    Draggable,
     ElementSelector,
     HighlightOfElement,
     ImageElement,
+    ColumnDraggable,
     TextElement,
-  },
-  data() {
-    return {
-      options: {
-        group: {
-          name: 'componentsBox',
-          put: ['componentsList', 'componentsBox'],
-        },
-        handle: '.move',
-        ghostClass: 'ghost-component', // Class name for the drop placeholder
-        chosenClass: 'chosen-component', // Class name for the chosen item
-        dragClass: 'drag-component', // Class name for the dragging item
-      },
-    };
   },
   computed: {
     isActiveGeneralSettings() {
@@ -138,52 +106,6 @@ module.exports = {
     },
   },
   methods: {
-    onAdd(e) {
-      const componentId = e.newIndex;
-      const colId = e.to.getAttribute('data-col');
-
-      if (!(e.from.getAttribute('class') === 'components-list')) {
-        // Just clone the object when user drop an element from other column
-        if (this.module.structure.columns[colId].components.length === 0) {
-          const el = JSON.parse(e.clone.getAttribute('data-component'));
-          this.$store.commit('module/addComponent', {
-            el,
-            index: componentId,
-            colId,
-          });
-        }
-      } else {
-        const elType = e.clone.getAttribute('data-type');
-
-        // Get element compatible plugins
-        const plugins = {};
-        _.each(this.$_app.modulePlugins, (plugin, name) => {
-          if (plugin.target.indexOf(elType.replace('-element', '')) !== -1) {
-            plugins[name] = clone(plugin);
-          }
-        });
-
-        // Create a new Element with default properties
-        const element = new Element({ type: elType, plugins });
-
-        // Add it to the list
-        this.$store.commit('module/addComponent', {
-          el: element.getProperties(),
-          index: componentId,
-          colId,
-        });
-
-        // Remove ghost element
-        const cloneItem = e.item;
-        cloneItem.parentNode.removeChild(cloneItem);
-        e.clone.style.opacity = '1';
-      }
-      // Set dropped element as selected
-      this.selectComponent({
-        columnId: +colId,
-        componentId,
-      });
-    },
     selectComponent(ref) {
       this.$store.commit('module/setCurrentComponent', ref);
     },
@@ -192,6 +114,32 @@ module.exports = {
         columnId: undefined,
         componentId: undefined,
       });
+    },
+    setModuleHeight() {
+      this.$nextTick(() => {
+        let higherHeight = 0;
+        $('.column-draggable.has-component').parents('[column-id]').each((index, item) => {
+          higherHeight = Math.max(higherHeight, $(item).height());
+        });
+        if (this.module.structure.columns.filter(column => column.components.length === 0).length > 0) {
+          higherHeight = Math.max(higherHeight, 150);
+        }
+        this.$store.commit('module/setModuleHeight', higherHeight);
+      });
+    },
+  },
+  mounted() {
+    this.setModuleHeight();
+  },
+  watch: {
+    module: {
+      handler() {
+        this.setModuleHeight();
+      },
+      deep: true,
+    },
+    draggableChanged() {
+      this.setModuleHeight();
     },
   },
 };
@@ -210,11 +158,10 @@ module.exports = {
 }
 </style>
 <style lang="scss">
-@import '../../stensul-ui/scss/stui.scss';
-.empty-col {
-  background-color: lighten($color-secondary, 30%);
+[data-column-id] {
+  position: relative;
 }
-
+@import '../../stensul-ui/scss/stui.scss';
 .alignRight {
   float: left;
 }
@@ -224,26 +171,6 @@ module.exports = {
   border: none !important;
 }
 
-.empty-table {
-  outline: 1px dashed $color-secondary;
-  background-color: lighten($color-secondary, 30%);
-  display: table;
-  width: 100%;
-  &:hover {
-    div.empty-cell {
-      font-size: 13px;
-    }
-  }
-  div.empty-cell {
-    font-weight: normal;
-    color: $color-secondary;
-    display: table-cell;
-    height: 80px;
-    width: 100%;
-    vertical-align: middle;
-    font-size: 0px;
-  }
-}
 .module-wrapper {
   li.ghost-component-menu {
     outline: 2px dashed $color-secondary;
@@ -268,6 +195,9 @@ module.exports = {
     }
     p {
       display: none;
+    }
+    & ~ tr .empty-column {
+      opacity: 0;
     }
   }
   tr.ghost-component {

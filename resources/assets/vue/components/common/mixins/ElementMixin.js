@@ -66,6 +66,15 @@ export default {
     textOptions() {
       return this.isPreview ? false : textOptions();
     },
+    moduleHeight() {
+      return this.$store.getters['module/moduleHeight'];
+    },
+    dragging() {
+      return this.$store.getters['module/draggable'].dragging;
+    },
+    draggableChanged() {
+      return this.$store.getters['module/draggable'].changed;
+    },
   },
   methods: {
     // Get an string of classes
@@ -134,11 +143,7 @@ export default {
         }
       }
     },
-    columnSelect(columnIndex) {
-      let columnId = columnIndex;
-      if (this.isInvertedStacking) {
-        columnId = this.module.structure.columns.length - columnId - 1;
-      }
+    columnSelect(columnId) {
       this.$emit('select-component', {
         columnId,
         componentId: undefined,
@@ -160,11 +165,7 @@ export default {
         });
       }, 100);
     },
-    isColumnSelect(columnIndex) {
-      let columnId = columnIndex;
-      if (this.isInvertedStacking) {
-        columnId = this.module.structure.columns.length - columnId - 1;
-      }
+    isColumnSelect(columnId) {
       return this.currentComponent.columnId === columnId && this.currentComponent.componentId === undefined;
     },
     elementBackground(element) {

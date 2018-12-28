@@ -14,6 +14,8 @@ const state = {
   module: {},
   currentElementId: false,
   buildingMode: 'desktop',
+  moduleHeight: 0,
+  draggable: { dragging: false, changed: 0 },
   showRaw: false,
   loading: false,
   secondaryLoading: false,
@@ -103,6 +105,9 @@ const getters = {
   module(state) {
     return state.module;
   },
+  moduleHeight(state) {
+    return state.moduleHeight;
+  },
   currentComponent(state) {
     if (state.currentElementId) {
       let columnId = getColumnIndexByElementId(state.module, state.currentElementId);
@@ -121,6 +126,9 @@ const getters = {
   },
   showRaw(state) {
     return state.showRaw;
+  },
+  draggable(state) {
+    return state.draggable;
   },
 };
 
@@ -150,6 +158,12 @@ const mutations = {
     } else {
       state.currentElementId = false;
     }
+  },
+  setModuleHeight(state, height) {
+    state.moduleHeight = height;
+  },
+  setDraggable(state, { property, value }) {
+    Vue.set(state.draggable, property, value);
   },
   clearCurrentComponent(state) {
     state.currentElementId = false;
