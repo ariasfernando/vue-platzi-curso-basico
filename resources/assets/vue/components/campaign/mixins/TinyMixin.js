@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import Adapter from './tinymce/Adapter';
+import listStylesFix from './tinymce/listStyles.fix';
 
 export default {
   props: ['name', 'plugin'],
@@ -559,6 +560,7 @@ export default {
                 _this.setLinkStyles();
               }
             });
+            listStylesFix(editor);
         },
         paste_preprocess: (plugin, args) => {
           const editor = tinymce.get(this.editorId);
