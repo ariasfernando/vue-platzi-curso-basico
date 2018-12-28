@@ -116,16 +116,14 @@ module.exports = {
       });
     },
     setModuleHeight() {
-      this.$nextTick(() => {
-        let higherHeight = 0;
-        $('.column-draggable.has-component').parents('[column-id]').each((index, item) => {
-          higherHeight = Math.max(higherHeight, $(item).height());
-        });
-        if (this.module.structure.columns.filter(column => column.components.length === 0).length > 0) {
-          higherHeight = Math.max(higherHeight, 150);
-        }
-        this.$store.commit('module/setModuleHeight', higherHeight);
+      let higherHeight = 0;
+      $('.column-draggable.has-component').parents('[column-id]').each((index, item) => {
+        higherHeight = Math.max(higherHeight, $(item).height());
       });
+      if (this.module.structure.columns.filter(column => column.components.length === 0).length > 0) {
+        higherHeight = Math.max(higherHeight, 150);
+      }
+      this.$store.commit('module/setModuleHeight', higherHeight);
     },
   },
   mounted() {
@@ -134,12 +132,16 @@ module.exports = {
   watch: {
     module: {
       handler() {
-        this.setModuleHeight();
+        this.$nextTick(() => {
+          this.setModuleHeight();
+        });
       },
       deep: true,
     },
     draggableChanged() {
-      this.setModuleHeight();
+      this.$nextTick(() => {
+        this.setModuleHeight();
+      });
     },
   },
 };

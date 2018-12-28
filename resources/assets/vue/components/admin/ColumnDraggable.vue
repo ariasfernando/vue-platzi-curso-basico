@@ -117,9 +117,6 @@ module.exports = {
         styles.minHeight = '150px';
         styles.height = `${this.moduleHeight}px`;
       }
-      if (type === 'draggable') {
-        styles.width = '100%';
-      }
       if (type === 'EmptyColumn') {
         styles.opacity = type && this.hasComponents ? 0 : 1;
       } if (type === 'HighlightOfElement') {
