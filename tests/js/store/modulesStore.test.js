@@ -106,6 +106,7 @@ describe('== Module Store ==', () => {
       done();
     });
     it('"setCurrentComponent" with data, expect of the "currentComponent" state has been same to passed data', (done) => {
+      store.commit('module/setModuleData', mocks.module.getModule);
       let dataSetting = {
         columnId: 0,
         componentId: 0,
@@ -113,7 +114,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setCurrentComponent', dataSetting);
 
-      let stateCurrentComponent = store.state.module.currentComponent;
+      let stateCurrentComponent = store.getters['module/currentComponent'];
 
       expect(stateCurrentComponent).toEqual(dataSetting);
 
@@ -122,6 +123,7 @@ describe('== Module Store ==', () => {
       done();
     });
     it('"clearCurrentComponent", expect of the "currentComponent" state has been empty object', (done) => {
+      store.commit('module/setModuleData', mocks.module.getModule);
       let dataSetting = {
         columnId: 0,
         componentId: 0,
@@ -130,7 +132,7 @@ describe('== Module Store ==', () => {
       store.commit('module/setCurrentComponent', dataSetting);
       store.commit('module/clearCurrentComponent');
 
-      let stateCurrentComponent = store.state.module.currentComponent;
+      let stateCurrentComponent = store.getters['module/currentComponent'];
       expect(stateCurrentComponent).toBeEmptyObject();
 
       dataSetting = stateCurrentComponent = null;
@@ -4201,23 +4203,17 @@ describe('== Module Store ==', () => {
     });
 
     it('"module", expect state module has object', (done) => {
-      let dataModule = {
-        module: {},
-        moduleId: 'edsr345',
-        name: 'name',
-      };
-
-      store.commit('module/setModuleData', dataModule);
-
+      store.commit('module/setModuleData', mocks.module.getModule);
       let getDataModule = store.getters['module/module'];
 
-      expect(getDataModule).toEqual(dataModule);
+      expect(getDataModule).toEqual(mocks.module.getModule);
 
-      dataModule = getDataModule = null;
+      getDataModule = null;
 
       done();
     });
     it('"currentComponent", expect state module has object', (done) => {
+      store.commit('module/setModuleData', mocks.module.getModule);
       let dataSetting = {
         columnId: 0,
         componentId: 0,

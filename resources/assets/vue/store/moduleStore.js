@@ -19,9 +19,9 @@ const state = {
   secondaryLoading: false,
 };
 
-const getColumnIndexByElementId = (elementId) => {
+const getColumnIndexByElementId = (module, elementId) => {
   let columnIndex = false;
-  _.forEach(state.module.structure.columns, (column, currentColumnIndex) => {
+  _.forEach(module.structure.columns, (column, currentColumnIndex) => {
     if (column.id === elementId) {
       columnIndex = currentColumnIndex;
       return false;
@@ -37,9 +37,9 @@ const getColumnIndexByElementId = (elementId) => {
   });
   return columnIndex;
 };
-const getComponentIndexByComponentId = (elementId) => {
+const getComponentIndexByComponentId = (module, elementId) => {
   let componentIndex = false;
-  _.forEach(state.module.structure.columns, (column) => {
+  _.forEach(module.structure.columns, (column) => {
     _.forEach(column.components, (currentComponent, currentComponentIndex) => {
       if (currentComponent.id === elementId) {
         componentIndex = currentComponentIndex;
@@ -105,8 +105,8 @@ const getters = {
   },
   currentComponent(state) {
     if (state.currentElementId) {
-      let columnId = getColumnIndexByElementId(state.currentElementId);
-      let componentId = getComponentIndexByComponentId(state.currentElementId);
+      let columnId = getColumnIndexByElementId(state.module, state.currentElementId);
+      let componentId = getComponentIndexByComponentId(state.module, state.currentElementId);
       columnId = columnId === false ? undefined : columnId;
       componentId = componentId === false ? undefined : componentId;
       return {
@@ -148,11 +148,11 @@ const mutations = {
     } else if (data.columnId >= 0) {
       state.currentElementId = state.module.structure.columns[data.columnId].id;
     } else {
-      state.currentElementId = {};
+      state.currentElementId = false;
     }
   },
   clearCurrentComponent(state) {
-    state.currentComponent = {};
+    state.currentElementId = false;
   },
   updateElement(state, payload) {
     const update = {
@@ -222,9 +222,9 @@ const mutations = {
   },
   removeElement(state, { elementId }) {
     state.module.structure.columns[
-      getColumnIndexByElementId(elementId)
+      getColumnIndexByElementId(state.module, elementId)
     ].components.splice(
-      getComponentIndexByComponentId(elementId),
+      getComponentIndexByComponentId(state.module, elementId),
       1,
     );
   },
