@@ -84,7 +84,7 @@ jsunit:
   <<: *npm_install
   script:
     - npm run cover
-    - npm run metricOfCover -- -p ${CI_PROJECT_NAME} -b ${CI_COMMIT_REF_NAME} -u ${GITLAB_USER_NAME} -e "{\"mongoDns\":\" \",\"mongoPort\":\" \",\"mongoUser\":\" \",\"mongoSsl\":false,\"mongoPass\":\" \",\"mongoShortConfig\":\"mongodb+srv://coverage_user:Az5zFQ59zASUe38@clusterqa-ujgr6.azure.mongodb.net/test?retryWrites=true\"}"
+    - npm run metricOfCover -- -p ${CI_PROJECT_NAME} -b ${CI_COMMIT_REF_NAME} -u ${GITLAB_USER_EMAIL} -e "{\"mongoDns\":\" \",\"mongoPort\":\" \",\"mongoUser\":\" \",\"mongoSsl\":false,\"mongoPass\":\" \",\"mongoShortConfig\":\"mongodb+srv://coverage_user:Az5zFQ59zASUe38@clusterqa-ujgr6.azure.mongodb.net/test?retryWrites=true\"}"
   artifacts:
     when: always
     name: "${CI_JOB_STAGE}_testjs_${CI_COMMIT_REF_NAME}"
