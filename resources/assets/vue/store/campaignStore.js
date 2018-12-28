@@ -16,7 +16,7 @@ const convertArrayToObject = (element, { subComponent, link }) => {
 };
 
 const getElement = (module, elementId) => {
-  let element;
+  let element = false;
   _.forEach(module.structure.columns, (column) => {
     if (column.id === elementId) {
       element = column;
@@ -27,6 +27,7 @@ const getElement = (module, elementId) => {
         element = CurrentComponent;
         return false;
       }
+      return true;
     });
     return !element;
   });
@@ -34,12 +35,13 @@ const getElement = (module, elementId) => {
 };
 
 const getModule = (modules, idInstance) => {
-  let module;
+  let module = false;
   _.forEach(modules, (currentModule) => {
     if (currentModule.idInstance === idInstance) {
       module = currentModule;
       return false;
     }
+    return true;
   });
   return module;
 };
