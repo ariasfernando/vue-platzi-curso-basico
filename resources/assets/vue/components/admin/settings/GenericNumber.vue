@@ -10,7 +10,7 @@
         controls-position="right"
         :min="minValue"
         :max="maxCalculated" />
-      <el-button
+      <ElButton
         v-if="isPercentage || isPixel"
         slot="append"
         :style="isPercentage && isPixel ? 'cursor: pointer' : 'cursor: default'"
@@ -18,7 +18,7 @@
         :disabled="!(isPercentage && isPixel)"
         @click="onToggleUnit">
         {{ isNumberPercentage ? "%": "px" }}
-      </el-button>
+      </ElButton>
     </template>
   </SettingsContainer>
 </template>
@@ -87,12 +87,13 @@ export default {
   padding-left: 0;
   padding-right: 21px;
 }
-.ErIdeepN.el-input__inner {
+.el-input-number /deep/ .el-input__inner {
   padding: 0;
   border-radius: 2px 0px 0px 2px;
 }
-.ErIdeepN{
-  .ErIdecreaseN  .el-input-number__increase {
+.el-input-number /deep/ {
+  .el-input-number__decrease,
+  .el-input-number__increase {
     right: 0;
     border: 1px solid #dcdfe6;
     border-left: 1px solid #dcdfe6;
@@ -121,7 +122,7 @@ export default {
   }
   .el-input-number--mini .el-input-number__decrease,
   .el-input-number--mini .el-input-number__increase {
-    width: 30px;
+    width: 17px;
   }
   .el-input-number__decrease,
   .el-input-number__increase {
