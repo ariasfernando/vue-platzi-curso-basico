@@ -3,11 +3,9 @@
     class="half-style-setting-padding align-element"
     :title="`Padding ${side}`">
     <span class="side-title">{{ uppercaseSide }}</span>
-    <ElInputNumber
+    <StuiInputNumber
       v-model="padding"
       v-validate="'required'"
-      controls-position="right"
-      size="mini"
       :min="min"
       :controls="true" />
   </div>

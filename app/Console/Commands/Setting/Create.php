@@ -31,12 +31,16 @@ class Create extends Command
 
         $name = (is_null($options["name"]))? $this->ask('What is the setting name ?') : $options["name"];
         $key = (is_null($options["key"]))? $this->ask('What is the setting key ? ?') : $options["key"];
+        $type = (is_null($options["type"]))? $this->ask('What is the setting type ? ?') : $options["type"];
         $value = (is_null($options["value"]))? $this->ask('What is the setting value ?') : $options["value"];
 
         $params = [
             'name' => $name,
             'key' => $key,
             'value' => $value,
+            'properties' => [
+                'type' => $type,
+            ]
         ];
 
         if ($key != "") {
@@ -72,6 +76,7 @@ class Create extends Command
             ['name', null, InputOption::VALUE_OPTIONAL, 'Setting name', null],
             ['key', null, InputOption::VALUE_OPTIONAL, 'Setting key', null],
             ['value', null, InputOption::VALUE_OPTIONAL, 'Setting value', null],
+            ['type', null, InputOption::VALUE_OPTIONAL, 'Setting type', null],
         ];
     }
 }

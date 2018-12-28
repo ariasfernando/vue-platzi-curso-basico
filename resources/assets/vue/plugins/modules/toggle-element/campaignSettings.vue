@@ -27,7 +27,10 @@
       };
     },
     methods: {
-      getValue(elementId){
+      getValue(elementId) {
+        if (this.isCustom) {
+          return this.getElement(elementId).enableElement;
+        }
         return this.getElement(elementId).container.styleOption.enableElement;
       },
       toggleElement(value, elementId) {

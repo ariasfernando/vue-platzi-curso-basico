@@ -128,7 +128,7 @@ class ModuleController extends Controller
         ];
 
         $user = new \stdClass();
-        $user->_id = new ObjectID(Auth::user()->id);
+        $user->_id = Auth::user()->id;
         $user->email = Auth::user()->email;
 
         //If the module has id we are editing it, if not, we are creating it

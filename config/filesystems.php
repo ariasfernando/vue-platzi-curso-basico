@@ -1,6 +1,7 @@
 <?php
 
 $public_image_path = public_path() . '/images/';
+$public_font_path = public_path() . '/fonts/';
 
 return [
 
@@ -75,6 +76,11 @@ return [
         'local:modules:studio' => [
             'driver' => 'local',
             'root'   => $public_image_path . 'customer/modules/studio/',
+        ],
+
+        'local:fonts' => [
+            'driver' => 'local',
+            'root'   => $public_font_path . 'customer/',
         ],
 
         'cloud' => [

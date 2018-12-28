@@ -8,11 +8,9 @@
           disabled
         >normal</ElButton>
 
-        <ElInputNumber
+        <stui-input-number
           v-else
           class="custom-col is-letter-spacing"
-          size="mini"
-          controls-position="right"
           :step="0.05"
           :min="-5"
           :max="5"
