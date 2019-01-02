@@ -3,7 +3,7 @@ import Adapter from './tinymce/Adapter';
 import listStylesFix from './tinymce/listStyles.fix';
 
 export default {
-  props: ['editor-id', 'textDirty', 'type', 'config', 'fontStyles', 'text'],
+  props: ['editor-id', 'textDirty', 'type', 'config', 'fontStyles', 'text', 'tinyClass'],
   mixins: [
     Adapter,
   ],
