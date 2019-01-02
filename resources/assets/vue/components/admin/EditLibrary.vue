@@ -52,7 +52,6 @@
                           <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
                         </p>
                       </div>
-
                       <!-- Field Description -->
                       <div class="col-md-6">
                         <label for="description">Description</label>
@@ -64,14 +63,12 @@
                         </p>
                       </div>
                     </div>
-
                     <div v-if="campaignConfig.preview.show_preheader" class="row">
                       <!-- Field Preheader -->
                       <label for="preheader" class="col-sm-4 control-label">Preheader</label>
                       <p class="control col-sm-1">
                         <toggle-button :value="library.config.preheader" @change="updateToggle('preheader')" />
                       </p>
-
                       <div v-show="library.config.preheader" class="col-sm-4">
                         <!-- Preheader default text -->
                         <p class="control">
@@ -82,7 +79,6 @@
                         </p>
                       </div>
                     </div>
-
                     <!-- Field Plain text -->
                     <div v-if="campaignConfig.process_plaintext" class="row">
                       <label for="plainText" class="col-sm-4 control-label">Plain Text</label>
@@ -90,7 +86,6 @@
                         <toggle-button :value="library.config.plainText" @change="updateToggle('plainText')" />
                       </p>
                     </div>
-
                     <!-- Html to pdf -->
                     <div v-if="campaignConfig.download_pdf" class="row">
                       <label for="htmlToPdf" class="col-sm-4 control-label">PDF Download</label>
@@ -98,7 +93,6 @@
                         <toggle-button :value="library.config.htmlToPdf" @change="updateToggle('htmlToPdf')" />
                       </p>
                     </div>
-
                     <!-- Field ESP -->
                     <div class="row">
                       <label for="preheader" class="col-sm-4 control-label">ESP</label>
@@ -117,7 +111,6 @@
                         </p>
                       </div>
                     </div>
-
                     <!-- Field Tagging -->
                     <div v-if="campaignConfig.enable_tagging" class="row">
                       <label for="tagging" class="col-sm-4 control-label">Tags</label>
@@ -125,7 +118,6 @@
                         <toggle-button :value="library.config.tagging" @change="updateToggle('tagging')" />
                       </p>
                     </div>
-
                     <!-- Field Templating -->
                     <div v-if="campaignConfig.enable_templating" class="row">
                       <label for="templating" class="col-sm-4 control-label">Enable templating</label>
@@ -133,15 +125,27 @@
                         <toggle-button :value="library.config.templating" @change="updateToggle('templating')" />
                       </p>
                     </div>
-                    <div v-if="campaignConfig.enable_tracking" class="row">
-                      <!-- Field Tracking -->
+                    <!-- Field Tracking -->
+                    <div class="row">
                       <label for="tracking" class="col-sm-4 control-label">Enable Tracking</label>
                       <p class="control col-sm-1">
                         <toggle-button :value="library.config.tracking" @change="updateToggle('tracking')" />
                       </p>
+                      <div class="col-sm-11">
+                        <textarea
+                          v-model="library.config.trackingConfig"
+                          v-validate="'required:library.config.tracking|isValidJson'"
+                          :name="'trackingConfig'"
+                          :style="{borderColor: errors.has('trackingConfig') ? 'red' : '', resize: 'vertical'}"
+                          :disabled="!library.config.tracking"
+                          data-vv-as="configuration"
+                          placeholder="Add the tracking configuration in JSON format...">
+                        </textarea>
+                        <span v-if="errors.has('trackingConfig')" class="help is-danger">{{ errors.first('trackingConfig') }}</span>
+                        <span v-else>&nbsp;</span>
+                      </div>
                     </div>
                   </tab>
-
                   <tab name="Template" @onClick="setTab">
                     <div class="row">
                       <!-- Field width -->
@@ -159,7 +163,6 @@
                             class="help is-danger">{{ errors.first('templateWidth') }}</span>
                         </p>
                       </div>
-
                       <!-- Field mobile-width -->
                       <div class="col-md-4">
                         <label for="templateMobileWidth">Template Mobile Width</label>
@@ -175,7 +178,6 @@
                             class="help is-danger">{{ errors.first('templateMobileWidth') }}</span>
                         </p>
                       </div>
-
                       <div class="col-md-4">
                         <label for="padding">Padding</label>
                         <p class="control">
@@ -191,7 +193,6 @@
                         </p>
                       </div>
                     </div>
-
                     <div class="row">
                       <!-- Field background-color -->
                       <div class="col-md-4">
@@ -205,7 +206,6 @@
                           :element="library"
                           @setting-updated="settingUpdatedHandler" />
                       </div>
-
                       <!-- Field content-background-color -->
                       <div class="col-md-4">
                         <input-generic-color
@@ -218,7 +218,6 @@
                           :element="library"
                           @setting-updated="settingUpdatedHandler" />
                       </div>
-
                       <!-- Field template background palettes -->
                       <div class="col-md-4">
                         <label for="templateBackgroundPalettes">Template background palettes</label>
@@ -230,7 +229,6 @@
                         </p>
                       </div>
                     </div>
-
                     <div class="row">
                       <!-- Field font-family -->
                       <div class="col-md-3">
@@ -244,7 +242,6 @@
                           :element="library"
                           @setting-updated="settingUpdatedHandler" />
                       </div>
-
                       <!-- Field font-color -->
                       <div class="col-md-3">
                         <input-generic-color
@@ -257,7 +254,6 @@
                           :element="library"
                           @setting-updated="settingUpdatedHandler" />
                       </div>
-
                       <!-- Field font-size -->
                       <div class="col-md-3">
                         <label for="fontSize">Font Size</label>
@@ -273,7 +269,6 @@
                             class="help is-danger">{{ errors.first('fontSize') }}</span>
                         </p>
                       </div>
-
                       <!-- Field line-height -->
                       <div class="col-md-3">
                         <label for="lineHeight">Line Height</label>
@@ -290,7 +285,6 @@
                         </p>
                       </div>
                     </div>
-
                     <div class="row">
                       <!-- Field link-color -->
                       <div class="col-md-3">
@@ -304,7 +298,6 @@
                           :default-value="library.config.linkColor"
                           @setting-updated="settingUpdatedHandler" />
                       </div>
-
                       <!-- Field link-decoration -->
                       <div class="col-md-3">
                         <label for="linkDecoration">Link Decoration</label>
@@ -315,7 +308,6 @@
                             @click.native="toggleUnderline" />
                         </p>
                       </div>
-
                       <!-- Field external-link -->
                       <div class="col-md-3">
                         <label for="externalCssLink">External CSS Link</label>
@@ -326,7 +318,6 @@
                             placeholder="http://www.example.com/css/styles.css" />
                         </p>
                       </div>
-
                       <!-- Field external-link -->
                       <div class="col-md-3">
                         <label for="colorPalettes">color palettes</label>
@@ -338,7 +329,6 @@
                         </p>
                       </div>
                     </div>
-
                     <div class="row">
                       <!-- Field proprietary styles -->
                       <div class="col-md-12">
@@ -350,7 +340,6 @@
                           height="300px" />
                       </div>
                     </div>
-
                     <div class="row">
                       <!-- Field propietary styles -->
                       <div class="col-md-12">
@@ -365,7 +354,6 @@
                         </p>
                       </div>
                     </div>
-
                     <div class="row">
                       <!-- Field propietary styles -->
                       <div class="col-md-12">
@@ -381,7 +369,6 @@
                       </div>
                     </div>
                   </tab>
-
                   <tab name="Menu">
                     <!-- Select modules -->
                     <div class="row">
@@ -734,7 +721,6 @@ export default {
     toggleSidebar() {
       const sidebar = document.getElementById('admin-sidebar');
       sidebar.style.display = 'none';
-
       const libMargin = document.getElementById('admin-library-container');
       libMargin.className -= ('col-xs-12');
 

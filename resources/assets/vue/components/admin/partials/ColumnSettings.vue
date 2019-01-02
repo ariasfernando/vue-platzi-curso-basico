@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label-item-container v-b-toggle.column-settings-styles :label="`Column ${currentComponent.columnId + 1} Style`" icon="glyphicon-pause" />
+    <label-item-container v-b-toggle.column-settings-styles :label="`Column ${currentComponent.columnId + 1} Styles`" icon="glyphicon-pause" />
     <b-collapse id="column-settings-styles" visible accordion="general-settings">
       <b-card class="control" no-block>
         <group-container v-for="(settingGroup, groupKey) in settings" v-if="hasPermissionsInGroup(settingGroup, 'std-column_')" :key="groupKey">
@@ -34,11 +34,20 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="column-settings-functionalities" accordion="column-settings">
       <b-card class="control">
-        <template v-for="(plugin, moduleKey) in column.plugins">
-          <div v-if="$can('std-column-plugin-'+plugin.name)" :class="'plugin-' + plugin.name" :key="plugin.name">
-            <component :is="'studio-' + plugin.name" :name="moduleKey" :plugin="plugin" :column-id="currentComponent.columnId" />
-          </div>
-        </template>
+        <group-container
+          v-for="(pluginGroup, groupKey) in pluginsGroups"
+          v-if="pluginFilter(pluginGroup.plugins).length !== 0"
+          :key="groupKey"
+          :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
+          <component
+            :is="'studio-' + plugin.name"
+            v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
+            :key="plugin.name + column.id"
+            :class="'plugin-' + plugin.name"
+            :name="_.camelCase(plugin.name)"
+            :plugin="column.plugins[_.camelCase(plugin.name)]"
+            :column-id="currentComponent.columnId" />
+        </group-container>
       </b-card>
     </b-collapse>
   </div>
@@ -51,10 +60,9 @@ import GroupContainer from '../../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../../common/containers/LabelItemContainer.vue';
 import settingsDefault from '../settingsDefault';
 import AclMixing from '../mixins/AclMixin';
-
+import pluginsLayout from '../pluginsLayout';
 
 export default {
-  mixins: [AclMixing],
   components: {
     GroupContainer,
     LabelItemContainer,
@@ -64,6 +72,7 @@ export default {
     'input-generic-color': elementSettings.GenericColor,
     'input-class-input': elementSettings.ClassInput,
   },
+  mixins: [AclMixing],
   props: ['currentComponent'],
   computed: {
     module() {
@@ -75,8 +84,19 @@ export default {
     settings() {
       return settingsDefault['column-element']().componentSettings;
     },
+    pluginsGroups() {
+      return pluginsLayout['column-element']().componentPlugins;
+    },
+    _() {
+      return _;
+    },
   },
   methods: {
+    pluginFilter(plugins) {
+      return plugins.filter(plugin => {
+        return this.$can(`std-column-plugin-${plugin.aclName}`) && this.column.plugins[_.camelCase(plugin.name)];
+      });
+    },
     settingUpdatedHandler(eventData) {
       this.saveColumnProperty(
         eventData.link,

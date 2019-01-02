@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import Adapter from './tinymce/Adapter';
+import listStylesFix from './tinymce/listStyles.fix';
 
 export default {
   props: ['name', 'plugin'],
@@ -179,9 +180,7 @@ export default {
     tinyMaxLines() {
       const editor = tinymce.get(this.editorId);
       if (editor.settings.max_lines) {
-        if (parseInt(editor.settings.max_lines)) {
-          return parseInt(editor.settings.max_lines) || undefined;
-        } else {
+        if (_.isObject(editor.settings.max_lines)) {
           const firstTextElement = this.$textElement[0].firstElementChild;
           let firstTextNode = firstTextElement.firstChild;
           // if the first node is a text node, we go up to te parent element.
@@ -189,9 +188,12 @@ export default {
             firstTextNode = firstTextElement;
           }
           const fontSize = document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('font-size');
-          return JSON.parse(editor.settings.max_lines)[fontSize];
+          return editor.settings.max_lines[fontSize];
         }
+        // if is not an object, should be a number
+        return parseInt(editor.settings.max_lines, 10) || undefined;
       }
+      return undefined;
     },
     tinyMax() {
       const editor = tinymce.get(this.editorId);
@@ -230,8 +232,18 @@ export default {
         firstTextNode = firstTextElement;
       }
 
-      const lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
-      const actualLines = divHeight / lineHeight;
+      let lineHeight = 0;
+
+      if (firstTextNode.nodeName === 'SUP') {
+        // if the first node is a superscript, we should check with the line-height of the container
+        lineHeight = parseInt(this.$textElement.css('line-height').replace('px', ''));
+      } else {
+        // otherwise, check with the line-height of the first text
+        lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
+      }
+
+      // note: to perform the correct calculation, actualLines must be an integer
+      const actualLines = Math.floor(divHeight / lineHeight);
 
       if (actualLines > this.tinyMaxLines()) {
         this.setError({
@@ -548,6 +560,7 @@ export default {
                 _this.setLinkStyles();
               }
             });
+            listStylesFix(editor);
         },
         paste_preprocess: (plugin, args) => {
           const editor = tinymce.get(this.editorId);
@@ -562,15 +575,15 @@ export default {
           // trim string if exceed max char limit
 
           const tinyLength = $(editor.getContent({ format: 'html' })).text().length;
-          const charsToPaste = tinyMax - tinyLength;
+          const selectionLength = editor.selection.getContent({ format: 'text' }).length;
+          const charsToPaste = (tinyMax - tinyLength) + selectionLength;
 
-          if (cleanTxt.length > charsToPaste){
+          if (cleanTxt.length > charsToPaste) {
             args.content = cleanTxt.trim().substring(0, charsToPaste);
           } else {
             args.content = cleanTxt.trim();
           }
         },
-
       };
 
       if (!_.isEmpty(options)) {

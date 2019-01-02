@@ -146,6 +146,19 @@ export default {
           // TODO: Trigger event editModule.onLoaded
           this.ready = true;
           this.$store.commit('global/setLoader', false);
+
+          if (this.module.inUse) {
+            this.$root.$toast(
+              "This module is already in use. Any changes will not affect or update the module instance in "
+                + "the existing campaigns. To create a new version you can clone the module in the module list.",
+              {
+                className: 'et-info',
+                closeable: true,
+                duration: 10000
+              },
+            );
+          }
+
         })
         .catch(() => {
           this.$root.$toast(
@@ -168,7 +181,7 @@ export default {
       sideToggled.classList.toggle('sidebar-closed');
     },
     clickModuleContainer(e) {
-      if ($(e.target).hasClass('module-container')) {
+      if ($(e.target).hasClass('scrollbar-container-inner') || $(e.target).hasClass('mCustomScrollBox')) {
         this.$store.commit('module/setCurrentComponent', {
           columnId: undefined,
           componentId: undefined,
@@ -226,9 +239,10 @@ export default {
 
 #edit-container {
   padding: 0px;
-  height: calc(~'100vh - 53px');
+  height: calc(~'100vh -102px');
   overflow: hidden;
   min-width: 1200px;
+  padding-top: 46px;
 }
 
 .row-style-left {
@@ -314,7 +328,7 @@ export default {
     background: #f0f0f0;
     display: block;
     float: left;
-    height: calc(~'100vh - 53px');
+    height: calc(~'100vh - 102px');
     width: calc(~'100% - 540px');
     min-width: 640px;
     overflow-x: hidden;
@@ -373,9 +387,23 @@ ol {
 }
 
 #studio .column-bar-container {
-  height: calc(100vh - 53px);
+  height: calc(~'100vh - 102px');
 }
 #studio .module-container .scrollbar-container-inner {
   padding: 20px 20px 100px;
+}
+#studio .st-component.is-active > td:before {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  background: none;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  display: block;
+  outline: 2px solid #69dac8;
+  outline-offset: -1px;
+  z-index: 298;
 }
 </style>

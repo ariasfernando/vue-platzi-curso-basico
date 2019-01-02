@@ -162,6 +162,14 @@
                  color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
             }
         @endif
+        span.MsoHyperlink {
+            mso-style-priority:99;
+            color:inherit;
+        }
+        span.MsoHyperlinkFollowed {
+            mso-style-priority:99;
+            color:inherit;
+        }
 	</style>
 <![endif]-->
 
