@@ -1,17 +1,17 @@
 <template>
-  <div class="settings-wrapper plugin-wrapper" v-if="component">
+  <div v-show="(elementKey === currentElementKey)">
     <settings-container :no-label="true">
       <template slot="setting-bottom">
-        <el-button @click="showModal('desktop')" type="primary">
-          <i class="glyphicon glyphicon-cloud-upload"></i>
+        <el-button type="primary" @click="showModal('desktop')">
+          <i class="glyphicon glyphicon-cloud-upload" />
           Upload Image
         </el-button>
       </template>
     </settings-container>
-    <settings-container :no-label="true" v-if="hasImageMobile">
+    <settings-container v-if="hasImageMobile" :no-label="true">
       <template slot="setting-bottom">
-        <el-button @click="showModal('mobile')" type="primary" size="mini" :disabled="!plugin.data.img">
-          <i class="glyphicon glyphicon-cloud-upload"></i>
+        <el-button type="primary" size="mini" @click="showModal('mobile')" :disabled="!plugin.data.img">
+          <i class="glyphicon glyphicon-cloud-upload" />
           Upload Mobile Image
         </el-button>
       </template>
@@ -20,48 +20,45 @@
       <template slot="setting-bottom">
         <el-input
           v-if="validationRules"
+          v-model="alt"
+          v-validate.initial="validationRules"
           name="alt"
           type="text"
           placeholder="Alt text"
           size="mini"
-          v-model="alt"
-          v-validate.initial="validationRules"
           class="image-alt-text"
-          :class="{'input': true, 'is-danger': hasError }">
-        </el-input>
+          :class="{'input': true, 'is-danger': hasError }" />
         <el-input
           v-else
           v-model="alt"
           class="image-alt-text"
-          placeholder="Alt text"></el-input>
+          placeholder="Alt text" />
         <span v-show="hasError" class="help is-danger">{{ getErrorMessage }}</span>
       </template>
     </settings-container>
-    <image-modal 
-    :config="plugin.config" 
-    v-if="showImageEditor" 
-    :libraryImages="libraryImages" 
-    :overlayImages="overlayImages" 
-    :data="image" 
-    @close="close" 
-    @submitImage="submitImage">
-    </image-modal>
+    <image-modal
+      v-if="showImageEditor"
+      :config="plugin.config"
+      :library-images="libraryImages"
+      :overlay-images="overlayImages"
+      :data="image"
+      @close="close"
+      @submitImage="submitImage" />
   </div>
 </template>
 
 <script>
-import imageService from '../../../services/image';
 import ImageModal from '../../../components/common/ImageModal';
+import imageService from '../../../services/image';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
-import _ from 'lodash';
-import validatorMixin from '../mixins/validator';
+import validatorMixin from '../mixins/validatorMixin';
 
 export default {
-  props: ['name', 'plugin', 'pluginKey'],
-  mixins: [validatorMixin],
+  mixins: [validatorMixin, pluginCampaignMixin],
   components: {
     ImageModal,
-    SettingsContainer
+    SettingsContainer,
   },
   data() {
     return {
@@ -69,71 +66,44 @@ export default {
       libraryImages: [],
       overlayImages: [],
       type: 'desktop',
+      subComponent: 'image',
       image: {},
-      isEdit: false
+      isEdit: false,
     };
   },
   computed: {
     campaign() {
       return this.$store.getters['campaign/campaign'];
     },
-    currentComponent() {
-      return this.$store.getters['campaign/currentComponent'];
-    },
-    module() {
-      return this.$store.getters["campaign/modules"][this.currentComponent.moduleId];
-    },
-    component() {
-      let component = {};
-
-      if (Object.keys(this.currentComponent).length !== 0) {
-        const moduleId = this.currentComponent.moduleId;
-        const columnId = this.currentComponent.columnId;
-        const componentId = this.currentComponent.componentId;
-
-        component = this.$store.getters['campaign/modules'][moduleId].structure
-          .columns[columnId].components[componentId];
-      }
-
-      return component;
-    },
     alt: {
       get() {
-        return this.component.image.attribute.alt;
+        return this.element.image.attribute.alt;
       },
       set(value) {
-        const payload = {
-          plugin: this.pluginKey,
-          moduleId: this.currentComponent.moduleId,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          subComponent: 'image',
-          link: 'attribute',
+        this.saveAttributeInThisElement({
           property: 'alt',
-          value
-        };
-        this.$store.commit('campaign/saveComponentProperty', payload);
-        
+          value,
+        });
         this.$nextTick(() => {
           if (this.validationRules) {
             this.validate();
           }
         });
-      }
+      },
     },
     validationRules() {
-        const rules = [];
-        if(this.plugin.config.alt && this.plugin.config.alt.validations){
-          _.each(this.plugin.config.alt.validations, (e,i) => {
-            if (e) {
-              rules.push(i);
-            }
-          });
-          return rules.join('|');
-        }
+      const rules = [];
+      if (this.plugin.config.alt && this.plugin.config.alt.validations){
+        _.each(this.plugin.config.alt.validations, (e,i) => {
+          if (e) {
+            rules.push(i);
+          }
+        });
+        return rules.join('|');
+      }
     },
     hasImageMobile() {
-      return this.component.image.styleOption.hasImageMobile;
+      return this.element.image.styleOption.hasImageMobile;
     },
   },
   created() {
@@ -144,7 +114,7 @@ export default {
         });
     }
     const ovGallery = _.get(this.plugin.config, 'sie-plugin-image-overlay_image.config.overlay_gallery.config.set_images.value');
-    if(ovGallery !== null){
+    if (ovGallery !== null) {
       imageService.getMedia(ovGallery).then(res => {
         this.overlayImages = res.map(image => image.path);
       });
@@ -164,12 +134,15 @@ export default {
       this.$store
         .dispatch('campaign/uploadImages', {
           images: imgs,
-          campaignId: this.campaign.campaign_id
+          campaignId: this.campaign.campaign_id,
         })
         .then(uploadedImgs => {
           this.updateAttribute(uploadedImgs[imgs.length - 1], data.newImage);
-          if(typeof this.plugin.config.adjust !== 'undefined' && this.plugin.config.adjust.value) {
-            this.updateWidthAttribute(data.state.outputSize.width);
+          if (typeof this.plugin.config.adjust !== 'undefined' && this.plugin.config.adjust.value) {
+            this.saveAttributeInThisElement({
+              property: 'width',
+              value: data.state.outputSize.width,
+            });
           }
           const temp = {};
           if (this.type === 'desktop') {
@@ -187,7 +160,7 @@ export default {
           }
           this.updatePluginData(uploadedImgs, data.images, {
             ...this.plugin.data,
-            ...temp
+            ...temp,
           }, data.newImage);
           this.$store.commit('global/setLoader', false);
           this.showImageEditor = false;
@@ -221,54 +194,34 @@ export default {
       delete data.images;
       this.$store.commit('campaign/savePlugin', {
         plugin: this.pluginKey,
-        moduleId: this.currentComponent.moduleId,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        data: data
+        moduleId: this.elementLocation.moduleId,
+        columnId: this.elementLocation.columnId,
+        componentId: this.elementLocation.componentId,
+        data,
       });
     },
     updateAttribute(image, newImage) {
       this.removeErrorsImages();
       const payload = {
-        plugin: this.pluginKey,
-        moduleId: this.currentComponent.moduleId,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        subComponent: 'image',
-        link: 'attribute',
-        value: image
+        value: image,
       };
       if (this.type === 'desktop') {
         payload.property = 'placeholder';
-        this.$store.commit('campaign/saveComponentProperty', payload);
+        this.saveAttributeInThisElement(payload);
 
         if (newImage && this.isEdit) {
           if (typeof this.plugin.data.imgMobile !== 'undefined') {
             payload.property = 'placeholderMobile';
-            this.$store.commit('campaign/saveComponentProperty',payload);
+            this.saveAttributeInThisElement(payload);
           }
         }
       } else {
         payload.property = 'placeholderMobile';
-        this.$store.commit('campaign/saveComponentProperty', payload);
+        this.saveAttributeInThisElement(payload);
       }
     },
-    updateWidthAttribute(newWidth){
-      this.$store.commit('campaign/saveComponentProperty', {
-        plugin: this.pluginKey,
-        moduleId: this.currentComponent.moduleId,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        subComponent: 'image',
-        link: 'attribute',
-        property: 'width',
-        value: newWidth
-      });
-    },
     removeErrorsImages() {
-      let $contentImgError = $('.stx-module-wrapper-active').find(
-        '.default-image-error'
-      );
+      const $contentImgError = $('.stx-module-wrapper-active').find('.default-image-error');
       if ($contentImgError.length > 0) {
         $contentImgError.removeClass('default-image-error');
       }
@@ -284,7 +237,7 @@ export default {
             this.isEdit = true;
             this.image = {
               img: temp.img,
-              state: temp.state
+              state: temp.state,
             };
           }
         } else {
@@ -292,16 +245,16 @@ export default {
             this.isEdit = true;
             this.image = {
               img: temp.imgMobile,
-              state: temp.stateMobile
+              state: temp.stateMobile,
             };
           } else {
             this.isEdit = true;
-          this.image = {
+            this.image = {
               img: temp.img,
-              state: temp.state
-          };
+              state: temp.state,
+            };
+          }
         }
-      }
       }
       this.showImageEditor = true;
     },
@@ -318,7 +271,7 @@ export default {
   padding: 6px 20px;
   border-radius: 2px;
   margin-top: 5px;
-} 
+}
 
 .el-button--primary {
   &.is-disabled,

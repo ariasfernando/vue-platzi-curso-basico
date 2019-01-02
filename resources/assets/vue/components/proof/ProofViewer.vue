@@ -31,7 +31,7 @@
 
         <div class="section-container-campaign">
             <section class="section-canvas-email section-box">
-                <div class="section-box-content section-canvas-container">
+                <div class="section-box-content section-canvas-container scrolled">
                     <table cellpadding="0" cellspacing="0" width="100%">
                         <tr v-if="campaign.length === 0">
                             <td align="center">
@@ -58,11 +58,24 @@
 
             <aside>
                 <proof-comments
+                    ref="proofComments"
                     :token="token"
+                    :campaignFinished="campaignFinished"
                 ></proof-comments>
             </aside>
         </div>
-
+        <modal-reviewer v-if="displayModal" @close="displayModal = false" @submit="goToLink">
+          <div slot="body">
+            <div>
+              The link that you are following may not render as expected in this test environment. Do you wish to proceed?
+              <br>
+              <br>
+            </div>
+            <div>
+              <p>link: <b>{{linkUrl}}</b></p>
+            </div>
+          </div>
+        </modal-reviewer>
     </div>
 </template>
 
@@ -71,12 +84,14 @@
   import ProofDecision from './ProofDecision.vue';
   import VueSticky from 'vue-sticky';
   import proofService from '../../services/proof';
+  import ModalReviewer from './modals/ModalReviewer.vue';
 
   export default {
     name: 'proofViewer',
     components: {
       ProofComments,
-      ProofDecision
+      ProofDecision,
+      ModalReviewer
     },
     data() {
       return {
@@ -84,15 +99,23 @@
         showDecision: false,
         canEdit: false,
         reviewer: [],
+        campaignFinished: false,
         desktopWidth: '600',
         mobileWidth: '300',
-        buildingMode: 'desktop'
+        buildingMode: 'desktop',
+        displayModal: false,
+        linkUrl: '',
       };
     },
     props: ['token'],
     computed: {
       campaignHtml () {
         if ('body_html' in this.campaign) {
+          //hide hack in Finished Emails.
+          setTimeout(function(){
+            $(".st-hide-hack").hide();
+          },1000);
+
           // Yes, it's ugly, but this width value is set in the body_html and we need
           // to remove it so the switch can work.
           // @TODO: check why this value is in the body_html
@@ -113,6 +136,9 @@
       // Get campaign data
       this.getProofData();
     },
+    mounted: function () {
+      this.urlPrevent();
+    },
     directives: {
       'sticky': VueSticky,
     },
@@ -125,6 +151,7 @@
             _this.reviewer = response.data.reviewer;
             _this.showDecision = response.data.show_decision;
             _this.canEdit = response.data.can_edit;
+            _this.campaignFinished = response.data.campaign_finished;
             _this.desktopWidth = response.data.campaign.template_width;
             _this.mobileWidth = response.data.campaign.template_mobile_width;
             if ('message' in response.data) {
@@ -134,12 +161,24 @@
         });
       },
       decisionMade: function() {
-        return false; // this will be commented until we finish all this implementation
         // Ugly but works. @TODO: find a better way to do this (e.g. vuex)
-        this.$children[1].getComments();
+        this.$refs.proofComments.getComments();
       },
       changeBuildingMode(mode) {
         this.buildingMode = mode;
+      },
+      goToLink(){
+        this.displayModal = false;
+        window.open(this.linkUrl,'_blank');
+      },
+      urlPrevent() {
+        $("#emailCanvas").on('click','a', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          this.showLinkModal= true;
+          this.linkUrl = $(e.target).closest('a').attr('href');
+          this.displayModal = true;
+        });
       }
     }
   };
@@ -150,6 +189,42 @@
         width: 100%;
         display: table;
         min-height: 100%;
+
+      .section-canvas-email{
+        width: 100%;
+        position: relative;
+
+        .scrolled{
+          width: 100%;
+          max-height: 80vh;
+          overflow-y: scroll;
+        }
+        .scrolled::-webkit-scrollbar {
+          width: .4em;
+        }
+        .scrolled::-webkit-scrollbar,
+        .scrolled::-webkit-scrollbar-thumb {
+          overflow:visible;
+          border-radius: 4px;
+        }
+        .scrolled::-webkit-scrollbar-thumb {
+          background: rgba(0,0,0,.2);
+        }
+        .cover-bar {
+          position: absolute;
+          background: #fff;;
+          height: 100%;
+          top: 0;
+          right: 0;
+          width: .4em;
+          -webkit-transition: all .5s;
+          opacity: 1;
+        }
+        .section-canvas-email:hover .cover-bar {
+          opacity: 0;
+          -webkit-transition: all .5s;
+        }
+      }
     }
     #emailCanvas{
         &:empty {

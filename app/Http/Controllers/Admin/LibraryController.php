@@ -34,6 +34,7 @@ class LibraryController extends Controller
     {
         $this->middleware('AdminAuthenticate');
         $this->middleware('acl.permission:access_admin_libraries');
+        $this->middleware('acl.permission:access_admin_studio_libraries');
     }
 
     /**
@@ -167,17 +168,24 @@ class LibraryController extends Controller
      */
     public function postEdit(Request $request)
     {
-        $library = Library::findOrFail($request->input("libraryId"));
-        $old_name = $library->name;
-        $library->name = $request->input("name");
-        $library->description = $request->input("description");
-        $library->modules = $modules = [];
-        $library->config = $request->input("config");
-        $library->modules = $request->input('modules');
+        $request->validate(
+            [
+                'name' => ['required', 'max:255', $this->libraryUniqueValidator($request->input('libraryId'))],
+                'config.trackingConfig' => 'json|required_if:config.tracking,==,true'
+            ],
+            [
+                'config.trackingConfig.json'        => 'Tracking configuration must be a valid JSON.',
+                'config.trackingConfig.required_if' => 'Tracking configuration is required if tracking is enabled.'
+            ]
+        );
 
-        $request->validate([
-            'name' => ['required', 'max:255', $this->libraryUniqueValidator($request->input('libraryId'))],
-        ]);
+        $library              = Library::findOrFail($request->input("libraryId"));
+        $old_name             = $library->name;
+        $library->name        = $request->input("name");
+        $library->description = $request->input("description");
+        $library->modules     = $modules = [];
+        $library->config      = $request->input("config");
+        $library->modules     = $request->input('modules');
 
         if (is_null($library->config)) {
             return array("message" => "ERROR_CONFIG");
@@ -206,40 +214,47 @@ class LibraryController extends Controller
     public function postCreate(Request $request)
     {
 
-        $request->validate([
-            'name' => ['required', 'max:255', $this->libraryUniqueValidator($request->input('libraryId'))],
-        ]);
+        $request->validate(
+            [
+                'name' => ['required', 'max:255', $this->libraryUniqueValidator($request->input('libraryId'))],
+                'config.trackingConfig' => 'json|required_if:config.tracking,==,true'
+            ],
+            [
+                'config.trackingConfig.json'        => 'Tracking configuration must be a valid JSON.',
+                'config.trackingConfig.required_if' => 'Tracking configuration is required if tracking is enabled.'
+            ]
+        );
 
         $params = [
-            "name" => $request->input("name"),
-            "key" => ModelKeyManager::getStandardKey(new Library, $request->input('name')),
+            "name"        => $request->input("name"),
+            "key"         => ModelKeyManager::getStandardKey(new Library, $request->input('name')),
             "description" => $request->input("description"),
-            "config" => $request->input("config"),
-            "modules" => $request->input('modules')
+            "config"      => $request->input("config"),
+            "modules"     => $request->input('modules')
         ];
 
-            // Create permission to have access to the new library
-            $permission_params = [
-                "name" => "access_library_" . $params['key'],
-                "description" => "Access to library: " . $params['name']
-            ];
+        // Create permission to have access to the new library
+        $permission_params = [
+            "name"        => "access_library_" . $params['key'],
+            "description" => "Access to library: " . $params['name']
+        ];
 
-            if (Permission::where('name', '=', $permission_params["name"])->exists()) {
-                $response_message = array("message"=> "ERROR_EXISTS");
-            } else {
-                Library::create($params);
-                Permission::create($permission_params);
+        if (Permission::where('name', '=', $permission_params["name"])->exists()) {
+            $response_message = array("message"=> "ERROR_EXISTS");
+        } else {
+            Library::create($params);
+            Permission::create($permission_params);
 
-                // Add newly created permission to admin role.
-                if ($role = Role::where('name', '=', 'admin')->first()) {
-                    $permissions = $role->permissions;
-                    $permissions[] = $permission_params['name'];
-                    $role->permissions = $permissions;
-                    $role->save();
-                }
-
-                $response_message = array("message"=> "SUCCESS");
+            // Add newly created permission to admin role.
+            if ($role = Role::where('name', '=', 'admin')->first()) {
+                $permissions = $role->permissions;
+                $permissions[] = $permission_params['name'];
+                $role->permissions = $permissions;
+                $role->save();
             }
+
+            $response_message = array("message"=> "SUCCESS");
+        }
 
 
         return $response_message;

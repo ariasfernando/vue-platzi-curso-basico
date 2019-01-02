@@ -1,7 +1,12 @@
 import _ from 'lodash';
+import Adapter from './tinymce/Adapter';
+import listStylesFix from './tinymce/listStyles.fix';
 
 export default {
   props: ['name', 'plugin'],
+  mixins: [
+    Adapter,
+  ],
   mounted() {
     if (this.textOptions.enabled) {
       this.initTinyMCE();
@@ -25,7 +30,9 @@ export default {
       const button_inline_color = editor.settings.button_inline_color;
 
       if (nameComponent === 'button-element' && button_inline_color) {
-        this.changeStyles('p', { color: this.component.button.style.color || libraryLinkColor });
+        this.changeStyles('p', {
+          color: this.component.button.style.color || libraryLinkColor
+        });
       }
       if (p_fixed_style && Application.utils.isJsonString(p_fixed_style)) {
         this.changeStyles('p', JSON.parse(p_fixed_style));
@@ -66,8 +73,8 @@ export default {
       const editorLinks = $(editor.targetElm).find('a');
 
       /*
-      * Color Treatment
-      */
+       * Color Treatment
+       */
 
       // check if link_fixed_color is setup an apply it, otherwise, apply parent color
       if (link_fixed_color && /^#[0-9A-F]{6}$/i.test(link_fixed_color)) {
@@ -109,18 +116,18 @@ export default {
       }
 
       /*
-      * Fixed Styles Treatment
-      */
+       * Fixed Styles Treatment
+       */
 
       if (link_fixed_styles) {
         this.changeStyles('a', link_fixed_styles);
       }
 
       /*
-      * Underline Treatment
-      * note: text-decoration:underline in <a> is overriden by css clases in email clients,
-      * so we have to add an underlined span inside
-      */
+       * Underline Treatment
+       * note: text-decoration:underline in <a> is overriden by css clases in email clients,
+       * so we have to add an underlined span inside
+       */
 
       $.each(editorLinks, (index, el) => {
         if (link_fixed_styles && link_fixed_styles["text-decoration"] === "underline") {
@@ -162,9 +169,9 @@ export default {
             const lineHeight = computedStyle.getPropertyValue('line-height');
             const letterSpacing = computedStyle.getPropertyValue('letter-spacing');
             $(el).css({
-              fontSize: fontSize,
-              lineHeight: lineHeight,
-              letterSpacing: letterSpacing
+              fontSize,
+              lineHeight,
+              letterSpacing,
             });
           }
         });
@@ -173,19 +180,20 @@ export default {
     tinyMaxLines() {
       const editor = tinymce.get(this.editorId);
       if (editor.settings.max_lines) {
-        if (parseInt(editor.settings.max_lines)) {
-          return parseInt(editor.settings.max_lines) || undefined;
-        } else {
+        if (_.isObject(editor.settings.max_lines)) {
           const firstTextElement = this.$textElement[0].firstElementChild;
           let firstTextNode = firstTextElement.firstChild;
           // if the first node is a text node, we go up to te parent element.
-          if(firstTextNode.nodeName === "#text") {
+          if (firstTextNode.nodeName === '#text') {
             firstTextNode = firstTextElement;
           }
           const fontSize = document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('font-size');
-          return JSON.parse(editor.settings.max_lines)[fontSize];
+          return editor.settings.max_lines[fontSize];
         }
+        // if is not an object, should be a number
+        return parseInt(editor.settings.max_lines, 10) || undefined;
       }
+      return undefined;
     },
     tinyMax() {
       const editor = tinymce.get(this.editorId);
@@ -211,9 +219,8 @@ export default {
           event.stopPropagation();
         }
         return false;
-      } else {
-        this.clearError();
       }
+      this.clearError();
     },
     maxLinesValidation(event) {
       const divHeight = this.$textElement.height();
@@ -221,12 +228,22 @@ export default {
       let firstTextNode = firstTextElement.firstChild;
 
       // if the first node is a text node, we go up to te parent element.
-      if(firstTextNode.nodeName === "#text") {
+      if (firstTextNode.nodeName === '#text') {
         firstTextNode = firstTextElement;
       }
 
-      const lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
-      const actualLines = divHeight / lineHeight;
+      let lineHeight = 0;
+
+      if (firstTextNode.nodeName === 'SUP') {
+        // if the first node is a superscript, we should check with the line-height of the container
+        lineHeight = parseInt(this.$textElement.css('line-height').replace('px', ''));
+      } else {
+        // otherwise, check with the line-height of the first text
+        lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
+      }
+
+      // note: to perform the correct calculation, actualLines must be an integer
+      const actualLines = Math.floor(divHeight / lineHeight);
 
       if (actualLines > this.tinyMaxLines()) {
         this.setError({
@@ -343,7 +360,7 @@ export default {
         });
 
         _.forOwn(loop.settings, (prop, key) => {
-            format[key] = prop;
+          format[key] = prop;
         });
 
         const fontSizeBehaviour = loop.styles.fontSize.behaviour || loop.steps.behaviour;
@@ -364,14 +381,14 @@ export default {
 
       _.each(this.textOptions.config.settings, (e, k) => {
         if (Application.utils.isJsonString(e.content)) {
-          customSettings[k] = JSON.parse(e.content);
+          customSettings[k] = this.adapter(JSON.parse(e.content), k);
         } else {
-          customSettings[k] = e.content || e.value;
+          customSettings[k] = e.content ? this.adapter(e.content, k) : this.adapter(e.value, k);
         }
       });
 
       if (this.textOptions.config.settings.style_formats_increment && this.textOptions.config.settings.style_formats_increment.value) {
-        customSettings['style_formats'] = this.styleFormatsIncrement();
+        customSettings.style_formats = this.styleFormatsIncrement();
       }
 
       let toolbar = [];
@@ -432,23 +449,23 @@ export default {
         setup(editor) {
           editor.paste_block_drop = true;
           editor.on('focus', (e) => {
-              // Change icon tiny
-              // TODO  implement DRY.
+            // Change icon tiny
+            // TODO  implement DRY.
             const $toolbox = $(editor.settings.fixed_toolbar_container);
 
             if ($toolbox.length && !$toolbox.find('div[aria-label="Font Sizes"] .text-size').length) {
-              setTimeout(() =>  {
+              setTimeout(() => {
                 $toolbox.find('div[aria-label="Font Sizes"] button:first').empty();
                 $toolbox.find('div[aria-label="Font Sizes"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-text-size"></i>');
               });
             }
             if ($toolbox.length && !$toolbox.find('div[aria-label="Font Family"] .text-size').length) {
-              setTimeout(() =>  {
+              setTimeout(() => {
                 $toolbox.find('div[aria-label="Font Family"] button:first').empty();
                 $toolbox.find('div[aria-label="Font Family"] button:first').append('<i class="mce-caret"></i><i class="stx-toolbar-icon glyphicon glyphicon-font"></i>');
               });
             }
-            if ($toolbox.length && !$toolbox.find('button:contains("Formats")').length ){
+            if ($toolbox.length && !$toolbox.find('button:contains("Formats")').length) {
               setTimeout(() => {
                 const $button = $toolbox.find("button:contains('Formats')");
                 $button.parent('div').attr('aria-label', 'Font Format');
@@ -474,100 +491,120 @@ export default {
           });
 
           editor
-          .on('keydown', (e) => {
-            if (!(_this.tinyMax() || _this.tinyMaxLines() || _this.tinyMin())) {
-              // if truncate is NAN, returns and avoid validations
-              return;
-            }
-            const allowKeys = [
-              //  key      keyCode
-              'Backspace', 8,
-              'Delete', 46,
-              'Tab', 9,
-              'Escape', 27,
-              'Home', 36,
-              'End', 35,
-              'ArrowLeft', 37,
-              'ArrowRight', 39,
-              'ArrowUp', 38,
-              'ArrowDown', 40,
-            ];
-
-            let code = null;
-            if (e.key !== undefined) {
-              code = e.key;
-            } else if (e.keyCode !== undefined) {
-              code = e.keyCode;
-            }
-
-            if ($.inArray(code, allowKeys) !== -1 ||
-              // Allow: Ctrl+A,Ctrl+C, Ctrl+X
-              ((e.keyCode === 65 || e.keyCode === 67 || e.keyCode === 88) && (e.ctrlKey === true || e.metaKey === true))
-            ) {
-              if (code === 'Backspace') {
-                // Check for Min Characters Limit
-                _this.minCharsValidation(e);
+            .on('keydown', (e) => {
+              if (!(_this.tinyMax() || _this.tinyMaxLines() || _this.tinyMin())) {
+                // if truncate is NAN, returns and avoid validations
+                return;
               }
-              return;
-            }
+              const allowKeys = [
+                //  key      keyCode
+                'Backspace', 8,
+                'Delete', 46,
+                'Tab', 9,
+                'Escape', 27,
+                'Home', 36,
+                'End', 35,
+                'ArrowLeft', 37,
+                'ArrowRight', 39,
+                'ArrowUp', 38,
+                'ArrowDown', 40,
+              ];
 
-            // Check for Characters Limit
-            _this.maxCharsValidation(e);
+              let code = null;
+              if (e.key !== undefined) {
+                code = e.key;
+              } else if (e.keyCode !== undefined) {
+                code = e.keyCode;
+              }
 
-            // Check for Lines Limit
-            _this.maxLinesValidation(e);
-          })
-          .on('keyup change', (e) => {
-            editor.bodyElement.dispatchEvent(new Event('tiny-change'));
+              if ($.inArray(code, allowKeys) !== -1 ||
+                // Allow: Ctrl+A,Ctrl+C, Ctrl+X
+                ((e.keyCode === 65 || e.keyCode === 67 || e.keyCode === 88) && (e.ctrlKey === true || e.metaKey === true))
+              ) {
+                if (code === 'Backspace') {
+                  // Check for Min Characters Limit
+                  _this.minCharsValidation(e);
+                }
+                return;
+              }
 
-            if (!(_this.tinyMax() || _this.tinyMaxLines() || _this.tinyMin())) {
-              //if truncate is NAN, returns and avoid validations
-              return;
-            }
+              // Check for Characters Limit
+              _this.maxCharsValidation(e);
 
-            // Check for Min Characters Limit
-            _this.minCharsValidation(e);
+              // Check for Lines Limit
+              _this.maxLinesValidation(e);
+            })
+            .on('keyup change', (e) => {
+              editor.bodyElement.dispatchEvent(new Event('tiny-change'));
 
-            // Check for Characters Limit
-            _this.maxCharsValidation(e);
+              if (!(_this.tinyMax() || _this.tinyMaxLines() || _this.tinyMin())) {
+                //if truncate is NAN, returns and avoid validations
+                return;
+              }
 
-            // Check for Lines Limit
-            _this.maxLinesValidation(e);
+              // Check for Min Characters Limit
+              _this.minCharsValidation(e);
 
-          })
-          .on('change', (e) => {
-            _this.setStyles();
-          })
-          .on('ExecCommand', (e) => {
-            if (e.command == 'mceInsertContent' && $(e.value)[0].nodeName == 'A')  {
-              _this.setLinkStyles();
-            }
-          });
+              // Check for Characters Limit
+              _this.maxCharsValidation(e);
+
+              // Check for Lines Limit
+              _this.maxLinesValidation(e);
+
+            })
+            .on('change', (e) => {
+              _this.setStyles();
+            })
+            .on('ExecCommand', (e) => {
+              if (e.command === 'mceInsertContent' && $(e.value)[0].nodeName === 'A') {
+                _this.setLinkStyles();
+              }
+            });
+            listStylesFix(editor);
         },
         paste_preprocess: (plugin, args) => {
-          const editor = tinymce.get(tinymce.activeEditor.id);
-          const tinyMax = parseInt(editor.settings.max_chars);
+          const editor = tinymce.get(this.editorId);
+          const tinyMax = this.tinyMax();
 
           if (!tinyMax) {
             // if truncate is NAN, returns and avoid validations
             return;
           }
-
+          const ghostObj = $('<div/>').html(args.content);
+          const cleanTxt = ghostObj.text();
           // trim string if exceed max char limit
-          const tinyLength = editor.getContent({ format: 'text' }).length - 1;
-          const charsToPaste = tinyMax - tinyLength;
-          args.content = args.content.trim().substring(0, charsToPaste);
-        },
 
+          const tinyLength = $(editor.getContent({ format: 'html' })).text().length;
+          const selectionLength = editor.selection.getContent({ format: 'text' }).length;
+          const charsToPaste = (tinyMax - tinyLength) + selectionLength;
+
+          if (cleanTxt.length > charsToPaste) {
+            args.content = cleanTxt.trim().substring(0, charsToPaste);
+          } else {
+            args.content = cleanTxt.trim();
+          }
+        },
       };
 
       if (!_.isEmpty(options)) {
         _.each(options, (option) => {
-          if (option.key === 'forecolor' && !_.isEmpty(option.textcolor_map) && !option.textcolor_from_library) {
-            settings.plugins = [settings.plugins, 'textcolor'].join(' ');
-            settings.textcolor_map = option.textcolor_map;
-          } else if (option.textcolor_from_library && Application.utils.isJsonString(this.libraryConfig.colorPalettes)) {
-            settings.textcolor_map = JSON.parse(this.libraryConfig.colorPalettes)[option.palette_name];
+          if (option.key === 'forecolor') {
+            if (!_.isEmpty(option.textcolor_map) && !option.textcolor_from_library) {
+              settings.textcolor_map = this.adapter(option.textcolor_map, 'forecolor');
+            } else if (option.textcolor_from_library && Application.utils.isJsonString(this.libraryConfig.colorPalettes)) {
+              settings.textcolor_map = JSON.parse(this.libraryConfig.colorPalettes)[option.palette_name];
+            }
+          }
+
+          if (option.key === 'backcolor') {
+            if (!_.isEmpty(option.backcolor_map) && !option.backcolor_from_library) {
+              settings.backcolor_map = this.adapter(option.backcolor_map, option.key);
+            } else if (option.backcolor_from_library && Application.utils.isJsonString(this.libraryConfig.colorPalettes)) {
+              settings.backcolor_map = JSON.parse(this.libraryConfig.colorPalettes)[option.palette_name];
+            }
+            if (!_.isEmpty(option.backcolor_map) || option.backcolor_from_library) {
+              settings.plugins = [settings.plugins, 'stbackcolorextended'].join(' ');
+            }
           }
         });
       }

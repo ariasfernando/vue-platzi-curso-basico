@@ -6,7 +6,7 @@ module.exports = {
   title: 'Destination URL',
   version: '0.0.2',
   author: 'emiliano@stensul.com',
-  target: ['button', 'image'],
+  target: ['button', 'image', 'text'],
   studioSettings,
   campaignSettings,
   config: {
@@ -34,4 +34,5 @@ module.exports = {
   render: true,
   enabled: false,
   validated: false,
+  runBackground: true,
 };
