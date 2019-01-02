@@ -3,6 +3,7 @@
     <Draggable
       :ref="'draggable'"
       v-model="components"
+      v-observer:subtree="emitChange"
       style="display: table; width: 100%;"
       element="div"
       :options="options"
@@ -10,9 +11,6 @@
       :style="getStyles('draggable')"
       class="column-draggable"
       :class="hasComponents ? 'has-component': 'no-component'"
-      :move="emitChange"
-      @clone="emitChange"
-      @sort="emitChange"
       @start="setDragging(true)"
       @end="setDragging(false)"
       @add="onAdd">
@@ -30,7 +28,7 @@
       v-if="isStudio && buildingMode === 'desktop' && !dragging && module.structure.columns.length !== 1"
       :key="'selector' + columnId"
       :left-position="columnWidth(columnId) / 2"
-      :top="moduleHeight ? moduleHeight+10 : 160"
+      :top="elementSelectorTop"
       :label="columnLabel(columnId)"
       :active="isColumnSelect(columnId)"
       selector-icon="fa fa-pencil"
@@ -83,15 +81,21 @@ module.exports = {
           value,
         };
         this.$store.commit('module/saveElementProperty', data);
-        this.emitChange();
       },
     },
     ischanged() {
       return this.$store.getters['module/draggable'].changed;
     },
-  },
-  mounted() {
-    this.emitChange();
+    elementSelectorTop() {
+      const top = this.moduleHeight ? this.moduleHeight + 10 : 160;
+      const paddingBottom = _.parseInt(
+        this.module.structure.style.paddingBottom || 0,
+      );
+      const borderBottom = _.parseInt(
+        this.module.structure.style.borderBottomWidth || 0,
+      );
+      return top + paddingBottom + borderBottom;
+    },
   },
   methods: {
     setDragging(value) {
@@ -119,7 +123,8 @@ module.exports = {
       }
       if (type === 'EmptyColumn') {
         styles.opacity = type && this.hasComponents ? 0 : 1;
-      } if (type === 'HighlightOfElement') {
+      }
+      if (type === 'HighlightOfElement') {
         styles.height = `${this.moduleHeight}px`;
       }
       return styles;
@@ -178,20 +183,7 @@ module.exports = {
     },
   },
   watch: {
-    module: {
-      handler() {
-        this.$nextTick(() => {
-          this.setHasComponents();
-        });
-      },
-      deep: true,
-    },
     draggableChanged() {
-      this.$nextTick(() => {
-        this.setHasComponents();
-      });
-    },
-    moduleHeight() {
       this.$nextTick(() => {
         this.setHasComponents();
       });
@@ -200,6 +192,46 @@ module.exports = {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '../../stensul-ui/scss/stui.scss';
+.column-draggable /deep/ {
+  .ghost-component,
+  .ghost-component-menu {
+    height: 80px;
+    display: table-row;
+    list-style-type: none;
+    font-size: 13px;
+    color: $color-secondary;
+    background-color: lighten($color-secondary, 30%);
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+    &:before {
+      content: 'Drag content here';
+      display: flex;
+      justify-content: center;
+      border: none;
+      color: $color-secondary;
+      background-color: lighten($color-secondary, 30%);
+      height: 80px;
+      line-height: 80px;
+      font-family: 'Open Sans', Arial, serif;
+      opacity: 1;
+      outline: 2px dashed $color-secondary;
+      outline-offset: -10px;
+    }
+    td {
+      display: none;
+    }
+    > i {
+      display: none;
+    }
+    p {
+      display: none;
+    }
+    & ~ tr .empty-column {
+      opacity: 0;
+    }
+  }
+}
 </style>

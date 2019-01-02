@@ -158,77 +158,15 @@ module.exports = {
   outline-color: $color-grey;
   outline-width: 2px;
 }
-</style>
-<style lang="scss">
-[data-column-id] {
-  position: relative;
-}
-@import '../../stensul-ui/scss/stui.scss';
-.alignRight {
-  float: left;
-}
-
-.st-content-component {
+.st-content-component /deep/ {
   outline: 1px dashed $color-secondary;
   border: none !important;
-}
-
-.module-wrapper {
-  li.ghost-component-menu {
-    outline: 2px dashed $color-secondary;
-    color: $color-secondary;
-    background-color: lighten($color-secondary, 30%);
-    height: 80px;
-    line-height: 80px;
-    width: 100%;
-    display: table-row;
-    list-style-type: none;
-    font-size: 13px;
-    z-index: 300;
-    text-align: center;
-    opacity: 1 !important;
-    vertical-align: middle;
+  [data-column-id] {
     position: relative;
-    &:before {
-      content: 'Drag content here';
-    }
-    i {
-      display: none;
-    }
-    p {
-      display: none;
-    }
-    & ~ tr .empty-column {
-      opacity: 0;
-    }
   }
-  tr.ghost-component {
-    color: $color-secondary;
-    background-color: lighten($color-secondary, 30%);
-    text-align: center;
-    height: 20px;
-    line-height: 20px;
-    &:before {
-      content: 'Drag content here';
-      display: flex;
-      justify-content: center;
-      border: none;
-      color: $color-secondary;
-      background-color: lighten($color-secondary, 30%);
-      height: 80px;
-      line-height: 80px;
-      font-family: 'Open Sans', Arial, serif;
-      opacity: 1;
-      outline: 2px dashed $color-secondary;
-      outline-offset: -10px;
-    }
-    td {
-      display: none;
-    }
+  .stx-wrapper {
+    display: contents;
+    width: 100%;
   }
-}
-.stx-wrapper {
-  display: contents;
-  width: 100%;
 }
 </style>

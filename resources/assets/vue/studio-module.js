@@ -7,6 +7,7 @@ import BootstrapVue from 'bootstrap-vue';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/en';
+import observer from 'vue-mutation-observer';
 import interceptors from './interceptors';
 import Bootstrap from './bootstrap';
 import { studioModuleRoutes } from './router';
@@ -14,6 +15,7 @@ import store from './store';
 import acl from './resources/plugins/acl';
 
 Vue.use(acl);
+Vue.use(observer);
 Vue.use(Bootstrap);
 Vue.use(Toast, {
   horizontalPosition: 'center',

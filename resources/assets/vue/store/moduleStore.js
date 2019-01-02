@@ -235,12 +235,15 @@ const mutations = {
     ].plugins = data.plugins;
   },
   removeElement(state, { elementId }) {
+    const columnId = getColumnIndexByElementId(state.module, elementId);
     state.module.structure.columns[
-      getColumnIndexByElementId(state.module, elementId)
+      columnId
     ].components.splice(
       getComponentIndexByComponentId(state.module, elementId),
       1,
     );
+    // Set active the column that that contained the element.
+    state.currentElementId = state.module.structure.columns[columnId].id;
   },
   savePlugin(state, payload) {
     let pluginData = state.module;
