@@ -6,6 +6,7 @@
       :id="editorId"
       class="stx-edit-text stx-wrapper"
       style="width: 100%; display: inline-block !important;"
+      :class="tinyClass"
       :style="fontStyles"
       @keyup="changeContent"
       @tiny-change="changeContent"
