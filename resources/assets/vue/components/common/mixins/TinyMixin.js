@@ -568,7 +568,7 @@ export default {
                 _this.setLinkStyles();
               }
             });
-            listStylesFix(editor);
+          listStylesFix(editor);
         },
         paste_preprocess: (plugin, args) => {
           const editor = tinymce.get(this.editorId);
