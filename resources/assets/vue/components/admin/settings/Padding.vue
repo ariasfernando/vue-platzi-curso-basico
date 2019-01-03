@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import _ from 'lodash';
 import SettingMixin from '../mixins/SettingMixin';
 
 export default {
@@ -60,7 +59,7 @@ export default {
   line-height: 14px;
   border-radius: 0px 2px 2px 0px;
 }
-.el-button.is-disabled span{
+.el-button.is-disabled span {
   padding-left: 2px;
   padding-right: 2px;
 }
@@ -102,7 +101,8 @@ export default {
   }
 
   .el-input-number /deep/ {
-    .el-input-number__decrease, .el-input-number__increase {
+    .el-input-number__decrease,
+    .el-input-number__increase {
       width: 17px;
     }
   }
@@ -110,7 +110,7 @@ export default {
 </style>
   <style lang="less" >
 .field-padding {
-  input[type="text"] {
+  input[type='text'] {
     text-align: center;
   }
   .el-input-number .el-input__inner {

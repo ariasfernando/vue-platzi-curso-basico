@@ -1,12 +1,12 @@
 <template>
-    <settings-container label="Letter Spacing">
+    <SettingsContainer label="Letter Spacing">
       <template slot="setting-right">
-        <el-button
+        <ElButton
           v-if="isNormalLetterSpacing"
           class="custom-col"
           size="mini"
           disabled
-        >normal</el-button>
+        >normal</ElButton>
 
         <stui-input-number
           v-else
@@ -15,34 +15,33 @@
           :min="-5"
           :max="5"
           v-model="letterSpacingInputValue"
-          @change="(newValue)=>updateLetterSpacing(newValue)"
-          />
+          @change="(newValue)=>updateLetterSpacing(newValue)"/>
 
-        <el-button
+        <ElButton
           size="mini"
           :class="{'el-icon-setting': isNormalLetterSpacing,'active': !isNormalLetterSpacing}"
           @click="toggleNormalLetterSpacing"
-        ><span v-if="!isNormalLetterSpacing">{{ this.unit }}</span></el-button>
+        ><span v-if="!isNormalLetterSpacing">{{ this.unit }}</span></ElButton>
       </template>
-    </settings-container>
+    </SettingsContainer>
 </template>
 
 <script>
-import SettingMixin from "../mixins/SettingMixin.js";
-import SettingsContainer from "../../common/settings/containers/SettingsContainer.vue";
+import SettingMixin from '../mixins/SettingMixin';
+import SettingsContainer from '../../common/settings/containers/SettingsContainer.vue';
 
 export default {
-  name: "letter-spacing",
+  name: 'letter-spacing',
   mixins: [SettingMixin],
   components: { SettingsContainer },
   data() {
     return {
-      linkName: "letterSpacing",
-      isNormalLetterSpacingName: "isNormalLetterSpacing",
+      linkName: 'letterSpacing',
+      isNormalLetterSpacingName: 'isNormalLetterSpacing',
       defaultLetterSpacing: 0.2,
       letterSpacingInputValue: 0.2,
-      unit: "em",
-      letterSpacingInputValue: this.letterSpacing
+      unit: 'em',
+      letterSpacingInputValue: this.letterSpacing,
     };
   },
   mounted() {
@@ -51,38 +50,40 @@ export default {
   },
   computed: {
     isNormalLetterSpacing: {
-      get: function() {
+      get() {
         return this.element.styleOption[this.isNormalLetterSpacingName];
       },
-      set: function(newValue) {
-        this.$emit("setting-updated", {
+      set(newValue) {
+        this.$emit('setting-updated', {
           subComponent: this.subComponent,
-          link: "styleOption",
+          link: 'styleOption',
           name: this.isNormalLetterSpacingName,
-          value: newValue
+          value: newValue,
         });
         this.letterSpacing = this.inferLetterSpacing(
           this.letterSpacing,
-          newValue
-        );
-      }
-    },
-    letterSpacing: {
-      get: function() {
-        return this.inferLetterSpacing(this.element.style[this.linkName], this.isNormalLetterSpacing
+          newValue,
         );
       },
-      set: function(value) {
-        let newValue = value === "normal" ? value : value + this.unit;
-        this.$emit("setting-updated", {
+    },
+    letterSpacing: {
+      get() {
+        return this.inferLetterSpacing(
+          this.element.style[this.linkName],
+          this.isNormalLetterSpacing,
+        );
+      },
+      set(value) {
+        let newValue = value === 'normal' ? value : value + this.unit;
+        this.$emit('setting-updated', {
           subComponent: this.subComponent,
-          link: "style",
+          link: 'style',
           name: this.linkName,
-          value: newValue
+          value: newValue,
         });
         this.updateLetterSpacingInputValue(value);
-      }
-    }
+      },
+    },
   },
   methods: {
     updateLetterSpacingInputValue(value) {
@@ -94,7 +95,7 @@ export default {
       let newSpacing = this.defaultLetterSpacing;
       if (currentSpacing) {
         newSpacing = isNormalLetterSpacing
-          ? "normal"
+          ? 'normal'
           : parseFloat(currentSpacing);
       }
       return newSpacing;
@@ -102,109 +103,117 @@ export default {
     updateLetterSpacing(newValue) {
       this.letterSpacing = newValue;
     },
-    toggleNormalLetterSpacing: function() {
+    toggleNormalLetterSpacing() {
       this.isNormalLetterSpacing = !this.isNormalLetterSpacing;
     },
-    defineStyleOption(){
+    defineStyleOption() {
       // set styleOption to default if is undefined
       if (this.isNormalLetterSpacing === undefined) {
         this.isNormalLetterSpacing = true;
       }
-    }
+    },
   },
   watch: {
     element: {
-      handler: function(){
+      handler() {
         this.defineStyleOption();
       },
-      deep: true
+      deep: true,
     },
   },
 };
 </script>
 <style lang="scss" scoped>
-  .custom-col {
-    width: calc(100% - 28px);
-    float: left;
-    display: block;
-    border-right: 0;
-  }
+.custom-col {
+  width: calc(100% - 28px);
+  float: left;
+  display: block;
+  border-right: 0;
+}
 
-  .el-button {
-    transition: unset;
-    border-radius: 2px;
-    &.active {
-      background-color: #78dcd6;
-      padding: 7px 4px;
-      font-weight: 300;
-      color: #ffffff;
-      border: 1px solid #78dcd6;
-      border-radius: 0px 2px 2px 0px;
-      height: 28px!important;
-    }
-    &--mini,
-    &--mini.is-round {
-      padding: 7px;
-    }
-    & + .el-button {
-      margin-left: 0;
-    }
-    &:not(.custom-col) {
-      width: 28px;
-      padding: 4px 0;
-      height: 26px;
-      display: block;
-      float: left;
-    }
-    &.is-disabled,
-    &.is-disabled:focus,
-    &.is-disabled:hover {
-      color: #666666;
-      cursor: auto;
-    }
-  }
-
-  .el-icon-setting{
-    background: #f8f8f8;
-    color: #666666;
-    cursor: inherit;
-    border: 1px solid #dcdfe6;
-    font-size: 11px;
+.el-button {
+  transition: unset;
+  border-radius: 2px;
+  &.active {
+    background-color: #78dcd6;
+    padding: 7px 4px;
     font-weight: 300;
-    line-height: 14px;
+    color: #ffffff;
+    border: 1px solid #78dcd6;
     border-radius: 0px 2px 2px 0px;
-    height: 28px!important;
-
-    &:hover{
-      color: #78dcd6;
-    }
+    height: 28px !important;
   }
+  &--mini,
+  &--mini.is-round {
+    padding: 7px;
+  }
+  & + .el-button {
+    margin-left: 0;
+  }
+  &:not(.custom-col) {
+    width: 28px;
+    padding: 4px 0;
+    height: 26px;
+    display: block;
+    float: left;
+  }
+  &.is-disabled,
+  &.is-disabled:focus,
+  &.is-disabled:hover {
+    color: #666666;
+    cursor: auto;
+  }
+}
 
-  .is-letter-spacing /deep/ {
-    input.el-input__inner[type="text"] {
-      padding-left: 0;
-      padding-right: 0;
-    }
-    .el-input-number__decrease{
-      border-radius: 2px 0px 0px 2px;
-      background: #f8f8f8;
-    }
-    .el-input-number__increase{
-      border-radius: 0px;
-      background: #f8f8f8;
-    } 
-    .el-input__inner{
-      text-align: center;
-      border-top-right-radius: 0px;
-      border-bottom-right-radius: 0px;
-      &:focus{
-        border: 1px solid #78dcd6;
-      }
-    }
-    .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled), 
-    .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){
+.el-icon-setting {
+  background: #f8f8f8;
+  color: #666666;
+  cursor: inherit;
+  border: 1px solid #dcdfe6;
+  font-size: 11px;
+  font-weight: 300;
+  line-height: 14px;
+  border-radius: 0px 2px 2px 0px;
+  height: 28px !important;
+
+  &:hover {
+    color: #78dcd6;
+  }
+}
+
+.is-letter-spacing /deep/ {
+  input.el-input__inner[type='text'] {
+    padding-left: 0;
+    padding-right: 17px;
+  }
+  .el-input-number__decrease {
+    border-radius: 2px 0px 0px 2px;
+    background: #f8f8f8;
+  }
+  .el-input-number__increase {
+    border-radius: 0px;
+    background: #f8f8f8;
+  }
+  .el-input__inner {
+    text-align: center;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    &:focus {
       border: 1px solid #78dcd6;
     }
   }
+  .el-input-number__decrease:hover:not(.is-disabled)
+    ~ .el-input
+    .el-input__inner:not(.is-disabled),
+  .el-input-number__increase:hover:not(.is-disabled)
+    ~ .el-input
+    .el-input__inner:not(.is-disabled) {
+    border: 1px solid #78dcd6;
+  }
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    width: 17px;
+  }
+}
 </style>
 

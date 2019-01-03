@@ -19,50 +19,49 @@
 </template>
 
 <script>
-import SettingMixin from "../mixins/SettingMixin.js";
-import SettingsContainer from "../../common/settings/containers/SettingsContainer.vue";
+import SettingMixin from '../mixins/SettingMixin.js';
+import SettingsContainer from '../../common/settings/containers/SettingsContainer.vue';
 
 export default {
-  name: "width",
+  name: 'width',
   mixins: [SettingMixin],
   components: { SettingsContainer },
-  data() {
-    return {
-    };
-  },
   mounted() {
     this.defineStyleOption();
   },
   computed: {
     isPxWidth: {
       get() {
-        return this.element.styleOption["isPxWidth"];
+        return this.element.styleOption['isPxWidth'];
       },
       set(value) {
-        this.$emit("setting-updated", {
+        this.$emit('setting-updated', {
           subComponent: this.subComponent,
-          link: "styleOption",
-          name: "isPxWidth",
-          value: value
+          link: 'styleOption',
+          name: 'isPxWidth',
+          value: value,
         });
-      }
+      },
     },
     mainSettingNumeric: {
       get() {
         return parseFloat(this.mainSetting);
       },
       set(value) {
-        value = isNaN(value) || value < this.minValueCalculated ? this.minValueCalculated : value;
+        value =
+          isNaN(value) || value < this.minValueCalculated
+            ? this.minValueCalculated
+            : value;
         value = this.isPxWidth ? `${value}` : `${value}%`;
         this.mainSetting = value;
-      }
+      },
     },
     minValueCalculated() {
-    return  this.minValue ? this.minValue : 1;
+      return this.minValue ? this.minValue : 1;
     },
     maxValueCalculated() {
       return this.isPxWidth ? undefined : 100;
-    }
+    },
   },
   methods: {
     onTogglePxWidth() {
@@ -71,24 +70,27 @@ export default {
       if (!isPxWidth) {
         width = Math.min(100, parseFloat(this.mainSettingNumeric));
       }
-      width = isNaN(width) || width < this.minValueCalculated ? this.minValueCalculated : width;
+      width =
+        isNaN(width) || width < this.minValueCalculated
+          ? this.minValueCalculated
+          : width;
       width = isPxWidth ? `${width}` : `${width}%`;
       this.isPxWidth = isPxWidth;
       this.mainSetting = width;
     },
     defineStyleOption() {
-        // set styleOption to default if is undefined
-        if (this.element.styleOption["isPxWidth"] === undefined) {
-          this.isPxWidth = false;
-        }
+      // set styleOption to default if is undefined
+      if (this.element.styleOption['isPxWidth'] === undefined) {
+        this.isPxWidth = false;
       }
+    },
   },
   watch: {
     element: {
-      handler: function(){
+      handler: function() {
         this.defineStyleOption();
       },
-      deep: true
+      deep: true,
     },
   },
 };
@@ -115,12 +117,16 @@ export default {
     color: #606266;
   }
 }
-.el-input-number {
+.el-input-number /deep/ {
   width: 80px;
   float: right;
   right: 23px;
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    width: 17px;
+  }
 }
-.el-button{
+.el-button {
   background: #f8f8f8;
   color: #666666;
   cursor: inherit;
@@ -129,9 +135,9 @@ export default {
   font-weight: 300;
   line-height: 14px;
   border-radius: 0px 2px 2px 0px;
-  height: 28px!important;
+  height: 28px !important;
 
-  &:hover{
+  &:hover {
     color: #78dcd6;
   }
 }
@@ -140,14 +146,14 @@ export default {
   border: 1px solid #78dcd6;
   color: #ffffff;
 
-  &:hover{
+  &:hover {
     color: #ffffff;
   }
 }
 </style>
 <style  lang="less">
 .width-setting {
-  input[type="text"] {
+  input[type='text'] {
     text-align: center;
   }
   .el-input-number .el-input__inner {
@@ -157,7 +163,7 @@ export default {
     border-bottom-right-radius: 2px;
   }
 
-  .el-input-number .el-button{
+  .el-input-number .el-button {
     background: #f8f8f8;
     color: #666666;
     cursor: inherit;

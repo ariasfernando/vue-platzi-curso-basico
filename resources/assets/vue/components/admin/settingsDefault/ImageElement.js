@@ -2,8 +2,6 @@ function imageDefault() {
   return {
     componentSettings: [
       {
-        groupLabel: 'Placeholders',
-        showLabel: false,
         settings: [{
           link: 'attribute',
           label: 'Default Image',
@@ -21,6 +19,15 @@ function imageDefault() {
           subComponent: 'image',
         },
         {
+          link: 'styleOption',
+          label: 'Full Width In Mobile',
+          name: 'noMobileStretch',
+          aclName: 'placeholder_placeholder-desktop',
+          type: 'generic-switch',
+          isInverted: true,
+          subComponent: 'image',
+        },
+        {
           name: 'classes',
           aclName: 'placeholder_classes',
           type: 'class-input',
@@ -29,8 +36,6 @@ function imageDefault() {
         }],
       },
       {
-        groupLabel: 'Image size',
-        showLabel: false,
         settings: [{
           name: 'image-size',
           aclName: 'image_image-size',
@@ -39,8 +44,6 @@ function imageDefault() {
         }],
       },
       {
-        groupLabel: 'Text align',
-        showLabel: false,
         settings: [{
           name: 'text-align',
           aclName: 'text_text-align',
@@ -49,8 +52,6 @@ function imageDefault() {
         }],
       },
       {
-        groupLabel: 'Background color',
-        showLabel: false,
         settings: [{
           name: 'bgcolor',
           aclName: 'background_bgcolor',
@@ -61,8 +62,6 @@ function imageDefault() {
         }],
       },
       {
-        groupLabel: 'Padding group',
-        showLabel: false,
         settings: [{
           name: 'padding',
           aclName: 'padding_padding',
@@ -72,8 +71,6 @@ function imageDefault() {
         }],
       },
       {
-        groupLabel: 'Url Settings',
-        showLabel: false,
         settings: [{
           link: 'attribute',
           label: 'Default URL',

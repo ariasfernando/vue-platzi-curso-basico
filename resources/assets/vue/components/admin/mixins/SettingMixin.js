@@ -1,9 +1,13 @@
 export default {
   props: [
+    'autosize',
+    'column-id',
+    'component',
     'default-value',
     'element',
     'is-disable',
     'isDisablePercentage',
+    'isInverted',
     'isPercentage',
     'isPixel',
     'label',
@@ -11,36 +15,23 @@ export default {
     'max-percentage',
     'max-value',
     'min-value',
+    'module',
     'name',
     'options',
     'placeholder',
+    'resize',
+    'setting-position',
     'setting-slot',
     'showSetting',
     'sub-component',
     'type',
-    'setting-position',
-    'autosize',
-    'resize',
   ],
   mounted() {
     this.setDefaultValue();
   },
   computed: {
-    module() {
-      return this.$store.getters['module/module'];
-    },
     currentComponent() {
       return this.$store.getters['module/currentComponent'];
-    },
-    component() {
-      if (this.module.structure.columns[this.currentComponent.columnId]) {
-        const component =
-          this.module.structure
-          .columns[this.currentComponent.columnId]
-          .components[this.currentComponent.componentId];
-        return component;
-      }
-      return null;
     },
     mainSetting: {
       get() {
@@ -61,8 +52,11 @@ export default {
   },
   methods: {
     setDefaultValue() {
-      if (this.link !== undefined && this.defaultValue !== undefined
-        && this.element[this.link][this.name] === undefined) {
+      if (
+        this.link !== undefined &&
+        this.defaultValue !== undefined &&
+        this.element[this.link][this.name] === undefined
+      ) {
         // set styleOption to default if is undefined
         this.mainSetting = this.defaultValue;
       }

@@ -1,5 +1,5 @@
 <template>
-  <wrapper>
+  <Wrapper>
     <!-- more than 1 column -->
     <tr v-if="module.structure.columns.length > 1">
       <!-- columns stacking -->
@@ -8,14 +8,14 @@
         width="100%"
         style="width:100%;"
         :valign="module.structure.attribute.valign || 'top'">
-        <columns-comment
+        <ColumnsComment
           :is-inverted="isInvertedStacking"
           :wrapper-width="templateInnerWidth"
           :width-first-column="columnWidth(0)"
           :bgcolor="columnBgcolor(0)"
           :module="module">
           <template v-for="(column, columnId) in module.structure.columns">
-            <column-render
+            <ColumnRender
               :key="'column-' + columnId"
               :module-id="moduleId"
               :column="column"
@@ -24,28 +24,19 @@
               :module="module"
               :is-inverted="isInvertedStacking">
               <slot :columnData="{columnId, column}" />
-              <element-selector
-                v-if="isStudio && buildingMode === 'desktop'"
-                :key="'selector' + columnId"
-                :left-position="calculeLeftPosition(columnId)"
-                :label="`Column ${columnId+1}`"
-                :active="isColumnSelect(columnId)"
-                selector-icon="fa fa-pencil"
-                @element-selected="columnSelect(columnId)" />
-            </column-render>
-            <between-column-comment
+            </ColumnRender>
+            <BetweenColumnComment
               v-if="module.structure.columns.length -1 > columnId"
               :key="'comment-' + columnId"
               :is-inverted="isInvertedStacking"
               :width="columnWidth(columnId + 1)"
               :bgcolor="columnBgcolor(columnId + 1)" />
           </template>
-        </columns-comment>
+        </ColumnsComment>
       </td>
       <!-- columns fixed -->
       <td
-        v-else-if="module.structure.columnsStacking == 'columnsFixed'"
-        v-for="(column, columnId) in module.structure.columns"
+        v-for="(column, columnId) in columnsFixed"
         :key="column.id"
         :data-column-id="columnId"
         :column-id="column.id"
@@ -54,51 +45,44 @@
         :class="column.container.attribute.classes"
         :height="column.container.attribute.height"
         :bgcolor="column.container.attribute.bgcolor"
-        :style="[elementBorderPaddingAndHeight(column.container), {'width': widthStyle(columnWidth(columnId))}]">
+        :style="[elementBorderPaddingAndHeight(column.container), {width: widthStyle(columnWidth(columnId))}]">
         <table align="left" width="100%" cellspacing="0" cellpadding="0" border="0">
           <slot :columnData="{columnId, column}" />
-          <element-selector
-            v-if="isStudio && buildingMode === 'desktop'"
-            :left-position="calculeLeftPosition(columnId)"
-            :width-column="columnWidth(columnId)"
-            :label="`Column ${columnId+1}`"
-            selector-icon="fa fa-pencil"
-            :active="isColumnSelect(columnId)"
-            @element-selected="columnSelect(columnId)" />
         </table>
       </td>
     </tr>
     <!--  1 column -->
-    <slot v-else :columnData="{columnId, column}" v-for="(column, columnId) in module.structure.columns" :data-column-id="columnId" :column-id="column.id" />
-  </wrapper>
+    <slot
+      v-for="(column, columnId) in module.structure.columns"
+      v-else
+      :columnData="{columnId, column}"
+      :data-column-id="columnId"
+      :column-id="column.id" />
+  </Wrapper>
 </template>
 
 <script>
-import ElementSelector from '../ElementSelector.vue';
-import ColumnRender from './ColumnRender.vue';
-import ElementMixin from '../mixins/ElementMixin';
 import BetweenColumnComment from '../comments/BetweenColumnComment.vue';
+import ColumnRender from './ColumnRender.vue';
 import ColumnsComment from '../comments/ColumnsComment.vue';
+import ElementMixin from '../mixins/ElementMixin';
 import Wrapper from '../Wrapper.vue';
 
 export default {
   name: 'ColumnManager',
   components: {
-    ColumnRender,
-    ElementSelector,
     BetweenColumnComment,
+    ColumnRender,
     ColumnsComment,
     Wrapper,
   },
   mixins: [ElementMixin],
-  methods: {
-    calculeLeftPosition(col) {
-      let leftPosition = 0;
-      for (let index = 0; index < col; index++) {
-        leftPosition += this.columnWidth(index);
+  computed: {
+    columnsFixed() {
+      if (this.module.structure.columnsStacking === 'columnsFixed') {
+        return this.module.structure.columns;
       }
-      leftPosition += this.columnWidth(col) / 2;
-      return leftPosition;
+      return [];
     },
   },
 };

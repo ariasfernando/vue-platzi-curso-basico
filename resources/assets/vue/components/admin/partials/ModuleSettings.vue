@@ -9,6 +9,7 @@
             v-for="setting in settingGroup.settings"
             v-if="$can('std-module_'+setting.aclName)"
             :key="setting.name"
+            :module="module"
             :setting="setting.type"
             :name="setting.name"
             :type="setting.type"
@@ -27,11 +28,11 @@
     </b-collapse>
     <label-item-container
       v-b-tooltip.hover
-      v-b-toggle.general-settings-functionalities
+      v-b-toggle.module-settings-functionalities
       label="Editor Settings"
       icon="glyphicon-tasks"
       title="Settings available in the Email Editor" />
-    <b-collapse id="general-settings-functionalities" accordion="general-settings">
+    <b-collapse id="module-settings-functionalities" accordion="module-settings">
       <b-card class="control">
         <group-container
           v-for="(pluginGroup, groupKey) in pluginsGroups"
@@ -83,9 +84,6 @@ export default {
     },
     pluginsGroups() {
       return pluginsLayout['Module']().componentPlugins;
-    },
-    _() {
-      return _;
     },
   },
   methods: {

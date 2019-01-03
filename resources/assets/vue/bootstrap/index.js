@@ -45,6 +45,8 @@ export default {
 
     // Register plugins for studio modules ( module, column and components plugins )
     this.initPlugins();
+
+    Object.defineProperty(this.Vue.prototype, '_', { value: _ });
   },
   initDictionary() {
     if (customer.config.dictionary) {
@@ -69,43 +71,51 @@ export default {
     // Check first if there are fonts load from studio
     configService.getConfig('global_settings').then((response) => {
       let studioFonts = response.custom_fonts;
-      if(studioFonts && studioFonts.length > 0) {
+      if (studioFonts && studioFonts.length > 0) {
         fonts.custom = fonts.custom.concat(studioFonts);
       }
 
       this.Vue.prototype.$_app.utils = utils;
       // Fonts path
       const fontPath = `${this.Vue.prototype.$_app.config.baseUrl}/fonts/`;
-  
+
       let custom = {};
-  
-      fonts.custom.map(font => {
+
+      fonts.custom.map((font) => {
         custom[font.name] = true;
         if (font.folder || font.source === 'studio') {
           const style = document.createElement('style');
           style.type = 'text/css';
           let definition = '';
           let ie = '';
-          font.types.map(typeFont => {
-            typeFont.files.map(fileFont => {
+          font.types.map((typeFont) => {
+            typeFont.files.map((fileFont) => {
               if (fileFont.file === 'eot') {
                 if (font.folder) {
-                  ie = `src: url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}?#iefix');`;
+                  ie = `src: url('${fontPath}${font.folder}/${fileFont.name}.${
+                    fileFont.file
+                  }?#iefix');`;
                 } else {
-                  ie = `src: url('${fontPath}customer/${fileFont.name}?#iefix');`;
+                  ie = `src: url('${fontPath}customer/${
+                    fileFont.name
+                  }?#iefix');`;
                 }
               }
             });
           });
-          font.types.map(typeFont => {
+          font.types.map((typeFont) => {
             definition += `@font-face {font-family: '${font.name}';`;
             definition += ie;
             definition += 'src: ';
             typeFont.files.map((fileFont, index) => {
               if (font.folder) {
-                definition += `url('${fontPath}${font.folder}/${fileFont.name}.${fileFont.file}') format('${fileFont.file}')`;
+                definition += `url('${fontPath}${font.folder}/${
+                  fileFont.name
+                }.${fileFont.file}') format('${fileFont.file}')`;
               } else {
-                definition += `url('${fontPath}customer/${fileFont.name}') format('${fileFont.file}')`;
+                definition += `url('${fontPath}customer/${
+                  fileFont.name
+                }') format('${fileFont.file}')`;
               }
               if (index < typeFont.files.length - 1) {
                 definition += ',';
@@ -120,8 +130,8 @@ export default {
         } else if (font.url) {
           const link = document.createElement('link');
           link.href = font.url;
-          link.rel="stylesheet";
-          link.type="text/css";
+          link.rel = 'stylesheet';
+          link.type = 'text/css';
           document.head.insertBefore(link, document.head.childNodes[0]);
         }
       });
@@ -189,14 +199,20 @@ export default {
     // Register Global Components
     _.each(this.Vue.prototype.$_app.modulePlugins, (component) => {
       if (component.studioSettings) {
-        component['hasStudioSettings'] = true;
-        this.Vue.component(`studio-${component.name}`, component.studioSettings);
+        component.hasStudioSettings = true;
+        this.Vue.component(
+          `studio-${component.name}`,
+          component.studioSettings,
+        );
         delete component.studioSettings;
       }
 
       if (component.campaignSettings) {
-        component['hasCampaignSettings'] = true;
-        this.Vue.component(`campaign-${component.name}`, component.campaignSettings);
+        component.hasCampaignSettings = true;
+        this.Vue.component(
+          `campaign-${component.name}`,
+          component.campaignSettings,
+        );
         delete component.campaignSettings;
       }
     });

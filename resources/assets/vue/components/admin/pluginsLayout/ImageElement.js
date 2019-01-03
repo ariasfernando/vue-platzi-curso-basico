@@ -2,13 +2,13 @@ function imageDefault() {
   return {
     componentPlugins: [
       {
-        groupLabel: '',
-        showLabel: false,
-        plugins: [{
-          name: 'alignment',
-          title: 'Alignment',
-          aclName: 'alignment',
-        }],
+        plugins: [
+          {
+            name: 'alignment',
+            title: 'Alignment',
+            aclName: 'alignment',
+          },
+        ],
       },
       {
         groupLabel: 'Background',
@@ -27,8 +27,6 @@ function imageDefault() {
         ],
       },
       {
-        groupLabel: '',
-        showLabel: false,
         plugins: [
           {
             name: 'style-image-editor',
@@ -38,8 +36,6 @@ function imageDefault() {
         ],
       },
       {
-        groupLabel: '',
-        showLabel: false,
         plugins: [
           {
             name: 'toggle-element-setter',
@@ -49,8 +45,6 @@ function imageDefault() {
         ],
       },
       {
-        groupLabel: '',
-        showLabel: false,
         plugins: [
           {
             name: 'destination-url',

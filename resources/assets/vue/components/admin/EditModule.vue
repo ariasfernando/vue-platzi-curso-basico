@@ -137,7 +137,7 @@ export default {
       // TODO: Trigger event editModule.onInit
       this.$store
         .dispatch('module/getModuleData', moduleId)
-        .then((response) => {
+        .then(() => {
           if (this.$route.path.match(/^\/clone\//)) {
             const cloned = Object.assign({}, this.module);
             cloned.moduleId = undefined;
@@ -151,18 +151,17 @@ export default {
 
           if (this.module.inUse) {
             this.$root.$toast(
-              "This module is already in use. Any changes will not affect or update the module instance in "
-                + "the existing campaigns. To create a new version you can clone the module in the module list.",
+              'This module is already in use. Any changes will not affect or update the module instance in ' +
+                'the existing campaigns. To create a new version you can clone the module in the module list.',
               {
                 className: 'et-info',
                 closeable: true,
-                duration: 10000
+                duration: 10000,
               },
             );
           }
-
         })
-        .catch((error) => {
+        .catch(() => {
           this.$root.$toast(
             "Oops! Something went wrong! Please try again. If it doesn't work, please contact our support team.",
             { className: 'et-error' },
@@ -183,7 +182,10 @@ export default {
       sideToggled.classList.toggle('sidebar-closed');
     },
     clickModuleContainer(e) {
-      if ($(e.target).hasClass('scrollbar-container-inner') || $(e.target).hasClass('mCustomScrollBox')) {
+      if (
+        $(e.target).hasClass('scrollbar-container-inner') ||
+        $(e.target).hasClass('mCustomScrollBox')
+      ) {
         this.$store.commit('module/setCurrentComponent', {
           columnId: undefined,
           componentId: undefined,
@@ -368,19 +370,5 @@ export default {
 }
 #studio .module-container .scrollbar-container-inner {
   padding: 40px 20px 100px;
-}
-#studio .st-component.is-active > td:before {
-  content: '';
-  pointer-events: none;
-  position: absolute;
-  background: none;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  display: block;
-  outline: 2px solid #69dac8;
-  outline-offset: -1px;
-  z-index: 298;
 }
 </style>
