@@ -463,9 +463,8 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                     if ((editor.settings.link_validate_url === 'url' || editor.settings.link_validate_url === 'urlAndDestination')
                         && !matches.length 
                         && !validateUrl(href)) {
-                        $('#errorMessage').remove();
+                        $('.mce-link-input #errorMessage').remove();
 
-                        var errorMessage = 'Entered URL is invalid or incomplete.';
                         if (Application.utils.validate.messages.url){
                             errorMessage = Application.utils.validate.messages.url;
                         }
