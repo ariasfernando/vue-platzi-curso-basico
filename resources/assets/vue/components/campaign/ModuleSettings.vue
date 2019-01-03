@@ -55,7 +55,7 @@
       if plugin is enabled === true && render === false mount the Js logic.
     -->
     <template
-      v-for="(plugin, pluginKey) in module.plugins" :
+      v-for="(plugin, pluginKey) in module.plugins"
       v-if="plugin.enabled && $_app.modulePlugins[pluginKey] && plugin.render === false && !plugin.runBackground">
       <component :is="'campaign-' + plugin.name" :key="`${plugin.name}-${pluginKey}`" :module="module"></component>
     </template>
