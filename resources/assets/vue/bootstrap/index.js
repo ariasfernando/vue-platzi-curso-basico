@@ -159,6 +159,8 @@ export default {
     _.each(customer.customElements.default, (element, name) => {
       this.Vue.component(element.key, element.view);
       this.Vue.component(element.studioKey, element.studio);
+      delete element.view;
+      delete element.studio;
 
       if (Object.prototype.hasOwnProperty.call(settingsDefault, element.type)) {
         if (!element.settings) {
@@ -169,6 +171,7 @@ export default {
 
       if (element.settings) {
         this.Vue.component(`custom-settings-${element.key}`, element.settings);
+        delete element.settings;
       }
 
       this.Vue.prototype.$_app.customElements[name] = element;

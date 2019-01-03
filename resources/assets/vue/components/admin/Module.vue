@@ -211,7 +211,7 @@
           });
 
           // Create a new Element with default properties
-          const element = new Element({ type: elType, plugins, customType: elCustomType});
+          const element = new Element({ type: elType, plugins, customType: elCustomType, customElements: this.$_app.customElements });
 
           // Add it to the list
           this.$store.commit("module/addComponent", {

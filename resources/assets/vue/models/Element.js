@@ -13,9 +13,14 @@ class Element {
     // Call function here to avoid override issues
     let defaultProperties = defaultElements[properties.type]();
 
-    if (Object.prototype.hasOwnProperty.call(properties, 'customType') && properties.customType !== '') {
+    if (
+        Object.prototype.hasOwnProperty.call(properties, 'customType') &&
+        properties.customType !== '' &&
+        Object.prototype.hasOwnProperty.call(properties, 'customElements') &&
+        properties.customElements !== ''
+    ) {
       const keyName = _.upperFirst(_.camelCase(properties.customType));
-      defaultProperties = _.merge({}, defaultProperties, customElements.default[keyName]);
+      defaultProperties = _.merge({}, defaultProperties, properties.customElements[keyName]);
     }
 
     this.properties = {
