@@ -337,7 +337,6 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                     size: 40,
                     autofocus: true,
                     label: 'Url',
-                    tooltip: 'Insert a valid URL',
                     onchange: urlChange,
                     onkeyup: updateText,
                     onfocusout: function (e) {
@@ -464,6 +463,8 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                     if ((editor.settings.link_validate_url === 'url' || editor.settings.link_validate_url === 'urlAndDestination')
                         && !matches.length 
                         && !validateUrl(href)) {
+                        $('#errorMessage').remove();
+
                         var errorMessage = 'Entered URL is invalid or incomplete.';
                         if (Application.utils.validate.messages.url){
                             errorMessage = Application.utils.validate.messages.url;
@@ -471,7 +472,9 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                         $('.mce-link-input .mce-textbox')
                             .css('cssText', 'border-color: red')
                             .focus();
-                        win.find('#href')[0].tooltip().text(errorMessage).show();
+
+                        $('.mce-link-input').append("<span id='errorMessage' class='is-danger' style='display:inherit; position:fixed'>Please, enter a valid URL.</span>");
+
                         return false;
                     }
 
