@@ -196,6 +196,16 @@ export default {
 };
 </script>
 
+<style lang="scss" scope>
+.module /deep/ {
+  .mCSB_outside {
+    overflow: unset;
+    .mCSB_container {
+      overflow: unset;
+    }
+  }
+}
+</style>
 <style lang="less">
 @stensul-purple: #514960;
 @stensul-white: #ffffff;
@@ -317,7 +327,6 @@ export default {
     height: calc(~'100vh - 102px');
     width: calc(~'100% - 540px');
     min-width: 640px;
-    overflow-x: hidden;
     overflow-y: visible;
     table {
       border-collapse: initial;
