@@ -70,7 +70,19 @@ class ModuleController extends Controller
      */
     public function getModules(Request $request, $type = null)
     {
-        return \StensulModule::getModuleList(null, $type);
+        $modules = \StensulModule::getModuleList(null, $type);
+
+        foreach ($modules as $module) {
+            $modules[$module->key] = $module->toArray();
+            $libraries = $module->getLibraries();
+            $modules[$module->key]['libraries'] = [];
+            foreach ($libraries as $library) {
+                $modules[$module->key]['libraries'][] = $library->name;
+            }
+            $modules[$module->key] = (object) $modules[$module->key];
+        }
+
+        return $modules;
     }
 
     /**
@@ -215,7 +227,7 @@ class ModuleController extends Controller
                 return $query->where('deleted_at', null);
             })->ignore($id, '_id');
         }
-        
+
         return $uniqueValidator;
     }
 }
