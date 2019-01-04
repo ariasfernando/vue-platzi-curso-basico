@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isStudio">
     <Draggable
       :ref="'draggable'"
       v-model="components"
@@ -21,11 +21,11 @@
       :ref="'EmptyColumn'"
       :styles="getStyles('EmptyColumn')" />
     <HighlightOfElement
-      v-if="isStudio && buildingMode === 'desktop' && !dragging"
+      v-if="buildingMode === 'desktop' && !dragging"
       :active="isColumnSelect(columnId)"
       :style="getStyles('HighlightOfElement')" />
     <ElementSelector
-      v-if="isStudio && buildingMode === 'desktop' && !dragging && module.structure.columns.length !== 1"
+      v-if="buildingMode === 'desktop' && !dragging && module.structure.columns.length !== 1"
       :key="'selector' + columnId"
       :left-position="columnWidth(columnId) / 2"
       :top="elementSelectorTop"
@@ -33,6 +33,9 @@
       :active="isColumnSelect(columnId)"
       selector-icon="fa fa-pencil"
       @element-selected="columnSelect(columnId)" />
+  </div>
+  <div v-else>
+    <slot />
   </div>
 </template>
 
