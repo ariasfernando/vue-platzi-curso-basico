@@ -399,7 +399,9 @@
   }
 
   .stx-edit-text{
-
+    a{
+      text-decoration: inherit !important;
+    }
     a:hover,
     a:focus{
       text-decoration: none !important;
