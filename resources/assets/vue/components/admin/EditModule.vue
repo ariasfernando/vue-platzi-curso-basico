@@ -1,8 +1,8 @@
 <template>
   <div class="col-xs-12 module">
     <module-header />
-    <div class="row">
-      <section v-if="ready" id="edit-container" class="col-xs-12 section-container">
+    <div v-if="ready" class="row">
+      <section id="edit-container" class="col-xs-12 section-container">
         <column-bar-container side="left">
           <general-settings v-if="ready" />
           <elements-settings v-if="ready" />
@@ -26,7 +26,9 @@
         </column-bar-container>
       </section>
     </div>
-    <spinner />
+    <div v-else class="container-spinner">
+      <stui-spinner />
+    </div>
   </div>
 </template>
 
@@ -42,7 +44,6 @@ import ModuleContainer from '../common/containers/ModuleContainer.vue';
 import ModuleHeader from './partials/ModuleHeader.vue';
 import ModuleSettings from './partials/ModuleSettings.vue';
 import ScrollbarContainer from '../common/containers/ScrollbarContainer.vue';
-import Spinner from '../common/Spinner.vue';
 
 export default {
   name: 'EditModule',
@@ -58,7 +59,6 @@ export default {
     ModuleHeader,
     ModuleSettings,
     ScrollbarContainer,
-    Spinner,
   },
   data() {
     return {
@@ -113,7 +113,6 @@ export default {
     ready(value) {
       if (value === true) {
         setTimeout(() => {
-          this.toggleSidebar();
           this.loadColumn();
         }, 100);
       }
@@ -121,6 +120,7 @@ export default {
   },
   created() {
     this.loadModule();
+    this.toggleSidebar();
   },
   methods: {
     loadColumn() {
@@ -169,17 +169,11 @@ export default {
         });
     },
     toggleSidebar() {
-      const modOpen = document.getElementById('admin-module-container');
-      modOpen.className -= 'col-xs-12';
-
       const sidebar = document.getElementById('admin-sidebar');
       sidebar.style.display = 'none';
 
       const container = document.getElementsByClassName('base-admin')[0];
       container.style.paddingLeft = 0;
-
-      const sideToggled = document.getElementById('edit-container');
-      sideToggled.classList.toggle('sidebar-closed');
     },
     clickModuleContainer(e) {
       if (
@@ -203,6 +197,12 @@ export default {
     .mCSB_container {
       overflow: unset;
     }
+  }
+}
+.container-spinner {
+  height: calc(100vh - 102px);
+  /deep/ .spinner-wrapper {
+    top: 50%;
   }
 }
 </style>
@@ -253,7 +253,7 @@ export default {
 
 #edit-container {
   padding: 0px;
-  height: calc(~'100vh -102px');
+  height: calc(~'100vh - 102px');
   overflow: hidden;
   min-width: 1200px;
   padding-top: 46px;

@@ -114,7 +114,7 @@
           No results were found.
         </div>
         <div v-if="ready === false" class="no-results">
-          <generic-spinner />
+          <stui-spinner />
         </div>
       </div>
     </div>
@@ -131,7 +131,6 @@
 <script>
 import moduleService from '../../services/module';
 import SearchInput from './SearchInput.vue';
-import GenericSpinner from '../common/GenericSpinner.vue';
 import ModulePreview from './ModulePreview.vue';
 import ModalContainer from '../common/containers/ModalContainer.vue';
 
@@ -139,7 +138,6 @@ export default {
   name: 'Modules',
   components: {
     SearchInput,
-    GenericSpinner,
     ModulePreview,
     ModalContainer,
   },

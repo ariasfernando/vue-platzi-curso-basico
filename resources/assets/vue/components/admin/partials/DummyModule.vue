@@ -15,18 +15,14 @@
         </div>
       </div>
       <div v-else key="loading" class="dummy-loading">
-        <generic-spinner />
+        <stui-spinner />
       </div>
     </transition>
   </div>
 </template>
 <script>
-import GenericSpinner from '../../common/GenericSpinner.vue';
 
 export default {
-  components: {
-    GenericSpinner,
-  },
   props: {
     config: {
       type: Object,
