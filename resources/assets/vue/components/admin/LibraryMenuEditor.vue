@@ -65,7 +65,7 @@
                            :class="{'input': true , 'menu-item' : true }" type="text" placeholder="Enter module name"
                            :name="'group[' + idx + '][name]'">
                     <div class="component-item-id">
-                      <i class="glyphicon glyphicon-chevron-down dropdown-icon" />
+                      <i v-if="group.moduleId == ''" class="glyphicon glyphicon-chevron-down dropdown-icon" />
                       <el-autocomplete
                         v-if="group.moduleId == ''"
                         v-model="state"

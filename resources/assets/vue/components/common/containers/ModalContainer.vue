@@ -69,9 +69,8 @@ export default {
   margin-bottom: 20px;
   padding-top: 22px;
   padding-bottom: 22px;
-  max-height: 85%;
   overflow: auto;
-  max-height: 85%;
+  max-height: 90%;
   min-height: 80%;
 }
 </style>
