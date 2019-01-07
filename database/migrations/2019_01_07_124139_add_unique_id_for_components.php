@@ -26,9 +26,8 @@ class AddUniqueIdForComponents extends Migration
                     foreach ($module_structure['columns'] as $column_key => $column_value) {
                         if (isset($column_value['components'])) {
                             foreach ($column_value['components'] as $component_key => $component_value) {
-                                Logging::info('name=' . $module['name']);
                                 if (!isset($component_value['id'])) {
-                                    $module_structure['columns'][$column_key]['components'][$component_key]['id'] = (int)floor(100000 + (mt_rand() / mt_getrandmax() * 900000));
+                                    $module_structure['columns'][$column_key]['components'][$component_key]['id'] = (int)mt_rand(100000, 999999);
                                 }
                             }
                         }
@@ -36,6 +35,7 @@ class AddUniqueIdForComponents extends Migration
                 }
 
                 $module->structure = $module_structure;
+                $module->timestamps = false;
                 $module->save();
             }
         });
