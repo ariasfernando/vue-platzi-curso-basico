@@ -103,14 +103,18 @@
                 $fontPath = url('/') . "/fonts/";
 
                 foreach ($fonts as $a => $font) {
-                    if (isset($font['folder'])) {
+                    if (isset($font['folder']) || (isset($font['source']) && $font['source'] === 'studio')) {
                         $definition = "";
                         $ie = "";
 
                         foreach ($font['types'] as $b => $type) {
                             foreach ($type['files'] as $c => $file) {
                                 if ($file['file'] === 'eot') {
-                                    $ie = "src: url('" . $fontPath . $font['folder'] . "/" . $file['name'] . "." . $file['file'] . "?#iefix');";
+                                    if (isset($font['folder'])) {
+                                        $ie = "src: url('" . $fontPath . $font['folder'] . "/" . $file['name'] . "." . $file['file'] . "?#iefix');";
+                                    } else {
+                                        $ie = "src: url('" . $fontPath . "customer/" . $file['name'] . "?#iefix');";
+                                    }
                                 }
                             }
                         }
@@ -121,8 +125,11 @@
                             $definition .= "src: ";
 
                             foreach ($type['files'] as $c => $file) {
-                                $definition .= "url('". $fontPath . $font['folder'] . "/" . $file['name'] . "." . $file['file'] . "') format('" . $file['file'] . "')";
-
+                                if (isset($font['folder'])) {
+                                    $definition .= "url('". $fontPath . $font['folder'] . "/" . $file['name'] . "." . $file['file'] . "') format('" . $file['file'] . "')";
+                                } else {
+                                    $definition .= "url('". $fontPath . "customer/" . $file['name'] . "') format('" . $file['file'] . "')";
+                                }
                                 if ($c < count($type['files']) - 1) {
                                     $definition .= ",";
                                 } else {
