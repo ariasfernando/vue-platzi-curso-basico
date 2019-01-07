@@ -102,8 +102,6 @@ export default {
                 }
               }
             });
-          });
-          font.types.map((typeFont) => {
             definition += `@font-face {font-family: '${font.name}';`;
             definition += ie;
             definition += 'src: ';
@@ -123,7 +121,11 @@ export default {
                 definition += ';';
               }
             });
+            if (typeFont.style) {
+              definition += `font-style: ${typeFont.style};`;
+            }
             definition += `font-weight: ${typeFont.weight};}`;
+            ie = '';
           });
           style.appendChild(document.createTextNode(definition));
           document.head.appendChild(style);
