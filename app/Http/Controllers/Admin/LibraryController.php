@@ -195,8 +195,23 @@ class LibraryController extends Controller
             $library->config = null;
         }
 
+        $user = new \stdClass();
+        $user->id = new ObjectID(Auth::user()->id);
+        $user->email = Auth::user()->email;
+        $library->updated_by = $user;
+
         $library->save();
-        
+
+        Activity::log(
+            'Library updated',
+            [
+                'properties' => [
+                    'library_id' => new ObjectID($library->id),
+                    'library_name' => $library->name,
+                ]
+            ]
+        );
+
         if ($library->name !== $old_name) {
             // Update library name in campaigns for library name search
             // We do not use directly the Campaign model class to avoid touching the updated_at attribute
@@ -242,7 +257,25 @@ class LibraryController extends Controller
         if (Permission::where('name', '=', $permission_params["name"])->exists()) {
             $response_message = array("message"=> "ERROR_EXISTS");
         } else {
-            Library::create($params);
+            $library = Library::create($params);
+
+            $user = new \stdClass();
+            $user->id = new ObjectID(Auth::user()->id);
+            $user->email = Auth::user()->email;
+    
+            $library->created_by = $user;
+            $library->save();
+
+            Activity::log(
+                'Library created',
+                [
+                    'properties' => [
+                        'library_id' => new ObjectID($library->id),
+                        'library_name' => $library->name,
+                    ]
+                ]
+            );
+
             Permission::create($permission_params);
 
             // Add newly created permission to admin role.
@@ -274,7 +307,12 @@ class LibraryController extends Controller
 
         Activity::log(
             'Library and permissions deleted',
-            array('properties' => ['library_id' => new ObjectID($library->id)])
+            [
+                'properties' => [
+                    'library_id' => new ObjectID($library->id),
+                    'library_name' => $library->name,
+                ]
+            ]
         );
 
         return array("deleted" => $request->input("libraryId"));
@@ -291,7 +329,8 @@ class LibraryController extends Controller
         return $providers;
     }
 
-    private function libraryUniqueValidator($id) {
+    private function libraryUniqueValidator($id)
+    {
         $uniqueValidator = Rule::unique('libraries', 'name')->where(function ($query) {
             return $query->where('deleted_at', null);
         });
