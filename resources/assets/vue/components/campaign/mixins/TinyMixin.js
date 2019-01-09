@@ -402,6 +402,7 @@ export default {
         selector: `#${editorId}`,
         fixed_toolbar_container: `.toolbar-${editorId}`,
         document_base_url: `${Application.globals.cdnHost  }/js/tinymce/`,
+        convert_urls: false,
         skin: 'lightgray',
         skin_url: `${Application.globals.cdnHost  }/css/tinymce/lightgray`,
         toolbar,
