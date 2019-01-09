@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import Adapter from './tinymce/Adapter';
-import listStylesFix from './tinymce/listStyles.fix';
+import Adapter from './tinyMce/Adapter';
+import listStylesFix from './tinyMce/listStyles.fix';
 
 export default {
   props: ['name', 'plugin'],
