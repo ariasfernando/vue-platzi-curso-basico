@@ -1,9 +1,19 @@
 <template>
-  <settings-container :label="plugin.title">
-    <template slot="setting-right">
-      <input-toggleable-text v-model="value" false-text="Disabled" default-value="label" />
-    </template>
-  </settings-container>
+  <div>
+    <settings-container :label="plugin.title">
+      <template slot="setting-right">
+          <toggle-button :value="isSet" @change="toggle"></toggle-button>
+      </template>
+    </settings-container>
+    <settings-container label="Label" v-if="isSet">
+      <template slot="setting-right">
+          <el-input
+            size="mini" 
+            v-model="value"
+          ></el-input>
+      </template>
+    </settings-container>
+  </div>
 </template>
 <script>
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
@@ -57,6 +67,14 @@ export default {
         const enabled = elements.length !== 0;
         this.$store.commit('module/togglePlugin', { plugin: 'toggleElement', enabled });
       },
+    },
+    isSet() {
+      return this.value !== false ? true : false;
+    },
+  },
+  methods: {
+    toggle(value) {
+      this.value = value !== false ? _.startCase(this.element.type.replace('-element', '')) : false;
     },
   },
 };
