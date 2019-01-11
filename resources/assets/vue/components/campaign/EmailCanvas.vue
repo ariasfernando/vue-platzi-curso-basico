@@ -3,7 +3,7 @@
     <back-to-top />
     <!-- content canvas email -->
     <st-style :content="templateWidthStyles" />
-    <st-style prefix="#emailCanvas" :content="proprietaryCss" />
+    <st-style prefix="#emailCanvas" media-query-prefix="#emailCanvas.stx-mobile-mode" :content="proprietaryCss" />
     <div class="section-box-content section-canvas-container">
       <table
         width="100%"

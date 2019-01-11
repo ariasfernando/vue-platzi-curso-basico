@@ -11,6 +11,10 @@ export default {
       type: String,
       default: undefined,
     },
+    mediaQueryPrefix: {
+      type: String,
+      default: undefined,
+    },
     content: {
       type: String,
       default: '',
@@ -55,18 +59,24 @@ export default {
       }
       this.$refs.style.innerHTML = this.parsed.toString();
     },
-    forEachRule(rules) {
+    forEachRule(rules, media = false) {
       for (let k = 0; k < rules.length; k++) {
         if (rules[k].cssRules) {
-          rules[k].cssRules = this.forEachRule(rules[k].cssRules);
+          rules[k].cssRules = this.forEachRule(rules[k].cssRules, (rules[k].media));
         } else if (rules[k].selectorText) {
-          rules[k].selectorText = this.newSelector(rules[k].selectorText);
+          rules[k].selectorText = this.newSelector(rules[k].selectorText, media);
+          if (media) {
+            this.parsed = this.parsed + rules[k].cssText;
+          }
         }
       }
       return rules;
     },
-    newSelector(old) {
-      const prefix = this.prefix ? `${this.prefix} ` : '';
+    newSelector(old, media = false) {
+      let prefix = this.prefix ? `${this.prefix} ` : '';
+      if (media) {
+        prefix = this.mediaQueryPrefix ? `${this.mediaQueryPrefix} ` : '';
+      }
       return `${prefix}${old}`;
     },
   },
