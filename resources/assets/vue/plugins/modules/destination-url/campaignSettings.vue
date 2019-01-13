@@ -1,157 +1,113 @@
 <template>
-  <div>
-    <settings-container label="Destination Url" customClass="destination-url" v-if="component" key="destination-url">
+  <div v-show="isCurrentElement">
+    <settings-container key="destination-url" label="Destination Url" custom-class="destination-url">
       <template slot="setting-bottom">
         <p v-if="validationRules">
           <el-input
+            v-model="href"
+            v-validate.initial="validationRules"
             name="href"
             type="text"
             size="mini"
             placeholder="http://examp.le"
-            v-model="href"
-            v-validate.initial="validationRules"
-            :class="{'input': true, 'is-danger': hasError }"></el-input>
+            :class="{'input': true, 'is-danger': hasError }" />
           <span v-show="hasError" class="help is-danger">{{ getErrorMessage }}</span>
         </p>
         <p v-else>
           <el-input
-          name="href"
-          type="text"
-          size="mini"
-          placeholder="http://examp.le"
-          v-model="href"></el-input>
+            v-model="href"
+            name="href"
+            type="text"
+            size="mini"
+            placeholder="http://examp.le" />
         </p>
       </template>
     </settings-container>
 
-    <settings-container label="Target" v-if="plugin.config.target" key="target">
+    <settings-container v-if="plugin.config.target" key="target" label="Target">
       <template slot="setting-right">
         <el-button
           v-for="(icon, option) in plugin.config.options"
+          :key="option"
+          :data-tooltip="option"
           plain
           size="mini"
           :class="[`glyphicon glyphicon-${icon}`,{ 'active': target === option }]"
-            :data-tooltip="option"
-            @click="changeTarget(option)"
-            :key="option"
-          >
-        </el-button>
+          @click="changeTarget(option)" />
       </template>
     </settings-container>
 
-    <settings-container label="Title" v-if="plugin.config.title" key="title">
+    <settings-container v-if="plugin.config.title" key="title" label="Title">
       <template slot="setting-bottom">
         <el-input
+          v-model="title"
           name="title"
           type="text"
           size="mini"
-          placeholder="Title"
-          v-model="title"></el-input>
+          placeholder="Title" />
       </template>
     </settings-container>
   </div>
 </template>
 
 <script>
-  import _ from 'lodash';
-  import validatorMixin from '../mixins/validator';
-  import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+  import validatorMixin from '../mixins/validatorMixin';
+  import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
+  import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 
   export default {
-    props: ['name', 'plugin', 'pluginKey'],
-    mixins: [validatorMixin],
     components: { SettingsContainer },
-    mounted() {
-      if (this.validationRules) {
-        this.validate();
-      }
-    },
-    watch: {
-      currentComponent: {
-        handler: function(currentComponent) {
-          if (this.validationRules) {
-            this.validate();
-          }
-        },
-        deep: true
-      }
-    },
+    mixins: [validatorMixin, pluginCampaignMixin],
     computed: {
-      currentComponent() {
-        return this.$store.getters["campaign/currentComponent"];
-      },
-      module() {
-        return this.$store.getters["campaign/modules"][this.currentComponent.moduleId];
-      },
-      component() {
-        let component = {};
-        if (Object.keys(this.currentComponent).length !== 0) {
-          const moduleId = this.currentComponent.moduleId;
-          const columnId = this.currentComponent.columnId;
-          const componentId = this.currentComponent.componentId;
-
-          component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
-        }
-        return component;
-      },
       target() {
-        return this.component[this.plugin.subComponent].attribute ? this.component[this.plugin.subComponent].attribute.target : '_blank';
+        return this.element[this.plugin.subComponent].attribute ? this.element[this.plugin.subComponent].attribute.target : '_blank';
       },
       href: {
         get() {
-          return this.component[this.plugin.subComponent].attribute.href;
+          return this.element[this.plugin.subComponent].attribute.href;
         },
         set(value) {
-          this.saveComponentProperty('href', value);
-
-          this.$nextTick(() => {
-          if (this.validationRules) {
-            this.validate();
-          }
-          });
+          this.saveAttributeInThisElement({ property: 'href', value });
         },
       },
       title: {
         get() {
-          return this.component[this.plugin.subComponent].attribute.title;
+          return this.element[this.plugin.subComponent].attribute.title;
         },
         set(value) {
-          this.saveComponentProperty('title', value);
+          this.saveAttributeInThisElement({ property: 'title', value });
         },
       },
       validationRules() {
         const rules = [];
-        _.each(this.plugin.config.validations, (e,i) => {
-          if (e) {
+        _.each(this.plugin.config.validations, (e, i) => {
+          if (e === true) {
             rules.push(i);
+          } else if (typeof e === 'object' && e.selected !== 'disabled') {
+            rules.push(e.selected);
           }
         });
-
         return rules.join('|');
-      }
+      },
+    },
+    watch: {
+      href() {
+        this.$nextTick(() => {
+          if (this.validationRules) {
+            this.validate();
+          }
+        });
+      },
     },
     methods: {
-      changeTarget(option) {
-        const property = 'target';
-        const value = option;
-
-        this.saveComponentProperty(property, value);
+      changeTarget(value) {
+        this.saveAttributeInThisElement({
+          property: 'target',
+          value,
+        });
       },
-      saveComponentProperty(property, value) {
-        const payload = {
-          moduleId: this.currentComponent.moduleId,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          subComponent: this.plugin.subComponent,
-          link:'attribute',
-          property,
-          value: value,
-        };
-        this.$store.commit('campaign/saveComponentProperty', payload);
-      },
-      
     },
-  }
+  };
 </script>
 
 <style lang="scss" scoped>

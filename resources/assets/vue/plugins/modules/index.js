@@ -8,6 +8,7 @@ import fontFamily from './font-family';
 import mobileStyles from './mobile-styles';
 import moduleBackgroundColor from './module-background-color';
 import moduleEqualHeightForColumn from './module-equal-height-for-column';
+import moduleEqualHeightForElements from './module-equal-height-for-elements';
 import moduleHeightSync from './module-height-sync';
 import modulePaletteBackgroundColor from './module-palette-background-color';
 import paletteBackgroundColor from './palette-background-color';
@@ -16,6 +17,7 @@ import textColorByBackground from './text-color-by-background';
 import textColorByBackgroundForModule from './text-color-by-background-for-module';
 import textOptions from './text-options';
 import toggleElement from './toggle-element';
+import toggleElementSetter from './toggle-element-setter';
 import variableHeight from './variable-height';
 import verticalAlignment from './vertical-alignment';
 
@@ -30,6 +32,7 @@ export default {
   mobileStyles,
   moduleBackgroundColor,
   moduleEqualHeightForColumn,
+  moduleEqualHeightForElements,
   moduleHeightSync,
   modulePaletteBackgroundColor,
   paletteBackgroundColor,
@@ -38,6 +41,7 @@ export default {
   textColorByBackgroundForModule,
   textOptions,
   toggleElement,
+  toggleElementSetter,
   variableHeight,
   verticalAlignment,
 };

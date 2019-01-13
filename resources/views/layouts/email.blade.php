@@ -49,8 +49,6 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 			<?php echo $params['library_config']['prependHtml']; ?>
 		@endif
 		
-		@include('layouts.partials.email_styles')
-		
 		@if (isset($params['campaign_data']['campaign_fonts']))
 			@if (isset($params['campaign_data']['campaign_fonts']['custom']))
 				@if (count($params['campaign_data']['campaign_fonts']['custom']) > 0)
@@ -74,7 +72,7 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
                 {{-- CAMPAIGN PREHEADER --}}
                 <div style="font-size:0px; display:none; visibility:hidden; opacity:0; color:transparent; max-height:0px; height:0; width:0; mso-hide:all;">{{ $params['campaign_data']['campaign_preheader'] or '' }}
                     @if ((190 - mb_strlen($params['campaign_data']['campaign_preheader']) > 0))
-                        {{ str_repeat('&zwnj;&nbsp;', 190 - mb_strlen($params['campaign_data']['campaign_preheader'])) }}
+					{!! str_repeat('&zwnj;&nbsp;', 190 - mb_strlen($params['campaign_data']['campaign_preheader'])) !!}
                     @endif
                 </div>
             @endif

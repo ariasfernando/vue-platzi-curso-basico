@@ -27,11 +27,11 @@
       <column-bar-container side="right">
         <scrollbar-container>
           <div>
-            <module-settings v-if="showModuleSettings"></module-settings>
-            <module-background-settings></module-background-settings>
-            <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
-            <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
-            <shadow-render></shadow-render>
+            <module-settings v-if="showModuleSettings" />
+            <module-background-settings />
+            <component-settings />
+            <custom-module-settings v-if="currentCustomModule" />
+            <shadow-render />
           </div>
         </scrollbar-container>
       </column-bar-container>
@@ -43,6 +43,7 @@
     <modal-esp v-if="campaignReady"></modal-esp>
     <modal-proof v-if="campaignReady"></modal-proof>
     <modal-enable-templating v-if="campaignReady"></modal-enable-templating>
+    <modal-proof-track v-if="campaignReady"></modal-proof-track>
 
     <spinner></spinner>
 
@@ -64,6 +65,7 @@
   import ModalEsp from './modals/ModalEsp.vue'
   import ModalPreview from './modals/ModalPreview.vue'
   import ModalProof from './modals/ModalProof.vue'
+  import ModalProofTrack from './modals/ModalProofTrack.vue';
   import ModuleBackgroundSettings from './ModuleBackgroundSettings.vue'
   import ModuleSettings from './ModuleSettings.vue'
   import ScrollbarContainer from '../common/containers/ScrollbarContainer.vue';
@@ -88,6 +90,7 @@
       ModalEsp,
       ModalPreview,
       ModalProof,
+      ModalProofTrack,
       ModuleBackgroundSettings,
       ModuleSettings,
       ScrollbarContainer,
@@ -160,7 +163,7 @@
         this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
           this.$store.commit("global/setLoader", false);
           this.campaignReady = true;
-          this.trackingEnabled = (this.campaignReady && this.campaignConfig && this.campaignConfig.enable_tracking && _.has(this.campaign.library_config, 'tracking') && this.campaign.library_config.tracking);
+          this.trackingEnabled = (this.campaignReady && _.has(this.campaign.library_config, 'tracking') && this.campaign.library_config.tracking);
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(

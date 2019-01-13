@@ -134,13 +134,6 @@
 		border-top: none;
 		.border-bottom-radius( 10px );
 
-		.mce-primary{
-			button{
-				&:extend(.btn.btn-continue);
-			}
-		}
-
-
 		.mce-btn,
 		.mce-primary{
 			border: none;
@@ -156,7 +149,14 @@
 
 		.mce-btn{
 			button{
-				&:extend(.btn-default);
+				&:extend(.beta-btn-secondary);
+			}
+		}
+
+		.mce-btn.mce-primary{
+			button{
+				&:extend(.btn.btn-continue);
+				color: @btn-default-color!important;
 			}
 		}
 	}

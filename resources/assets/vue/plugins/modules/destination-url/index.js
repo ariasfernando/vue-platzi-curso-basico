@@ -3,10 +3,10 @@ const campaignSettings = require('./campaignSettings.vue');
 
 module.exports = {
   name: 'destination-url',
-  title: 'Destination Url',
+  title: 'Destination URL',
   version: '0.0.2',
   author: 'emiliano@stensul.com',
-  target: ['button', 'image'],
+  target: ['button', 'image', 'text'],
   studioSettings,
   campaignSettings,
   config: {
@@ -18,7 +18,14 @@ module.exports = {
     defaultValue: '_blank',
     validations: {
       required: false,
-      url: false,
+      url: {
+        selected: 'disabled',
+        options: {
+          disabled: 'No Validation',
+          url: 'Validate Format',
+          urlAndDestination: 'Format and Destination',
+        },
+      },
     },
     target: false,
     title: false,
@@ -27,4 +34,5 @@ module.exports = {
   render: true,
   enabled: false,
   validated: false,
+  runBackground: true,
 };
