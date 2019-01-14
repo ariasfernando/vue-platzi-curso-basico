@@ -1,10 +1,10 @@
 <template>
   <div>
-    <settings-container :label="plugin.title">
+    <settingsContainer :label="plugin.title">
       <template slot="setting-right">
         <toggle-button v-model="pluginEnabled" />
       </template>
-    </settings-container>
+    </settingsContainer>
     <template v-if="pluginEnabled">
       <div class="btn-group">
         <el-button
@@ -12,12 +12,12 @@
           :key="optionName"
           v-b-tooltip.hover
           :class="[option.icon , {'active': plugin.config.options[optionName]
-          ? plugin.config.options[optionName].value : undefined}]"
+            ? plugin.config.options[optionName].value : undefined}]"
           :title="option.label"
           :data-tooltip="option.label"
           size="mini"
           @click.prevent="toggleOption(optionName, plugin.config.options[optionName]
-          ? plugin.config.options[optionName].value : undefined)" />
+            ? plugin.config.options[optionName].value : undefined)" />
       </div>
       <group-container label="Advanced Settings">
         <!-- forecolor -->
@@ -230,7 +230,11 @@ export default {
   methods: {
     showSetting(dependsOn) {
       if (dependsOn) {
-        return _.get(this.plugin, `config.${dependsOn.config}.${dependsOn.name}.value`, false);
+        return _.get(
+          this.plugin,
+          `config.${dependsOn.config}.${dependsOn.name}.value`,
+          false,
+        );
       }
       return true;
     },
@@ -272,7 +276,9 @@ export default {
       return 0;
     },
     isDisabled(isDisabled, content) {
-      return (isDisabled && content) ? isDisabled(this.tinySettingContent(content)) : false;
+      return isDisabled && content
+        ? isDisabled(this.tinySettingContent(content))
+        : false;
     },
   },
 };

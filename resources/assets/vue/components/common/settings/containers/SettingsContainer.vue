@@ -1,37 +1,68 @@
 <template>
-    <div class="settings-container" :class="[customClass,{'clearfix' : !hasSettingHalf},{'is-setting-half' : hasSettingHalf}, {[`level-${level}-container`] : level}]">
-      <template v-if="hasSettingRight">
-        <label :class="{[`level-${level}`] : level}" class="half" :title="title" v-if="!noLabel">{{label}}</label>
-        <div class="half-setting padding-top">
-            <slot name="setting-right"></slot>
-        </div>
-      </template>
+  <div
+    class="settings-container"
+    :class="[
+      customClass,
+      {'clearfix' : !hasSettingHalf},
+      {'is-setting-half' : hasSettingHalf},
+      {[`level-${level}-container`] : level}
+    ]">
+    <template v-if="hasSettingRight">
+      <label
+        v-if="!noLabel"
+        :class="{[`level-${level}`] : level}"
+        class="half"
+        :title="title">
+        {{ label }}
+      </label>
+      <div class="half-setting padding-top">
+        <slot name="setting-right" />
+      </div>
+    </template>
 
-      <template v-if="hasSettingSideBySide">
-        <div class="half-setting half-setting--left">
-          <label :class="{[`level-${level}`] : level}" :title="titleLeft" v-if="!noLabel">{{labelLeft}}</label>
-          <slot name="setting-half-left"></slot>
-        </div>
-        <div class="half-setting half-setting--right">
-          <label :class="{[`level-${level}`] : level}" :title="titleRight" v-if="!noLabel">{{labelRight}}</label>
-          <slot name="setting-half-right"></slot>
-        </div>
-      </template>
-    
-      <template v-if="hasSettingBottom">
-        <label :class="{[`level-${level}`] : level}" :title="title" v-if="!noLabel">{{label}}</label>
-        <slot name="setting-bottom"></slot>
-      </template>
+    <template v-if="hasSettingSideBySide">
+      <div class="half-setting half-setting--left">
+        <label
+          v-if="!noLabel"
+          :class="{[`level-${level}`] : level}"
+          :title="titleLeft">
+          {{ labelLeft }}
+        </label>
+        <slot name="setting-half-left" />
+      </div>
+      <div class="half-setting half-setting--right">
+        <label
+          v-if="!noLabel"
+          :class="{[`level-${level}`] : level}"
+          :title="titleRight">
+          {{ labelRight }}
+        </label>
+        <slot name="setting-half-right" />
+      </div>
+    </template>
 
-      <template v-if="hasSettingHalf">
-          <label :class="{[`level-${level}`] : level}" :title="title" v-if="!noLabel">{{label}}</label>
-          <slot name="setting-half"></slot>
-      </template>
-    
-    </div>
+    <template v-if="hasSettingBottom">
+      <label
+        v-if="!noLabel"
+        :class="{[`level-${level}`] : level}"
+        :title="title">
+        {{ label }}
+      </label>
+      <slot name="setting-bottom" />
+    </template>
+
+    <template v-if="hasSettingHalf">
+      <label
+        v-if="!noLabel"
+        :class="{[`level-${level}`] : level}"
+        :title="title">
+        {{ label }}
+      </label>
+      <slot name="setting-half" />
+    </template>
+  </div>
 </template>
 <script>
-import _ from 'lodash';
 export default {
   name: 'SettingsContainers',
   props: [
@@ -122,14 +153,14 @@ span.is-danger {
   float: left;
   width: 50%;
   margin-bottom: 0;
-  &:nth-child(2n+1) {
+  &:nth-child(2n + 1) {
     padding-right: 8px;
   }
-  &:nth-child(2n+2) {
+  &:nth-child(2n + 2) {
     padding-left: 8px;
   }
 }
-.clearfix{
+.clearfix {
   clear: both;
 }
 .is-danger /deep/ input {
