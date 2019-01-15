@@ -1,31 +1,47 @@
 
 <template>
   <div class="color-picker">
-    <div @click="openColorPicker()" class="input-text-hex">
+    <div class="input-text-hex" @click="openColorPicker()" >
       <el-input
-        placeholder="transparent"
-        disabled="disabled" 
-        :value="value"
+        :placeholder="placeholder"
+        disabled="disabled"
+        :value="inputValue"
         size="mini" />
     </div>
-    <el-color-picker :ref="`color-picker-${instance}`" :value="value" @change="(value)=>change(value)" color-format="hex" />
+    <el-color-picker :ref="`color-picker-${instance}`" :value="pickerValue" color-format="hex" @change="(value)=>change(value)" />
   </div>
 </template>
 <script>
 
 export default {
   name: 'ColorPicker',
-  props: ['value'],
+  props: ['value', 'falseText'],
   data() {
     return {
-      instance: Math.floor(100000 + Math.random() * 900000),
+      instance: Math.floor((100000 + Math.random()) * 900000),
     };
+  },
+  computed: {
+    inputValue() {
+      if (this.falseText !== undefined) {
+        return this.value === false ? this.falseText : this.value;
+      }
+      return this.value;
+    },
+    pickerValue() {
+      // el-color-picker Expects a String, so we convert false to null
+      return this.value === false ? null : this.value;
+    },
+    placeholder() {
+      return this.falseText !== undefined ? this.falseText : 'transparent';
+    },
   },
   methods: {
     openColorPicker() {
       this.$refs[`color-picker-${this.instance}`].$el.children[0].click();
     },
-    change(value) {
+    change(val) {
+      const value = val === null ? false : val;
       this.$emit('input', value);
       this.$emit('change', value);
     },

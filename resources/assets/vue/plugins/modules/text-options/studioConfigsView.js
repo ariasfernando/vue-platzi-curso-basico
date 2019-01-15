@@ -81,10 +81,9 @@ function configsView() {
         key: 'truncate',
         title: 'Char Limit',
         type: 'stui-input-autodisable',
-        falseText: 'Disabled',
         props: {
           disableOn: 0,
-          isNumeric: true,
+          autodisableComponent: 'stui-input-number',
           min: 0,
         },
         checkbox: {
@@ -95,11 +94,10 @@ function configsView() {
         key: 'lines_limit',
         title: 'Lines Limit',
         type: 'stui-input-autodisable',
-        falseText: 'Disabled',
         isDisabled: value => (Application.utils.isJsonObjectString(value)),
         props: {
           disableOn: 0,
-          isNumeric: true,
+          autodisableComponent: 'stui-input-number',
           min: 0,
         },
         checkbox: {
@@ -128,13 +126,18 @@ function configsView() {
       },
       link_fixed_color: {
         key: 'link_fixed_color',
-        title: 'Link fixed color',
-        type: 'input-toggleable-text',
-        falseText: 'Disabled',
-        defaultValue: '#000000',
+        title: 'Link color',
+        type: 'stui-input-autodisable',
+        falseText: 'none',
         dependsOn: {
           config: 'options',
           name: 'link',
+        },
+        props: {
+          autodisableComponent: 'stui-color-picker',
+        },
+        checkbox: {
+          valueOnTrue: '#000000',
         },
       },
     },
