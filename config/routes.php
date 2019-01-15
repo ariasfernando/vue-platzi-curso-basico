@@ -168,6 +168,7 @@ if (env("APP_ADMIN", false)) {
             '/admin/module/edit'       => 'Admin\ModuleController@getEdit',
             '/admin/module/modules'    => 'Admin\ModuleController@getModules',
             '/admin/setting'           => 'Admin\SettingController@getIndex',
+            '/admin/setting/all'       => 'Admin\SettingController@getAll',
         ],
         'post' => [
             '/admin/login'                 => 'Admin\Auth\AdminAuthController@postLogin',
