@@ -294,5 +294,27 @@ return [
             'type' => 'GET',
             'url' => '/rest/asset/v1/folders.json'
         ]
-    ]
+    ],
+
+    'epsilon' => [
+        'title' => 'Epsilon',
+        'class' => 'Epsilon',
+        'auth' => [
+            'base_url' => 'https://api-public.epsilon.com',
+            'type' => 'POST',
+            'path' => '/Epsilon/oauth2/access_token',
+            'credentials' => [
+                'client_id'  =>  env('API_EPSILON_CLIENT_ID', ''),
+                'client_secret'  =>  env('API_EPSILON_CLIENT_SECRET', ''),
+                'user_name'  =>  env('API_EPSILON_USER_NAME', ''),
+                'password'   =>  env('API_EPSILON_PASSWORD', ''),
+                'base_token' =>  env('API_EPSILON_BASE_TOKEN', ''),
+            ]
+        ],
+        'x-ouid' => env('API_EPSILON_XOUID', ''),
+        'folder' => env('API_EPSILON_FOLDER', ''),
+        'content_id' => env('API_EPSILON_CONTENT_ID', ''),
+        'api_url' => 'https://api.harmony.epsilon.com',
+        'upload_path' => '/v1/contentBlocks',
+    ],
 ];
