@@ -20,5 +20,8 @@ return [
         'silverpop' => [
             'title', 'class'
         ],
+        'responsys' => [
+            'title', 'class'
+        ],
     ],
 ];

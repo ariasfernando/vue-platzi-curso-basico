@@ -113,9 +113,7 @@
                                     $ie = "src: url('" . $fontPath . $font['folder'] . "/" . $file['name'] . "." . $file['file'] . "?#iefix');";
                                 }
                             }
-                        }
 
-                        foreach ($font['types'] as $b => $type) {
                             $definition .= "@font-face {font-family: '" . $font['name'] . "';";
                             $definition .= $ie;
                             $definition .= "src: ";
@@ -130,7 +128,12 @@
                                 }
                             }
 
+                            if(isset($type['style']) && !empty($type['style'])) {
+                                $definition .= "font-style: " . $type['style'] . ";";
+                            }
+
                             $definition .= "font-weight: " . $type['weight'] . ";}";
+                            $ie = "";
                         }
                         echo $definition;
                     }
@@ -161,6 +164,14 @@
                  color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
             }
         @endif
+        span.MsoHyperlink {
+            mso-style-priority:99;
+            color:inherit;
+        }
+        span.MsoHyperlinkFollowed {
+            mso-style-priority:99;
+            color:inherit;
+        }
 	</style>
 <![endif]-->
 

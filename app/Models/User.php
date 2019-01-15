@@ -55,6 +55,8 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
         'unconfirmed' => 1
     );
 
+    protected $appends = ['fullname'];
+
     /**
      * Constructor.
      *
@@ -162,6 +164,16 @@ class User extends Eloquent implements AuthenticatableContract, CanResetPassword
             $permissions = array_merge($permissions, $role_data->permissions);
         }
         return $permissions;
+    }
+
+    /**
+     * Get user full name
+     *
+     * @return array
+     */
+    public function getFullNameAttribute()
+    {
+        return rtrim($this->attributes['name'] . ' ' . $this->attributes['last_name']);
     }
 
     /**

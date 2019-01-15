@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
 function Library(data = {}) {
-
   this.id = data._id || undefined;
   this.name = data.name || 'Unnamed Library';
   this.description = data.description || '';
@@ -21,19 +20,24 @@ function Library(data = {}) {
     fontSize: config.fontSize || '14',
     fontColor: typeof config.fontColor === 'undefined' ? '#000000' : config.fontColor,
     lineHeight: config.lineHeight || '18',
-    linkColor: typeof config.linkColor === 'undefined' ? '#000000' : config.linkColor,
+    linkColor: typeof config.linkColor === 'undefined' ? '' : config.linkColor,
     linkDecoration: config.linkDecoration || 'underline',
     externalCssLink: config.externalCssLink || '',
     propietaryCss: config.propietaryCss || '',
+    prependHtml: config.prependHtml || '',
+    appendHtml: config.appendHtml || '',
     fixedModules: config.fixedModules || '',
     padding: config.padding || '',
     esp: config.esp || false,
     espProvider: config.espProvider || false,
     plainText: config.plainText || false,
     preheader: config.preheader || false,
+    preheaderDefault: config.preheaderDefault || '',
     tracking: config.tracking || false,
+    trackingConfig: config.trackingConfig || '',
     tagging: config.tagging || false,
     templating: config.templating || false,
+    htmlToPdf: config.htmlToPdf || false,
   };
 
   const groups = [];

@@ -4,6 +4,7 @@
 
 <script>
   export default {
+    // DEPRECATE
     props: {
       content: {
         type: String,

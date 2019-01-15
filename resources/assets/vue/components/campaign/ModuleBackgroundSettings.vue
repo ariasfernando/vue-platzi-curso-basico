@@ -5,12 +5,13 @@
     >
       <component
         v-for="(plugin, pluginKey) in module.plugins"
-        :key="moduleKey + pluginKey"
+        :key="module.idInstance + pluginKey"
         v-if="isRenderSetting(plugin, pluginKey)"
         :is="'campaign-' + plugin.name"
         :name="pluginKey"
         :plugin="plugin"
-        :module-id="moduleKey">
+        :module-id="moduleKey"
+        :module="module">
       </component>
     </template>
   </div>

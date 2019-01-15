@@ -1,20 +1,20 @@
 <template>
   <module-container :component="component" @select-component="selectComponentHandler">
       <button-border-radius-comment v-if="hasBorderRadius" :component="component"
-        :module="module" :columnId="columnId" :componentId="componentId"></button-border-radius-comment>
+        :module="module" :module-id="moduleId" :columnId="columnId" :componentId="componentId"></button-border-radius-comment>
       <div class="stx-wrapper" v-if="hasBorderRadius" v-html="notMsoStartingComment"></div>
       <a
         @click.prevent
         :data-contenteditable-href="component.button.attribute.href || ''"
         :target="component.button.attribute.target || '_blank'"
         :style="component.button.style.textDecoration || 'text-decoration:none;'"
+        :title="component.button.attribute.title || ''"
         >
         <table
           cellpadding="0"
           cellspacing="0"
           border="0"
-          :width="component.button.style.minWidth && component.button.style.minWidth  !== '0px' ? undefined : component.button.attribute.width"
-          :height="component.button.attribute.height"
+          :width="buttonContainerWidth"
           :style="tableStyles"
           >
           <tr>
@@ -23,7 +23,7 @@
               :bgcolor="component.button.attribute.bgcolor"
               :height="component.button.attribute.height"
               style="vertical-align: middle; width:100%;"
-            :style="elementBorderAndPadding(this.component.button)"
+              :style="elementBorderPaddingAndHeight(this.component.button)"
             >
               <table
                 cellpadding="0"
@@ -40,7 +40,7 @@
                     :valign="component.button.attribute.valign || ''"
                     >
                     <tiny-mce
-                      :fontStyles="[fontStyles(component.button),{'display': 'inline-block !important'}, {'vertical-align': 'middle'}]"
+                      :fontStyles="fontStyles(component.button)"
                       :module="module"
                       :component="component"
                       :columnId="columnId"
@@ -98,8 +98,15 @@
       module() {
         return this.$store.getters["campaign/modules"][this.moduleId];
       },
+      width() {
+        return this.component.button.styleOption.autoWidth ? undefined : this.component.button.attribute.width;
+      },
       tableStyles(){
-        const width = this.component.button.style.minWidth ? undefined : this.widthStyle(this.component.button.attribute.width);
+        const { behaviour } = this.component;
+        let width = this.width ? this.widthStyle(this.width) : undefined;
+        if(behaviour == 'text'){
+          width = '100%';
+        }
         return {
           'width': width,
           'min-width': this.component.button.style.minWidth === '0px' ? undefined : this.component.button.style.minWidth,
@@ -123,6 +130,13 @@
         } 
         return false;
       },
+      buttonContainerWidth() {
+        const { behaviour } = this.component;
+        if(behaviour == 'text'){
+          return '100%';
+        }
+        return this.width; 
+      }
     },
     methods: {
       changeText(value) {

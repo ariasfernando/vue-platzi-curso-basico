@@ -4,32 +4,37 @@
 
     <div class="container-campaign-subwrapper">
       <div class="beta-wrapper"></div>
-      <!-- column left (menu) -->
-      <aside :style="locked ? 'overflow-y: hidden;' : undefined" class="left-bar">
-        <div>
+      <column-bar-container side="left" :style="locked ? 'overflow-y: hidden;' : undefined">
+        <scrollbar-container>
           <div class="menu-campaign">
             <campaign-configuration v-if="campaignReady && campaignConfigReady"></campaign-configuration>
             <tracking v-if="trackingEnabled" :library-key="libraryKey"></tracking>
             <campaign-menu v-if="campaignReady && !locked" :library-id="libraryId"></campaign-menu>
             <div class="lock-warning-container" v-if="locked">Unfix the email to add modules</div>
           </div>
-        </div>
-      </aside>
+        </scrollbar-container>
+      </column-bar-container>
 
-      <!-- column right (container email) -->
+      <!-- container email -->
       <section class="section-canvas-email module-container">
-        <email-canvas v-if="campaignReady"></email-canvas>
+        <scrollbar-container>
+          <div class="module-container-inner">
+            <email-canvas v-if="campaignReady"></email-canvas>
+          </div>
+        </scrollbar-container>
       </section>
 
-      <aside class="right-bar">
-        <div>
-          <module-settings v-if="showModuleSettings"></module-settings>
-          <module-background-settings></module-background-settings>
-          <component-settings v-if="Object.keys(currentComponent).length > 0 && !showModuleSettings"></component-settings>
-          <custom-module-settings v-if="currentCustomModule"></custom-module-settings>
-          <shadow-render></shadow-render>
-        </div>
-      </aside>
+      <column-bar-container side="right">
+        <scrollbar-container>
+          <div>
+            <module-settings v-if="showModuleSettings" />
+            <module-background-settings />
+            <component-settings />
+            <custom-module-settings v-if="currentCustomModule" />
+            <shadow-render />
+          </div>
+        </scrollbar-container>
+      </column-bar-container>
     </div>
 
     <!-- Modals -->
@@ -38,6 +43,7 @@
     <modal-esp v-if="campaignReady"></modal-esp>
     <modal-proof v-if="campaignReady"></modal-proof>
     <modal-enable-templating v-if="campaignReady"></modal-enable-templating>
+    <modal-proof-track v-if="campaignReady"></modal-proof-track>
 
     <spinner></spinner>
 
@@ -49,6 +55,7 @@
   import CampaignConfiguration from './CampaignConfiguration.vue'
   import CampaignMenu from './CampaignMenu.vue'
   import CampaignService from '../../services/campaign'
+  import ColumnBarContainer from "../common/containers/ColumnBarContainer.vue";
   import ComponentSettings from './ComponentSettings.vue'
   import CustomModuleSettings from './CustomModuleSettings.vue'
   import EmailActions from './EmailActions.vue'
@@ -58,8 +65,10 @@
   import ModalEsp from './modals/ModalEsp.vue'
   import ModalPreview from './modals/ModalPreview.vue'
   import ModalProof from './modals/ModalProof.vue'
+  import ModalProofTrack from './modals/ModalProofTrack.vue';
   import ModuleBackgroundSettings from './ModuleBackgroundSettings.vue'
   import ModuleSettings from './ModuleSettings.vue'
+  import ScrollbarContainer from '../common/containers/ScrollbarContainer.vue';
   import ShadowRender from './ShadowRender.vue'
   import Spinner from '../common/Spinner.vue'
   import Tracking from './Tracking.vue'
@@ -71,6 +80,7 @@
     components: {
       CampaignConfiguration,
       CampaignMenu,
+      ColumnBarContainer,
       ComponentSettings,
       CustomModuleSettings,
       EmailActions,
@@ -80,11 +90,13 @@
       ModalEsp,
       ModalPreview,
       ModalProof,
+      ModalProofTrack,
       ModuleBackgroundSettings,
       ModuleSettings,
+      ScrollbarContainer,
       ShadowRender,
       Spinner,
-      Tracking
+      Tracking,
     },
     data: function () {
       return {
@@ -151,7 +163,7 @@
         this.$store.dispatch("campaign/getCampaignData", this.campaignId).then(response => {
           this.$store.commit("global/setLoader", false);
           this.campaignReady = true;
-          this.trackingEnabled = (this.campaignReady && this.campaignConfig && this.campaignConfig.enable_tracking && _.has(this.campaign.library_config, 'tracking') && this.campaign.library_config.tracking);
+          this.trackingEnabled = (this.campaignReady && _.has(this.campaign.library_config, 'tracking') && this.campaign.library_config.tracking);
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(
@@ -162,7 +174,7 @@
       },
       loadConfig() {
         this.$store.dispatch("config/getConfig", 'campaign').then(response => {
-          this.campaignConfigReady = true;        
+          this.campaignConfigReady = true;
           this.campaignConfig = this.$store.getters["config/config"].campaign;
         }, error => {
           this.$root.$toast(
@@ -170,6 +182,11 @@
             {className: 'et-error'}
           );
         });
+      },
+      logTimeWindowFocus() {
+        if (document.visibilityState && document.visibilityState === 'visible') {
+          CampaignService.logTime(this.campaignId, this.logTimeInterval / 1000);
+        }
       },
       lockPing() {
         this.$store.dispatch('campaign/pingLockCampaign',
@@ -198,7 +215,7 @@
           {className: 'et-info'}
         );
       }
-      setInterval(CampaignService.logTime, this.logTimeInterval, this.campaignId, this.logTimeInterval / 1000);
+      setInterval(this.logTimeWindowFocus, this.logTimeInterval);
     }
   };
 </script>
@@ -215,7 +232,7 @@
 
   @brand-primary: lighten(@stensul-purple, 35%);
   @brand-secondary: @stensul-purple-light;
-  
+
   .el-input.is-active .el-input__inner,
   .el-select .el-input__inner:focus,
   .el-select .el-input.is-focus .el-input__inner,
@@ -256,189 +273,22 @@
   }
 
   .module-container {
-    padding: 40px 20px 80px 20px;
     background: #f0f0f0;
     display: block;
     float: left;
-    height: calc(~"100vh - 53px");
+    height: calc(~"100vh - 90px");
     width: calc(~"100% - 540px");
     min-width: 640px;
-    overflow-x: hidden;
-    overflow-y: visible;
+
+    &-inner {
+      padding: 40px 20px;
+    }
+
     table{
       border-collapse: initial;
     }
   }
-  .right-bar,
-  .left-bar {
-    height: calc(~"100vh - 86px");
-    overflow: auto;
-    overflow: overlay;
-    width: 270px;
-    display: block;
-    float: left;
-      padding: 0px;
-    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-    padding-bottom: 25px;
 
-    &:hover{
-      overflow: overlay
-    }
-
-    &::-webkit-scrollbar {
-        width: 4px; 
-        background: transparent;
-        }
-    &::-webkit-scrollbar-thumb {
-        background: lighten(@stensul-gray, 40%);
-    }
-    .btn.btn-secondary.btn-block {
-      &:hover,
-      &:visited,
-      &:focus,
-      &:active,
-      &:active:focus {
-        color: #666666;
-      }
-        }
-    .fa.pull-left {
-      margin-right: 12px;
-      }
-
-    .components-list {
-      padding: 0;
-      margin: 0;
-
-      .component-item {
-        cursor: pointer;
-        list-style-type: none;
-        font-size: 14px;
-        background-color: #f4f4f4;
-        border: 1px solid #d8d8d8;
-        padding: 20px 20px 14px 20px;
-        width: 47%;
-        margin-right: 4px;
-        margin-bottom: 4px;
-        float: left;
-        text-align: center;
-        transition: all 0.3s linear;
-
-        i {
-          margin: 0 5px;
-          color: #514960;
-          font-size: 28px;
-        }
-        p {
-          display: inline-block;
-          font-size: 12px;
-          margin: 0px;
-          padding: 0px;
-          font-weight: 400px;
-          color: #666666;
-            width: 100%;
-          font-weight: 300;
-          text-align: center;
-        }
-
-        &:hover {
-          border: 1px solid #888888;
-
-          p {
-            color: #333333;
-          }
-        }
-          }
-        }
-
-    .card {
-      padding: 0 8px 15px 8px;
-      border-bottom: 1px solid #f0f0f0;
-      border-top: 1px solid #ffffff;
-      margin-top: -1px;
-      display: table;
-          width: 100%;
-        }
-
-        select{
-      height: 22px;
-          font-size: 11px;
-          color: #666666;
-          border: none;
-      background: #f4f4f4;
-          box-shadow: none;
-          font-weight: 300;
-      width: 65px;
-          float: right;
-        }
-
-    select[multiple] {
-      height: 50px;
-      }
-
-    .vue-js-switch {
-      float: right;
-      padding-top: 0px;
-      margin: 0px;
-    }
-
-    .content-colorpicker {
-      .sketch-picker {
-        display: none;
-        position: absolute !important;
-        z-index: 300;
-        right: 100%;
-          }
-      .icon-remove {
-        color: #999999;
-        background: #ffffff;
-        border: 1px solid #cccccc;
-        margin-top: -40px;
-        margin-left: -35px;
-        padding-top: 4px;
-        }
-      }
-  }
-
-  .card-header {
-    padding-bottom: 10px;
-    ul {
-      margin-left: -10px;
-      margin-right: -10px;
-      border-bottom: 1px solid #dddddd;
-
-      .nav-item {
-        border-top: 1px solid #dddddd;
-        border-left: 1px solid #dddddd;
-        margin-bottom: -2px;
-
-        &:first-child {
-          margin-left: 10px;
-        }
-
-        &:last-of-type {
-          border-right: 1px solid #dddddd;
-        }
-        .nav-link {
-          margin-right: 0;
-          padding: 4px 7px;
-          border: 0;
-          border-radius: 0;
-          font-weight: 300;
-          color: #666666;
-          &.active {
-            border-bottom: 2px solid @focus;
-            background: @focus-light;
-          }
-          &:focus {
-            background-color: transparent;
-          }
-          &:hover {
-            background-color: @focus-light;
-          }
-        }
-      }
-    }
-  }
   aside {
     width: 20%;
     background: @stensul-white;
@@ -549,6 +399,15 @@
 
   .mce-edit-focus{
     outline: 1px dotted #333!important;
+  }
+
+  .section-canvas-email{
+    .mCSB_outside {
+      overflow: unset;
+      .mCSB_container {
+        overflow: unset;
+      }
+    }
   }
 </style>
 

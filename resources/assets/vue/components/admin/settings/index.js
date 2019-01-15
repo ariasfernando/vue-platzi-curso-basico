@@ -1,10 +1,12 @@
 import BorderGroup from './BorderGroup.vue';
 import ButtonCaret from './ButtonCaret.vue';
+import HorizontalPaddingGroup from './HorizontalPaddingGroup.vue';
+import ButtonWidth from './ButtonWidth.vue';
 import ClassInput from './ClassInput.vue';
 import ColumnsStacking from './ColumnsStacking.vue';
 import FontFamily from './FontFamily.vue';
-import FontStyle from './FontStyle.vue';
 import FontWeight from './FontWeight.vue';
+import GenericCode from './GenericCode.vue';
 import GenericColor from './GenericColor.vue';
 import GenericFile from './GenericFile.vue';
 import GenericNumber from './GenericNumber.vue';
@@ -21,11 +23,13 @@ import Width from './Width.vue';
 const Settings = {
   BorderGroup,
   ButtonCaret,
+  HorizontalPaddingGroup,
+  ButtonWidth,
   ClassInput,
   ColumnsStacking,
   FontFamily,
-  FontStyle,
   FontWeight,
+  GenericCode,
   GenericColor,
   GenericFile,
   GenericNumber,

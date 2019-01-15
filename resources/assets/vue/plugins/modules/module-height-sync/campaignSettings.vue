@@ -3,10 +3,11 @@
 
 <script>
 export default {
+  name: 'module-height-sync',
   props: ['name', 'module', 'plugin', 'moduleId'],
   data() {
     return {
-      previousHeight: 0
+      previousHeight: 0,
     };
   },
   computed: {
@@ -18,13 +19,24 @@ export default {
     },
     iframe() {
       return document.getElementById('shadowRender');
-    }
+    },
+  },
+  watch: {
+    module: {
+      handler() {
+        if (this.buildingMode === 'mobile') {
+          this.iframe.dispatchEvent(new Event('update-iframe'))
+        }
+        this.setModuleHeight();
+      },
+      deep: true,
+    },
   },
   methods: {
     saveModuleAttribute(property, value, columnId) {
       const payload = {
         moduleId: this.moduleId,
-        columnId
+        columnId,
       };
       if (this.isCustom) {
         payload.plugin = this.name;
@@ -32,7 +44,6 @@ export default {
         payload.data[property] = value;
         this.$store.commit('campaign/saveCustomModuleData', payload);
       } else {
-        payload.subComponent = 'container';
         payload.link = 'attribute';
         payload.property = property;
         payload.value = value;
@@ -51,23 +62,17 @@ export default {
     getHeight() {
       let height = 0;
       if (this.buildingMode === 'desktop') {
-        height = $(`[data-module-id="${this.moduleId}"]`).height();
+        height = $(`[data-module-id='${this.moduleId}']`).height();
       } else {
-        height = $(this.iframe.contentDocument).find(`[data-module-id="${this.moduleId}"]`).height();
+        height = $(this.iframe.contentDocument)
+          .find(`[data-module-id='${this.moduleId}']`)
+          .height();
       }
       return height;
-    }
+    },
   },
-  watch: {
-    module: {
-      handler(newModule) {
-        if (this.buildingMode === 'mobile') {
-          this.iframe.dispatchEvent(new Event('update-iframe'))
-        }
-        this.setModuleHeight();
-      },
-      deep: true
-    }
-  }
+  mounted() {
+    this.setModuleHeight();
+  },
 };
 </script>

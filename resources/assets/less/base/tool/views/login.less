@@ -7,258 +7,291 @@ body.base-register,
 body.base-change_password,
 body.base-reset,
 body.base-session {
-	background: @stensul-purple;
-	padding-top: 80px;
+  background: @stensul-purple;
+  padding-top: 80px;
 
-	.beta-login{
-		background: #3e384a;
-		padding: 40px;
-		font-family: 'Open Sans', Arial, sans-serif;
-		width: 370px;
-		float: none;
-		margin: 0 auto;
-		clear:both;
+  .beta-login {
+    background: #3e384a;
+    padding: 40px;
+    font-family: "Open Sans", Arial, sans-serif;
+    width: 370px;
+    float: none;
+    margin: 0 auto;
+    clear: both;
 
-		a{
-			font-size: 50px;
-			font-weight: 300;
-			color: #ffffff;
-		}
-
-		input{
-			width: 100%;
-			padding: 8px 12px;
-			font-size: 18px;
-			border-radius: 2px;
-			color: @input-color;
-			font-weight: 300;
-			height: auto;
-			text-align: left;
-		}
-
-		button{
-			width: 100%;
-			padding: 10px 12px;
-			font-size: 18px;
-			border-radius: 2px;
-			color: @dropdown-link-color;
-			font-weight: 600;
-			height: auto;
-			background: @stensul-purple;
-			border: none;
-			transition: all 0.2s linear;
-
-			&:hover{
-				padding: 10px 12px;
-				border: none
-			}
-		}
-
-		h4{
-			margin-top: 0px;
-			font-weight: 300;
-			border-bottom: 1px solid @stensul-purple;
-			padding-bottom: 20px;
-			margin-bottom: 20px;
-			margin-top: -5px;
-			font-size: 20px;
-		}
-
-		.submit-row{
-			margin-top: 15px;
-		}
-
-		.alert-danger{
-			border-radius: 2px;
-			font-weight: 300;
-			color: @dropdown-link-color;
-			background: @beta-error;
-			border: none;
-		}
-
-		.alert {
-			&.alert-success {
-				&.text-center a{
-					color: #00A4E4;
-				    text-decoration: none;
-				    font-weight: 700;
-				    font-size: 14px;
-
-				    &:hover,
-					&:focus {
-					    color: #006d98;
-					    text-decoration: underline;
-					}
-				}
-			}
-		}
-
-		.app-email{
-			margin-top: 10px;
-		}
-
-		.g-recaptcha {
-			transform: scale(0.96);
-			transform-origin: 0 0;
-		}
-	}
-
-	.stensul-logo{
-		color: #FFFFFF;
-		font-size: 60px;
-		text-align: center;
-		font-weight: 300;
-		text-decoration: none;
-	}
-
-	form{
-		.form-group{
-			margin: 15px 0;
-		}
-
-		.selector{
-			margin-bottom: 25px;
-		}
-
-		.submit-row{
-			margin: 30px 0 0;
-
-			a, span{
-				vertical-align: middle;
-			}
-
-			span.spacer{
-				margin: 0 8px 0 10px;
-			}
-		}
-
-		label{
-			color: #FFF;
-		}
-
-		input{
-			width: 225px;
-			margin: 0 auto;
-			padding: 2px 20px;
-			line-height: 26px;
-			border: 1px solid #FFFFFF;
-			outline: none;
-			text-align: center;
-			.border-radius( 20px );
-		}
-
-		button{
-			outline: none;
-			color: @dropdown-link-color!important;
-			font-size: 18px!important;
-			font-weight: 300!important;
-			line-height: 24px;
-			padding: 11px 20px;
-			border: 1px solid @brand-secondary;
-			background: @brand-secondary;
-
-			background-image: -webkit-linear-gradient(bottom, @brand-secondary 40%, lighten(@brand-secondary, 20%));
-			background-image: -moz-linear-gradient(bottom, @brand-secondary 40%, lighten(@brand-secondary, 20%));
-			background-image: -ms-linear-gradient(bottom, @brand-secondary 40%, lighten(@brand-secondary, 20%));
-			background-image: -o-linear-gradient(bottom, @brand-secondary 40%, lighten(@brand-secondary, 20%));
-			background-image: linear-gradient(to top, @brand-secondary 40%, lighten(@brand-secondary, 20%));
-
-			&:link,
-			&:focus,
-			&:active,
-			&:visited,
-			&:hover{
-				background: @brand-secondary;
-				border: 1px solid @brand-secondary;
-				background-position: center -35px;
-			}
-		}
-
-		button.dropdown-toggle{
-			color: @input-color!important;
-
-			span{
-				color: #999999;
-			}
-
-			span.bs-caret{
-				margin-left: -20px;
-			}
-		}
-
-		.dropdown-menu ul li a{
-			color: @input-color;
-			font-size: 18px;
-
-			span{
-				color: #999999;
-			}
-		}
-
-		a, a:hover, a:active, span{
-			color: @login-links;
-		}
-
-		.sublink{
-			margin: 5px 0 0;
-			
-			a{
-				font-size: 14px;
-				opacity: 0.7;
-				text-decoration: underline;
-				transition: all 0.3s linear;
-
-				&:hover{
-					color: #ffffff;
-					opacity: 1;
-				}
-			}
-		}
-
-		.register{
-			font-size: 14px;
-			opacity: 0.7;
-			text-decoration: underline;
-			margin-top: 10px;
-		    display: inline-block;
-		    margin-bottom: 30px;
-			transition: all 0.3s linear;
-
-			&:hover{
-				color: #ffffff;
-				opacity: 1;
-			}
+    a {
+      font-size: 50px;
+      font-weight: 300;
+      color: #ffffff;
     }
-	}
 
-	.login-footer{
-		height: 43px;
-		width: 100%;
-		max-width: 475px;
-		margin: 20px auto 5px;
-	}
+    input {
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 18px;
+      border-radius: 2px;
+      color: @input-color;
+      font-weight: 300;
+      height: auto;
+      text-align: left;
+    }
 
-	p, p a{
-		color: #ffffff;
-		font-weight: 300;
-		opacity: 0.8;
-	}
-}
-body.base-auth-change_password{
-  #top-link-block{
-    display:none !important;
+    button {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 18px;
+      border-radius: 2px;
+      color: @dropdown-link-color;
+      font-weight: 600;
+      height: auto;
+      background: @stensul-purple;
+      border: none;
+      transition: all 0.2s linear;
+
+      &:hover {
+        padding: 10px 12px;
+        border: none
+      }
+    }
+
+    h4 {
+      margin-top: 0;
+      font-weight: 300;
+      border-bottom: 1px solid @stensul-purple;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      margin-top: -5px;
+      font-size: 20px;
+    }
+
+    .submit-row {
+      margin-top: 15px;
+    }
+
+    .alert-danger {
+      border-radius: 2px;
+      font-weight: 300;
+      color: @dropdown-link-color;
+      background: @beta-error;
+      border: none;
+
+      ul {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      a {
+        font-size: 14px;
+        opacity: 0.7;
+        text-decoration: underline;
+        transition: all 0.3s linear;
+
+        &:hover {
+          color: #ffffff;
+          opacity: 1;
+        }
+      }
+
+    }
+
+    .alert {
+
+      &.alert-success {
+
+        &.text-center a {
+          color: #00A4E4;
+          text-decoration: none;
+          font-weight: 700;
+          font-size: 14px;
+
+          &:hover,
+          &:focus {
+            color: #006d98;
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    .app-email {
+      margin-top: 10px;
+    }
+
+    .g-recaptcha {
+      transform: scale(0.96);
+      transform-origin: 0 0;
+    }
+  }
+
+  .stensul-logo {
+    color: #FFFFFF;
+    font-size: 60px;
+    text-align: center;
+    font-weight: 300;
+    text-decoration: none;
+  }
+
+  form {
+
+    .form-group {
+      margin: 15px 0;
+    }
+
+    .selector {
+      margin-bottom: 25px;
+    }
+
+    .submit-row {
+      margin: 30px 0 0;
+
+      a,
+ span {
+        vertical-align: middle;
+      }
+
+      span.spacer {
+        margin: 0 8px 0 10px;
+      }
+    }
+
+    label {
+      color: #FFF;
+    }
+
+    input {
+      width: 225px;
+      margin: 0 auto;
+      padding: 2px 20px;
+      line-height: 26px;
+      border: 1px solid #FFFFFF;
+      outline: none;
+      text-align: center;
+      .border-radius( 20px );
+    }
+
+    button {
+      outline: none;
+      color: @dropdown-link-color!important;
+      font-size: 18px!important;
+      font-weight: 300!important;
+      line-height: 24px;
+      padding: 11px 20px;
+      border: 1px solid @brand-secondary;
+      background: @brand-secondary;
+
+      background-image: -webkit-linear-gradient(bottom, @brand-secondary 40%, lighten(@brand-secondary, 20%));
+      background-image: -moz-linear-gradient(bottom, @brand-secondary 40%, lighten(@brand-secondary, 20%));
+      background-image: -ms-linear-gradient(bottom, @brand-secondary 40%, lighten(@brand-secondary, 20%));
+      background-image: -o-linear-gradient(bottom, @brand-secondary 40%, lighten(@brand-secondary, 20%));
+      background-image: linear-gradient(to top, @brand-secondary 40%, lighten(@brand-secondary, 20%));
+
+      &:link,
+      &:focus,
+      &:active,
+      &:visited,
+      &:hover {
+        background: @brand-secondary;
+        border: 1px solid @brand-secondary;
+        background-position: center -35px;
+      }
+    }
+
+    button.dropdown-toggle {
+      color: @input-color!important;
+
+      span {
+        color: #999999;
+      }
+
+      span.bs-caret {
+        margin-left: -20px;
+      }
+    }
+
+    .dropdown-menu ul li a {
+      color: @input-color;
+      font-size: 18px;
+
+      span {
+        color: #999999;
+      }
+    }
+
+    a,
+ a:hover,
+ a:active,
+ span {
+      color: @login-links;
+    }
+
+    .sublink {
+      margin: 5px 0 0;
+
+      a {
+        font-size: 14px;
+        opacity: 0.7;
+        text-decoration: underline;
+        transition: all 0.3s linear;
+
+        &:hover {
+          color: #ffffff;
+          opacity: 1;
+        }
+      }
+    }
+
+    .register {
+      font-size: 14px;
+      opacity: 0.7;
+      text-decoration: underline;
+      margin-top: 10px;
+      display: inline-block;
+      margin-bottom: 30px;
+      transition: all 0.3s linear;
+
+      &:hover {
+        color: #ffffff;
+        opacity: 1;
+      }
+    }
+  }
+
+  .login-footer {
+    height: 43px;
+    width: 100%;
+    max-width: 475px;
+    margin: 20px auto 5px;
+  }
+
+  p,
+ p a {
+    color: #ffffff;
+    font-weight: 300;
+    opacity: 0.8;
   }
 }
-body.base-auth-password{
-	.reset-captcha{
-		float: right;
-		padding: 6px 0px 0px 30px;
-	}
+
+body.base-auth-change_password {
+
+  #top-link-block {
+    display: none !important;
+  }
 }
+
+body.base-auth-password {
+
+  .reset-captcha {
+    float: right;
+    padding: 6px 0 0 30px;
+  }
+}
+
 body.auth-session {
+
   a {
     font-size: 16px !important;
-    &:hover{
+
+    &:hover {
       color: #ffffff !important;
       opacity: 1;
     }
@@ -268,14 +301,16 @@ body.auth-session {
 body.base-change_password,
 body.base-reset,
 body.base-register {
+
   .progress {
-		width: 100%;
-		display: block;
-		height: 5px;
-		border-radius: 0 0 4px 4px;
-		margin-top: 0;
-		margin-bottom: 0px;
+    width: 100%;
+    display: block;
+    height: 5px;
+    border-radius: 0 0 4px 4px;
+    margin-top: 0;
+    margin-bottom: 0;
   }
+
   .validate-password {
     border-radius: 2px 2px 0 0 !important;
   }

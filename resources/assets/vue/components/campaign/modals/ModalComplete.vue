@@ -15,12 +15,12 @@
                 <b-tab title="HTML" @click="changeTypeTextArea('normal_html')" >
                   <div class="html_minify_toggle pull-right">
                     <label for="htmlMinify">Minify Code</label>
-                    <toggle-button :value="this.minified.normal_html.toggle" :sync="false" id="htmlMinify" active-color="#78DCD6" @change="htmlMinifyChange('normal_html')"></toggle-button>
+                    <toggle-button :value="minified.normal_html.toggle" :sync="false" id="htmlMinify" active-color="#78DCD6" @change="htmlMinifyChange('normal_html')" />
                   </div>
-                  <textarea ref="normal_html" v-html="this.minified.normal_html.output" readonly></textarea>
+                  <textarea ref="normal_html" v-model="minified.normal_html.output" readonly />
                 </b-tab>
                 <b-tab title="Plain Text" @click="changeTypeTextArea('plain_text')" v-if="campaign.library_config.plainText">
-                  <textarea ref="plain_text" v-html="plainText" readonly></textarea>
+                  <textarea ref="plain_text" v-html="plainText" readonly />
                 </b-tab>
               </b-tabs>
             </slot>
@@ -103,7 +103,7 @@
       },
       campaign: {
         handler: function(value) {
-          this.minified.normal_html.initial_html = value.campaign_data.body_html;
+          this.minified.normal_html.initial_html = this.$options.filters.charConvert(value.campaign_data.body_html);
           this.minified.normal_html.minified_html = this.$options.filters.charConvert(value.campaign_data.body_html_minified);
           this.minified.normal_html.output = this.minified.normal_html.initial_html;
           this.plainText = value.campaign_data.plain_text;

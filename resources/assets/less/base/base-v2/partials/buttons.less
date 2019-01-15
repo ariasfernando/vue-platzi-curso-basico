@@ -1,95 +1,96 @@
-.btn{
-	font-size: 14px;
-	font-family: 'Open Sans', Arial, sans-serif;
-	font-weight: normal;
-	color: @input-color;
-	background: transparent;
-	border: 1px solid #CCCCCC;
-	.border-radius(2px);
-	padding: 2px 10px;
+.btn {
+  font-size: 14px;
+  font-family: "Open Sans", Arial, sans-serif;
+  font-weight: normal;
+  color: @input-color;
+  background: transparent;
+  border: 1px solid #CCCCCC;
+  .border-radius(2px);
+  padding: 2px 10px;
 
-	&.ajax-loader-small{
-		background-image: url( "@{image-url}ajax-loader.gif") !important;
-		background-repeat: no-repeat !important;
-		background-position: 95% center !important;
-		padding-right: 30px !important;
-	}
+  &.ajax-loader-small {
+    background-image: url("@{image-url}ajax-loader.gif") !important;
+    background-repeat: no-repeat !important;
+    background-position: 95% center !important;
+    padding-right: 30px !important;
+  }
 
-	&.btn-default{
-		.caret{
-			margin-left: 10px;
-		}
+  &.btn-default {
 
-		&:focus,
-		&:visited,
-		&:active,
-		&:hover{
-			background-color: darken(@btn-default-bg, 10%);
-			border-color: darken(@btn-default-bg, 12%);
-		}
-	}
+    .caret {
+      margin-left: 10px;
+    }
 
-	&.btn-continue{
-		border-color: @btn-success-bg;
-		background: @btn-success-bg;
-		color: @btn-default-color;
+    &:focus,
+    &:visited,
+    &:active,
+    &:hover {
+      background-color: darken(@btn-default-bg, 10%);
+      border-color: darken(@btn-default-bg, 12%);
+    }
+  }
 
-		&:active,
-		&:hover{
-			background-color: darken(@btn-success-bg, 10%);
-			border-color: darken(@btn-success-bg, 12%);
-		}	
-	}
+  &.btn-continue {
+    border-color: @stensul-purple;
+    background: @stensul-purple;
+    color: @btn-default-color;
 
-	i.glyphicon{
-		line-height: 19px;
-		font-size: 12px;
-		vertical-align: text-bottom;
+    &:active,
+    &:hover {
+      background-color: darken(@stensul-purple, 10%);
+      border-color: darken(@stensul-purple, 12%);
+    }
+  }
 
-		&.glyphicon-triangle-right{
-			margin-right: 0;
-			margin-left: 7px;
-		}
-	}
+  i.glyphicon {
+    line-height: 19px;
+    font-size: 12px;
+    vertical-align: text-bottom;
 
-	&.disabled,
-	&[disabled],
-	fieldset[disabled] & {
-		.opacity(.4);
-	}
+    &.glyphicon-triangle-right {
+      margin-right: 0;
+      margin-left: 7px;
+    }
+  }
+
+  &.disabled,
+  &[disabled],
+  fieldset[disabled] & {
+    .opacity(.4);
+  }
 }
 
-.beta-btn-primary{
-	font-family: 'Open Sans', Arial, sans-serif;
-	font-size: 13px!important;
-	font-weight: 400!important;
-	background: @stensul-purple!important;
-	padding: 7px 10px;
-	border: none!important;
-	color: @btn-default-color!important;
-	border: 1px solid  @stensul-purple;
-	transition: all 0.3s linear;
+.beta-btn-primary {
+  font-family: "Open Sans", Arial, sans-serif;
+  font-size: 13px!important;
+  font-weight: 400!important;
+  background: @stensul-purple!important;
+  padding: 7px 10px;
+  border: none!important;
+  color: @btn-default-color!important;
+  border: 1px solid  @stensul-purple;
+  transition: all 0.3s linear;
 
-	&:hover{
-		background: @stensul-purple!important;
-		color: @btn-default-color!important;
-	}
+  &:hover {
+    background: @stensul-purple!important;
+    color: @btn-default-color!important;
+  }
 }
 
-.beta-btn-secondary{
-	font-family: 'Open Sans', Arial, sans-serif;
-	font-size: 13px;
-	font-weight: 400;
-	color: @input-color;
-	padding: 7px 10px;
-	border: none;
-	background: @btn-default-color;
-	border: 1px solid #dddddd;
-	transition: all 0.3s linear;
+.beta-btn-secondary {
+  font-family: "Open Sans", Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: @input-color;
+  padding: 7px 10px;
+  border: none;
+  background: @btn-default-color;
+  border: 1px solid #dddddd;
+  transition: all 0.3s linear;
 
-	&:hover{
-		background: @btn-default-color;
-		color: @input-color;
-		border: 1px solid @stensul-purple;
-	}
+  &:hover {
+    background: @btn-default-color;
+    color: @input-color;
+    border: 1px solid @stensul-purple;
+  }
 }

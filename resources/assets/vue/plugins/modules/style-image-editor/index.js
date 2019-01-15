@@ -3,7 +3,7 @@ import campaignSettings from './campaignSettings.vue';
 
 export default {
   name: 'style-image-editor',
-  title: 'style Image Editor',
+  title: 'Image Editable',
   version: '0.0.11',
   author: 'ximena.garcia@stensul.com',
   target: ['image'],
@@ -150,6 +150,12 @@ export default {
         vertical: {
           label: 'Vertical crop',
           key: 'cropBoxResizable',
+          value: false,
+          type: 'switch',
+        },
+        square: {
+          label: 'Force square output',
+          key: 'square',
           value: false,
           type: 'switch',
         },
@@ -469,4 +475,5 @@ export default {
   data: {},
   enabled: false,
   settings: true,
+  runBackground: true,
 };

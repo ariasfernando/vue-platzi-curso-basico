@@ -37,6 +37,8 @@ return [
         'title' => 'Responsys',
         'class' => 'Responsys',
         'default_path' => '/contentlibrary/' . env('API_RESPONSYS_PATH', ''),
+        'folders' => [
+        ],
         'auth' => [
             'type' => 'POST',
             'url' => '/rest/api/v1.1/auth/token',
