@@ -29,8 +29,16 @@ class ImageTransformer
      *
      * @return Array
      */
-    public function transform()
+    public function transform($options = [])
     {
+        if (!empty($options['keep_original_image_url']) && $options['keep_original_image_url'] === true) {
+            $small = ($this->image_small != '')? $this->image_small : $this->image_large;
+            $large = $this->image_large;
+        } else {
+            $small = ($this->image_small != '')? explode("?", $this->image_small)[0] : $this->image_large;
+            $large = explode("?", $this->image_large)[0];
+        }
+
         return [
             "source" => $this->source,
             "text" => $this->text,
@@ -40,9 +48,8 @@ class ImageTransformer
             "link" => $this->link,
             "user" => $this->user,
             "images" => [
-                "small" => ($this->image_small != '')?
-                    explode("?", $this->image_small)[0] : $this->image_large,
-                "large" => explode("?", $this->image_large)[0]
+                "small" => $small,
+                "large" => $large
             ],
         ];
     }
