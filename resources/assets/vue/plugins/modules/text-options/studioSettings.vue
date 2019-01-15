@@ -1,10 +1,10 @@
 <template>
   <div>
-    <settingsContainer :label="plugin.title">
+    <settings-container :label="plugin.title">
       <template slot="setting-right">
         <toggle-button v-model="pluginEnabled" />
       </template>
-    </settingsContainer>
+    </settings-container>
     <template v-if="pluginEnabled">
       <div class="btn-group">
         <el-button
@@ -99,7 +99,9 @@
             <!-- Input if config needs it -->
             <settings-container
               v-if="showSetting(tinySetting.dependsOn) && $can('tiny-plugin-' + key)"
-              :label="tinySetting.title">
+              :label="tinySetting.title"
+              :checkbox="checkboxValue(plugin.config.settings[tinySetting.key].content, tinySetting)"
+              @checkboxChange="(value)=>checkboxChange(value, tinySetting)">
               <template slot="setting-right">
                 <el-input-number
                   v-if="tinySetting.type === 'number'"
@@ -136,6 +138,7 @@
                   :default-value="tinySetting.defaultValue"
                   :disabled="isDisabled(tinySetting.isDisabled, tinySettingContent(plugin.config.settings[tinySetting.key].content))"
                   :false-text="tinySetting.falseText"
+                  v-bind="tinySetting.props"
                   @change="(value)=>changeSetting(value, tinySetting.key)" />
               </template>
             </settings-container>
@@ -238,7 +241,6 @@ export default {
       }
       return true;
     },
-
     toggleOption(optionName, oldValue) {
       const value = !oldValue;
       const payload = {
@@ -279,6 +281,25 @@ export default {
       return isDisabled && content
         ? isDisabled(this.tinySettingContent(content))
         : false;
+    },
+    checkboxValue(val, tinySetting) {
+      const _value =
+        val !== undefined && val !== 0 && val !== '0' && val !== false;
+
+      const disabled = this.isDisabled(
+        tinySetting.isDisabled,
+        this.tinySettingContent(val),
+      );
+
+      return tinySetting.checkbox ? { value: _value, disabled } : undefined;
+    },
+    checkboxChange(value, tinySetting) {
+      const val =
+        value && tinySetting.checkbox
+          ? tinySetting.checkbox.valueOnTrue
+          : false;
+
+      this.changeSetting(val, tinySetting.key);
     },
   },
 };

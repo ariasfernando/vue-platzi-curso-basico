@@ -79,24 +79,43 @@ function configsView() {
       },
       truncate: {
         key: 'truncate',
-        title: 'Characters Limit',
-        type: 'input-toggleable-number',
+        title: 'Char Limit',
+        type: 'stui-input-autodisable',
         falseText: 'Disabled',
+        props: {
+          disableOn: 0,
+          isNumeric: true,
+          min: 0,
+        },
+        checkbox: {
+          valueOnTrue: 1,
+        },
       },
       lines_limit: {
         key: 'lines_limit',
         title: 'Lines Limit',
-        type: 'input-toggleable-number',
+        type: 'stui-input-autodisable',
         falseText: 'Disabled',
-        defaultValue: 2,
         isDisabled: value => (Application.utils.isJsonObjectString(value)),
+        props: {
+          disableOn: 0,
+          isNumeric: true,
+          min: 0,
+        },
+        checkbox: {
+          valueOnTrue: 2,
+        },
       },
       lines_limit_advanced: {
         key: 'lines_limit',
         title: 'Lines Limit',
-        type: 'input-toggleable-text',
-        falseText: 'Disabled',
-        defaultValue: '2',
+        type: 'stui-input-autodisable',
+        props: {
+          disableOn: '0',
+        },
+        checkbox: {
+          valueOnTrue: 2,
+        },
       },
       fontsize_formats: {
         key: 'fontsize_formats',
