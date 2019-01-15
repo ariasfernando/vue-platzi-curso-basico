@@ -33,6 +33,12 @@
             </template>
           </settings-container>
 
+          <settings-container label="Email Title" v-if="enableTitle" title="Email Title" key="email-title">
+            <template slot="setting-bottom">
+              <el-input size="mini" placeholder="Email Title" name="emailTitle" maxlength="140" :value="form.emailTitle" @blur="saveSettings"/>
+            </template>
+          </settings-container>
+
           <settings-container custom-class="field-Tags" label="Tags" v-if="enableTagging" key="tags">
             <template slot="setting-bottom">
               <el-select
@@ -105,9 +111,11 @@
         enableTagging: false,
         enableAutoSave: false,
         enableLocking: false,
+        enableTitle: false,
         form: {
           campaignName: '',
           campaignProcess: false,
+          emailTitle: '',
           tags: []
         },
         defaultTemplateBackgroundColor() {
@@ -204,7 +212,8 @@
       this.enableTagging = this.campaign.library_config.tagging;
       this.form.tags = _.cloneDeep(this.campaign.tags);
       this.form.campaignName = this.campaign.campaign_name || '';
-      this.campaignPreheader = this.campaign.campaign_preheader;
+      this.form.campaignPreheader = this.campaign.campaign_preheader || '';
+      this.form.emailTitle = this.campaign.email_title || '';
 
       this.loadConfig();
     },
@@ -248,11 +257,28 @@
 
         });
       },
+      saveSettings(e) {
+        let value = e.target.value;
+
+        if (e.target.type === 'checkbox') {
+          value = e.target.checked;
+        }
+
+        if(e.target.name in this.form){
+          this.form[e.target.name] = value;
+        }
+
+        this.$store.commit('campaign/saveSetting', {
+          name: e.target.name,
+          value
+        });
+      },
       loadConfig() {
         this.$store.dispatch("config/getConfig", 'global_settings').then(response => {
           this.globalConfig = this.$store.getters["config/config"].global_settings;
           this.enableAutoSave = this.globalConfig.auto_save === '1';
           this.enablePreheader = this.globalConfig.enable_preheader === '1' && this.campaign.library_config.preheader;
+          this.enableTitle = this.globalConfig.enable_title === '1';
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(
@@ -595,6 +621,9 @@
     }
     .glyphicon-star {
       color: #eac827;
+    }
+    .form-group {
+      margin-bottom: 0px;
     }
   }
 </style>
