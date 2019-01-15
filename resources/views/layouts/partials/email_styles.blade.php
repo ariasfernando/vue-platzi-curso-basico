@@ -12,12 +12,16 @@
 @endif
 <style type="text/css">
 	/* COMMON STYLES */
-    .st-email-body{ 
+    span, td, table, div {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .st-email-body{
         width:100% !important;
         -webkit-text-size-adjust: 100%;
-        margin: 0 !important;
-        padding: 0px; 
-        background-color: #ffffff; 
+        margin: 0 auto!important;
+        padding: 0px;
+        background-color: #ffffff;
     }
 
     #outlook a{
@@ -47,14 +51,14 @@
         line-height:100%
     }
 
-    span.st-preheader{ 
+    span.st-preheader{
         display: none!important;
-    }  
+    }
 
     .applelinks {
-        color:#ffffff !important; 
-        text-decoration: none !important; 
-    }  
+        color:#ffffff !important;
+        text-decoration: none !important;
+    }
 
 	a,a:hover,a:link,a:visited {
         text-decoration:none !important;
@@ -70,18 +74,18 @@
         padding: 0;
     }
 
-    @if(isset($params['campaign_data']['library_config']) && 
+    @if(isset($params['campaign_data']['library_config']) &&
         !empty($params['campaign_data']['library_config']['linkColor'])
     )
        a{
             color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
         }
-        a *{ 
+        a *{
             color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
-        }         
-        a:link{ 
+        }
+        a:link{
              color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
-        }  
+        }
     @endif
 
     {{-- Mobile Styles --}}
@@ -109,9 +113,7 @@
                                     $ie = "src: url('" . $fontPath . $font['folder'] . "/" . $file['name'] . "." . $file['file'] . "?#iefix');";
                                 }
                             }
-                        }
 
-                        foreach ($font['types'] as $b => $type) {
                             $definition .= "@font-face {font-family: '" . $font['name'] . "';";
                             $definition .= $ie;
                             $definition .= "src: ";
@@ -126,7 +128,12 @@
                                 }
                             }
 
+                            if(isset($type['style']) && !empty($type['style'])) {
+                                $definition .= "font-style: " . $type['style'] . ";";
+                            }
+
                             $definition .= "font-weight: " . $type['weight'] . ";}";
+                            $ie = "";
                         }
                         echo $definition;
                     }
@@ -142,21 +149,29 @@
             font-family: Arial, Helvetica, sans-serif !important;
         }
 
-        @if(isset($params['campaign_data']['library_config']) && 
+        @if(isset($params['campaign_data']['library_config']) &&
             !empty($params['campaign_data']['library_config']['linkColor'])
         )
            a{
                 color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
             }
-          
-            a *{ 
+
+            a *{
                 color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
-            } 
-                    
-            a:link{ 
+            }
+
+            a:link{
                  color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
-            }  
+            }
         @endif
+        span.MsoHyperlink {
+            mso-style-priority:99;
+            color:inherit;
+        }
+        span.MsoHyperlinkFollowed {
+            mso-style-priority:99;
+            color:inherit;
+        }
 	</style>
 <![endif]-->
 
@@ -165,22 +180,34 @@
         .st-mso-full-width{
             width: 100%;
         }
-        @if(isset($params['campaign_data']['library_config']) && 
+        @if(isset($params['campaign_data']['library_config']) &&
             !empty($params['campaign_data']['library_config']['linkColor'])
         )
            a{
                 color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
             }
-          
-            a *{ 
+
+            a *{
                 color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
-            } 
-                    
-            a:link{ 
+            }
+
+            a:link{
                  color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
-            }  
+            }
         @endif
 	</style>
+<![endif]-->
+
+<!--[if IE]>
+   <style type="text/css">
+        .mso-img-centered > table {
+            width: auto!important;
+            margin: 0 auto!important;
+        }
+        .mso-img-centered > table > tbody > tr > td {
+            margin: 0 auto!important;
+        }
+   </style>
 <![endif]-->
 
 <!--[if IEMobile]>
@@ -189,6 +216,5 @@
 	   .st-mso-full-width{
             width: 100%;
        }
-        
     </style>
 <![endif]-->

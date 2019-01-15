@@ -16,6 +16,13 @@ export default {
 
       return plugin;
     },
+    modulePlugin() {
+      const module = this.module;
+      const plugin = module.plugins[this.name];
+      this.enabled = plugin.enabled;
+
+      return plugin;
+    },
     component() {
       if (this.module.structure.columns[this.currentComponent.columnId]) {
         const component = this.module.structure.columns[this.currentComponent.columnId].components[this.currentComponent.componentId];

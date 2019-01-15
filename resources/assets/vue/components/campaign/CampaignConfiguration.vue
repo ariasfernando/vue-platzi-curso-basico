@@ -1,86 +1,89 @@
 <template>
   <div class="expand configuration-mod">
-    <h2 class="show-configuration" v-on:click=" collapsed = !collapsed" v-bind:class="{'config-selected' : collapsed }"><i class="glyphicon glyphicon-cog glyph-inline"></i> Email Settings <i class="glyphicon glyphicon-menu-up"></i></h2>
-    <div class="level-1 open-section-campaign" v-bind:class="{'is-collapsed' : collapsed }">
-      <form>
-        <!-- Configuration Inputs -->
-        <div class="configuration-field configuration-nomargin">
-          <label for="campaignName">
-            Email Name
-            <a v-if="enableFavorite" @click.prevent="toggleFavorite" href="#" title="Favorite">
-              <i class="glyphicon"
-                v-bind:class="favoriteClass">
-              </i>
-            </a>
-          </label>
-          <p>
-            <input type="text"
-              placeholder="Email Name"
-              name="campaignName"
-              id="campaignName"
-              v-validate.initial="'required'"
-              :value="form.campaignName"
-              :class="{'input': true, 'is-danger': errors.has('campaignName') }"
-              @input="saveCampaignName"
-              @focus="checkName"
-             />
+    <label-item-container label="EMAIL SETTINGS" icon="glyphicon-cog"  v-b-toggle.emailSettings></label-item-container>
+    <b-collapse id="emailSettings" visible>
+      <!-- Configuration Inputs -->
+      <div class="card">
+        <group-container>
+          <settings-container custom-class="field-Tags" label="Email Name" key="email-name">
+            <template slot="setting-bottom">
+              <el-input type="text"
+                placeholder="Email Name"
+                name="campaignName"
+                id="campaignName"
+                v-validate.initial="'required'"
+                v-model="campaignName"
+                :class="{'input': true, 'is-danger': errors.has('campaignName') }"
+                @change="saveCampaignName"
+                @focus="checkName"
+                size="mini"
+              ></el-input>
+              <a v-if="enableFavorite" @click.prevent="toggleFavorite" href="#" title="Favorite">
+                <i class="glyphicon"
+                  v-bind:class="favoriteClass">
+                </i>
+              </a>
+              <span v-show="errors.has('campaignName')" class="help is-danger">{{ errors.first('campaignName') }}</span>
+            </template>
+          </settings-container>
 
-            <span v-show="errors.has('campaignName')" class="help is-danger">{{ errors.first('campaignName') }}</span>
-          </p>
-        </div>
+          <settings-container label="Preheader Text" v-if="enablePreheader" title="The best practice is to limit preheaders to 50 characters." key="preheader-text">
+            <template slot="setting-bottom">
+              <el-input v-model="campaignPreheader" size="mini" placeholder="Preheader Text" maxlength="140" />
+            </template>
+          </settings-container>
 
-        <div class="form-group configuration-field configuration-nomargin" v-if="enablePreheader">
-          <label for="campaignPreheader" title="The best practice is to limit preheaders to 50 characters.">Preheader Text</label>
-          <input type="text" placeholder="Preheader Text" name="campaignPreheader" class="campaignPreheader" maxlength="140" :value="form.campaignPreheader" @blur="saveSettings"/>
-        </div>
+          <settings-container label="Email Title" v-if="enableTitle" title="Email Title" key="email-title">
+            <template slot="setting-bottom">
+              <el-input size="mini" placeholder="Email Title" name="emailTitle" maxlength="140" :value="form.emailTitle" @blur="saveSettings"/>
+            </template>
+          </settings-container>
 
-        <settings-container custom-class="field-Tags" label="Tags" v-if="enableTagging">
-          <template slot="setting-bottom">
-            <el-select
-              class="width-full"
-              multiple
-              filterable
-              default-first-option
-              allow-create
-              placeholder="Choose tag"
-              v-model="form.tags"
-              @change="changeTags"
-              size="mini"
-            >
-              <el-option
-                v-for="item in tagOptions"
-                :key="item"
-                :label="item"
-                :value="item"
-                >
-              </el-option>
-            </el-select>
-          </template>
-        </settings-container>
+          <settings-container custom-class="field-Tags" label="Tags" v-if="enableTagging" key="tags">
+            <template slot="setting-bottom">
+              <el-select
+                class="width-full"
+                multiple
+                filterable
+                default-first-option
+                allow-create
+                placeholder="Choose tag"
+                v-model="form.tags"
+                @change="changeTags"
+                size="mini"
+              >
+                <el-option
+                  v-for="item in tagOptions"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                  >
+                </el-option>
+              </el-select>
+            </template>
+          </settings-container>
 
-        <settings-container label="Email Color" v-if="campaign.library_config.templateBackgroundPalettes">
+          <settings-container label="Email Color" v-if="campaign.library_config.templateBackgroundPalettes" key="email-color">
+            <template slot="setting-bottom" v-if="templatePalette">
+              <compact-picker ref="compact" v-model="templateBackgroundColor" :palette="Object.values(templatePalette.options)"></compact-picker>
+            </template>
+          </settings-container>
 
-          <template slot="setting-bottom" v-if="templatePalette">
-            <compact-picker ref="compact" v-model="templateBackgroundColor" :palette="Object.values(templatePalette.options)"></compact-picker>
-          </template>
-
-        </settings-container>
-
-        <div class="config-box-divider" v-if="enableAutoSave">
-          <label for="autoSave" class="pull-left">Auto Save</label>
-          <toggle-button class="pull-right" :value="campaign.auto_save" :sync="true" id="autoSave" active-color="#78DCD6" @change="autoSaveChange"></toggle-button>
-          <br>
-          <label v-if="!secondaryLoading" class="autosave-message pull-right">last saved: {{this.campaign.updated_at.substring(0,16)}}</label>
-          <secondary-spinner></secondary-spinner>
-        </div>
-
-        <div class="config-box-divider" v-if="enableAutoSave && $can('fix_layout')">
-          <label for="fixLayout" class="pull-left">Fix Layout</label>
-          <toggle-button class="pull-right" :value="campaign.locked" :sync="true" id="fixLayout" active-color="#78DCD6" @change="toggleLockCampaign"></toggle-button>
-        </div>
-
-      </form>
-    </div>
+          <settings-container v-if="enableAutoSave" label="Auto Save" class="last-saved" key="auto-save">
+            <template slot="setting-right">
+              <toggle-button class="pull-right" :value="campaign.auto_save" id="autoSave" @change="autoSaveChange"></toggle-button>
+              <label v-if="!secondaryLoading" class="autosave-message pull-right">last saved: {{this.campaign.updated_at.substring(0,16)}}</label>
+              <secondary-spinner></secondary-spinner>
+            </template>
+          </settings-container>
+          <settings-container  v-if="enableAutoSave && $can('fix_layout')" label="Fix Layout" key="fix-layout">
+            <template slot="setting-right">
+              <toggle-button class="pull-right" :value="campaign.locked" id="fixLayout" @change="toggleLockCampaign"></toggle-button>
+            </template>
+          </settings-container>
+        </group-container>
+      </div>
+    </b-collapse>
   </div>
 </template>
 
@@ -89,11 +92,15 @@
   import { Compact } from 'vue-color';
   import SettingsContainer from "../common/settings/containers/SettingsContainer.vue";
   import secondarySpinner from '../common/secondarySpinner.vue';
+  import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
+  import GroupContainer from "../common/containers/GroupContainer.vue";
 
   export default {
     components: {
       SettingsContainer,
       secondarySpinner,
+      LabelItemContainer,
+      GroupContainer,
       'compact-picker': Compact
     },
     name: 'CampaignConfiguration',
@@ -104,10 +111,11 @@
         enableTagging: false,
         enableAutoSave: false,
         enableLocking: false,
+        enableTitle: false,
         form: {
           campaignName: '',
-          campaignPreheader: '',
           campaignProcess: false,
+          emailTitle: '',
           tags: []
         },
         defaultTemplateBackgroundColor() {
@@ -124,6 +132,9 @@
       }
     },
     computed: {
+      editedSettings() {
+        return this.$store.getters['campaign/editedSettings'];
+      },
       locked() {
         return this.$store.getters["campaign/campaign"].campaign_data.locked;
       },
@@ -156,6 +167,25 @@
       secondaryLoading() {
         return this.$store.state.global.secondaryLoading
       },
+      campaignName: {
+        get() {
+          return this.form.campaignName;
+        },
+        set(value) {
+          this.saveCampaignName(value);
+        },
+      },
+      campaignPreheader: {
+        get() {
+          return this.editedSettings.campaignPreheader;
+        },
+        set(value) {
+          this.$store.commit('campaign/saveSetting', {
+            name: 'campaignPreheader',
+            value,
+          });
+        },
+      },
       templateBackgroundColor: {
         get() {
           return { hex: this.campaign.campaign_settings.templateBackgroundColor || this.templatePalette.default };
@@ -183,6 +213,7 @@
       this.form.tags = _.cloneDeep(this.campaign.tags);
       this.form.campaignName = this.campaign.campaign_name || '';
       this.form.campaignPreheader = this.campaign.campaign_preheader || '';
+      this.form.emailTitle = this.campaign.email_title || '';
 
       this.loadConfig();
     },
@@ -195,7 +226,7 @@
     },
     methods: {
       changeTags(values) {
-        let tags = [];
+        const tags = [];
         for (let n = 0; n < values.length; n++) {
           if (values[n].match(/[^a-z0-9-_]+/i)) {
             this.$root.$toast('Only alphanumeric characters, hyphens and underscores are allowed.', {className: 'et-error'});
@@ -206,19 +237,20 @@
         this.form.tags = tags;
         this.$store.commit('campaign/saveSetting', {
           name: 'tags',
-          value: tags
+          value: tags,
         });
       },
       validate() {
         this.$validator.validateAll().then(() => {
-          if (this.$validator.errors.items.length) {
-            _.each(this.$validator.errors.items, (err) => {
+          const errorItems = _.cloneDeep(this.$validator.errors.items);
+          if (errorItems.length) {
+            _.each(errorItems, (err) => {
               _.extend(err, {
                 scope: '',
               });
             });
 
-            this.$store.dispatch('campaign/addErrors', this.$validator.errors.items);
+            this.$store.dispatch('campaign/addErrors', errorItems);
           } else {
             this.$store.commit('campaign/clearErrorsByScope', '');
           }
@@ -233,7 +265,7 @@
         }
 
         if(e.target.name in this.form){
-          this.form[e.target.name] = e.target.value;
+          this.form[e.target.name] = value;
         }
 
         this.$store.commit('campaign/saveSetting', {
@@ -246,6 +278,7 @@
           this.globalConfig = this.$store.getters["config/config"].global_settings;
           this.enableAutoSave = this.globalConfig.auto_save === '1';
           this.enablePreheader = this.globalConfig.enable_preheader === '1' && this.campaign.library_config.preheader;
+          this.enableTitle = this.globalConfig.enable_title === '1';
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(
@@ -336,46 +369,79 @@
             {className: 'et-error'});
         });
       },
-      saveCampaignName(e) {
-        let value = e.target.value;
+      saveCampaignName(value) {
         this.form.campaignName = value;
         this.$store.commit('campaign/saveSetting', {
           name: 'campaignName',
           value
         });
-
-        this.validate();
+        this.$store.commit('campaign/setCampaignName', value);
       },
       checkName(event) {
         if (this.form.campaignName === 'Untitled Email') {
           this.form.campaignName = '';
+          this.$store.commit('campaign/setCampaignName', '');
         }
       }
     },
   }
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
+.settings-container /deep/ label{
+  font-weight: 600;
+}
 .width-full {
   width: 100%;
+}
+.last-saved /deep/ label.half {
+  width: 30%;
+}
+.last-saved /deep/ .half-setting {
+  width: 70%;
+}
+.autosave-message{
+  font-size: 10px;
+  font-style: italic;
+  padding: 0;
+  text-align: right;
+}
+.field-Tags /deep/ .el-select {
+  .el-select__input.is-mini {
+    height: 24px;
+  }
+  .el-tag__close.el-icon-close {
+    right: -2px;
+    top: -5px;
+  }
+  span.el-select__tags-text {
+    overflow: hidden;
+    max-width: 177px;
+    text-overflow: ellipsis;
+    display: inline-block;
+  }
+}
+.el-select /deep/ .is-focus{
+  .el-input__inner{
+    border-color: #78dcd6;
+  }
+}
+.el-select /deep/ .el-input__inner,
+.el-input /deep/ .el-input__inner{
+  border-radius: 2px;
+  font-weight: 300;
+  padding-left: 8px;
+  height: 26px;
+
+  &:focus{
+    border: 1px solid #78dcd6;
+  }
+}
+.el-select-dropdown.is-multiple .el-select-dropdown__item.selected{
+  color: #61bab5;
 }
 </style>
 
 <style lang="less">
-  .field-Tags .el-select {
-    .el-select__input.is-mini {
-      height: 24px;
-    }
-    .el-tag__close.el-icon-close {
-      right: -2px;
-      top: -5px;
-    }
-    span.el-select__tags-text {
-      overflow: hidden;
-      max-width: 177px;
-      text-overflow: ellipsis;
-      display: inline-block;
-    }
-  }
   .el-select-dropdown__item span {
     margin-right: 20px;
   }
@@ -389,10 +455,6 @@
   .menu-campaign {
     -ms-user-select: none !important;
 
-    .autosave-message{
-      font-size: 10px;
-      font-style: italic;
-    }
 
     ::-webkit-input-placeholder {
       color: #CCCCCC;
@@ -559,6 +621,9 @@
     }
     .glyphicon-star {
       color: #eac827;
+    }
+    .form-group {
+      margin-bottom: 0px;
     }
   }
 </style>

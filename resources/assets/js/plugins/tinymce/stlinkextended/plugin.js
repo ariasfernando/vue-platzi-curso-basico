@@ -1,6 +1,6 @@
 /**
  * plugin.js
- * 
+ *
  * currently, stlinkextended plugin is mounted always even if link option is disabled in editor settings
  * for this reason is why if (linkButton) is in several parts of the code
  */
@@ -16,7 +16,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
     }
     var linkButton = null;
 
-    function createLinkList(callback) {  
+    function createLinkList(callback) {
         return function () {
             var linkList = editor.settings.link_list;
 
@@ -154,7 +154,10 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
 
             // Validate only urls
             if (!matches.length && href.length > 0) {
-                if (href.indexOf('@') > 0 && href.indexOf('//') == -1 && href.indexOf('mailto:') == -1) {
+                if (href.indexOf('@') > 0
+                    && href.indexOf('//') == -1
+                    && href.indexOf('mailto:') == -1
+                    && editor.settings.autocomplete_mailto != false) {
                     href = 'mailto:' + href;
                 } else if (href.indexOf('http://') == -1
                     && href.indexOf('https://') == -1
@@ -196,8 +199,8 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         selectedElm = selection.getNode();
         anchorElm = dom.getParent(selectedElm, 'a[href]');
         onlyText = isOnlyTextSelected();
-
-        data.text = initialText = anchorElm ? (anchorElm.innerText || anchorElm.textContent) : selection.getContent({ format: 'text' });
+        var content = (selectedElm.textContent === selection.getContent()) ? selectedElm.outerHTML : selection.getContent();
+        data.text = initialText = anchorElm ? (anchorElm.innerText || anchorElm.textContent) : content;
         data.href = anchorElm ? dom.getAttrib(anchorElm, 'href') : '';
 
         if (anchorElm) {
@@ -334,7 +337,6 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                     size: 40,
                     autofocus: true,
                     label: 'Url',
-                    tooltip: 'Insert a valid URL',
                     onchange: urlChange,
                     onkeyup: updateText,
                     onfocusout: function (e) {
@@ -431,9 +433,11 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                                 matches = editor.settings.tag_list.filter(function (tag) {
                                     return tag.value == win.find('#href').value();
                                 });
+                                // Encode only urls
+                                editor.insertContent(dom.createHTML('a', linkAttrs, (!matches.length) ? dom.encode(data.text) : data.text));
+                            } else {
+                                editor.insertContent(dom.createHTML('a', linkAttrs, data.text));
                             }
-                            // Encode only urls
-                            editor.insertContent(dom.createHTML('a', linkAttrs, (!matches.length) ? dom.encode(data.text) : data.text));
                         } else {
                             editor.execCommand('mceInsertLink', false, linkAttrs);
                         }
@@ -446,7 +450,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                 }
 
                 // Validate the inserted url
-                if (editor.settings.link_validate_url) {
+                if (editor.settings.link_validate_url !== 'disabled') {
                     var matches = [];
 
                     if (editor.settings.tag_list) {
@@ -456,20 +460,25 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                     }
 
                     // Validate only urls
-                    if (!matches.length && !validateUrl(href)) {
-                        var errorMessage = 'Entered URL is invalid or incomplete.';
+                    if ((editor.settings.link_validate_url === 'url' || editor.settings.link_validate_url === 'urlAndDestination')
+                        && !matches.length 
+                        && !validateUrl(href)) {
+                        $('.mce-link-input #errorMessage').remove();
+
                         if (Application.utils.validate.messages.url){
                             errorMessage = Application.utils.validate.messages.url;
                         }
                         $('.mce-link-input .mce-textbox')
                             .css('cssText', 'border-color: red')
                             .focus();
-                        win.find('#href')[0].tooltip().text(errorMessage).show();
+
+                        $('.mce-link-input').append("<span id='errorMessage' class='is-danger' style='display:inherit; position:fixed'>Please, enter a valid URL.</span>");
+
                         return false;
                     }
 
                     // validateUrlExists
-                    if(Application.globals.validateUrlExists) {
+                    if(Application.globals.validateUrlExists && editor.settings.link_validate_url === 'urlAndDestination') {
                         var $input = $('.mce-link-input .mce-textbox');
                         var urlValidated = false;
                         var dataUrlValidated = $input.data("url-validated")
@@ -540,7 +549,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         shortcut: 'Meta+K',
         onclick: createLinkList(showDialog),
         stateSelector: 'a[href]',
-        onPostRender : function() { 
+        onPostRender : function() {
             linkButton = this;
             stLinksExtended.buttons[editor.id] = this;
          },
@@ -583,8 +592,8 @@ var stLinksExtended = {
 
             if (linkButton) {
                 /* If there is no selection, disable the button */
-                if (!textSelection || $.trim( textSelection ) == '') {      
-                    /* But, if button is active, it means that already has a link added, 
+                if (!textSelection || $.trim( textSelection ) == '') {
+                    /* But, if button is active, it means that already has a link added,
                     so we have to enable the button, even if there is no selection made */
                     if (stLinksExtended.buttons[editor.id].active()) {
                         linkButton.disabled(false);

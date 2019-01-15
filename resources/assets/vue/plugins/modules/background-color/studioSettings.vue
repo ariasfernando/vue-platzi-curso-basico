@@ -15,18 +15,23 @@
     watch: {
       component: {
         handler: function() {
-          switch (this.component.type) {
-            case 'button-element':
-              this.plugin.subComponent ='button';
-              break;
-            case 'image-element':
-              this.plugin.subComponent ='container';
-              break;
-            case 'text-element':
-              this.plugin.subComponent ='container';
-              break;
-            default:
-              break;
+          if(this.plugin.subComponent === undefined) {
+            switch (this.component.type) {
+              case 'button-element':
+                this.plugin.subComponent ='button';
+                break;
+              case 'image-element':
+                this.plugin.subComponent ='container';
+                break;
+              case 'text-element':
+                this.plugin.subComponent ='container';
+                break;
+              case 'divider-element':
+                this.plugin.subComponent ='container';
+                break;
+              default:
+                break;
+            }
           }
         },
         deep: true,

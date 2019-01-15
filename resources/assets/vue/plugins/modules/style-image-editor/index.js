@@ -3,8 +3,8 @@ import campaignSettings from './campaignSettings.vue';
 
 export default {
   name: 'style-image-editor',
-  title: 'style Image Editor',
-  version: '0.0.9',
+  title: 'Image Editable',
+  version: '0.0.11',
   author: 'ximena.garcia@stensul.com',
   target: ['image'],
   studioSettings,
@@ -60,7 +60,7 @@ export default {
         size_minHeight: {
           label: 'Min. Height',
           key: 'minHeight',
-          value: 100,
+          value: 1,
           type: 'number',
           step: 1,
         },
@@ -153,6 +153,12 @@ export default {
           value: false,
           type: 'switch',
         },
+        square: {
+          label: 'Force square output',
+          key: 'square',
+          value: false,
+          type: 'switch',
+        },
         round: {
           label: 'Circle Cropping',
           key: 'cropper_roundCrop',
@@ -233,6 +239,21 @@ export default {
           key: 'url',
           value: '',
           type: 'text',
+        },
+        overlay_gallery: {
+          label: 'Media Gallery',
+          key: 'image_gallery',
+          type: 'switch',
+          value: false,
+          config: {
+            set_images: {
+              label: 'Image Set',
+              key: 'images',
+              value: null,
+              type: 'select',
+              options: [],
+            },
+          },
         },
         overlay_change: {
           label: 'Change Image',
@@ -318,10 +339,16 @@ export default {
           value: false,
           type: 'switch',
         },
+        overlay_follow: {
+          label: 'Stick to cropper',
+          key: 'followCropper',
+          value: false,
+          type: 'switch',
+        },
         overlay_description: {
           label: 'Description',
           key: 'description',
-          value: 'Text',
+          value: 'Icon',
           type: 'text',
         },
       },
@@ -448,4 +475,5 @@ export default {
   data: {},
   enabled: false,
   settings: true,
+  runBackground: true,
 };

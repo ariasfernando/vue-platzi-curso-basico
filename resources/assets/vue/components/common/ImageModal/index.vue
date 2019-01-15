@@ -22,7 +22,7 @@
                     </button>
                     <input ref="input" type="file" name="file" style="display: none;" />
                   </div>
-                  <div v-if="params.library">
+                  <div v-if="params.library && images.length > 0">
                     <button type="button" @click="clickGallery">
                       <i class="fa fa-picture-o" aria-hidden="true"></i>
                       <p>Media Gallery</p>
@@ -94,13 +94,13 @@
 </template>
 
 <script>
-import each from 'lodash/each';
+import _ from 'lodash';
 import styleImageEditor from 'stensul-sie-vue';
 import imageHelper from './image-helper';
 import sieHelper from './sie-helper';
 
 export default {
-  props: ['config', 'libraryImages', 'data'],
+  props: ['config', 'libraryImages', 'overlayImages' ,'data'],
   components: {
     styleImageEditor
   },
@@ -115,7 +115,7 @@ export default {
       currentImage: null,
       sieOptions: {},
       isDisabled: false,
-      newImage: true
+      isNewImage: true
     };
   },
   computed: {
@@ -184,6 +184,15 @@ export default {
         sieOptions.preset = sieHelper.completeUrlPath(this.$_app.config.imageUrl, sieOptions.preset);
       }
 
+      const overlayImages = this.overlayImages || [];
+      
+      if(overlayImages.length > 0){
+        const i = sieOptions.preset.find(e => {
+          return e.type === 'sie-plugin-image-overlay';
+        });
+        _.set(i, 'options.plugin.image.gallery.images', overlayImages);
+      }
+
       this.sieOptions = sieOptions;
       if (typeof this.$refs.sie !== 'undefined') {
         this.$refs.sie.close();
@@ -239,9 +248,10 @@ export default {
       if (typeof this.$refs.sie !== 'undefined') {
         this.$refs.sie.close();
       }
+      this.$refs.input.value = '';
       this.sieOptions = {};
       this.currentImage = null;
-      this.newImage = true;
+      this.isNewImage = true;
       this.isDisabled = false;
       this.page = {
         one: true,
@@ -265,7 +275,7 @@ export default {
         image: data.img
       });
       data.images = images;
-      data.newImage = this.newImage;
+      data.isNewImage = this.isNewImage;
       this.$emit('submitImage', data);
     },
     submit() {
@@ -305,7 +315,7 @@ export default {
         two: false,
         three: true
       };
-      this.newImage = false;
+      this.isNewImage = false;
     }
     this.generateSieOptions();
   },
@@ -414,7 +424,6 @@ export default {
     }
   }
 }
-
 .url {
   max-width: 700px;
   padding-top: 30px;

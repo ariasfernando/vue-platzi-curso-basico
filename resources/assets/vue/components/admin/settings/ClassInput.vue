@@ -2,7 +2,7 @@
   <settings-container label="Class Input">
     <template slot="setting-bottom">
       <el-select
-      class="width-full"
+      class="width-full class-input"
       multiple
       filterable
       allow-create
@@ -56,8 +56,19 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .width-full {
   width: 100%;
+}
+.class-input /deep/ .el-input__inner{
+  border-radius: 2px;
+  padding-left: 8px;
+
+  &:focus{
+    border: 1px solid #78dcd6;
+  }
+}
+.el-select-dropdown__item.selected{
+  color: #78dcd6!important;
 }
 </style>

@@ -1,3 +1,4 @@
+import { hooks } from 'customer';
 /*
 * -- CAMPAIGN CLEANER ---
 */
@@ -13,25 +14,33 @@ export default {
     ],
     // Array of attributes to clean from final html
     attrSelectors: [
-      'data-type',
-      'data-params',
-      'data-modal',
-      'data-medium-element',
-      'data-module-id',
-      'data-placeholder',
-      'contenteditable',
-      'spellcheck',
       'aria-multiline',
-      'role',
-      'truncate',
-      'singleline',
-      'data-mce-bogus',
+      'column-id',
+      'column',
+      'component-id',
+      'contenteditable',
+      'context',
+      'data-column-id',
       'data-key',
+      'data-mce-bogus',
       'data-mce-href',
       'data-mce-style',
+      'data-medium-element',
+      'data-modal',
+      'data-module-id',
+      'data-params',
+      'data-placeholder',
+      'data-type',
+      'draggable',
+      'element-id',
       'id',
+      'module-id-instance',
+      'module-id',
       'module',
-      'context'
+      'role',
+      'singleline',
+      'spellcheck',
+      'truncate',
     ],
     blockSelectors: [
       '.module-toolbar',
@@ -39,7 +48,7 @@ export default {
       '.st-remove-element',
     ],
   },
-  
+
   clean(selector) {
     let $canvas = null;
     let $cleanedHtml = null;
@@ -48,7 +57,11 @@ export default {
 
     // Clone content
     $cleanedHtml = $canvas.clone(true);
-    
+
+    if (typeof hooks === 'object' && _.has(hooks, 'campaignCleaner.preCleanHook')) {
+      $cleanedHtml = hooks.campaignCleaner.preCleanHook($cleanedHtml);
+    }
+
     // Remove attr tags function clean
     const $removeAttr = this.removeDataHtml($cleanedHtml, this.cleanOptions.attrSelectors, 'attr');
     // Function removeDataHtml fail attributes
@@ -68,45 +81,34 @@ export default {
       $cleanedHtml.find(selector).remove();
     });
 
-    // Remove wrappers
-    const $wrapperElementRemove = $cleanedHtml.find('.stx-wrapper');
-
-    $.each($wrapperElementRemove, (i, element) => {
-      const $element = $(element);
-
-        // Replace element with the content element.
-      if ($element.is('table')) {
-        $element.replaceWith($element.find('td:first').html());
-      } else {
-        $element.replaceWith($element.html());
-      }
-    });
+    // Remove wrappers element ( .stx-wrapper )
+    $cleanedHtml = Application.utils.removeWrappers($cleanedHtml);
 
     // Remove every class starting with "stx-"
     $cleanedHtml.find("[class*=' stx-'], [class^='stx-']").removeClass((index, css) => (css.match(/(^|\s)stx-\S+/g) || []).join(' '));
-    
+
     // Remove attr class if it's empty.
     $cleanedHtml.find("[class='']").removeAttr('class');
-    
+
     // Remove attr style if it's empty.
     $cleanedHtml.find("[style='']").removeAttr('style');
-    
+
+    // Remove attr bgcolor if it's empty.
+    $cleanedHtml.find("[bgcolor='']").removeAttr('bgcolor');
+
     // Remove tooltip
     $cleanedHtml.find('.actions-buttons-tooltip').remove();
-    
+
     // Remove toolbox Tinymce
     $cleanedHtml.find('.text-overlay-toolbox').remove();
-    
+
     // Convert data-contenteditable-href to href
     if ($cleanedHtml.find('[data-contenteditable-href]').length) {
       const $targetContenteditableHref = $cleanedHtml.find('[data-contenteditable-href]');
-      
+
       $.each($targetContenteditableHref, (key, element) => {
-        const tempDataContenteditableHref = $(element).data('contenteditable-href');
-        // Add href
-        $(element).attr('href', tempDataContenteditableHref);
-        // Remove data-contenteditable-href 
-        $(element).removeAttr('data-contenteditable-href'); 
+        const content = element.outerHTML.replace('data-contenteditable-href', 'href');
+        element.outerHTML = content;
       });
     }
 
@@ -117,41 +119,60 @@ export default {
       $.each($targetDataTag, (key, element) => {
         const tempDataTag = $(element).data('tag-before');
         const $element = $(element);
-        
+
         // Add tag
         $element.before(tempDataTag);
-        
+
         // Remove data-tag-before
         $element.removeAttr('data-tag-before');
       });
-    };
+    }
 
     // Convert and add data-persist-styles to css property inline in styles attribute
     if ($cleanedHtml.find('[data-persist-styles]').length) {
-      const $toPersistArray = $cleanedHtml.find("[data-persist-styles]");
+      const $toPersistArray = $cleanedHtml.find('[data-persist-styles]');
       $.each($toPersistArray, (i, element) => {
         const $element = $(element);
         // Add inline data-saved CSS hacks
         this.addCSSHacks(
           $element,
-          Application.utils.objToCss($element.data('persist-styles'))
+          Application.utils.objToCss($element.data('persist-styles')),
         );
         $element.removeAttr('data-persist-styles');
       });
     }
+    // Remove Comment Divs
+    $cleanedHtml = this.removeCommentDivs($cleanedHtml);
+
+    // Skip <% %> Tags
+    if ($cleanedHtml.find('a').length) {
+      const $links = $cleanedHtml.find('a');
+      $.each($links, (i, element) => {
+        const $element = $(element);
+        const href = $element.attr('href');
+        if (href) {
+          $element.attr('href', href.replace('<%', 'LT%').replace('%>', '%GT'));
+        } else {
+          $element.replaceWith($element.html());
+        }
+      });
+    }
+
+    $cleanedHtml = this.addMediaQueryHack($cleanedHtml);
+
     // Convert special chars to html entities ---
     $cleanedHtml = this.encodeHtmlEntities($cleanedHtml);
     return this.charConvert($cleanedHtml.html());
   },
-  
+
   // display plain text modal.
   removeDataHtml($html, list, type) {
     if (!$html) {
       return false;
     }
-    
+
     const $editedHtml = $html;
-    
+
     // Remove data tags
     for (let i = 0; i < list.length; i++) {
       switch (type) {
@@ -163,43 +184,49 @@ export default {
           break;
       }
     }
-    
+
     return $editedHtml;
   },
 
   addCSSHacks($target, newStyles) {
       newStyles.replace(';','');
-      var originalStyles = $target.attr('style');
-      var originalStylesArray = originalStyles.split(';');
+    const originalStyles = $target.attr('style');
+    let originalStylesArray = originalStyles.split(';');
 
       if(!originalStyles.includes(newStyles)){
           originalStylesArray.push(newStyles);
       }
 
-      for (var i = 0; i < originalStylesArray.length; i++) {
+    for (let i = 0; i < originalStylesArray.length; i++) {
           originalStylesArray[i] = originalStylesArray[i].replace(' ','');
       }
 
-      originalStylesArray = originalStylesArray.filter(function(item) {
-          return item !== '';
-      })
+    originalStylesArray = originalStylesArray.filter(item => item !== '');
       newStyles = originalStylesArray.join('; ');
       $target.attr('style', newStyles);
   },
-  
+
   encodeHtmlEntities($cleanedHtml) {
     const all = $cleanedHtml.find('p, span, div, h1, h2, h3, h4, h5, a, td');
-    
+
     $.map(all, (el, index) => {
       const textConnvert = this.charConvertHtmlEntities($(el).html());
       if (el.innerText.length > 0) {
         $(el).text(textConnvert);
       }
     });
-    
+
     return $cleanedHtml;
   },
-  
+
+  removeCommentDivs($cleanedHtml) {
+    const all = $cleanedHtml.find('.st-comment');
+    $.map(all, (el) => {
+      $(el).replaceWith($(el).html());
+    });
+    return $cleanedHtml;
+  },
+
   charConvertHtmlEntities(str) {
     const codesToChars = {
       '&amp;': '&#38;',
@@ -229,18 +256,19 @@ export default {
       '℠': '&#8480;',
       '™': '&#8482;',
     };
-    
+
     const codesToCharsTags = {
       '&quot;': "'",
       '&#039;': "'",
+      '<!---->': '',
     };
-    
+
     const rex = new RegExp('(<[^>]*>)|(&[a-zA-Z0-9#]+;)', 'gm');
     const re = new RegExp(Object.keys(codesToChars).join('|'), 'gi');
     const reTags = new RegExp(Object.keys(codesToCharsTags).join('|'), 'gi');
     const parts = str.split(rex);
     let res = '';
-    
+
     for (let i = 0; i < parts.length; i++) {
       if (typeof parts[i] !== 'undefined') {
         // only text
@@ -255,7 +283,7 @@ export default {
     }
     return res;
   },
-  
+
   /*
   * Convert especial characters
   */
@@ -443,12 +471,14 @@ export default {
       œ: '&#156;',
       Ú: '&#218;',
       '&': '&amp;',
+      '&lt;%': 'LT%',
+      '%&gt;': '%GT',
       '<': '&lt;',
       '>': '&gt;',
       '£': '&pound;',
       '℠': '&#x2120;',
     };
-    
+
     $.each(chars, (key, value) => {
       if (inverse) {
         str = str.replace(new RegExp(key, 'g'), value);
@@ -456,8 +486,28 @@ export default {
         str = str.replace(new RegExp(value, 'g'), key);
       }
     });
-    
-    return str;
-  }
 
+    return str;
+  },
+  /*
+  * Hack for devices with media queries unsupported
+  */
+  addMediaQueryHack(htmlStructure) {
+    const width = htmlStructure.find('.st-wrapper-table').width() || 600;
+    if (!htmlStructure.hasClass('st-hide-hack')) {
+      const $hack = $(`<tr>
+              <td class="st-hide-hack">
+                  <table cellpadding="0" cellspacing="0" border="0" align="center" width="${width}">
+                      <tr>
+                          <td cellpadding="0" cellspacing="0" border="0" height="1" style="background-color:#ffffff; line-height:1px; height: 1px; min-width: ${width}px;">
+                              <img src="${Application.globals.baseUrl}/_common/images/en_us/spacer.gif" height="1" width="${width}" style="max-height:1px; min-height:1px; display:block; width:${width}px; min-width:${width}px; border: 0;"/>
+                          </td>
+                      </tr>
+                  </table>
+              </td>
+          </tr>`)[0];
+      htmlStructure.find('.st-wrapper-table').append($hack);
+    }
+    return htmlStructure;
+  },
 };

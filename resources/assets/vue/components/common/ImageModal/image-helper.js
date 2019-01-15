@@ -50,7 +50,7 @@ function getBase64Img(image) {
     reader.addEventListener('load', () => {
       resolve(reader.result);
     }, false);
-    if (typeof image !== 'object' && image.includes('http')) {
+    if (typeof image !== 'object' && RegExp('^https?://').test(image)) {
       loadImage(image)
         .then((img) => {
           reader.readAsDataURL(img);

@@ -1,106 +1,99 @@
 <template>
-  <div :class="'plugin-wrapper-inner plugin-' + plugin.name" v-if="component">
-    <label>{{ plugin.title }}</label>
-    <el-color-picker v-model="colors" color-format="hex"></el-color-picker>
-    <el-input
-      size="mini"
-      v-model="colors"
-      placeholder="transparent"
-      class="col-sm-4" 
-      disabled="disabled"
-    >
-    </el-input>
-  </div>
+  <settings-container :label="plugin.title" custom-class="generic-color">
+    <template slot="setting-right">
+      <div class="input-text-hex" @click="openColorPicker()">
+        <el-input
+          v-model="colors"
+          size="mini"
+          placeholder="transparent"
+          disabled="disabled" />
+      </div>
+      <el-color-picker :ref="`generic-color${instance}`" v-model="colors" color-format="hex" />
+    </template>
+  </settings-container>
 </template>
 
 <script>
-import { Compact } from "vue-color";
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {
-  props: ["name", "plugin"],
-  components: {
-    "compact-picker": Compact
-  },
-  computed: {
-    currentComponent() {
-      return this.$store.getters["campaign/currentComponent"];
-    },
-    component() {
-      let component = {};
-      if (Object.keys(this.currentComponent).length !== 0) {
-        const moduleId = this.currentComponent.moduleId;
-        const columnId = this.currentComponent.columnId;
-        const componentId = this.currentComponent.componentId;
-
-        component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
-      }
-      return component;
-    },
-    colors: {
-      get() {
-        return this.component[this.plugin.subComponent].attribute.bgcolor;
-      },
-      set(value) {
-        if (!Application.utils.validateHexVal(value)) {
-          value = value === null ? "" : Application.utils.rgbToHex(value);
-        }
-        this.saveComponentProperty("bgcolor", value);
-      }
-    }
-  },
+  components: { SettingsContainer },
+  mixins: [pluginCampaignMixin],
   data() {
     return {
-      defaultColors: this.plugin.config.defaultColors
+      instance: Math.floor(100000 + (Math.random() * 900000)),
     };
   },
+  computed: {
+    colors: {
+      get() {
+        return this.element[this.plugin.subComponent].attribute.bgcolor;
+      },
+      set(newValue) {
+        let value = newValue;
+        if (!Application.utils.validateHexVal(newValue)) {
+          value = newValue === null ? '' : Application.utils.rgbToHex(newValue);
+        }
+        this.saveAttributeInThisElement({ property: 'bgcolor', value });
+      },
+    },
+  },
   methods: {
-    saveComponentProperty(property, value) {
-      const payload = {
-        moduleId: this.currentComponent.moduleId,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        subComponent: this.plugin.subComponent,
-        link: "attribute",
-        property,
-        value: value
-      };
-
-      this.$store.commit("campaign/saveComponentProperty", payload);
-    }
-  }
+    openColorPicker() {
+      this.$refs[`generic-color${this.instance}`].$el.children[0].click();
+    },
+  },
 };
 </script>
-<style lang="less">
-.plugin-wrapper-inner.plugin-background-color {
-  .el-input--mini {
-    width: 86px;
-    padding: 6px 0 0 0;
+<style lang="scss" scoped>
+.el-color-picker {
+  float: right;
+  height: 28px;
+}
+.el-color-picker /deep/ .el-color-picker__icon {
+  &:before {
+    text-shadow: 0px 1px #666666;
   }
-  .el-color-picker__trigger {
-    padding: 3px;
-    height: 28px;
-    width: 34px;
-    border-right: 0;
-    border-top-left-radius: 4px;
+}
+.input-text-hex {
+  width: calc(100% - 34px);
+  float: left;
+}
+.generic-color /deep/ .el-input {
+  padding: 0;
+}
+.generic-color /deep/ .el-color-picker__trigger {
+  padding: 0px;
+  height: 26px;
+  width: 34px;
+  border-left: 0;
+  border-top-right-radius: 2px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 2px;
+
+  .el-color-picker__color {
+    border: none;
+  }
+}
+.generic-color /deep/ .el-input {
+  .el-input__inner {
+    border-top-left-radius: 2px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    border-bottom-left-radius: 4px;
+    border-bottom-left-radius: 2px;
+    font-weight: 300;
+    text-align: left;
   }
-  .el-color-picker {
-    padding: 6px 0 0 0;
-    float: left;
-  }
-  input.el-input__inner {
-    text-align: center;
-  }
-  .el-input.is-disabled .el-input__inner {
-    background-color: transparent !important;
+  &.is-disabled .el-input__inner {
+    background-color: #fff;
     color: #666666;
     cursor: auto;
     padding: 0;
-    font-size: 12px !important;
-    width: 87px !important;
-    border: 1px solid #dcdfe6 !important;
+    font-size: 12px;
+    text-align: center;
+    height: 26px;
   }
 }
 </style>

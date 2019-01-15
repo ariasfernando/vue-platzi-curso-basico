@@ -21,7 +21,8 @@ export default {
       selectedCampaignId: null,
       baseUrl: Application.globals.baseUrl,
       widthPreview: Application.globals.emailWidth || 660,
-      previewSrc: null
+      previewSrc: null,
+      askDeleteMessage: 'There are no emails to show in this list',
     }
   },
   props: {
@@ -121,8 +122,11 @@ export default {
         this.$emit('add-search-tag', tag);
       }
     },
-    askToDeleteCampaign(campaignId) {
-      this.selectedCampaignId = campaignId;
+    askToDeleteCampaign(campaign) {
+      this.selectedCampaignId = campaign._id;
+      if (campaign.status === 1 && campaign.has_active_proof === true) {
+        this.askDeleteMessage = 'Delete the campaign and send emails to all reviewers?';
+      }
       this.showModal = true;
     },
     askToEditCampaign(campaignId) {
@@ -175,6 +179,14 @@ export default {
       }
       return star;
     },
+    isArchive: function(data) {
+      if (!data.archive) {
+        var htmlElem = '<img src="'+this.$_app.config.imageUrl+'archive.svg" style="padding-bottom: 5px;"></img>';
+      } else {
+        var htmlElem = '<img src="'+this.$_app.config.imageUrl+'unarchive.svg" style="padding-bottom: 5px;"></img>';
+      }
+      return htmlElem;
+    },
     doFavorite: function(campaignId) {
 
       let request = Application.utils.doAjax( "/campaign/favorite", { dataType: "json", data: { campaign_id: campaignId }});
@@ -196,6 +208,32 @@ export default {
         );
       });
 
+    },
+    doArchive: function(campaignId) {
+      let request = Application.utils.doAjax( "/campaign/archive", { dataType: "json", data: { campaign_id: campaignId }});
+      let _this = this;
+      _this.$store.commit("global/setLoader", true);
+
+      // Ajax: On Success
+      request.done(function(response){
+        _this.$emit('refresh-campaigns', _this.type);
+        _this.$store.commit("global/setLoader", false);
+      });
+
+      // Ajax: On Fail
+      request.fail(function(err) {
+        _this.$store.commit("global/setLoader", false);
+        _this.$root.$toast(
+          'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
+          {className: 'et-error'}
+        );
+      });
+    },
+    wasArchive: function(archive) {
+      if (archive) {
+        return false;
+      }
+      return true;
     },
     highlightTag: function(tag) {
       if (this.config.search_settings.highlight_matches === true) {

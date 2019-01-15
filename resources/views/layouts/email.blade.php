@@ -2,7 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 xmlns:v="urn:schemas-microsoft-com:vml"
 xmlns:o="urn:schemas-microsoft-com:office:office">
-	<?php echo "<he"; ?><?php echo "ad>"; ?>
+	<?php
+	/**
+	 * the following hack prevents that tools like
+	 * NEWRELICK or alike inject a code that will mess with
+	 * the markup when &lt;head&gt; is found.
+	 * DO NOT CHANGE IT. See issue ST-3322
+	 */
+	echo "<he"; ?><?php echo "ad>"; ?>
 	
 		<!--if gte mso 9><xml>
 			<o:OfficeDocumentSettings>
@@ -20,7 +27,11 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 		<meta name="HandheldFriendly" content="true"/>
 		<meta name="MobileOptimized" content="320"/>
 		<meta name="viewport" content="width=device-width" />
-		<title></title>
+		@if (config('global_settings.enable_title') && isset($params['campaign_data']['email_title']))
+		<title>{{ $params['campaign_data']['email_title'] }}</title>
+        @else
+        <title></title>
+        @endif
 
 		@if(isset($params['library_config']['externalCssLink']) && !empty($params['library_config']['externalCssLink']))
 			<link href="{{ $params['library_config']['externalCssLink'] }}" rel="stylesheet">
@@ -28,9 +39,20 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 
 		@include('layouts.partials.email_styles')
 
-	<?php echo "</he"; ?><?php echo "ad>"; ?>
+	<?php
+	/**
+	 * the following hack prevents that tools like
+	 * NEWRELICK or alike inject a code that will mess with
+	 * the markup when &lt;head&gt; is found.
+	 * DO NOT CHANGE IT. See issue ST-3322
+	 */
+	 echo "</he"; ?><?php echo "ad>"; ?>
 
 	<body class="st-email-body">
+		@if (isset($params['library_config']['prependHtml']))
+			<?php echo $params['library_config']['prependHtml']; ?>
+		@endif
+		
 		@if (isset($params['campaign_data']['campaign_fonts']))
 			@if (isset($params['campaign_data']['campaign_fonts']['custom']))
 				@if (count($params['campaign_data']['campaign_fonts']['custom']) > 0)
@@ -54,7 +76,7 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
                 {{-- CAMPAIGN PREHEADER --}}
                 <div style="font-size:0px; display:none; visibility:hidden; opacity:0; color:transparent; max-height:0px; height:0; width:0; mso-hide:all;">{{ $params['campaign_data']['campaign_preheader'] or '' }}
                     @if ((190 - mb_strlen($params['campaign_data']['campaign_preheader']) > 0))
-                        {{ str_repeat('&zwnj;&nbsp;', 190 - mb_strlen($params['campaign_data']['campaign_preheader'])) }}
+					{!! str_repeat('&zwnj;&nbsp;', 190 - mb_strlen($params['campaign_data']['campaign_preheader'])) !!}
                     @endif
                 </div>
             @endif
@@ -62,5 +84,8 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
             {{-- PREHEADER NOT ENABLED, USE DE FACTO FROM MODULES --}}
         @endif
 <?= $params['body_html']; ?>
+		@if (isset($params['library_config']['appendHtml']))
+			<?php echo $params['library_config']['appendHtml']; ?>
+		@endif
 	</body>
 </html>

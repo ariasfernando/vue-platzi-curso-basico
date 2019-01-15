@@ -1,109 +1,102 @@
 <template>
-  <div class="component-module-background-color plugin-wrapper-inner">
-    <label class="half-style-setting">{{ plugin.title }}</label>
-    <el-color-picker ref="compact" v-model="colors" color-format="hex"></el-color-picker>
-    <el-input
-      size="mini"
-      v-model="colors"
-      placeholder="transparent"
-      class="col-sm-4" 
-      disabled="disabled"
-    >
-    </el-input>
-  </div>
+  <settings-container custom-class="generic-color" :label="plugin.title">
+    <template slot="setting-right">
+      <div class="input-text-hex" @click="openColorPicker()">
+        <el-input
+          v-model="colors"
+          size="mini"
+          placeholder="transparent"
+          disabled="disabled" />
+      </div>
+      <el-color-picker :ref="`generic-color${instance}`" v-model="colors" color-format="hex" />
+    </template>
+  </settings-container>
 </template>
 
 <script>
-import { Compact } from "vue-color";
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {
-  props: ["name", "plugin", "moduleId"],
-  components: {
-    "compact-picker": Compact
-  },
-  computed: {
-    currentModule() {
-      return this.$store.getters["campaign/currentModule"];
-    },
-    module() {
-      return this.$store.getters["campaign/modules"][this.currentModule];
-    },
-    colors: {
-      get() {
-        let value = this.module.structure.attribute && this.module.structure.attribute.bgcolor ? this.module.structure.attribute.bgcolor : this.plugin.config.defaultValue ;
-        return value;
-      },
-      set(value) {
-        if (!Application.utils.validateHexVal(value)) {
-          value = value === null ? "" : Application.utils.rgbToHex(value);
-        }
-        const payload = {
-          plugin: this.name,
-          moduleId: this.currentModule,
-          attribute: "bgcolor",
-          attributeValue: value
-        };
-        this.$store.commit("campaign/saveModuleAttribute", payload);
-      }
-    }
-  },
+  components: { SettingsContainer },
+  mixins: [pluginCampaignMixin],
+  props: ['name', 'plugin', 'moduleId'],
   data() {
     return {
-      defaultColors: this.plugin.config.defaultColors
+      instance: Math.floor(100000 + (Math.random() * 900000)),
     };
   },
-  mounted() {
-    this.$refs.compact.defaultColors = this.defaultColors;
-  }
+  computed: {
+    colors: {
+      get() {
+        const value =
+          this.module.structure.attribute &&
+          this.module.structure.attribute.bgcolor
+            ? this.module.structure.attribute.bgcolor
+            : this.plugin.config.defaultValue;
+        return value;
+      },
+      set(newValue) {
+        let value = newValue;
+        if (!Application.utils.validateHexVal(newValue)) {
+          value = newValue === null ? '' : Application.utils.rgbToHex(newValue);
+        }
+        this.saveAttributeInThisElement({ property: 'bgcolor', value });
+      },
+    },
+  },
+  methods: {
+    openColorPicker() {
+      this.$refs[`generic-color${this.instance}`].$el.children[0].click();
+    },
+  },
 };
 </script>
-<style lang="less" scoped>
-.half-style-setting {
-  width: 50%;
-  float: left;
-  position: relative;
-  & + .half-style-setting {
-    padding-left: 15px;
-  }
-  &.padding-top {
-    padding-top: 5px;
-  }
-  &.float-right {
-    float: right;
+<style lang="scss" scoped>
+.el-color-picker {
+  float: right;
+  height: 28px;
+}
+.el-color-picker /deep/ .el-color-picker__icon {
+  &:before {
+    text-shadow: 0px 1px #666666;
   }
 }
-</style>
-<style lang="less">
-.component-module-background-color {
-  .el-input--mini {
-    width: 86px;
-    padding: 6px 0 0 0;
+.input-text-hex {
+  width: calc(100% - 34px);
+  float: left;
+}
+.generic-color /deep/ .el-input {
+  padding: 0;
+}
+.generic-color /deep/ .el-color-picker__trigger {
+  padding: 0px;
+  height: 26px;
+  width: 34px;
+  border-left: 0;
+  border-top-right-radius: 2px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 2px;
+  .el-color-picker__color {
+    border: none;
   }
-  .el-color-picker__trigger {
-    padding: 3px;
-    height: 28px;
-    width: 34px;
-    border-right: 0;
-    border-top-left-radius: 4px;
+}
+.generic-color /deep/ .el-input {
+  .el-input__inner {
+    border-top-left-radius: 2px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    border-bottom-left-radius: 4px;
+    border-bottom-left-radius: 2px;
   }
-  .el-color-picker {
-    padding: 6px 0 0 0;
-    float: left;
-  }
-  input.el-input__inner {
-    text-align: center;
-  }
-  .el-input.is-disabled .el-input__inner {
-    background-color: transparent;
+  &.is-disabled .el-input__inner {
+    background-color: #fff;
     color: #666666;
     cursor: auto;
     padding: 0;
     font-size: 12px;
-    width: 87px;
-    border: 1px solid #dcdfe6;
+    text-align: center;
+    height: 26px;
   }
 }
 </style>

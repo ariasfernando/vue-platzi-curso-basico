@@ -4,20 +4,22 @@ function imageDefault() {
     type: 'image-element',
     container: {
       style: {},
-      styleOption: {},
+      styleOption: {
+        enableElement: true,
+      },
       attribute: {},
     },
     image: {
       attribute: {
-        placeholder: 'default/placeholder-square.jpg',
+        placeholder: '',
         href: '',
-        alt: 'Image',
-        title: 'Image',
         width: '100%',
         height: 'auto',
       },
       style: {},
-      styleOption: {},
+      styleOption: {
+        noMobileStretch: true,
+      },
     },
     plugins: {},
     data: {},

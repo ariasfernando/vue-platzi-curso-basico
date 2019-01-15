@@ -5,21 +5,27 @@ module.exports = {
     let errorFound = false;
 
     // Check if all images are uploaded.
-    let nonEditedImages = $(selector).find("img[src*='/default/']:visible");
+    const nonEditedImages = $(selector).find("img[src*='/default/']:visible, img[src*='base64,']");
 
     if (nonEditedImages.length) {
-        $.each(nonEditedImages, function (index, img) {
-            $(img).parent().addClass("default-image-error");
-        });
+      $.each(nonEditedImages, function (index, img) {
+        $(img).parent().addClass('default-image-error');
+      });
 
-        errorFound = true;
+      errorFound = true;
     }
 
     return errorFound;
   },
-  modulesErrors(selector){
+  modulesErrors(selector) {
     if ($(selector).find('div.default-module-error').length > 0) {
       $(selector).find('div.default-module-error').show();   
     }
-  }
+  },
+  tinyErrors(selector) {
+    if ($(selector).find('div.tinymce-error').length > 0) {
+      return true;
+    }
+    return false;
+  },
 };

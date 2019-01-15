@@ -1,85 +1,53 @@
 <template>
-  <div :class="'plugin-wrapper-inner plugin-' + plugin.name" v-if="component">
-    <label>{{ plugin.config.options.bgcolor.label }}</label>
-    <compact-picker ref="compact" v-model="color" :palette="palette"></compact-picker>
-  </div>
+  <settings-container :label="plugin.config.options.bgcolor.label" class="plugin-palette">
+    <template slot="setting-right">
+      <compact ref="compact" v-model="color" :palette="palette" />
+    </template>
+  </settings-container>
 </template>
 
 <script>
-  import { Compact } from 'vue-color'
+import { Compact } from 'vue-color';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 
-  export default {
-    props: ['name', 'plugin'],
-    components: {
-      'compact-picker': Compact
+export default {
+  mixins: [pluginCampaignMixin],
+  components: {
+    SettingsContainer,
+    Compact,
+  },
+  computed: {
+    palette() {
+      return this.plugin.config.options.bgcolor.palette.map(
+        color =>
+          color[0] !== '#' ? `#${color.toUpperCase()}` : color.toUpperCase()
+      );
     },
-    computed: {
-      currentComponent() {
-        return this.$store.getters["campaign/currentComponent"];
-      },
-      component() {
-        let component = {};
-        if (Object.keys(this.currentComponent).length !== 0) {
-          const moduleId = this.currentComponent.moduleId;
-          const columnId = this.currentComponent.columnId;
-          const componentId = this.currentComponent.componentId;
-
-          component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
-        }
-        return component;
-      },
-      palette() {
-        return this.plugin.config.options.bgcolor.palette.map( color => color[0] !== "#" ? `#${color.toUpperCase()}` : color.toUpperCase());
-      },
-      color: {
-        get() {
-          return { hex: this.component[this.plugin.subComponent].attribute ? this.component[this.plugin.subComponent].attribute.bgcolor : this.component.attribute.bgcolor};
-        },
-        set(value) {
-          this.updateValue('bgcolor', value.hex);
-        }
-      },
-    },
-    data() {
-      return {
-        
-      }
-    },
-    methods: {
-      updateValue(property, value) {
-        const payload = {
-          plugin: this.name,
-          moduleId: this.currentComponent.moduleId,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          subComponent:this.plugin.subComponent,
-          link:'attribute',
-          property,
-          value,
+    color: {
+      get() {
+        return {
+          hex: this.element[this.plugin.subComponent].attribute.bgcolor,
         };
-
-        this.$store.commit('campaign/saveComponentProperty', payload);
-      }
-    }
-  }
+      },
+      set(value) {
+        this.saveAttributeInThisElement({ property: 'bgcolor', value: value.hex });
+      },
+    },
+  },
+};
 </script>
-<style lang="less">
-.plugin-wrapper-inner.plugin-background-color {
-  .el-input--mini {
-    width: 86px;
-    padding: 6px 0 0 0;
+<style lang="scss" scoped>
+.plugin-palette /deep/ {
+  .vc-compact-color-item {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px !important;
   }
-  input.el-input__inner {
-    text-align: center;
-  }
-  .el-input.is-disabled .el-input__inner {
-    background-color: transparent!important;
-    color: #666666;
-    cursor: auto;
-    padding: 0;
-    font-size: 12px!important;
-    width: 87px!important;
-    border: 1px solid #dcdfe6!important;
+  .vc-compact {
+    padding-top: 5px;
+    padding-left: 6px;
+    border: 1px solid #dddddd !important;
   }
 }
 </style>

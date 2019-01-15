@@ -37,6 +37,8 @@ return [
         'title' => 'Responsys',
         'class' => 'Responsys',
         'default_path' => '/contentlibrary/' . env('API_RESPONSYS_PATH', ''),
+        'folders' => [
+        ],
         'auth' => [
             'type' => 'POST',
             'url' => '/rest/api/v1.1/auth/token',
@@ -138,8 +140,8 @@ return [
     'silverpop' => [
         'title' => 'Silverpop',
         'class' => 'Silverpop',
-        'token_endpoint' => 'https://api2.ibmmarketingcloud.com/oauth/token',
-        'endpoint' => 'https://api2.ibmmarketingcloud.com/XMLAPI',
+        'token_endpoint' => env('API_SILVERPOP_BASE_URL', '').'/oauth/token',
+        'endpoint' => env('API_SILVERPOP_BASE_URL', '').'/XMLAPI',
         'client_id' => env('API_SILVERPOP_USERNAME', ''),
         'client_secret' => env('API_SILVERPOP_PASSWORD', ''),
         'app_name' => env('API_SILVERPOP_APP_NAME', ''),
@@ -292,5 +294,27 @@ return [
             'type' => 'GET',
             'url' => '/rest/asset/v1/folders.json'
         ]
-    ]
+    ],
+
+    'epsilon' => [
+        'title' => 'Epsilon',
+        'class' => 'Epsilon',
+        'auth' => [
+            'base_url' => 'https://api-public.epsilon.com',
+            'type' => 'POST',
+            'path' => '/Epsilon/oauth2/access_token',
+            'credentials' => [
+                'client_id'  =>  env('API_EPSILON_CLIENT_ID', ''),
+                'client_secret'  =>  env('API_EPSILON_CLIENT_SECRET', ''),
+                'user_name'  =>  env('API_EPSILON_USER_NAME', ''),
+                'password'   =>  env('API_EPSILON_PASSWORD', ''),
+                'base_token' =>  env('API_EPSILON_BASE_TOKEN', ''),
+            ]
+        ],
+        'x-ouid' => env('API_EPSILON_XOUID', ''),
+        'folder' => env('API_EPSILON_FOLDER', ''),
+        'content_id' => env('API_EPSILON_CONTENT_ID', ''),
+        'api_url' => 'https://api.harmony.epsilon.com',
+        'upload_path' => '/v1/contentBlocks',
+    ],
 ];
