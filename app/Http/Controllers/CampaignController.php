@@ -280,7 +280,8 @@ class CampaignController extends Controller
             $request->all(),
             [
                 'campaign_name' => 'not_regex:/<.*?>/',
-                'campaign_preheader' => 'not_regex:/<.*?>/'
+                'campaign_preheader' => 'not_regex:/<.*?>/',
+                'email_title' => 'not_regex:/<.*?>/'
             ]
         );
 

@@ -107,11 +107,8 @@ export default {
       const $targetContenteditableHref = $cleanedHtml.find('[data-contenteditable-href]');
 
       $.each($targetContenteditableHref, (key, element) => {
-        const tempDataContenteditableHref = $(element).data('contenteditable-href');
-        // Add href
-        $(element).attr('href', tempDataContenteditableHref);
-        // Remove data-contenteditable-href
-        $(element).removeAttr('data-contenteditable-href');
+        const content = element.outerHTML.replace('data-contenteditable-href', 'href');
+        element.outerHTML = content;
       });
     }
 
