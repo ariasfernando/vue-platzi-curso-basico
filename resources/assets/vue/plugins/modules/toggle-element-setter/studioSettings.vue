@@ -2,15 +2,14 @@
   <div>
     <settings-container :label="plugin.title">
       <template slot="setting-right">
-          <toggle-button :value="isSet" @change="toggle"></toggle-button>
+        <toggle-button :value="isSet" @change="toggle" />
       </template>
     </settings-container>
-    <settings-container label="Label" v-if="isSet">
+    <settings-container v-if="isSet" label="Label">
       <template slot="setting-right">
-          <el-input
-            size="mini" 
-            v-model="value"
-          ></el-input>
+        <el-input
+          v-model="value"
+          size="mini" />
       </template>
     </settings-container>
   </div>
@@ -69,7 +68,7 @@ export default {
       },
     },
     isSet() {
-      return this.value !== false ? true : false;
+      return this.value !== false;
     },
   },
   methods: {
