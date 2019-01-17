@@ -416,6 +416,7 @@ export default {
         selector: `#${this.editorId}`,
         fixed_toolbar_container: `.toolbar-${this.editorId}`,
         document_base_url: `${Application.globals.cdnHost}/js/tinymce/`,
+        convert_urls: false,
         skin: 'lightgray',
         skin_url: `${Application.globals.cdnHost}/css/tinymce/lightgray`,
         toolbar,

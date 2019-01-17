@@ -55,6 +55,11 @@ class CampaignManager
         $campaign = Campaign::findOrFail($inputs['campaign_id']);
         $campaign_name = $inputs['campaign_name'] ?? '';
         $modules_data = $inputs['modules_data'] ?? [];
+        // Don't save created_by and updated_by ObjectId's on the campaign.
+        foreach ($modules_data as $key => $module) {
+            unset($modules_data[$key]['created_by']);
+            unset($modules_data[$key]['updated_by']);
+        }
         if (!is_array($campaign->tags)) {
             $campaign->tags = [];
         }
@@ -70,6 +75,7 @@ class CampaignManager
         ];
         $campaign->campaign_settings = $campaign_settings;
         $campaign->campaign_preheader = $inputs['campaign_preheader'] ?? '';
+        $campaign->email_title = $inputs['email_title'] ?? '';
         $campaign->auto_save = isset($inputs['auto_save']) && $inputs['auto_save'] ? true : false;
 
         if (isset($inputs['campaign_fonts'])) {
@@ -112,7 +118,6 @@ class CampaignManager
             }
         }
 
-        $campaign->modules_data = $inputs['modules_data'];
         $campaign->save();
 
         Activity::log('Campaign updated', array('properties' => ['campaign_id' => new ObjectID($campaign_id)]));
