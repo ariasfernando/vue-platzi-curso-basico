@@ -139,6 +139,12 @@ module.exports = {
       link_force_color: {
         content: true,
       },
+      link_format: {
+        content: {
+          bold: false,
+          underline: false,
+        },
+      },
     },
   },
   render: false,
