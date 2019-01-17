@@ -18,7 +18,6 @@ export default {
   z-index: 1;
   outline-offset: -1px;
   &.active {
-    background: transparentize($color-secondary, 0.8);
     outline-color: $color-secondary;
     outline-width: 2px;
     outline-style: solid;
