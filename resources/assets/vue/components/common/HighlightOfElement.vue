@@ -15,7 +15,7 @@ export default {
 .highlight {
   position: absolute;
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
   outline-offset: -1px;
   &.active {
     outline-color: $color-secondary;
