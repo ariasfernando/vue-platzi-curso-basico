@@ -109,9 +109,6 @@ module.exports = {
       },
     },
     settings: {
-      link_validate_url: {
-        content: 'disabled',
-      },
       truncate: {
         content: false,
       },
@@ -133,8 +130,14 @@ module.exports = {
         },
         ],
       },
+      link_validate_url: {
+        content: 'disabled',
+      },
       link_fixed_color: {
         content: false,
+      },
+      link_force_color: {
+        content: true,
       },
     },
   },

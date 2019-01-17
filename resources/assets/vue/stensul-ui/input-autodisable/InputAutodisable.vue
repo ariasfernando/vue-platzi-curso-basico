@@ -10,6 +10,7 @@
 
     <component
       :is="autodisableComponent"
+      v-else
       v-model="inputValue"
       v-bind="$attrs"
       class="stui-input-autodisable"
@@ -57,9 +58,9 @@ export default {
       },
       set(val) {
         if (this.autodisableComponent === 'stui-input-number') {
-          this.numberValue(val);
+          this.numberValue = val;
         }
-        this.textValue(val);
+        this.textValue = val;
       },
     },
     numberValue: {
@@ -67,7 +68,8 @@ export default {
         return this.value === false ? this.disableOn : this.value;
       },
       set(val) {
-        const value = this.disableOn !== undefined && val === this.disableOn ? false : val;
+        const value =
+          this.disableOn !== undefined && val === this.disableOn ? false : val;
         this.$emit('input', value);
         this.$emit('change', value);
       },
@@ -119,7 +121,7 @@ export default {
   }
   &.is-auto-disabled {
     position: relative;
-    &:before{
+    &:before {
       /* this option disables the click on the input */
       content: '';
       position: absolute;
@@ -130,11 +132,9 @@ export default {
       z-index: 2;
     }
   }
-  &.is-auto-disabled:after {
-    /* clearfix for floated components */
-    content:'';
-    clear:both;
-    display: table;
+  &.is-auto-disabled.color-picker {
+    /* clearfix floated components */
+    overflow: hidden;
   }
 }
 </style>

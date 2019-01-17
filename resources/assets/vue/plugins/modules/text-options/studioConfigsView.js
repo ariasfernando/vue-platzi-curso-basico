@@ -63,20 +63,6 @@ function configsView() {
       },
     },
     settings: {
-      link_validate_url: {
-        key: 'link_validate_url',
-        title: 'Validate URL',
-        type: 'select',
-        options: {
-          disabled: 'No Validation',
-          url: 'Validate Format',
-          urlAndDestination: 'Format and Destination',
-        },
-        dependsOn: {
-          config: 'options',
-          name: 'link',
-        },
-      },
       truncate: {
         key: 'truncate',
         title: 'Char Limit',
@@ -124,6 +110,20 @@ function configsView() {
           name: 'fontsizeselect',
         },
       },
+      link_validate_url: {
+        key: 'link_validate_url',
+        title: 'Validate URL',
+        type: 'select',
+        options: {
+          disabled: 'No Validation',
+          url: 'Validate Format',
+          urlAndDestination: 'Format and Destination',
+        },
+        dependsOn: {
+          config: 'options',
+          name: 'link',
+        },
+      },
       link_fixed_color: {
         key: 'link_fixed_color',
         title: 'Link color',
@@ -138,6 +138,31 @@ function configsView() {
         },
         checkbox: {
           valueOnTrue: '#000000',
+        },
+      },
+      link_format: {
+        key: 'link_format',
+        aclName: 'link_fixed_color',
+        title: 'Link Format',
+        type: 'stui-icon-checklist',
+        dependsOn: {
+          config: 'options',
+          name: 'link',
+        },
+        props: {
+          list: [
+            {
+              label: 'Bold',
+              icon: 'fa fa-bold',
+              enable: 'bold',
+            },
+            {
+              label: 'Underline',
+              icon: 'fa fa-underline',
+              enable: 'underline',
+            },
+          ],
+          multiselect: true,
         },
       },
     },

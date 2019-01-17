@@ -98,7 +98,7 @@
           <div v-for="(tinySetting, key) in settings" :key="key" class="clearfix">
             <!-- Input if config needs it -->
             <settings-container
-              v-if="showSetting(tinySetting.dependsOn) && $can('tiny-plugin-' + key)"
+              v-if="showSetting(tinySetting.dependsOn) && $can(`tiny-plugin-${tinySetting.aclName || key}`)"
               :label="tinySetting.title"
               :checkbox="checkboxValue(plugin.config.settings[tinySetting.key].content, tinySetting)"
               @checkboxChange="(value)=>checkboxChange(value, tinySetting)">
