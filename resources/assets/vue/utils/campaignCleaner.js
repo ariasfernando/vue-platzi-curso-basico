@@ -158,8 +158,6 @@ export default {
       });
     }
 
-    $cleanedHtml = this.addMediaQueryHack($cleanedHtml);
-
     // Convert special chars to html entities ---
     $cleanedHtml = this.encodeHtmlEntities($cleanedHtml);
     return this.charConvert($cleanedHtml.html());
