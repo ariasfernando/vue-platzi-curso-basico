@@ -57,7 +57,7 @@ export default {
           this.plugin.subComponent ='button';
           break;
         case 'image-element':
-          this.plugin.subComponent ='container';
+          this.plugin.subComponent ='image';
           break;
         case 'text-element':
           this.plugin.subComponent ='container';
