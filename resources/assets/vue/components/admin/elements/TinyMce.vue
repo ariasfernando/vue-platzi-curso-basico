@@ -1,5 +1,5 @@
 <template>
-  <div class="cta-text-wrapper stx-edit-text" :id="id" v-html="value" style="display: inline-block;"></div>
+  <div class="cta-text-wrapper stx-edit-text" :id="id" v-html="value" style="display: inline-block; width: 100%"></div>
 </template>
 
 <script>
@@ -45,6 +45,7 @@
         let options = _.extend({
           selector: `#${this.id}`,
           document_base_url: Application.globals.cdnHost + "/js/tinymce/",
+          convert_urls: false,
           skin: 'lightgray',
           skin_url: Application.globals.cdnHost + '/css/tinymce/lightgray',
           inline: true,

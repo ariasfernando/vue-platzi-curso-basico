@@ -35,6 +35,7 @@ function Library(data = {}) {
     preheader: config.preheader || false,
     preheaderDefault: config.preheaderDefault || '',
     tracking: config.tracking || false,
+    trackingConfig: config.trackingConfig || '',
     tagging: config.tagging || false,
     templating: config.templating || false,
     htmlToPdf: config.htmlToPdf || false,

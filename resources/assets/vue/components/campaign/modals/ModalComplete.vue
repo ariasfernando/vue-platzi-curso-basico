@@ -115,7 +115,7 @@
         handler: function(value) {
           this.minified.mask_link_html.initial_html = this.$options.filters.charConvert(value.campaign_data.mask_link_html);
           this.minified.mask_link_html.minified_html = this.$options.filters.charConvert(value.campaign_data.mask_link_html_minified);
-          this.minified.normal_html.initial_html = value.campaign_data.body_html;
+          this.minified.normal_html.initial_html = this.$options.filters.charConvert(value.campaign_data.body_html);
           this.minified.normal_html.minified_html = this.$options.filters.charConvert(value.campaign_data.body_html_minified);
           this.minified.normal_html.output = this.minified.normal_html.initial_html;
           this.minified.mask_link_html.output = value.campaign_data.mask_link_html;

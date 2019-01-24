@@ -14,28 +14,33 @@ export default {
     ],
     // Array of attributes to clean from final html
     attrSelectors: [
-      'data-type',
-      'data-params',
-      'data-modal',
-      'data-medium-element',
-      'data-module-id',
-      'data-column-id',
-      'data-placeholder',
-      'contenteditable',
-      'spellcheck',
       'aria-multiline',
-      'role',
-      'truncate',
-      'singleline',
-      'data-mce-bogus',
+      'column-id',
+      'column',
+      'component-id',
+      'contenteditable',
+      'context',
+      'data-column-id',
       'data-key',
+      'data-mce-bogus',
       'data-mce-href',
       'data-mce-style',
-      'id',
-      'module',
-      'column',
+      'data-medium-element',
+      'data-modal',
+      'data-module-id',
+      'data-params',
+      'data-placeholder',
+      'data-type',
       'draggable',
-      'context',
+      'element-id',
+      'id',
+      'module-id-instance',
+      'module-id',
+      'module',
+      'role',
+      'singleline',
+      'spellcheck',
+      'truncate',
     ],
     blockSelectors: [
       '.module-toolbar',
@@ -102,11 +107,8 @@ export default {
       const $targetContenteditableHref = $cleanedHtml.find('[data-contenteditable-href]');
 
       $.each($targetContenteditableHref, (key, element) => {
-        const tempDataContenteditableHref = $(element).data('contenteditable-href');
-        // Add href
-        $(element).attr('href', tempDataContenteditableHref);
-        // Remove data-contenteditable-href
-        $(element).removeAttr('data-contenteditable-href');
+        const content = element.outerHTML.replace('data-contenteditable-href', 'href');
+        element.outerHTML = content;
       });
     }
 
@@ -139,6 +141,8 @@ export default {
         $element.removeAttr('data-persist-styles');
       });
     }
+    // Remove Comment Divs
+    $cleanedHtml = this.removeCommentDivs($cleanedHtml);
 
     // Skip <% %> Tags
     if ($cleanedHtml.find('a').length) {
@@ -185,21 +189,21 @@ export default {
   },
 
   addCSSHacks($target, newStyles) {
-    newStyles.replace(';', '');
+      newStyles.replace(';','');
     const originalStyles = $target.attr('style');
     let originalStylesArray = originalStyles.split(';');
 
-    if (!originalStyles.includes(newStyles)) {
-      originalStylesArray.push(newStyles);
-    }
+      if(!originalStyles.includes(newStyles)){
+          originalStylesArray.push(newStyles);
+      }
 
     for (let i = 0; i < originalStylesArray.length; i++) {
-      originalStylesArray[i] = originalStylesArray[i].replace(' ', '');
-    }
+          originalStylesArray[i] = originalStylesArray[i].replace(' ','');
+      }
 
     originalStylesArray = originalStylesArray.filter(item => item !== '');
-    newStyles = originalStylesArray.join('; ');
-    $target.attr('style', newStyles);
+      newStyles = originalStylesArray.join('; ');
+      $target.attr('style', newStyles);
   },
 
   encodeHtmlEntities($cleanedHtml) {
@@ -212,6 +216,14 @@ export default {
       }
     });
 
+    return $cleanedHtml;
+  },
+
+  removeCommentDivs($cleanedHtml) {
+    const all = $cleanedHtml.find('.st-comment');
+    $.map(all, (el) => {
+      $(el).replaceWith($(el).html());
+    });
     return $cleanedHtml;
   },
 

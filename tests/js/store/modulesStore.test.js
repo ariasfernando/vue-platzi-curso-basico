@@ -27,7 +27,7 @@ function createStore(option) {
 }
 
 describe('== Module Store ==', () => {
-  describe('trigger muttation:', () => {
+  describe('trigger mutation:', () => {
     let original = () => {};
     let store = () => {};
     beforeAll(() => {
@@ -546,7 +546,7 @@ describe('== Module Store ==', () => {
               enabled: false,
             },
             paletteBackgroundColor: {
-              name: 'pallete-background-color',
+              name: 'palette-background-color',
               title: 'Palette Background color',
               version: '0.0.1',
               author: 'matias@stensul.com',
@@ -896,7 +896,7 @@ describe('== Module Store ==', () => {
               enabled: false,
             },
             paletteBackgroundColor: {
-              name: 'pallete-background-color',
+              name: 'palette-background-color',
               title: 'Palette Background color',
               version: '0.0.1',
               author: 'matias@stensul.com',
@@ -1816,7 +1816,7 @@ describe('== Module Store ==', () => {
                   enabled: false,
                 },
                 paletteBackgroundColor: {
-                  name: 'pallete-background-color',
+                  name: 'palette-background-color',
                   title: 'Palette Background color',
                   version: '0.0.1',
                   author: 'matias@stensul.com',
@@ -2623,7 +2623,7 @@ describe('== Module Store ==', () => {
                   enabled: false,
                 },
                 paletteBackgroundColor: {
-                  name: 'pallete-background-color',
+                  name: 'palette-background-color',
                   title: 'Palette Background color',
                   version: '0.0.1',
                   author: 'matias@stensul.com',
@@ -3030,7 +3030,7 @@ describe('== Module Store ==', () => {
                   enabled: false,
                 },
                 paletteBackgroundColor: {
-                  name: 'pallete-background-color',
+                  name: 'palette-background-color',
                   title: 'Palette Background color',
                   version: '0.0.1',
                   author: 'matias@stensul.com',

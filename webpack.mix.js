@@ -83,6 +83,9 @@ mix
   ], `${jsDestinationPath}/dashboard-components.js`)
   .js(`${assetsPath}/js/vendor/stensul/media-gallery/media-gallery.js`, 'public/js/media-gallery.js')
   .js(assetsPath + jsAppFilePath('proof.js'), `${jsDestinationPath}/proof.js`)
+  .js([
+    `${assetsVuePath}/global-settings.js`,
+  ], `${jsDestinationPath}/global-settings.js`)
   .extract([
     'vue',
     'vue-router',

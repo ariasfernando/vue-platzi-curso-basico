@@ -40,30 +40,6 @@ class EmailHtmlCreator
         isset($options['format']) ? $this->format = $options['format'] : null;
     }
 
-    /**
-     * Create HTML body.
-     *
-     * @return string
-     */
-    public function createHtmlBody()
-    {
-        // Initialize locale
-        StensulLocale::init($this->getCampaign()->locale);
-
-        $this->body = $this->getEmailLayout();
-
-        $this->body = $this->replaceViewInBrowserLink();
-
-        if (!env('CDN_UPLOAD_PRETEND', false)) {
-            $this->body = $this->replaceImagesPath();
-            $this->body = $this->replaceFontPath();
-        }
-        $this->body = $this->removeAttributes();
-        $this->body = $this->replaceCharacters();
- 
-        return $this->body;
-    }
-
     public function createHtmlBodyMaskLink()
     {
         $this->body = $this->getEmailLayout();
@@ -122,6 +98,33 @@ class EmailHtmlCreator
                     ]
                 )
                 ->render();
+    }
+
+    /**
+     * Create HTML body.
+     *
+     * @return string
+     */
+    public function createHtmlBody()
+    {
+        // Initialize locale
+        StensulLocale::init($this->getCampaign()->locale);
+
+        $this->body = $this->getEmailLayout();
+
+        $this->body = $this->replaceViewInBrowserLink();
+
+        $this->body = $this->updateBrTag();
+
+        if (!env('CDN_UPLOAD_PRETEND', false)) {
+            $this->body = $this->replaceImagesPath();
+            $this->body = $this->replaceFontPath();
+        }
+
+        $this->getCampaign()->body_html = $this->body;
+        $this->getCampaign()->save();
+
+        return $this->body;
     }
 
     /**
@@ -439,6 +442,19 @@ class EmailHtmlCreator
             $body = preg_replace($r[1], $r[2], $body, -1, $count);
         }
 
+        return $body;
+    }
+
+    /**
+     * Replace <br> tags by &zwnj;<br />
+     * Needed to prevent tag deletion on ESP upload.
+     *
+     * @return string
+     */
+    public function updateBrTag() {
+        $body = $this->body;
+        $body = str_replace('<br></p>', '<br />', $body);
+        $body = str_replace('<br /></p>', '&zwnj;<br /></p>', $body);
         return $body;
     }
 

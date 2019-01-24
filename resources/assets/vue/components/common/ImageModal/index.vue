@@ -248,6 +248,7 @@ export default {
       if (typeof this.$refs.sie !== 'undefined') {
         this.$refs.sie.close();
       }
+      this.$refs.input.value = '';
       this.sieOptions = {};
       this.currentImage = null;
       this.isNewImage = true;

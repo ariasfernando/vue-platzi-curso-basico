@@ -104,9 +104,7 @@ module.exports = {
         palette_name: '',
       },
       link: {
-        value: false,
-      },
-      stformatsmenu: {
+        key: 'link',
         value: false,
       },
     },
@@ -137,9 +135,6 @@ module.exports = {
       },
       link_fixed_color: {
         content: false,
-      },
-      formats: {
-        content: '{"light_font":{"inline":"span","styles":{"fontWeight":"300"}},"normal_font":{"inline":"span","styles":{"fontWeight":"400"}},"semi_bold_font":{"inline":"span","styles":{"fontWeight":"600"}},"bold_font":{"inline":"span","styles":{"fontWeight":"700"}}}',
       },
     },
   },
