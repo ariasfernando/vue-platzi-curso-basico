@@ -1,6 +1,5 @@
 <template>
   <section class="col-xs-12 section-container list-layout">
-
     <div class="row list-header">
       <div class="col-xs-12">
         <div class="level">
@@ -54,6 +53,22 @@
             :class="{'is-empty': filteredModules[activeTab].length === 0}">
             <thead>
               <tr>
+                <th class="sortable created">
+                  <a
+                    id="created" href="#" class="sortable-option sort-order-desc"
+                    data-order-field="created">
+                      Created
+                    <i class="glyphicon glyphicon-menu-down" />
+                  </a>
+                </th>
+                <th class="sortable updated">
+                  <a
+                    id="lastModified" href="#" class="sortable-option sort-order-desc"
+                    data-order-field="lastModified">
+                      Last Modified
+                    <i class="glyphicon glyphicon-menu-down" />
+                  </a>
+                </th>
                 <th class="sortable name">
                   <a
                     id="name" href="#" class="sortable-option sort-order-desc"
@@ -83,6 +98,8 @@
             </thead>
             <tbody v-if="ready">
               <tr v-for="(module, id) in filteredModules[activeTab]" :key="id" :data-module="id">
+                <td :title="module.created_at" class="created">{{ module.created_at }} by {{ module.created_by }}</td>
+                <td :title="module.updated_at" class="updated">{{ module.updated_at }} by {{ module.updated_by }}</td>
                 <td :title="module.title" class="name">{{ module.title }}</td>
                 <td :title="module.libraries" class="libraries">
                   <span v-for="(library) in module.libraries" :key="library" class="st-rounded-tag">{{ library }}</span>
@@ -251,17 +268,21 @@ $stensul-purple: #514960;
       }
       th,
       td {
+        &.created {
+          width: 160px;
+        }
+        &.updated {
+          width: 160px;
+        }
         &.name {
-          width:30%;
         }
         &.libraries {
-          width: 40%;
         }
         &.status {
-          width:15%;
+          width: 72px;
         }
         &.actions{
-          width: 15%;
+          width: 122px;
         }
       }
       th {
