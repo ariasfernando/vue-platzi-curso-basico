@@ -161,7 +161,6 @@ module.exports = {
 }
 .st-content-component /deep/ {
   outline: 1px dashed $color-secondary;
-  border: none !important;
   [data-column-id] {
     position: relative;
   }

@@ -36,6 +36,7 @@ function moduleDefault() {
           name: 'columnsStacking',
           aclName: 'stacking_column-stacking',
           type: 'columns-stacking',
+          dependOn: 'hasMoreThanOneColumn',
         }],
       },
     ],
