@@ -26,8 +26,6 @@ class ComposerServiceProvider extends ServiceProvider
 
                 $app_config = \Config::all();
 
-                $app_config['modules'] = ModuleServiceProvider::getModuleList();
-
                 $config_array = [
                     "modules"   => $app_config['modules'],
                     "locale"    => $app_config['locale'],
