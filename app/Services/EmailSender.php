@@ -45,7 +45,7 @@ class EmailSender
 
         $subject = !empty($params['subject']) ? $params['subject'] : env('MAIL_PREVIEW_SUBJECT', 'Preview email!');
 
-        $preheader = $params['preheader'] ?: false;
+        $preheader = isset($params['preheader']) ? $params['preheader'] : false;
 
         $library = Library::find($campaign_data->library);
 

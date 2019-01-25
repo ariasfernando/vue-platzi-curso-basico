@@ -10,7 +10,7 @@
 
     <el-input
       v-else
-      v-model="numberValue"
+      v-model="textValue"
       :controls="false"
       class="custom-col toggleable-text"
       size="mini" />
@@ -24,11 +24,11 @@
 <script>
 
 export default {
-  name: 'InputToggleableNumber',
+  name: 'InputToggleableText',
 
   props: {
     value: {
-      type: [Boolean, String, Number],
+      type: [String, Number, Object, Boolean],
       default: false,
     },
     falseText: {
@@ -37,13 +37,19 @@ export default {
     },
     defaultValue: {
       type: String,
-      default: 'true',
+      default: '',
     },
   },
   computed: {
-    numberValue: {
+    textValue: {
       get() {
-        return this.value;
+        if (typeof this.value === 'object') {
+          return JSON.stringify(this.value);
+        } else {
+          return Application.utils.isJsonString(this.value)
+            ? JSON.stringify(this.value)
+            : String(this.value);
+        }
       },
       set(value) {
         this.$emit('input', value);
@@ -53,7 +59,7 @@ export default {
   },
   methods: {
     toggle() {
-      this.numberValue = this.value ? false : this.defaultValue;
+      this.textValue = this.value ? false : this.defaultValue;
     },
   },
 };
@@ -137,7 +143,7 @@ export default {
         border: 1px solid #78dcd6;
       }
     }
-    .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled), 
+    .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled),
     .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){
       border: 1px solid #78dcd6;
     }

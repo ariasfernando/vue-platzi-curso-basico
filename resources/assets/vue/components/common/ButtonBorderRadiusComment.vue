@@ -9,7 +9,6 @@ import LineComment from './comments/LineComment.vue';
 export default {
   components: { LineComment },
   mixins: [ElementMixin],
-  props: ['module'],
   data() {
     return {
       height: 0,

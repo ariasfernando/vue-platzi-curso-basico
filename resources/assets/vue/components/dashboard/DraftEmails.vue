@@ -83,6 +83,18 @@
                 ><i class="glyphicon glyphicon-blackboard"></i></a>
               <a href="#" v-if="$can('clone_campaign')" @click.prevent="clone(campaign._id)" class="clone" data-tooltip="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
 
+              <a
+                  href="#"
+                  class="archive-campaign"
+                  v-if="$can('access_archive')"
+                  @click.prevent="doArchive(campaign._id)"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  :data-tooltip="wasArchive(campaign.archive) ?  'Archive Email' : 'Unarchive Email'"
+                  v-html="isArchive(campaign)"
+                >
+                </a>
+
               <a :data-campaign-id="campaign._id"
                 data-toggle="tooltip"
                 data-placement="top"

@@ -5,7 +5,7 @@
     >
       <component
         v-for="(plugin, pluginKey) in module.plugins"
-        :key="moduleKey + pluginKey"
+        :key="module.idInstance + pluginKey"
         v-if="isRenderSetting(plugin, pluginKey)"
         :is="'campaign-' + plugin.name"
         :name="pluginKey"

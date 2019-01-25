@@ -34,6 +34,7 @@ class Instagram extends Scraper implements ApiImageConnector
         $this->flush_cache = (isset($options["flush_cache"]));
         $this->current_page = (isset($options["page"]))? (int)$options["page"] : 1;
         $this->limit = (isset($options["limit"]))? (int)$options["limit"] : 0;
+        $this->replace_hashtags_with_links = (isset($options["replace_hashtags_with_links"]))? (bool)$options["replace_hashtags_with_links"] : false;
     }
 
     /**
@@ -58,7 +59,7 @@ class Instagram extends Scraper implements ApiImageConnector
             $transformer->likes = (isset($item['likes']))? $item['likes'] : 0;
             $transformer->source = (!is_null($this->scraper_name))? $this->scraper_name : $this->url;
 
-            $data_processed[] =  $transformer->transform();
+            $data_processed[] =  $transformer->transform(['keep_original_image_url' => true]);
             unset($transformer);
         }
 
@@ -88,17 +89,18 @@ class Instagram extends Scraper implements ApiImageConnector
                 $response_call = trim(preg_replace("/\n/", "", trim($response_call)));
                 $response_parse = json_decode($response_call);
 
-                if (isset($response_parse->entry_data->ProfilePage[0]->user) &&
-                    isset($response_parse->entry_data->ProfilePage[0]->user->media)) {
-                    if (isset($response_parse->entry_data->ProfilePage[0]->user->media->nodes)) {
-                        foreach ($response_parse->entry_data->ProfilePage[0]->user->media->nodes as $item) {
+                if (isset($response_parse->entry_data->ProfilePage[0]->graphql->user) &&
+                    isset($response_parse->entry_data->ProfilePage[0]->graphql->user->edge_owner_to_timeline_media)) {
+                    if (isset($response_parse->entry_data->ProfilePage[0]->graphql->user->edge_owner_to_timeline_media->edges)) {
+                        foreach ($response_parse->entry_data->ProfilePage[0]->graphql->user->edge_owner_to_timeline_media->edges as $item) {
                             $item_array = [
-                                "link" => $this->instagram_url . "p/" . $item->code,
-                                "likes" => $item->likes->count,
-                                "created_time" => $item->date,
-                                "text" => $item->caption,
-                                "image_small" => $item->thumbnail_src,
-                                "image_large" => $item->thumbnail_src
+                                "link" => $this->instagram_url . "p/" . $item->node->shortcode,
+                                "likes" => $item->node->edge_liked_by->count,
+                                "created_time" => $item->node->taken_at_timestamp,
+                                "text" => $this->replaceHashtagsWithLinks($item->node->edge_media_to_caption->edges[0]->node->text),
+                                "title" => $item->node->edge_media_to_caption->edges[0]->node->text,
+                                "image_small" => $item->node->thumbnail_src,
+                                "image_large" => $item->node->thumbnail_src
                             ];
 
                             $this->response_array[] = $item_array;
@@ -149,5 +151,12 @@ class Instagram extends Scraper implements ApiImageConnector
     public function getCacheKey()
     {
         return 'api:scraper:instagram:' . $this->user_name;
+    }
+
+    protected function replaceHashtagsWithLinks($string) {
+        if ($this->replace_hashtags_with_links) {
+            return preg_replace('/#(\w+)/', '<a target="_blank" href="'.$this->instagram_tags_url.'${1}'.'">#${1}</a>', $string);
+        }
+        return $string;
     }
 }

@@ -10,6 +10,7 @@ import Bootstrap from './bootstrap';
 import interceptors from './interceptors';
 import store from './store';
 import { studioLibraryRoutes } from './router';
+import { customValidators } from 'stensul/resources/validator_rules'
 
 Vue.use(Bootstrap);
 Vue.use(Toast, {
@@ -25,6 +26,10 @@ Vue.use(interceptors);
 Vue.use(ElementUI, { locale });
 Vue.use(VueRouter);
 Vue.use(VeeValidate);
+
+Object.keys(customValidators).forEach((key) => {
+  VeeValidate.Validator.extend(key, customValidators[key].method, customValidators[key].options);
+});
 
 // Pointing routes to the components they should use
 const router = new VueRouter({

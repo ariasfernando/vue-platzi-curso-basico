@@ -1,25 +1,13 @@
-import _ from 'lodash';
-
 export default {
   data() {
     return {
-      trackingConfigReady: true,
+      trackingConfigReady: false,
       trackingConfig: {},
-      trackingData: {
-        'trk-utm_source': '',
-        'trk-utm_campaign': '',
-        'trk-utm_medium': '',
-        'trk-source': '',
-        'trk-utm_term': ''
-      }
     }
   },
   computed: {
-    configs() {
-      return this.$store.getters["config/config"];
-    },
     campaignData() {
-      return this.$store.getters["campaign/campaign"].campaign_data;
+      return this.$store.getters['campaign/campaign'].campaign_data;
     }
   },
   created() {
@@ -27,37 +15,13 @@ export default {
   },
   methods: {
     loadConfig() {
-      if (this.campaignData.tracking !== undefined) {
-        this.trackingData = this.campaignData.tracking;
-      }
-      this.$store.dispatch("config/getConfig", 'tracking').then(response => {
-        var configs = this.configs;
+      this.trackingConfig = JSON.parse(this.campaignData.library_config.trackingConfig || '{}');
 
-        if (configs.tracking[this.libraryKey] !== undefined) {
-          this.trackingConfig = configs.tracking[this.libraryKey];
-        } else {
-          this.trackingConfig = configs.tracking['default'];
-        }
-        for (let k in this.trackingConfig) {
-          if (this.trackingData['trk-'+k] === undefined || this.trackingData['trk-'+k] == '') {
-            this.trackingData['trk-'+k] = this.trackingConfig[k].values;
-          }
-        }
-        this.trackingConfigReady = true;
-      }, error => {
-        this.$store.commit("global/setLoader", false);
-        this.$root.$toast(
-          'Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.',
-          {className: 'et-error'}
-        );
-      });
+      this.trackingConfigReady = true;
     },
 
-    cleanErrors() {},
-
     validateTracking () {
-      this.cleanErrors();
-      if (typeof this.campaignData.tracking == 'undefined' || !this.campaignData.tracking) {
+      if (typeof this.campaignData.tracking === 'undefined' || !this.campaignData.tracking) {
         this.$root.$toast(
           'Error: Tracking Configuration is required',
           {
@@ -66,16 +30,20 @@ export default {
             closeable: true
           }
         );
+
         return false;
       }
 
-      var trackingData = this.campaignData.tracking;
-      var $toast = this.$root.$toast;
-      var ret = true;
-      $.each(_.keys(this.trackingConfig), function(idx, param) {
-        if (typeof trackingData['trk-'+param] == 'undefined' || trackingData['trk-'+param] == '') {
+      let trackingData = this.campaignData.tracking;
+      let $toast = this.$root.$toast;
+      let ret = true;
+
+      Object.keys(this.trackingConfig).forEach((param) => {
+        let key = `trk-${param}`;
+
+        if (typeof trackingData[key] === 'undefined' || trackingData[key] === '') {
           $toast(
-            'Error: ' + param + ' is required',
+            `Error: ${this.trackingConfig[param].label} is required`,
             {
               className: 'et-error',
               duration: 10000,
@@ -89,50 +57,83 @@ export default {
     },
 
     addTrackingParams (html) {
+      const trackingData   = this.campaignData.tracking;
+      const trackingConfig = this.trackingConfig;
 
-      var trackingData = this.campaignData.tracking;
-      var trackingConfig = this.trackingConfig;
-      if(typeof(trackingConfig) != 'undefined' && typeof(trackingData) != 'undefined' ){
+      if (typeof trackingConfig === 'undefined' || typeof trackingData === 'undefined') {
+        return null;
+      }
 
-        var links = html.find("a");
-        $.each( links, function( index, link){
+      const trackingConfigGroups = { replace: {}, replaceLinks: {} };
+      Object.keys(trackingConfig).forEach((param) => {
+        if (trackingConfig[param].replaceString) {
+          trackingConfigGroups.replace[param] = trackingConfig[param];
+        } else {
+          trackingConfigGroups.replaceLinks[param] = trackingConfig[param];
+        }
+      });
 
-          var trackingPosition = $(link).closest( "th" ).attr('data-tracking-position');
-          if (typeof(trackingPosition) == "undefined"){
-            trackingPosition = $(link).closest( "td" ).attr('data-tracking-position');
+      const parser = new DOMParser();
+      const dom = parser.parseFromString(html, 'text/html');
+      const links = Array.from(dom.querySelectorAll('a'));
+
+      if (Object.keys(trackingConfigGroups.replaceLinks).length > 0) {
+        links.forEach((link) => {
+          if (link.classList.contains('st-no-tracking')) {
+            return false;
           }
-          if (typeof(trackingPosition) == "undefined"){
-            trackingPosition = $(link).attr('data-tracking-position');
+
+          let linkHref = link.getAttribute('href');
+
+          if (linkHref === '' || linkHref === '#') {
+            return false;
           }
 
-          if ($(link).hasClass('st-no-tracking') === false){
-            var linkHref = $(link).attr("href");
-            if( linkHref!=="" && linkHref!=="#"){
-              var anchor = '';
-              var anchorPos = linkHref.indexOf('#');
-              if (anchorPos !== -1) {
-                anchor = linkHref.substring(anchorPos);
-                linkHref = linkHref.replace(anchor, '');
-              }
-              if (linkHref.length > 0) {
-                $.each( _.keys(trackingConfig), function(idx, param){
-                  var separator = linkHref.indexOf('?') !== -1 ? "&" : "?";
-                  var value = ( typeof trackingData['trk-'+param] !== 'undefined' ) ? trackingData['trk-'+param] : '' ;
-                  linkHref += separator + param + "=" + value;
-                });
-                if (typeof(trackingPosition) != "undefined"){
-                  linkHref += "&utm_content=" + trackingPosition;
-                }
-              }
-              if (anchor.length) {
-                linkHref += anchor;
-              }
-              $(link).attr('href', linkHref);
-            }
+          let anchor = '';
+          const anchorPos = linkHref.indexOf('#');
+
+          if (anchorPos !== -1) {
+            anchor   = linkHref.substring(anchorPos);
+            linkHref = linkHref.replace(anchor, '');
           }
+
+          if (linkHref.length > 0) {
+            Object.keys(trackingConfigGroups.replaceLinks).forEach((param) => {
+              let key = `trk-${param}`;
+              let separator = linkHref.indexOf('?') !== -1 ? '&' : '?';
+              let value = typeof trackingData[key] !== 'undefined' ? trackingData[key] : '';
+              linkHref += `${separator}${param}=${value}`;
+            });
+          }
+
+          if (anchor.length) {
+            linkHref += anchor;
+          }
+
+          link.setAttribute('href', linkHref);
         });
       }
-      return html;
+
+      if (Object.keys(trackingConfigGroups.replace).length > 0) {
+        Object.keys(trackingConfigGroups.replace).forEach((param) => {
+          const key = `trk-${param}`;
+          const search = trackingConfigGroups.replace[param].replaceString;
+          const replacement = trackingData[key];
+          dom.body.firstChild.innerHTML = dom.body.firstChild.innerHTML.replace(new RegExp(search, 'g'), replacement);
+        });
+      }
+
+      const tmpWrapper = document.createElement('div');
+      if (dom.body.childNodes.length > 1) {
+        Array.from(dom.body.childNodes).forEach((child) => {
+          tmpWrapper.appendChild(child);
+        });
+
+        return tmpWrapper.innerHTML;
+      }
+
+      tmpWrapper.appendChild(dom.body.firstChild);
+      return tmpWrapper.innerHTML;
     },
   },
 };

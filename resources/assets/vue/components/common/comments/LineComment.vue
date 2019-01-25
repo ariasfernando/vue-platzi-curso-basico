@@ -1,10 +1,10 @@
 <template>
-    <div v-html="comment" class="stx-wrapper"></div>
+  <div class="stx-wrapper" v-html="comment" />
 </template>
 
 <script>
-  export default {
-    name: 'LineComment',
-    props: ['comment'],
-  }
+export default {
+  name: 'LineComment',
+  props: ['comment'],
+};
 </script>

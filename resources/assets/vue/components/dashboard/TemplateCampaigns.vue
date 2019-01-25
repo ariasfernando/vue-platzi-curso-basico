@@ -75,6 +75,19 @@
               ></campaign-tag>
             </td>
             <td class="actions icons">
+
+                <a
+                  href="#"
+                  class="archive-campaign"
+                  v-if="$can('access_archive')"
+                  @click.prevent="doArchive(campaign._id)"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  :data-tooltip="wasArchive(campaign.archive) ?  'Archive Email' : 'Unarchive Email'"
+                  v-html="isArchive(campaign)"
+                >
+                </a>
+
                 <a
                   href="#"
                   class="lock-campaign"

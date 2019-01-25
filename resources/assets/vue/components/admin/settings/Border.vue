@@ -157,10 +157,16 @@ button.el-button {
   width: 67px;
 }
 
+.el-input-number /deep/ {
+  .el-input-number__decrease, .el-input-number__increase {
+    width: 17px;
+  }
+}
+
 .el-input-number.is-controls-right /deep/ .el-input__inner {
   border-radius: 2px 0px 0px 2px;
   padding-left: 8px;
-  padding-right: 35px;
+  padding-right: 25px;
 }
 
 #edit-container .right-bar .form-group,

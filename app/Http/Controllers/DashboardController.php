@@ -39,7 +39,8 @@ class DashboardController extends Controller
         'created_at',
         'updated_at',
         'published_at',
-        'proof_id'
+        'proof_id',
+        'archive'
     ];
 
     const RESULTS_X_PAGE = 10;
@@ -141,6 +142,15 @@ class DashboardController extends Controller
         $direction = strlen($request->input('direction')) ? $request->input('direction', 'updated_at') : 'desc';
         $campaigns->orderBy($sort, $direction);
 
+        /** Filter code **/
+        $filters = $request->input('filters', []);
+        if (Auth::user()->can("access_archive") && empty($filters)) {
+            $campaigns->where('archive', false);
+        }
+        /** End Filter code **/
+
+        $this->filterParams($campaigns, $filters);
+
         $result = $campaigns->paginate(self::RESULTS_X_PAGE, self::$campaign_fields);
         $libraries = [];
         foreach (Auth::user()->getLibraries() as $library) {
@@ -152,6 +162,36 @@ class DashboardController extends Controller
             }
         }
         return $result;
+    }
+
+    /**
+     * filterParams
+     *
+     * @param Object $campaigns
+     * @param Array  $filters
+     */
+    private function filterParams($campaigns, $filters)
+    {
+        if (count($filters)) {
+            foreach ($filters as $filter) {
+                // This is the part of the code where you take the filter param
+                // and make your desire custom query
+                switch ($filter) {
+                    case 'all':
+                        // Show all the campaigns if user have access_archive role
+                        if (Auth::user()->can("access_archive")) {
+                            $campaigns->where('archive', '!=', null);
+                        }
+                        break;
+                    case 'archived':
+                        // Show the archived campaigns if user have access_archive role
+                        if (Auth::user()->can("access_archive")) {
+                            $campaigns->where('archive', true);
+                        }
+                        break;
+                }
+            }
+        }
     }
 
     public function getTags()
@@ -240,6 +280,14 @@ class DashboardController extends Controller
                 $this->tagsFilter($campaigns, $request->input('tags', []));
             }
         }
+
+        /** Filter code **/
+        $filters = $request->input('filters', []);
+        if (Auth::user()->can("access_archive") && empty($filters)) {
+            $campaigns->where('archive', false);
+        }
+        $this->filterParams($campaigns, $filters);
+        /** End Filter code **/
 
         if (\Config::get('campaign.enable_favorite_template')) {
             $favorite_type = \Config::get('campaign.favorite_settings.type');

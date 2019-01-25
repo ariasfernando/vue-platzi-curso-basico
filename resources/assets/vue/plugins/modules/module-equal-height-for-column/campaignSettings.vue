@@ -2,45 +2,26 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {
-  props: ['name', 'plugin', 'moduleId'],
-  data () {
+  mixins: [pluginCampaignMixin],
+  data() {
     return {
       previousImagesUrls: [],
-      previousHeight: 0
-    }
-  },
-  computed: {
-    modules() {
-      return this.$store.getters['campaign/modules'];
-    },
-    module() {
-      return this.modules[this.moduleId];
-    },
-    buildingMode() {
-      return this.$store.getters['campaign/buildingMode'];
-    }
+      previousHeight: 0,
+      subComponent: 'container',
+    };
   },
   methods: {
-    saveColumnAttribute(property, value, columnId) {
-      const payload = {
-        moduleId: this.moduleId,
-        columnId,
-        subComponent: 'container',
-        link: 'attribute',
-        property,
-        value
-      };
-      this.$store.commit('campaign/saveColumnProperty', payload);
-    },
     getHigherHeight() {
-      let $itemsToEqualize;
+      const moduleIdInstance = this.moduleIdInstance;
+      const selector = `[module-id-instance="${moduleIdInstance}"] .st-equal-height > table`;
+      let $itemsToEqualize = false;
       if (this.buildingMode === 'desktop') {
-        $itemsToEqualize = $("[data-module-id='" + this.moduleId + "']").find('.st-equal-height > table');
+        $itemsToEqualize = $(selector);
       } else {
-        $itemsToEqualize = $('#shadowRender').contents().find(`[data-module-id='${this.moduleId}']`).find('.st-equal-height > table');
+        $itemsToEqualize = $('#shadowRender').contents().find(selector);
       }
       let higherHeight = 0;
       $itemsToEqualize.each((index, item) => {
@@ -53,39 +34,37 @@ export default {
     setEqualHeights() {
       setTimeout(() => {
         const higherHeight = this.getHigherHeight();
-        if(higherHeight != this.previousHeight){
+        if (higherHeight !== this.previousHeight) {
           _.each(this.module.structure.columns, (column, columnIndex) => {
             const height = higherHeight - this.getPaddingTopAndBottom(columnIndex);
-            this.saveColumnAttribute('height', height, columnIndex);
+            this.saveElementProperty({
+              elementId: column.id,
+              link: 'attribute',
+              property: 'height',
+              value: height,
+            });
             this.previousHeight = higherHeight;
           });
         }
       }, 200);
     },
     setEqualHeightsWithImages(url) {
-      var tmpImg = new Image() ;
+      const tmpImg = new Image();
       tmpImg.src = this.$_app.config.imageUrl + url;
       tmpImg.onload = () => {
-          this.setEqualHeights();
+        this.setEqualHeights();
       };
     },
     addClassEqualHeight() {
-      _.each(this.module.structure.columns, (column, columnIndex) => {
-        let classes = column.container.attribute.classes;
-        let classesArr = classes ? classes.split(' ') : [];
-        const index = classesArr.indexOf('st-equal-height');
-        if (index === -1) {
-          classesArr.push('st-equal-height');
-          classes = classesArr.join(' ');
-          this.saveColumnAttribute('classes', classes, columnIndex);
-        }
+      _.each(this.module.structure.columns, (column) => {
+          this.addClassToElement({ value: 'st-equal-height', elementId: column.id });
       });
     },
-    getImagesUrls(module){
-      let imagesUrls = [];
-      for (let columnId in module.structure.columns) {
-        let column = module.structure.columns[columnId];
-        for (let componentId in column.components) {
+    getImagesUrls(module) {
+      const imagesUrls = [];
+      for (const columnId in module.structure.columns) {
+        const column = module.structure.columns[columnId];
+        for (const componentId in column.components) {
           if (module.structure.columns[columnId].components[componentId].type === 'image-element') {
             imagesUrls.push(module.structure.columns[columnId].components[componentId].image.attribute.placeholder);
           }
@@ -100,7 +79,7 @@ export default {
       const column = this.module.structure.columns[columnIndex];
       const padding = parseInt(column.container.style.paddingTop || 0) + parseInt(column.container.style.paddingBottom || 0);
       return padding;
-    }
+    },
   },
   mounted() {
     this.setImagesUrls();
@@ -109,29 +88,27 @@ export default {
   },
   watch: {
     module: {
-      handler: function(newModule) {
-
-          let newImagesUrls = this.getImagesUrls(newModule);
-
-          if(this.previousImagesUrls.length > 0){
-            for(let i=0; i < this.previousImagesUrls.length; i++){
-              if(this.previousImagesUrls[i] === newImagesUrls[i]){
-                this.setEqualHeights();
-              }else{
-                this.setEqualHeightsWithImages(newImagesUrls[i]);
-                this.setImagesUrls();
-              }
+      handler: function (newModule) {
+        const newImagesUrls = this.getImagesUrls(newModule);
+        if (this.previousImagesUrls.length > 0) {
+          for (let i = 0; i < this.previousImagesUrls.length; i++) {
+            if (this.previousImagesUrls[i] === newImagesUrls[i]) {
+              this.setEqualHeights();
+            } else {
+              this.setEqualHeightsWithImages(newImagesUrls[i]);
+              this.setImagesUrls();
             }
-          }else{
-            this.setEqualHeights();
           }
+        } else {
+          this.setEqualHeights();
+        }
 
-          if (this.buildingMode === 'mobile') {
-            $('#shadowRender')[0].dispatchEvent(new Event("update-iframe"))
-          }
+        if (this.buildingMode === 'mobile') {
+          $('#shadowRender')[0].dispatchEvent(new Event("update-iframe"))
+        }
       },
-      deep: true
-    }
-  }
+      deep: true,
+    },
+  },
 };
 </script>

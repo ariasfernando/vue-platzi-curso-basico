@@ -29,8 +29,11 @@ class Module extends Eloquent
      * @var array
      */
     protected $attributes = [
-        'type' => 'studio'
+        'type' => 'studio',
+        'used' => false,
     ];
+
+    protected $appends = ['in_use'];
 
     /**
      * Scope a query to only include documents with
@@ -56,5 +59,15 @@ class Module extends Eloquent
     {
         $query->where('status', '=', 'draft');
         return $query;
+    }
+
+    /**
+     * Get campaign count for the module.
+     *
+     * @return int
+     */
+    public function getInUseAttribute()
+    {
+        return \ModuleUsageModel::campaignCount($this->id);
     }
 }

@@ -48,14 +48,14 @@
     "popper.js": "^1.14.0",
     "q": "^1.5.0",
     "readdir": "0.0.13",
-    "stensul-sie-vue": "0.0.46",
+    "stensul-sie-vue": "0.0.47",
     "stringify": "^5.1.0",
     "tinymce": "~4.2.1",
     "tinymce-vue-2": "0.0.2",
     "underscore": "1.8.3",
     "underscore-contrib": "^0.3.0",
     "url-search-params-polyfill": "^2.0.2",
-    "vee-validate": "^2.0.0-rc.23",
+    "vee-validate": "2.0.9",
     "vue": "^2.5.15",
     "vue-checkbox-radio": "^0.6.0",
     "vue-clickaway": "^2.1.0",
@@ -93,6 +93,7 @@
     "cz-conventional-changelog": "^2.0.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
+    "eslint-import-resolver-webpack": "^0.10.1",
     "eslint-plugin-import": "^2.3.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-vue": "^5.0.0-beta.3",
@@ -104,6 +105,7 @@
     "pre-commit": "^1.2.2",
     "stackup": "1.0.1",
     "stensul-pre-commit-with-lint": "^1.0.1",
+    "stensul-coverage-metrics": "^1.0.7",
     "stylelint": "^9.6.0"
   },
   "pre-commit": {
@@ -133,12 +135,25 @@
       "customer(.*)$": "<rootDir>/stensul/customer/resources/assets/vue/$1"
     },
     "modulePaths": [
-      "./node_modules",
-      "./resources/assets/vue"
+      "<rootDir>/node_modules",
+      "<rootDir>/resources/assets"
     ],
     "roots": [
-      "./tests/js"
+      "<rootDir>/tests/js",
+      "<rootDir>/resources/assets/"
     ],
+    "collectCoverageFrom": [
+      "**/*.{js,vue}",
+      "!<rootDir>/.jestrc.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 0.42,
+        "functions": 0.39,
+        "lines": 0.47,
+        "statements": 0.47
+      }
+    },
     "testEnvironment": "node",
     "coverageDirectory": "./ci/storage/tmp/coverage",
     "verbose": true
@@ -149,7 +164,21 @@
     "production": "NODE_ENV=production webpack --progress --hide-modules --config=./webpack.config.js",
     "watch:test": "npm t -- --watch",
     "cover": "npm t -- --coverage",
+    "metricOfCover": "npx metricCover",
     "test": "jest",
     "eslint": "./node_modules/.bin/eslint ./resources/**/*.{js,vue} || echo \"\n$(tput setaf 1) CORRECT CODE IN THE ABOVE FILES AND TRY AGAIN $(tput sgr 0)\n\""
+  },
+  "metrics": {
+    "coverUnitTest": {
+      "pathReporter": "./ci/storage/tmp/coverage/clover.xml",
+      "output": {
+        "conexion": {
+          "type": "mongoDb",
+          "dbName": "coverage_reports",
+          "collectionName": "coverages",
+          "pathEnv": "./.env"
+        }
+      }
+    }
   }
 }

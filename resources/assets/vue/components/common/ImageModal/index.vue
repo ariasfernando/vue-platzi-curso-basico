@@ -248,6 +248,7 @@ export default {
       if (typeof this.$refs.sie !== 'undefined') {
         this.$refs.sie.close();
       }
+      this.$refs.input.value = '';
       this.sieOptions = {};
       this.currentImage = null;
       this.isNewImage = true;
@@ -336,7 +337,6 @@ export default {
     .modal-container,
     .modal-body {
       width: 100%;
-      max-height: none;
     }
   }
 }
@@ -396,32 +396,34 @@ export default {
   padding-top: 40px;
   padding-left: 40px;
   padding-right: 40px;
-  overflow-y: auto;
-  .library-container {
-    width: 100%;
-    margin: 20px auto;
-    border: 1px solid #eaeaea;
-    padding: 20px;
-    .row {
-      .col-md-2 {
-        background-color: #f6f6f6;
-        height: 150px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        margin: 13px;
-        overflow: hidden;
-        img {
-          padding: 3px;
-          cursor: pointer;
-          width: 100%;
-          vertical-align: middle;
+  .modal-body {
+    overflow-y: scroll;
+    max-height: 500px;
+    .library-container {
+      width: 100%;
+      margin: 20px auto;
+      border: 1px solid #eaeaea;
+      padding: 20px;
+      .row {
+        .col-md-2 {
+          background-color: #f6f6f6;
+          height: 150px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          margin: 13px;
+          overflow: hidden;
+          img {
+            padding: 3px;
+            cursor: pointer;
+            width: 100%;
+            vertical-align: middle;
+          }
         }
       }
     }
   }
 }
-
 .url {
   max-width: 700px;
   padding-top: 30px;

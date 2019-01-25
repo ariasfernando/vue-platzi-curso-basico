@@ -42,6 +42,15 @@ function textDefault() {
           subComponent: 'text',
         },
         {
+          link: 'attribute',
+          label: 'Default URL',
+          name: 'href',
+          aclName: 'font_font-style',
+          type: 'generic-text',
+          value: '',
+          subComponent: 'text',
+        },
+        {
           name: 'fontWeight',
           aclName: 'font_font-weight',
           type: 'font-weight',

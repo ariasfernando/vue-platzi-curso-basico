@@ -50,7 +50,10 @@
 							'name' => 'roles[]',
 							'multiple' => 'true',
 							'title' => '',
-							'data-validation' => '{"required":"true"}'
+							'data-validation' => '{"required":"true"}',
+							'data-selected-text-format' => 'count > 3',
+							'data-actions-box '=> 'true',
+							'data-live-search'=> 'true',
 						]
 					);
 				!!}

@@ -285,6 +285,7 @@ return [
         'ModuleModel'    => Stensul\Models\Module::class,
         'TagModel'    => Stensul\Models\Tag::class,
         'PermissionModel'    => Stensul\Models\Permission::class,
+        'ModuleUsageModel'   => Stensul\Models\ModuleUsage::class,
         'SendReviewersEmail' => Stensul\Jobs\SendReviewersEmail::class,
         'StoreAssetsInCdn' => Stensul\Jobs\StoreAssetsInCdn::class,
         'TextConverter' => Stensul\Services\TextConverter::class,

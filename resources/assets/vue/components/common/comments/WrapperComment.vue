@@ -1,20 +1,21 @@
 <template>
   <wrapper>
-    <LineComment :comment="start"></LineComment>
-      <slot></slot>
-    <LineComment :comment="end"></LineComment>
+    <line-comment :comment="start" />
+    <slot />
+    <line-comment :comment="end" />
   </wrapper>
 </template>
 
 <script>
-import Wrapper from '../Wrapper';
-import LineComment from './LineComment';
-  export default {
-    name: 'WrapperComment',
-    props: ['start', 'end'],
-    components: {
-      Wrapper,
-      LineComment,
-    },
-  }
+import Wrapper from '../Wrapper.vue';
+import LineComment from './LineComment.vue';
+
+export default {
+  name: 'WrapperComment',
+  components: {
+    Wrapper,
+    LineComment,
+  },
+  props: ['start', 'end'],
+};
 </script>

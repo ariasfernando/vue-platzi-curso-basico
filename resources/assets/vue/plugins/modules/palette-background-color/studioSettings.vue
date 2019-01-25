@@ -2,17 +2,16 @@
   <div>
     <settings-container :label="plugin.title">
       <template slot="setting-right">
-          <toggle-button :value="enabled" @change="toggle"></toggle-button>
+        <toggle-button :value="enabled" @change="toggle" />
       </template>
     </settings-container>
     <settings-container v-if="plugin.enabled" label="Palette">
       <template slot="setting-right">
-          <el-input
-            size="mini"
-            v-validate="'required'"
-            v-model="bgColorMap"
-            placeholder="000000,474646,79A8C9,CD202C"
-          ></el-input>
+        <el-input
+          v-model="bgColorMap"
+          v-validate="'required'"
+          size="mini"
+          placeholder="000000,474646,79A8C9,CD202C" />
       </template>
     </settings-container>
   </div>
@@ -27,21 +26,23 @@
     watch: {
       component: {
         handler: function() {
-          switch (this.component.type) {
-            case 'button-element':
-              this.plugin.subComponent ='button';
-              break;
-            case 'image-element':
-              this.plugin.subComponent ='container';
-              break;
-            case 'text-element':
-              this.plugin.subComponent ='container';
-              break;
-            case 'divider-element':
-              this.plugin.subComponent ='divider';
-              break;
-            default:
-              break;
+          if (this.plugin.subComponent === undefined) {
+            switch (this.component.type) {
+              case 'button-element':
+                this.plugin.subComponent = 'button';
+                break;
+              case 'image-element':
+                this.plugin.subComponent = 'container';
+                break;
+              case 'text-element':
+                this.plugin.subComponent = 'container';
+                break;
+              case 'divider-element':
+                this.plugin.subComponent = 'container';
+                break;
+              default:
+                break;
+            }
           }
         },
         deep: true,
@@ -59,8 +60,8 @@
     },
     data() {
       return {
-        enabled: false
-      }
+        enabled: false,
+      };
     },
     methods: {
       toggle(value) {
@@ -83,14 +84,14 @@
           columnId: this.currentComponent.columnId,
           componentId: this.currentComponent.componentId,
           config: {
-            options: option
+            options: option,
           },
-          subOption: subOption
+          subOption,
         };
 
         // Save plugin data
-        this.$store.commit("module/savePluginSuboption", payload);
+        this.$store.commit('module/savePluginSuboption', payload);
       },
-    }
-  }
+    },
+  };
 </script>

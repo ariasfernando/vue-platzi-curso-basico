@@ -132,12 +132,26 @@
                                 <toggle-button :value="library.config.templating" @change="updateToggle('templating')"></toggle-button>
                               </p>
                             </div>
-                            <div class="row" v-if="campaignConfig.enable_tracking">
+
                               <!-- Field Tracking -->
+                            <div class="row">
                               <label for="tracking" class="col-sm-4 control-label">Enable Tracking</label>
-                              <p class="control col-sm-1">
+                              <div class="control col-sm-1">
                                 <toggle-button :value="library.config.tracking" @change="updateToggle('tracking')"></toggle-button>
-                              </p>
+                              </div>
+                              <div class="col-sm-11">
+                                <textarea
+                                    v-model="library.config.trackingConfig"
+                                    v-validate="'required:library.config.tracking|isValidJson'"
+                                    :name="'trackingConfig'"
+                                    :style="{borderColor: errors.has('trackingConfig') ? 'red' : '', resize: 'vertical'}"
+                                    :disabled="!library.config.tracking"
+                                    data-vv-as="configuration"
+                                    placeholder="Add the tracking configuration in JSON format...">
+                                </textarea>
+                                <span v-if="errors.has('trackingConfig')" class="help is-danger">{{ errors.first('trackingConfig') }}</span>
+                                <span v-else>&nbsp;</span>
+                              </div>
                             </div>
 
                         </tab>
@@ -150,7 +164,7 @@
                                 <label for="templateWidth">Template width</label>
                                 <p class="control">
                                   <el-input-number
-                                    size="mini" 
+                                    size="mini"
                                     v-validate="'required'"
                                     v-model="library.config.templateWidth"
                                     :class="{'is-danger': errors.has('templateWidth') }"
@@ -165,7 +179,7 @@
                                 <label for="templateMobileWidth">Template Mobile Width</label>
                                 <p class="control">
                                   <el-input-number
-                                    size="mini" 
+                                    size="mini"
                                     v-validate="'required'"
                                     v-model="library.config.templateMobileWidth"
                                     :class="{'is-danger': errors.has('templateMobileWidth') }"
@@ -264,7 +278,7 @@
                                 <p class="control">
 
                                   <el-input-number
-                                    size="mini" 
+                                    size="mini"
                                     v-validate="'required'"
                                     v-model="library.config.fontSize"
                                     :class="{'is-danger': errors.has('fontSize') }"
@@ -279,7 +293,7 @@
                                 <label for="lineHeight">Line Height</label>
                                 <p class="control">
                                   <el-input-number
-                                    size="mini" 
+                                    size="mini"
                                     v-validate="'required'"
                                     v-model="library.config.lineHeight"
                                     :class="{'is-danger': errors.has('lineHeight') }"
@@ -324,7 +338,7 @@
                                 <p class="control">
                                   <el-input
                                     v-model="library.config.externalCssLink"
-                                    name="linkColor" 
+                                    name="linkColor"
                                     placeholder="http://www.example.com/css/styles.css"
                                   ></el-input>
                                 </p>
@@ -336,7 +350,7 @@
                                 <p class="control">
                                   <el-input
                                     v-model="library.config.colorPalettes"
-                                    name="colorPalettes" 
+                                    name="colorPalettes"
                                     placeholder="{'palette_name':['000000','Black','474646','Gray','79a8c9','Blue','cd202c','Red']}"
                                   ></el-input>
                                 </p>
@@ -388,7 +402,7 @@
 														      placeholder="Please Input"
 														      @select="handleSelect"
 														    ></el-autocomplete>
-																  	| 
+																  	|
                                   <button class="btn btn-success btn-add-group" @click.prevent="addGroup">Add Group</button>
                                 </p>
                               </div>
@@ -615,7 +629,7 @@
               }
             });
         }
-        
+
       },
       extractErrors(errArr){
         let errors = []
@@ -637,7 +651,7 @@
       addItem(moduleId) {
         let itemData = {
           name: moduleId,
-          moduleId: moduleId, 
+          moduleId: moduleId,
           type: 'item',
         }
         this.library.modules.push(itemData);
@@ -921,11 +935,11 @@
     .drag-component-menu{
       min-height: 30px;
       margin-left: 30px;
-      
+
       input{
         width: 50% !important;
       }
-      
+
       hr{
         margin-top: 3px;
         margin-bottom: 10px;
