@@ -2,7 +2,7 @@
   <div class="stui-icon-hecklist">
     <el-button
       v-for="(option, key) in list"
-      :key="option.enable+key"
+      :key="option.key+key"
       v-b-tooltip.hover
       :class="[option.icon , {'active': isActive(option)}]"
       :title="option.label"
@@ -22,37 +22,26 @@ export default {
       },
     },
     value: {
-      type: [String, Object, Boolean],
-      default: '',
-    },
-    multiselect: {
-      type: Boolean,
-      default: false,
+      type: [Object],
+      required: true,
     },
   },
   methods: {
     toggleOption(option) {
-      let newValue = '';
-      if (this.multiselect) {
-        newValue = (typeof this.value === 'object') ? _.cloneDeep(this.value) : {};
-        newValue[option.enable] = !newValue[option.enable];
-      } else {
-        newValue = this.value === option.enable ? option.disabled : option.enable;
-      }
-
-      this.$emit('input', newValue);
-      this.$emit('change', newValue);
+      const value = _.cloneDeep(this.value);
+      value[option.key] = !value[option.key];
+      this.$emit('input', value);
+      this.$emit('change', value);
     },
     isActive(option) {
-      if (typeof this.value === 'object') {
-        return this.value[option.enable];
-      }
-      return option.enable === this.value;
+      return this.value[option.key];
     },
   },
 };
 </script>
 <style lang='scss' scoped>
+@import '../scss/stui.scss';
+
 .stui-icon-hecklist {
   text-align: left;
   /deep/ {
@@ -64,8 +53,8 @@ export default {
     }
     .el-button.active {
       color: #ffffff;
-      border-color: rgb(120, 220, 214);
-      background-color: rgb(120, 220, 214);
+      border-color: $color-secondary;
+      background-color: $color-secondary;
     }
     .el-button {
       width: 26px;

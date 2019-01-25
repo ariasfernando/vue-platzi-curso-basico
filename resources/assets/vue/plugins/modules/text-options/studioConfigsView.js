@@ -66,40 +66,30 @@ function configsView() {
       truncate: {
         key: 'truncate',
         title: 'Char Limit',
-        type: 'stui-input-autodisable',
-        props: {
-          disableOn: 0,
-          autodisableComponent: 'stui-input-number',
-          min: 0,
-        },
-        checkbox: {
-          valueOnTrue: 1,
-        },
+        type: 'stui-input-number',
+        checkbox: true,
+        defaultValue: 50,
+        min: 0,
+        muteOn: [0, false],
       },
       lines_limit: {
         key: 'lines_limit',
         title: 'Lines Limit',
-        type: 'stui-input-autodisable',
+        type: 'stui-input-number',
+        checkbox: true,
+        defaultValue: 2,
         isDisabled: value => (Application.utils.isJsonObjectString(value)),
-        props: {
-          disableOn: 0,
-          autodisableComponent: 'stui-input-number',
-          min: 0,
-        },
-        checkbox: {
-          valueOnTrue: 2,
-        },
+        min: 0,
+        muteOn: [0, false],
       },
       lines_limit_advanced: {
         key: 'lines_limit',
         title: 'Lines Limit',
-        type: 'stui-input-autodisable',
-        props: {
-          disableOn: '0',
-        },
-        checkbox: {
-          valueOnTrue: 2,
-        },
+        type: 'stui-input-text',
+        checkbox: true,
+        defaultValue: 2,
+        falseText: '0',
+        muteOn: ['0', 0, false],
       },
       fontsize_formats: {
         key: 'fontsize_formats',
@@ -114,31 +104,28 @@ function configsView() {
         key: 'link_validate_url',
         title: 'Validate URL',
         type: 'select',
+        dependsOn: {
+          config: 'options',
+          name: 'link',
+        },
         options: {
           disabled: 'No Validation',
           url: 'Validate Format',
           urlAndDestination: 'Format and Destination',
         },
-        dependsOn: {
-          config: 'options',
-          name: 'link',
-        },
       },
       link_fixed_color: {
         key: 'link_fixed_color',
         title: 'Link color',
-        type: 'stui-input-autodisable',
-        falseText: 'none',
+        type: 'stui-color-picker',
+        checkbox: true,
+        defaultValue: '#000000',
         dependsOn: {
           config: 'options',
           name: 'link',
         },
-        props: {
-          autodisableComponent: 'stui-color-picker',
-        },
-        checkbox: {
-          valueOnTrue: '#000000',
-        },
+        falseText: 'none',
+        muteOn: [false],
       },
       link_format: {
         key: 'link_format',
@@ -149,21 +136,18 @@ function configsView() {
           config: 'options',
           name: 'link',
         },
-        props: {
-          list: [
-            {
-              label: 'Bold',
-              icon: 'fa fa-bold',
-              enable: 'bold',
-            },
-            {
-              label: 'Underline',
-              icon: 'fa fa-underline',
-              enable: 'underline',
-            },
-          ],
-          multiselect: true,
-        },
+        list: [
+          {
+            label: 'Bold',
+            icon: 'fa fa-bold',
+            key: 'bold',
+          },
+          {
+            label: 'Underline',
+            icon: 'fa fa-underline',
+            key: 'underline',
+          },
+        ],
       },
     },
   };

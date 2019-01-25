@@ -5,23 +5,24 @@
       customClass,
       {'clearfix' : !hasSettingHalf},
       {'is-setting-half' : hasSettingHalf},
-      {[`level-${level}-container`] : level}
+      {[`level-${level}-container`] : level},
+      {'is-disabled': disabled}
     ]">
     <template v-if="hasSettingRight">
       <label
-        v-if="!noLabel && !checkbox"
+        v-if="!noLabel && checkbox === undefined"
         :class="{[`level-${level}`] : level}"
         class="half"
         :title="title">
         {{ label }}
       </label>
       <stui-checkbox
-        v-if="checkbox"
+        v-if="checkbox !== undefined"
         :label="label"
-        :value="checkbox.value"
+        :value="checkbox"
         :class="{[`level-${level}`] : level}" class="half"
-        :disabled="checkbox.disabled"
-        @change="checkboxChange" />
+        :disabled="disabled"
+        @change="(value)=>{$emit('checkboxChange', value)}" />
       <div class="half-setting padding-top">
         <slot name="setting-right" />
       </div>
@@ -83,6 +84,7 @@ export default {
     'titleLeft',
     'noLabel',
     'checkbox',
+    'disabled',
   ],
   computed: {
     hasSettingRight() {
@@ -99,11 +101,6 @@ export default {
     },
     hasSettingHalf() {
       return Boolean(this.$slots['setting-half']);
-    },
-  },
-  methods: {
-    checkboxChange(value) {
-      this.$emit('checkboxChange', value);
     },
   },
 };
