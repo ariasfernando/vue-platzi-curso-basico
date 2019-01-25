@@ -17,6 +17,8 @@ export default {
 <style lang="scss" scoped>
 .element-selector {
   border-radius: 2px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
   background: #cdcdcd;
   border: none;
   display: block;
@@ -24,7 +26,7 @@ export default {
   font-weight: normal;
   color: #ffffff;
   outline: none;
-  transition: background 0.3s linear;
+  transition: background 150ms linear;
   padding: 2px 7px 3px 7px;
   position: absolute;
   transform: translateX(-50%);
