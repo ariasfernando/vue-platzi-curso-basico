@@ -3,7 +3,7 @@ const Checkbox = require('./checkbox');
 const Close = require('./close');
 const ColorPicker = require('./color-picker');
 const IconChecklist = require('./icon-checklist');
-const InputAutodisable = require('./input-autodisable');
+const InputDisabled = require('./input-disabled');
 const InputNumber = require('./input-number');
 const InputText = require('./input-text');
 const InputToggleableNumber = require('./input-toggleable-number');
@@ -19,7 +19,7 @@ module.exports = {
   Close,
   ColorPicker,
   IconChecklist,
-  InputAutodisable,
+  InputDisabled,
   InputNumber,
   InputText,
   InputToggleableNumber,

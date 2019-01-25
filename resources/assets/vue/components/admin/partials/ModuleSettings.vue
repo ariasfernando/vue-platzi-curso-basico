@@ -3,7 +3,7 @@
     <label-item-container label="Row Styles" icon="glyphicon-cog" v-b-toggle.module-settings-styles />
     <b-collapse id="module-settings-styles" visible accordion="module-settings">
       <b-card class="control">
-        <group-container v-for="(settingGroup, groupKey) in settings" v-if="hasPermissionsInGroup(settingGroup, 'std-module_')" :key="groupKey">
+        <group-container v-for="(settingGroup, groupKey) in settingsFiltered" :key="groupKey">
           <component
             :is="'input-' + setting.type"
             v-for="setting in settingGroup.settings"
@@ -79,18 +79,38 @@ export default {
     module() {
       return this.$store.getters['module/module'];
     },
-    settings() {
-      return settingsDefault.Module().componentSettings;
+    hasMoreThanOneColumn() {
+      return this.module.structure.columns.length > 1;
+    },
+    settingsFiltered() {
+      return settingsDefault
+        .Module()
+        .componentSettings.filter(this.filterSetting);
     },
     pluginsGroups() {
-      return pluginsLayout['Module']().componentPlugins;
+      return pluginsLayout.Module().componentPlugins;
     },
   },
   methods: {
     pluginFilter(plugins) {
-      return plugins.filter(plugin => {
-        return this.$can(`std-plugin-${plugin.aclName}`) && this.module.plugins[_.camelCase(plugin.name)];
+      return plugins.filter(
+        plugin =>
+          this.$can(`std-plugin-${plugin.aclName}`) &&
+          this.module.plugins[_.camelCase(plugin.name)],
+      );
+    },
+    filterSetting(group) {
+      let show = false;
+      _.forEach(group.settings, (item) => {
+        if (
+          (item.dependOn === undefined || _.get(this, item.dependOn)) &&
+          this.$can(`std-module_${item.aclName}`)
+        ) {
+          show = true;
+        }
+        return !show;
       });
+      return show;
     },
     SettingUpdatedHandler(eventData) {
       this.saveModuleProperty(

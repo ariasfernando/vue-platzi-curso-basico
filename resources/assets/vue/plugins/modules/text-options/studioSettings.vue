@@ -100,7 +100,8 @@
             <settings-container
               v-if="showSetting(tinySetting.dependsOn) && $can(`tiny-plugin-${tinySetting.aclName || key}`)"
               :label="tinySetting.title"
-              :checkbox="checkboxValue(plugin.config.settings[tinySetting.key].content, tinySetting)"
+              :checkbox="checkboxValue(tinySetting.checkbox, plugin.config.settings[tinySetting.key].content)"
+              :disabled="isDisabled(tinySetting.isDisabled, tinySettingContent(plugin.config.settings[tinySetting.key].content))"
               @checkboxChange="(value)=>checkboxChange(value, tinySetting)">
               <template slot="setting-right">
                 <el-input-number
@@ -134,11 +135,7 @@
                 <component
                   :is="tinySetting.type"
                   v-else
-                  :value="plugin.config.settings[tinySetting.key].content"
-                  :default-value="tinySetting.defaultValue"
-                  :disabled="isDisabled(tinySetting.isDisabled, tinySettingContent(plugin.config.settings[tinySetting.key].content))"
-                  :false-text="tinySetting.falseText"
-                  v-bind="tinySetting.props"
+                  v-bind="props(tinySetting, key)"
                   @change="(value)=>changeSetting(value, tinySetting.key)" />
               </template>
             </settings-container>
@@ -231,6 +228,19 @@ export default {
     },
   },
   methods: {
+    props(tinySetting) {
+      return {
+        defaulValue: tinySetting.defaultValue,
+        disabled: this.isDisabled(tinySetting.isDisabled, this.tinySettingContent(this.plugin.config.settings[tinySetting.key].content)),
+        falseText: tinySetting.falseText,
+        list: tinySetting.list,
+        min: tinySetting.min,
+        multiselect: tinySetting.multiselect,
+        muteOn: tinySetting.muteOn,
+        option: tinySetting.option,
+        value: this.plugin.config.settings[tinySetting.key].content,
+      };
+    },
     showSetting(dependsOn) {
       if (dependsOn) {
         return _.get(
@@ -282,23 +292,11 @@ export default {
         ? isDisabled(this.tinySettingContent(content))
         : false;
     },
-    checkboxValue(val, tinySetting) {
-      const _value =
-        val !== undefined && val !== 0 && val !== '0' && val !== false;
-
-      const disabled = this.isDisabled(
-        tinySetting.isDisabled,
-        this.tinySettingContent(val),
-      );
-
-      return tinySetting.checkbox ? { value: _value, disabled } : undefined;
+    checkboxValue(checkbox, val) {
+      return checkbox ? val !== undefined && val !== 0 && val !== '0' && val !== false : undefined;
     },
     checkboxChange(value, tinySetting) {
-      const val =
-        value && tinySetting.checkbox
-          ? tinySetting.checkbox.valueOnTrue
-          : false;
-
+      const val = value ? tinySetting.defaultValue : false;
       this.changeSetting(val, tinySetting.key);
     },
   },

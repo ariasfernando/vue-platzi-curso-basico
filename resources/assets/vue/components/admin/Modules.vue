@@ -374,7 +374,7 @@ $stensul-purple: #514960;
   font-family: 'Open Sans', Arial, serif;
   font-weight: 300;
   &.is-2 {
-    font-size: 28px;
+    font-size: 20px;
   }
 }
 
