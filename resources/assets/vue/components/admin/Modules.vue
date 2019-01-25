@@ -32,7 +32,6 @@
             <div class="level-item">
               <div class="search-container">
                 <search-input
-                  :dirty="resetSearch"
                   :collection="modules[activeTab]"
                   :columns-to-filter="['name', 'status', 'libraries']"
                   @filtered="refreshData" />
@@ -172,7 +171,6 @@ export default {
         custom: [],
       },
       activeTab: 'studio',
-      resetSearch: 0,
     };
   },
   created() {
@@ -228,7 +226,6 @@ export default {
     setTab(type) {
       this.activeTab = type;
       this.filteredModules[type] = this.modules[type];
-      this.resetSearch++;
     },
   },
 };

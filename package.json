@@ -107,6 +107,7 @@
     "pre-commit": "^1.2.2",
     "pre-commit-with-lint": "^1.2.5",
     "stackup": "1.0.1",
+    "stensul-coverage-metrics": "^1.0.7",
     "stylelint": "^9.6.0"
   },
   "pre-commit": {
@@ -136,12 +137,25 @@
       "customer(.*)$": "<rootDir>/stensul/customer/resources/assets/vue/$1"
     },
     "modulePaths": [
-      "./node_modules",
-      "./resources/assets/vue"
+      "<rootDir>/node_modules",
+      "<rootDir>/resources/assets"
     ],
     "roots": [
-      "./tests/js"
+      "<rootDir>/tests/js",
+      "<rootDir>/resources/assets/"
     ],
+    "collectCoverageFrom": [
+      "**/*.{js,vue}",
+      "!<rootDir>/.jestrc.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 0.42,
+        "functions": 0.39,
+        "lines": 0.47,
+        "statements": 0.47
+      }
+    },
     "testEnvironment": "node",
     "coverageDirectory": "./ci/storage/tmp/coverage",
     "verbose": true
@@ -152,6 +166,7 @@
     "production": "NODE_ENV=production webpack --progress --hide-modules --config=./webpack.config.js",
     "watch:test": "npm t -- --watch",
     "cover": "npm t -- --coverage",
+    "metricOfCover": "npx metricCover",
     "test": "jest",
     "eslint": "./node_modules/.bin/eslint ./resources/**/*.{js,vue} || echo \"\n$(tput setaf 1) CORRECT CODE IN THE ABOVE FILES AND TRY AGAIN $(tput sgr 0)\n\""
   },
@@ -159,5 +174,18 @@
     "arrowParens": "always",
     "singleQuote": true,
     "trailingComma": "all"
+  },
+  "metrics": {
+    "coverUnitTest": {
+      "pathReporter": "./ci/storage/tmp/coverage/clover.xml",
+      "output": {
+        "conexion": {
+          "type": "mongoDb",
+          "dbName": "coverage_reports",
+          "collectionName": "coverages",
+          "pathEnv": "./.env"
+        }
+      }
+    }
   }
 }

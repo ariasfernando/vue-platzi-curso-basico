@@ -47,9 +47,6 @@ export default {
         }
       }, 500);
     },
-    dirty() {
-      this.clearSearch();
-    },
   },
   methods: {
     search() {
