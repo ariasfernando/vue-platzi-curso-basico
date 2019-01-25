@@ -159,16 +159,8 @@
     data () {
       return {
         campaignData: {},
-        users: [],
         reviewers: [],
-        currentReviewer: {},
-        currentNotificationMessage: '',
-        startProof: true,
-        proofAccess: {
-          status: this.$_app.config.proofConfig.status,
-          allow: this.$_app.config.permissions.indexOf('edit_proof') >= 0
-            && this.$_app.config.permissions.indexOf('access_proof') >= 0
-        }
+        startProof: true
       }
     },
   };
