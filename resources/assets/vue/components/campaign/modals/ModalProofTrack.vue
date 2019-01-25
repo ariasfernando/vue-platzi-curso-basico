@@ -80,7 +80,6 @@
     watch: {
       modalProofTrack (value) {
         if (value) {
-          this.checkCampaign();
           this.fetchReviewers();
         }
       }
@@ -89,27 +88,6 @@
       close () {
         this.reviewers = [];
         this.$store.commit('campaign/toggleModal', 'modalProofTrack');
-      },
-      checkCampaign () {
-        proofService.getJSON('campaign', this.campaign.campaign_data._id).then((response) => {
-          if (response.status === 'success') {
-            this.campaignData = response.data;
-            if (this.campaignData.proof_id !== null) {
-              // If a proof already exists, set the 'Start proof from scratch' off
-              this.startProof = false;
-            }
-            if ('can_be_processed' in this.campaignData && this.campaignData.can_be_processed === false) {
-              this.$root.$toast(
-                this.campaignData.alert,
-                {className: 'et-info'}
-              );
-              this.$store.commit('campaign/campaignCanBeProcessed', false);
-            }
-          }
-        })
-        .catch((error) => {
-          this.$root.$toast(error, {className: 'et-error'});
-        });
       },
       fetchReviewers () {
         proofService.getJSON('reviewers', this.campaign.campaign_data._id).then((response) => {
