@@ -5,8 +5,8 @@
 /* global Application */
 
 import nock from 'nock';
-import libraryService from 'services/library';
-import mocks from 'resources/mocks';
+import libraryService from '@/services/library';
+import mocks from '@/resources/mocks';
 
 require('dotenv').config();
 
