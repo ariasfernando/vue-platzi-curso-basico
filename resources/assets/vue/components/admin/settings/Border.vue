@@ -1,7 +1,7 @@
 <template>
   <settings-container :label="`Border ${side}`" custom-class="field-border">
     <template slot="setting-bottom">
-      <div class="clearfixalign-element">
+      <div class="clearfix">
         <el-color-picker
           v-model="color"
           color-format="hex"
@@ -51,7 +51,7 @@ export default {
         { value: 'double', label: 'double' },
         { value: 'dashed', label: 'dashed' },
         { value: 'dotted', label: 'dotted' },
-        { value: 'hidden', label: 'hidden' }
+        { value: 'hidden', label: 'hidden' },
       ],
     };
   },
@@ -91,7 +91,9 @@ export default {
     },
     color: {
       get() {
-        return this.element.style[`border${this.side}Color`] ? this.element.style[`border${this.side}Color`] : '';
+        return this.element.style[`border${this.side}Color`]
+          ? this.element.style[`border${this.side}Color`]
+          : '';
       },
       set(color) {
         let value = color;
@@ -109,99 +111,81 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
-.button input {
-  text-align: center;
-}
-.el-button.is-disabled,
-.el-button.is-disabled:focus,
-.el-button.is-disabled:hover {
-  background: #f8f8f8;
-  color: #666666;
-  cursor: inherit;
-  border: 1px solid #dcdfe6;
-  font-size: 11px;
-  font-weight: 300;
-  line-height: 14px;
-  border-radius: 0px 2px 2px 0px;
-}
-.input-number-size {
-  padding-left: 0;
-  padding-right: 21px;
-}
-.el-button.is-active .el-input__inner,
-.el-input__inner:focus {
-  border: 1px solid #dcdfe6;
-}
-button.el-button {
-  padding: 6px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.el-color-picker {
-  height: 30px;
-}
-
-.float-left {
-  float: left;
-}
-.el-select {
-  width: 100px;
-}
-.margin-right {
-  margin-right: 5px;
-}
-.el-input-number {
-  width: 67px;
-}
-
-.el-input-number /deep/ {
-  .el-input-number__decrease, .el-input-number__increase {
-    width: 17px;
-  }
-}
-
-.el-input-number.is-controls-right /deep/ .el-input__inner {
-  border-radius: 2px 0px 0px 2px;
-  padding-left: 8px;
-  padding-right: 25px;
-}
-
-#edit-container .right-bar .form-group,
-#edit-container .left-bar .form-group {
-  margin-bottom: 0;
-  &:last-of-type {
-    margin-bottom: 6px;
-  }
-}
-</style>
-<style lang="less" >
-
-
-.field-border {
-  input[type='text'] {
+.field-border /deep/ {
+  .button input {
     text-align: center;
   }
-  .el-input-number.is-without-controls .el-input__inner {
-    border-radius: 2px 0px 0px 2px;
-    border-right: none;
+  .el-button.is-disabled,
+  .el-button.is-disabled:focus,
+  .el-button.is-disabled:hover {
+    background: #f8f8f8;
+    color: #666666;
+    cursor: inherit;
+    border: 1px solid #dcdfe6;
+    font-size: 11px;
+    font-weight: 300;
+    line-height: 14px;
+    border-radius: 0px 2px 2px 0px;
   }
-  .el-color-picker__trigger {
-    padding: 0px;
-    height: 28px;
-    width: 34px;
-    border-radius: 2px;
+  .input-number-size {
+    padding-left: 0;
+    padding-right: 21px;
+  }
+  .el-button.is-active .el-input__inner,
+  .el-input__inner:focus {
+    border: 1px solid #dcdfe6;
+  }
+  button.el-button {
+    padding: 6px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  .el-color-picker {
+    height: 30px;
+  }
+  .float-left {
+    float: left;
+  }
+  .el-select {
+    width: 100px;
+  }
+  .margin-right {
+    margin-right: 5px;
+  }
+  .el-input-number {
+    width: 67px;
+    .el-input__inner,
+    .el-input-number__increase,
+    .el-input-number__decrease {
+      border-radius: 0;
+      border-right: 0;
+    }
+    .el-input-number__increase,
+    .el-input-number__decrease {
+      right: 0px;
+    }
+  }
+  .el-color-picker {
+    .el-color-picker__trigger {
+      padding: 0px;
+      height: 28px;
+      width: 34px;
+      border-radius: 2px;
 
-    .el-color-picker__color {
-      border: none;
+      .el-color-picker__color {
+        border: none;
+      }
     }
   }
   .el-select {
     .el-input__inner {
       border-radius: 2px;
-
       &:focus {
         border: 1px solid #78dcd6;
       }
+    }
+    input[type='text'] {
+      text-align: center;
     }
   }
 }

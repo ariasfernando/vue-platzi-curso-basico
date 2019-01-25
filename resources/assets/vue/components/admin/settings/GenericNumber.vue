@@ -151,8 +151,6 @@ export default {
 }
 .el-input-number--mini.width-unit {
   width: 95px;
-  margin-right: 25px;
-  padding-right: 16px;
   float: right;
 }
 .half-style-setting-padding {
