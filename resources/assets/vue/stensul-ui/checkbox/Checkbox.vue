@@ -34,6 +34,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import '../scss/stui.scss';
+
 .stui-checkbox /deep/ {
   .el-checkbox__label {
     text-align: left;
@@ -59,6 +61,10 @@ export default {
   &.is-disabled .el-checkbox__input.is-indeterminate .el-checkbox__inner {
     background-color: #c0c4cc;
     border-color: #c0c4cc;
+  }
+  .el-checkbox__inner:hover,
+  .el-checkbox__input:not(.is-checked).is-focus .el-checkbox__inner {
+    border-color: $color-secondary;
   }
 }
 </style>

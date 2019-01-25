@@ -43,8 +43,8 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-.stx-toolbar /deep/ {
+<style lang="scss">
+.stx-toolbar {
   position: absolute;
   transform: translate(0, -35px);
   z-index: 300;
