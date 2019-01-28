@@ -195,7 +195,7 @@ module.exports = {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '../../stensul-ui/scss/stui.scss';
 .column-draggable /deep/ {
   .ghost-component,

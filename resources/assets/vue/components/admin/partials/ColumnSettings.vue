@@ -45,6 +45,7 @@
             v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
             :key="plugin.name + column.id"
             :class="'plugin-' + plugin.name"
+            :element="column"
             :name="_.camelCase(plugin.name)"
             :plugin="column.plugins[_.camelCase(plugin.name)]"
             :column-id="currentComponent.columnId" />

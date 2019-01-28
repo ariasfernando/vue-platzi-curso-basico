@@ -44,6 +44,7 @@
             v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
             :key="plugin.name"
             :name="_.camelCase(plugin.name)"
+            :element="module"
             :plugin="module.plugins[_.camelCase(plugin.name)]"
             :class="'plugin-' + plugin.name" />
         </group-container>

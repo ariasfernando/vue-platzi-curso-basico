@@ -2,7 +2,7 @@
   <div>
     <settings-container :label="plugin.title">
       <template slot="setting-right">
-        <toggle-button :value="enabled" @change="toggle" />
+        <toggle-button :value="plugin.enabled" @change="toggle" />
       </template>
     </settings-container>
     <settings-container v-if="plugin.enabled" label="Palette">
@@ -17,81 +17,77 @@
   </div>
 </template>
 <script>
-  import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
-  import pluginMixin from '../mixins/pluginMixin';
-  export default {
-    props: ['name'],
-    components: { SettingsContainer },
-    mixins: [pluginMixin],
-    watch: {
-      component: {
-        handler: function() {
-          if (this.plugin.subComponent === undefined) {
-            switch (this.component.type) {
-              case 'button-element':
-                this.plugin.subComponent = 'button';
-                break;
-              case 'image-element':
-                this.plugin.subComponent = 'container';
-                break;
-              case 'text-element':
-                this.plugin.subComponent = 'container';
-                break;
-              case 'divider-element':
-                this.plugin.subComponent = 'container';
-                break;
-              default:
-                break;
-            }
-          }
-        },
-        deep: true,
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
+import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
+
+export default {
+  components: { SettingsContainer },
+  mixins: [pluginMixinAdmin],
+  props: ['name'],
+  computed: {
+    bgColorMap: {
+      get() {
+        return this.plugin.config.options.bgcolor.palette.join(',');
+      },
+      set(value) {
+        this.changeOption(value.split(','), 'palette', 'bgcolor');
       },
     },
-    computed: {
-      bgColorMap: {
-        get() {
-          return this.plugin.config.options.bgcolor.palette.join(',');
-        },
-        set(value) {
-          this.changeOption(value.split(","),'palette','bgcolor');
+  },
+  watch: {
+    component: {
+      handler() {
+        if (this.plugin.subComponent === undefined) {
+          switch (this.component.type) {
+            case 'button-element':
+              this.plugin.subComponent = 'button';
+              break;
+            case 'image-element':
+              this.plugin.subComponent = 'container';
+              break;
+            case 'text-element':
+              this.plugin.subComponent = 'container';
+              break;
+            case 'divider-element':
+              this.plugin.subComponent = 'container';
+              break;
+            default:
+              break;
+          }
         }
       },
+      deep: true,
     },
-    data() {
-      return {
-        enabled: false,
+  },
+  methods: {
+    toggle(value) {
+      const payload = {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        enabled: value,
       };
+
+      this.$store.commit('module/togglePlugin', payload);
     },
-    methods: {
-      toggle(value) {
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          enabled: value,
-        };
+    changeOption(value, setting, subOption) {
+      const option = {};
+      option[subOption] = {};
+      option[subOption][setting] = value;
 
-        this.$store.commit('module/togglePlugin', payload);
-      },
-      changeOption(value,setting,subOption) {
-        const option = {};
-        option[subOption] = {};
-        option[subOption][setting] = value;
+      const payload = {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        config: {
+          options: option,
+        },
+        subOption,
+      };
 
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          config: {
-            options: option,
-          },
-          subOption,
-        };
-
-        // Save plugin data
-        this.$store.commit('module/savePluginSuboption', payload);
-      },
+      // Save plugin data
+      this.$store.commit('module/savePluginSuboption', payload);
     },
-  };
+  },
+};
 </script>

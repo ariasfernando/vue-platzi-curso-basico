@@ -16,11 +16,11 @@
 </template>
 <script>
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
-import pluginMixin from '../mixins/pluginMixin';
+import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
 
 export default {
   components: { SettingsContainer },
-  mixins: [pluginMixin],
+  mixins: [pluginMixinAdmin],
   props: ['name', 'element'],
   computed: {
     value: {
