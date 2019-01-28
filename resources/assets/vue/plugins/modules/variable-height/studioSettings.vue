@@ -1,12 +1,12 @@
 <template>
   <div>
-    <SettingsContainer :label="plugin.title" :arrow="true" @toggleArrow="toggleArrow">
+    <SettingsContainer :label="plugin.title" :arrow="slideToggle" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
         <toggle-button :value="plugin.enabled" @change="toggle" />
       </template>
     </SettingsContainer>
-    <div>
-      <SettingsContainer v-if="plugin.enabled" label-left="MIN" label-right="MAX">
+    <b-collapse :id="pluginKey" :visible="slideToggle">
+      <SettingsContainer label-left="MIN" label-right="MAX">
         <template slot="setting-half-left">
           <ElInputNumber
             size="mini"
@@ -24,16 +24,18 @@
             @change="(val)=>changeOption(val, 'max')" />
         </template>
       </SettingsContainer>
-    </div>
+    </b-collapse>
   </div>
 </template>
 
 <script>
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
+import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
 
 export default {
   name: 'VariableHeight',
   components: { SettingsContainer },
+  mixins: [pluginMixinAdmin],
   props: ['name'],
   computed: {
     options() {

@@ -59,7 +59,8 @@
           <component
             :is="'studio-' + plugin.name"
             v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
-            :key="'std-'+component.id+'-plugin-' + plugin.name"
+            :key="`element-${component.id}-plugin-${plugin.name}`"
+            :plugin-key="`element-${component.id}-plugin-${plugin.name}`"
             :element="component"
             :class="'plugin-' + plugin.name"
             :name="_.camelCase(plugin.name)"

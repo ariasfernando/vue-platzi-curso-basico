@@ -15,6 +15,11 @@
         class="half"
         :title="title">
         {{ label }}
+        <i
+          v-if="arrow !== undefined"
+          class="glyphicon glyphicon-menu-down"
+          :class="{collapsed: arrow}"
+          @click="$emit('toggleArrow', !arrow)" />
       </label>
       <stui-checkbox
         v-if="checkbox !== undefined"
@@ -74,17 +79,18 @@
 export default {
   name: 'SettingsContainers',
   props: [
-    'customClass',
-    'label',
-    'level',
-    'label-right',
-    'label-left',
-    'title',
-    'titleRight',
-    'titleLeft',
-    'noLabel',
+    'arrow',
     'checkbox',
+    'customClass',
     'disabled',
+    'label',
+    'labelLeft',
+    'labelRight',
+    'level',
+    'noLabel',
+    'title',
+    'titleLeft',
+    'titleRight',
   ],
   computed: {
     hasSettingRight() {
@@ -175,5 +181,12 @@ span.is-danger {
 }
 .is-danger /deep/ input {
   border-color: #ce5f5f;
+}
+i.glyphicon-menu-down {
+  left: 2px;
+  font-size: 10px;
+  &.collapsed {
+    transform: rotate(180deg);
+  }
 }
 </style>
