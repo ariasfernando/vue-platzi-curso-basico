@@ -70,6 +70,7 @@ class CampaignManager
         ];
         $campaign->campaign_settings = $campaign_settings;
         $campaign->campaign_preheader = $inputs['campaign_preheader'] ?? '';
+        $campaign->email_title = $inputs['email_title'] ?? '';
         $campaign->auto_save = isset($inputs['auto_save']) && $inputs['auto_save'] ? true : false;
 
         if (isset($inputs['campaign_fonts'])) {

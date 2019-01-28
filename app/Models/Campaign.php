@@ -53,6 +53,7 @@ class Campaign extends Eloquent
         'parent_campaign_id',
         'tracking',
         'internal',
+        'email_title',
         'archive'
     ];
 
@@ -94,6 +95,7 @@ class Campaign extends Eloquent
         'parent_campaign_id' => null,
         'proof_id' => null,
         'tracking',
+        'email_title' => '',
         'archive' => false
     );
 

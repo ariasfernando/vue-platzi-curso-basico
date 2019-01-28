@@ -78,7 +78,8 @@ class AddKeyToTextOptions extends Migration
                                     if (isset($component_value['plugins'])) {
                                         foreach ($component_value['plugins'] as $plugin_name => $plugin) {
                                             if ($plugin_name === 'textOptions') {
-                                                Logging::info('component id= ' . $component_value['id']);
+                                                $component_id = isset($component_value['id']) ? $component_value['id'] : 'no-id';
+                                                Logging::info('component id= ' . $component_id);
                                                 $modules_data[$key]['structure']['columns'][$column_key]['components'][$component_key]
                                                 ['plugins'][$plugin_name]['config']['options']['link']['key'] = 'link';
                                             }
