@@ -17,8 +17,7 @@ export default {
       return null;
     },
     slideToggle() {
-      const slideToggle = this.$store.getters['module/slideToggles'][this.pluginKey];
-      return slideToggle === undefined ? false : slideToggle;
+      return this.$store.getters['module/slideToggles'][this.pluginKey];
     },
   },
   methods: {

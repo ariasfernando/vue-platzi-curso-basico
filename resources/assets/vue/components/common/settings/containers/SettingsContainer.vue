@@ -186,6 +186,8 @@ i.glyphicon-menu-down {
   left: 2px;
   font-size: 10px;
   cursor: pointer;
+  transition: transform 0.3s;
+  transform: rotate(0deg);
   &.collapsed {
     transform: rotate(180deg);
   }

@@ -58,6 +58,7 @@ export default {
       };
       // Update state of the component
       this.$store.commit('module/togglePlugin', payload);
+      this.setSlideToggles(value ? true : undefined);
     },
     changeOption(valueHeight, nameHeight) {
       let maxHeight = this.plugin.config.options.max;
