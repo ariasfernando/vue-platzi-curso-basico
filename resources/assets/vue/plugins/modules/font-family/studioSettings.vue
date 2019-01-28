@@ -1,18 +1,19 @@
 <template>
   <div>
-    <SettingsContainer :label="plugin.title">
+    <SettingsContainer :label="plugin.title" :arrow="slideToggle" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
         <toggle-button :value="plugin.enabled" @change="toggle" />
       </template>
     </SettingsContainer>
-
-    <SettingsContainer v-if="plugin.enabled" label="Fonts options">
-      <template slot="setting-right">
-        <ElInput
-          v-model="fontsOptions"
-          size="mini" />
-      </template>
-    </SettingsContainer>
+    <b-collapse :id="pluginKey" :visible="plugin.enabled && slideToggle">
+      <SettingsContainer v-if="plugin.enabled" label="Fonts options">
+        <template slot="setting-right">
+          <ElInput
+            v-model="fontsOptions"
+            size="mini" />
+        </template>
+      </SettingsContainer>
+    </b-collapse>
   </div>
 </template>
 <script>

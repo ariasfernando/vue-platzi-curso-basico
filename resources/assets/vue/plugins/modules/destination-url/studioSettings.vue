@@ -1,11 +1,11 @@
 <template>
   <div>
-    <SettingsContainer :label="plugin.title">
+    <SettingsContainer :label="plugin.title" :arrow="slideToggle" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
         <toggle-button :value="plugin.enabled" @change="toggle" />
       </template>
     </SettingsContainer>
-    <template v-if="plugin.enabled">
+    <b-collapse :id="pluginKey" :visible="plugin.enabled && slideToggle">
       <SettingsContainer label="Required">
         <template slot="setting-right">
           <toggle-button v-if="$can('std-'+component.type+'-plugin-destination-url-validate')" :value="plugin.config.validations.required" @change="(newValue)=>updateField(newValue, 'validations.required')" />
@@ -36,7 +36,7 @@
           <toggle-button :value="plugin.config.title" @change="(newValue)=>updateField(newValue, 'title')" />
         </template>
       </SettingsContainer>
-    </template>
+    </b-collapse>
   </div>
 </template>
 

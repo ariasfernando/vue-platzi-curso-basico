@@ -45,6 +45,7 @@
             :key="plugin.name"
             :name="_.camelCase(plugin.name)"
             :element="module"
+            :plugin-key="`module-plugin-${plugin.name}`"
             :plugin="module.plugins[_.camelCase(plugin.name)]"
             :class="'plugin-' + plugin.name" />
         </group-container>

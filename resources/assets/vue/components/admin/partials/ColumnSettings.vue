@@ -47,6 +47,7 @@
             :class="'plugin-' + plugin.name"
             :element="column"
             :name="_.camelCase(plugin.name)"
+            :plugin-key="`element-${column.id}-plugin-${plugin.name}`"
             :plugin="column.plugins[_.camelCase(plugin.name)]"
             :column-id="currentComponent.columnId" />
         </group-container>

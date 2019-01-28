@@ -1,19 +1,21 @@
 <template>
   <div>
-    <SettingsContainer :label="plugin.title">
+    <SettingsContainer class="custom-width" :label="plugin.title" :arrow="slideToggle" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
         <toggle-button :value="plugin.enabled" @change="toggle" />
       </template>
     </SettingsContainer>
-    <SettingsContainer v-if="plugin.enabled" label="Palette">
-      <template slot="setting-right">
-        <el-input
-          v-model="bgColorMap"
-          v-validate="'required'"
-          size="mini"
-          placeholder="000000,474646,79A8C9,CD202C" />
-      </template>
-    </SettingsContainer>
+    <b-collapse :id="pluginKey" :visible="plugin.enabled && slideToggle">
+      <SettingsContainer v-if="plugin.enabled" label="Palette">
+        <template slot="setting-right">
+          <ElInput
+            v-model="bgColorMap"
+            v-validate="'required'"
+            size="mini"
+            placeholder="000000,474646,79A8C9,CD202C" />
+        </template>
+      </SettingsContainer>
+    </b-collapse>
   </div>
 </template>
 <script>
@@ -80,3 +82,14 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.custom-width /deep/{
+  .half {
+    width: 64%;
+  }
+  .half-setting {
+    width: 36%;
+  }
+}
+</style>
+

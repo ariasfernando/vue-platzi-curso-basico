@@ -1,12 +1,12 @@
 <template>
   <div>
-    <SettingsContainer :label="plugin.title">
+    <SettingsContainer class="custom-width" :label="plugin.title" :arrow="slideToggle" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
         <toggle-button :value="plugin.enabled" @change="toggle" />
       </template>
     </SettingsContainer>
-    <div v-if="plugin.enabled">
-      <SettingsContainer label="Use Palette from Library">
+    <b-collapse :id="pluginKey" :visible="plugin.enabled && slideToggle">
+      <SettingsContainer class="custom-width" label="Use Palette from Library">
         <template slot="setting-right">
           <toggle-button :value="plugin.config.usePaletteFromLibrary" @change="(newValue)=>updatePluginConfig(newValue,'usePaletteFromLibrary')" />
         </template>
@@ -27,7 +27,7 @@
             placeholder="000000,474646,79A8C9,CD202C" />
         </template>
       </SettingsContainer>
-    </div>
+    </b-collapse>
   </div>
 </template>
 <script>
@@ -72,3 +72,15 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.custom-width /deep/{
+  .half {
+    width: 64%;
+  }
+  .half-setting {
+    width: 36%;
+  }
+}
+</style>
+
