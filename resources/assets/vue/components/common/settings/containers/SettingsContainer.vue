@@ -185,6 +185,7 @@ span.is-danger {
 i.glyphicon-menu-down {
   left: 2px;
   font-size: 10px;
+  cursor: pointer;
   &.collapsed {
     transform: rotate(180deg);
   }

@@ -1,7 +1,6 @@
 
 
 <script>
-import _ from 'lodash';
 import contrast from 'contrast';
 
 export default {
