@@ -1,11 +1,11 @@
 <template>
   <div>
-    <settings-container :label="plugin.title">
+    <SettingsContainer :label="plugin.title">
       <template slot="setting-right">
         <toggle-button :value="plugin.enabled" @change="toggle" />
       </template>
-    </settings-container>
-    <settings-container v-if="plugin.enabled" label="Palette">
+    </SettingsContainer>
+    <SettingsContainer v-if="plugin.enabled" label="Palette">
       <template slot="setting-right">
         <el-input
           v-model="bgColorMap"
@@ -13,7 +13,7 @@
           size="mini"
           placeholder="000000,474646,79A8C9,CD202C" />
       </template>
-    </settings-container>
+    </SettingsContainer>
   </div>
 </template>
 <script>
@@ -23,7 +23,6 @@ import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
 export default {
   components: { SettingsContainer },
   mixins: [pluginMixinAdmin],
-  props: ['name'],
   computed: {
     bgColorMap: {
       get() {
@@ -60,16 +59,6 @@ export default {
     },
   },
   methods: {
-    toggle(value) {
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        enabled: value,
-      };
-
-      this.$store.commit('module/togglePlugin', payload);
-    },
     changeOption(value, setting, subOption) {
       const option = {};
       option[subOption] = {};

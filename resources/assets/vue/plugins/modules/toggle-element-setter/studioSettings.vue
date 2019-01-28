@@ -1,17 +1,17 @@
 <template>
   <div>
-    <settings-container :label="plugin.title">
+    <SettingsContainer :label="plugin.title">
       <template slot="setting-right">
-        <toggle-button :value="isSet" @change="toggle" />
+        <toggle-button :value="isSet" @change="setActive" />
       </template>
-    </settings-container>
-    <settings-container v-if="isSet" label="Label">
+    </SettingsContainer>
+    <SettingsContainer v-if="isSet" label="Label">
       <template slot="setting-right">
-        <el-input
+        <ElInput
           v-model="value"
           size="mini" />
       </template>
-    </settings-container>
+    </SettingsContainer>
   </div>
 </template>
 <script>
@@ -72,7 +72,7 @@ export default {
     },
   },
   methods: {
-    toggle(value) {
+    setActive(value) {
       this.value = value !== false ? _.startCase(this.element.type.replace('-element', '')) : false;
     },
   },

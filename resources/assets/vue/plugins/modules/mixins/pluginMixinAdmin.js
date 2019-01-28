@@ -1,5 +1,5 @@
 export default {
-  props: ['element', 'name', 'plugin', 'pluginKey'],
+  props: ['element', 'name', 'plugin', 'pluginKey', 'columnId'],
   computed: {
     currentComponent() {
       return this.$store.getters['module/currentComponent'];
@@ -26,6 +26,17 @@ export default {
         key: this.pluginKey,
         value,
       });
+    },
+    toggle(value) {
+      const payload = {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        enabled: value,
+      };
+      // Update state of the component
+      this.$store.commit('module/togglePlugin', payload);
+      this.setSlideToggles(value ? true : undefined);
     },
   },
 };

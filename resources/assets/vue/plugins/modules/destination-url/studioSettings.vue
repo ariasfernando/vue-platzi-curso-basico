@@ -84,16 +84,6 @@ export default {
     },
   },
   methods: {
-    toggle(value) {
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        enabled: value,
-      };
-
-      this.$store.commit('module/togglePlugin', payload);
-    },
     updateField(value, option) {
       const config = {};
 

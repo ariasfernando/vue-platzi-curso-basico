@@ -12,9 +12,8 @@ import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
 export default {
   components: { SettingsContainer },
   mixins: [pluginMixinAdmin],
-  props: ['name'],
   watch: {
-    component: {
+    element: {
       handler() {
         if (this.plugin.subComponent === undefined) {
           switch (this.component.type) {
@@ -36,18 +35,6 @@ export default {
         }
       },
       deep: true,
-    },
-  },
-  methods: {
-    toggle(value) {
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        enabled: value,
-      };
-
-      this.$store.commit('module/togglePlugin', payload);
     },
   },
 };

@@ -1,95 +1,73 @@
 <template>
   <div>
-    <settings-container :label="plugin.title">
+    <SettingsContainer :label="plugin.title">
       <template slot="setting-right">
-          <toggle-button :value="enabled" @change="toggle"></toggle-button>
+        <toggle-button :value="plugin.enabled" @change="toggle" />
       </template>
-    </settings-container>
+    </SettingsContainer>
     <div v-if="plugin.enabled">
-      <settings-container label="Use Palette from Library">
+      <SettingsContainer label="Use Palette from Library">
         <template slot="setting-right">
-            <toggle-button :value="this.plugin.config.usePaletteFromLibrary" @change="(newValue)=>updatePluginConfig(newValue,'usePaletteFromLibrary')"></toggle-button>
+          <toggle-button :value="plugin.config.usePaletteFromLibrary" @change="(newValue)=>updatePluginConfig(newValue,'usePaletteFromLibrary')" />
         </template>
-      </settings-container>
-      <settings-container label="Palette name" v-if="this.plugin.config.usePaletteFromLibrary">
+      </SettingsContainer>
+      <SettingsContainer v-if="plugin.config.usePaletteFromLibrary" label="Palette name">
         <template slot="setting-right">
-            <el-input 
-              size="mini"
-              v-model="paletteFromLibrary"
-              placeholder="name"
-            ></el-input>
+          <ElInput
+            v-model="paletteFromLibrary"
+            size="mini"
+            placeholder="name" />
         </template>
-      </settings-container>
-      <settings-container v-else label="Custom Palette">
+      </SettingsContainer>
+      <SettingsContainer v-else label="Custom Palette">
         <template slot="setting-right">
-            <el-input
-              size="mini"
-              v-model="customPalette"
-              placeholder="000000,474646,79A8C9,CD202C"
-            ></el-input>
+          <ElInput
+            v-model="customPalette"
+            size="mini"
+            placeholder="000000,474646,79A8C9,CD202C" />
         </template>
-      </settings-container>
+      </SettingsContainer>
     </div>
   </div>
 </template>
 <script>
-  import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
-  export default {
-    props: ['name', 'columnId'],
-    components: { SettingsContainer },
-    computed: {
-      module() {
-        return this.$store.getters['module/module'];
-      },
-      plugin() {
-        const plugin = this.module.plugins[this.name];
-        this.enabled = plugin.enabled;
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
+import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
 
-        return plugin;
+export default {
+  components: { SettingsContainer },
+  mixins: [pluginMixinAdmin],
+  computed: {
+    paletteFromLibrary: {
+      get() {
+        return this.plugin.config.paletteName;
       },
-      paletteFromLibrary: {
-        get() {
-          return this.plugin.config.paletteName;
-        },
-        set(value) {
-          this.updatePluginConfig(value,'paletteName');
-        }
-      },
-      customPalette: {
-        get() {
-          return this.plugin.config.paletteMap.join(',');
-        },
-        set(value) {
-          this.updatePluginConfig(value.split(","),'paletteMap');
-        }
+      set(value) {
+        this.updatePluginConfig(value, 'paletteName');
       },
     },
-    data() {
-      return {
-        enabled: false,
-      }
-    },
-    methods: {
-      toggle(value) {
-        const payload = {
-          plugin: this.name,
-          enabled: value,
-        };
-
-        this.$store.commit('module/togglePlugin', payload);
+    customPalette: {
+      get() {
+        return this.plugin.config.paletteMap.join(',');
       },
-      updatePluginConfig(value, option) {
-        const config = {};
-
-        _.set(config, option, value);
-
-        const payload = {
-          plugin: this.name,
-          config,
-        };
-        
-        this.$store.commit('module/savePlugin', payload);
+      set(value) {
+        this.updatePluginConfig(value.split(','), 'paletteMap');
       },
     },
-  }
+  },
+  methods: {
+    updatePluginConfig(value, option) {
+      const config = {};
+
+      _.set(config, option, value);
+
+      const payload = {
+        plugin: this.name,
+        config,
+      };
+
+      this.$store.commit('module/savePlugin', payload);
+    },
+  },
+};
 </script>

@@ -22,7 +22,6 @@ import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
 export default {
   components: { SettingsContainer },
   mixins: [pluginMixinAdmin],
-  props: ['name'],
   computed: {
     fontsOptions: {
       get() {
@@ -56,18 +55,6 @@ export default {
         }
       },
       deep: true,
-    },
-  },
-  methods: {
-    toggle(value) {
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        enabled: value,
-      };
-
-      this.$store.commit('module/togglePlugin', payload);
     },
   },
 };

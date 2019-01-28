@@ -10,17 +10,7 @@ import SettingsContainer from 'stensul/components/common/settings/containers/Set
 import pluginMixinAdmin from 'stensul/plugins/modules/mixins/pluginMixinAdmin';
 
 export default {
-  props: ['name'],
   components: { SettingsContainer },
   mixins: [pluginMixinAdmin],
-  methods: {
-    toggle(enabled) {
-      const payload = {
-        plugin: this.name,
-        enabled,
-      };
-      this.$store.commit('module/togglePlugin', payload);
-    },
-  },
 };
 </script>

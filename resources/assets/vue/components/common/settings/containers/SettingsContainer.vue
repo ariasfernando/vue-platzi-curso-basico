@@ -183,8 +183,12 @@ span.is-danger {
   border-color: #ce5f5f;
 }
 i.glyphicon-menu-down {
-  left: 2px;
+  padding-left: 2px;
   font-size: 10px;
+  padding-top: 1px;
+  top: 0;
+  padding-bottom: 2px;
+  padding-right: 2px;
   cursor: pointer;
   transition: transform 0.3s;
   transform: rotate(0deg);

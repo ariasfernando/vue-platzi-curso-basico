@@ -5,7 +5,7 @@
         <toggle-button :value="plugin.enabled" @change="toggle" />
       </template>
     </SettingsContainer>
-    <b-collapse :id="pluginKey" :visible="slideToggle">
+    <b-collapse :id="pluginKey" :visible="plugin.enabled && slideToggle">
       <SettingsContainer label-left="MIN" label-right="MAX">
         <template slot="setting-half-left">
           <ElInputNumber
@@ -48,17 +48,6 @@ export default {
     },
     minValue(name) {
       return name === 'max' ? this.options.min + 1 : undefined;
-    },
-    toggle(value) {
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        enabled: value,
-      };
-      // Update state of the component
-      this.$store.commit('module/togglePlugin', payload);
-      this.setSlideToggles(value ? true : undefined);
     },
     changeOption(valueHeight, nameHeight) {
       let maxHeight = this.plugin.config.options.max;
