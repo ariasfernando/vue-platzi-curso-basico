@@ -45,6 +45,7 @@
         let options = _.extend({
           selector: `#${this.id}`,
           document_base_url: Application.globals.cdnHost + "/js/tinymce/",
+          convert_urls: false,
           skin: 'lightgray',
           skin_url: Application.globals.cdnHost + '/css/tinymce/lightgray',
           inline: true,
