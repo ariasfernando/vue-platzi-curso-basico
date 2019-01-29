@@ -96,7 +96,7 @@
               </tr>
             </thead>
             <tbody v-if="ready">
-              <tr v-for="(module, id) in filteredModules[activeTab]" :key="id" :data-module="id">
+              <tr v-for="(module, id) in paginatedFilteredModules" :key="id" :data-module="id">
                 <td :title="module.created_at" class="created">{{ module.created_at }} by {{ module.created_by }}</td>
                 <td :title="module.updated_at" class="updated">{{ module.updated_at }} by {{ module.updated_by }}</td>
                 <td :title="module.title" class="name">{{ module.title }}</td>
@@ -126,6 +126,13 @@
             </tbody>
           </table>
         </div>
+        <ElPagination
+          v-if="ready"
+          style="text-align: center;"
+          layout="prev, pager, next"
+          :page-size="20"
+          :total="filteredModules[activeTab].length"
+          @current-change="(value)=>{currentPagination = value}" />
         <div v-if="ready && filteredModules[activeTab].length === 0" class="no-results">
           No results were found.
         </div>
@@ -163,6 +170,8 @@ export default {
         studio: {},
         custom: {},
       },
+      currentPagination: 1,
+      pageSize: 10,
       ready: false,
       modulePreview: false,
       moduleSelected: false,
@@ -172,6 +181,13 @@ export default {
       },
       activeTab: 'studio',
     };
+  },
+  computed: {
+    paginatedFilteredModules() {
+      const startItems = this.pageSize * (this.currentPagination - 1);
+      const endItems = this.pageSize * this.currentPagination;
+      return this.filteredModules[this.activeTab].slice(startItems, endItems);
+    },
   },
   created() {
     this.loadModules();
