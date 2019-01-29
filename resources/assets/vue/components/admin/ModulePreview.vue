@@ -79,24 +79,28 @@ export default {
   min-height: 206px;
   background: #f4f4f4;
 }
-.preview-module-container /deep/ .module-wrapper{
-  margin-top: 1px;
+.preview-module-container /deep/ {
+  .module-wrapper {
+    margin-top: 1px;
+  }
+  .st-content-component {
+    outline: 1px solid #e4e4e4;
+  }
 }
-.preview-module-container /deep/ .st-content-component{
-  outline: 1px solid #e4e4e4;
-}
-.mt-20{
+.mt-20 {
   margin-top: 20px;
 }
-.settings-container /deep/ label{
-  font-weight: 600;
-  font-size: 13px;
-  color: #767676;
-  padding-bottom: 0px;
-}
-.settings-container /deep/ p{
-  font-size: 13px;
-  color: #767676;
+.settings-container /deep/ {
+  label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #767676;
+    padding-bottom: 0px;
+  }
+  p {
+    font-size: 13px;
+    color: #767676;
+  }
 }
 </style>
 
