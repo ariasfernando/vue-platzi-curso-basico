@@ -18,7 +18,8 @@
                 :is="'input-' + setting.type"
                 v-for="(setting, i) in settingGroupFilter(settingGroup.settings)"
                 :key="i + setting.name"
-                v-bind="settingProps(setting)" />
+                v-bind="settingProps(setting)"
+                @setting-updated="SettingUpdatedHandler" />
             </template>
           </settings-container>
         </group-container>
