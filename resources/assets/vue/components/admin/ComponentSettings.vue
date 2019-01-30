@@ -136,9 +136,7 @@ export default {
       };
     },
     settingGroupFilter(settings) {
-      return settings.filter((setting) => {
-        return this.$can(`std-${this.component.type}_${setting.aclName}`);
-      });
+      return settings.filter(setting => this.$can(`std-${this.component.type}_${setting.aclName}`));
     },
     pluginFilter(plugins) {
       return plugins.filter(plugin =>
