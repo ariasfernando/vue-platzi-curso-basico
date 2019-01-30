@@ -54,6 +54,7 @@ export default {
     border-radius: 2px;
     padding-left: 0;
     padding-right: 15px;
+    border-color: $stui-input-border;
   }
   .el-input-number__decrease,
   .el-input-number__increase {

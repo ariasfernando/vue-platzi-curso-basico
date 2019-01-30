@@ -9,14 +9,20 @@
       <b-card class="default-settings">
         <group-container
           v-for="(settingGroup, groupKey) in filteredSettings"
-          :key="groupKey"
-          :label="settingGroup.groupLabel || null">
-          <component
-            :is="'input-' + setting.type"
-            v-for="(setting,i) in settingGroupFilter(settingGroup.settings)"
-            :key="i+setting.type"
-            v-bind="settingProps(setting)"
-            @setting-updated="settingUpdatedHandler" />
+          :key="groupKey">
+          <settings-container
+            :label="settingGroup.groupLabel"
+            :no-label="!settingGroup.groupLabel"
+            level="first">
+            <template slot="setting-bottom">
+              <component
+                :is="'input-' + setting.type"
+                v-for="(setting,i) in settingGroupFilter(settingGroup.settings)"
+                :key="i+setting.type"
+                v-bind="settingProps(setting)"
+                @setting-updated="settingUpdatedHandler" />
+            </template>
+          </settings-container>
         </group-container>
         <group-container v-if="component.plugins.mobileStyles" key="mobile-styles" label="Mobile Settings">
           <studio-mobile-styles :plugin="component.plugins.mobileStyles" name="mobileStyles" />
@@ -57,6 +63,7 @@
 import * as elementSettings from './settings';
 import GroupContainer from '../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../common/containers/LabelItemContainer.vue';
+import SettingsContainer from '../common/settings/containers/SettingsContainer.vue';
 import settingsDefault from './settingsDefault';
 import AclMixing from './mixins/AclMixin';
 import pluginsLayout from './pluginsLayout';
@@ -64,6 +71,7 @@ import pluginsLayout from './pluginsLayout';
 export default {
   components: {
     GroupContainer,
+    SettingsContainer,
     LabelItemContainer,
     'input-border-group': elementSettings.BorderGroup,
     'input-caret': elementSettings.ButtonCaret,

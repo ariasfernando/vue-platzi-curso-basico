@@ -8,13 +8,19 @@
       <b-card class="control">
         <group-container
           v-for="(settingGroup, groupKey) in settingsFiltered"
-          :key="groupKey"
-          :label="settingGroup.groupLabel || null">
-          <component
-            :is="'input-' + setting.type"
-            v-for="(setting, i) in settingGroupFilter(settingGroup.settings)"
-            :key="i + setting.name"
-            v-bind="settingProps(setting)" />
+          :key="groupKey">
+          <settings-container
+            :label="settingGroup.groupLabel"
+            :no-label="!settingGroup.groupLabel"
+            level="first">
+            <template slot="setting-bottom">
+              <component
+                :is="'input-' + setting.type"
+                v-for="(setting, i) in settingGroupFilter(settingGroup.settings)"
+                :key="i + setting.name"
+                v-bind="settingProps(setting)" />
+            </template>
+          </settings-container>
         </group-container>
       </b-card>
     </b-collapse>
@@ -49,6 +55,7 @@
 import * as elementSettings from '../settings';
 import GroupContainer from '../../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../../common/containers/LabelItemContainer.vue';
+import SettingsContainer from '../../common/settings/containers/SettingsContainer.vue';
 import settingsDefault from '../settingsDefault';
 import AclMixing from '../mixins/AclMixin';
 import pluginsLayout from '../pluginsLayout';
@@ -57,6 +64,7 @@ export default {
   name: 'GeneralSettings',
   components: {
     GroupContainer,
+    SettingsContainer,
     LabelItemContainer,
     'input-border-group': elementSettings.BorderGroup,
     'input-class-input': elementSettings.ClassInput,

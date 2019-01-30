@@ -5,14 +5,20 @@
       <b-card class="control" no-block>
         <group-container
           v-for="(settingGroup, groupKey) in filteredSettings"
-          :key="groupKey"
-          :label="settingGroup.groupLabel || null">
-          <component
-            :is="'input-' + setting.type"
-            v-for="(setting,i) in settingGroupFilter(settingGroup)"
-            :key="i + setting.name"
-            v-bind="settingProps(setting)"
-            @setting-updated="settingUpdatedHandler" />
+          :key="groupKey">
+          <settings-container
+            :label="settingGroup.groupLabel"
+            :no-label="!settingGroup.groupLabel"
+            level="first">
+            <template slot="setting-bottom">
+              <component
+                :is="'input-' + setting.type"
+                v-for="(setting,i) in settingGroupFilter(settingGroup)"
+                :key="i + setting.name"
+                v-bind="settingProps(setting)"
+                @setting-updated="settingUpdatedHandler" />
+              </template>
+          </settings-container>
         </group-container>
       </b-card>
     </b-collapse>
@@ -50,6 +56,7 @@
 import * as elementSettings from '../settings';
 import GroupContainer from '../../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../../common/containers/LabelItemContainer.vue';
+import SettingsContainer from '../../common/settings/containers/SettingsContainer.vue';
 import settingsDefault from '../settingsDefault';
 import AclMixing from '../mixins/AclMixin';
 import pluginsLayout from '../pluginsLayout';
@@ -57,6 +64,7 @@ import pluginsLayout from '../pluginsLayout';
 export default {
   components: {
     GroupContainer,
+    SettingsContainer,
     LabelItemContainer,
     'input-padding-group': elementSettings.PaddingGroup,
     'input-border-group': elementSettings.BorderGroup,
