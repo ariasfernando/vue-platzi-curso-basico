@@ -34,7 +34,7 @@ class ProofController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('acl.permission:access_proof');
+        $this->middleware('acl.permission:edit_proof')->only('postCreate');
 
         if (!\Config::get('proof.status')) {
             abort(401, 'Not available.');
