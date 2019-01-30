@@ -10,7 +10,7 @@ import Bootstrap from './bootstrap';
 import interceptors from './interceptors';
 import store from './store';
 import { studioLibraryRoutes } from './router';
-import { customValidators } from 'stensul/resources/validator_rules'
+import { customValidators } from 'stensul/resources/validator_rules';
 
 Vue.use(Bootstrap);
 Vue.use(Toast, {

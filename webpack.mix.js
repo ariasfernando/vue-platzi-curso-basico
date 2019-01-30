@@ -1,6 +1,6 @@
 /* global path */
 /*
- NOTES: .scripts() doesn't work with watch you'll have to run watch again if you're editing legacy 
+ NOTES: .scripts() doesn't work with watch you'll have to run watch again if you're editing legacy
  files (E.g. application-globals.js).
 */
 
