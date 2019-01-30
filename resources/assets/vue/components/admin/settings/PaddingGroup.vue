@@ -1,10 +1,13 @@
 <template>
-  <SettingsContainer custom-class="field-padding" :label="label">
+  <SettingsContainer
+    custom-class="field-padding"
+    :label="label"
+    :no-label="noLabel">
     <template slot="setting-bottom">
       <Padding
         :element="element"
-        @setting-updated="settingUpdatedHandler"
-        :side="'Top'" />
+        :side="'Top'"
+        @setting-updated="settingUpdatedHandler" />
       <Padding
         :element="element"
         :side="'Right'"

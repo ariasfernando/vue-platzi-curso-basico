@@ -7,34 +7,15 @@
       icon="glyphicon-pencil" />
     <b-collapse id="style" visible accordion="component-setting">
       <b-card class="default-settings">
-        <group-container v-for="(settingGroup, groupKey) in settings" v-if="hasPermissionsInGroup(settingGroup, 'std-'+component.type+'_')" :label="settingGroup.showLabel ? settingGroup.groupLabel : null" :key="groupKey">
+        <group-container
+          v-for="(settingGroup, groupKey) in filteredSettings"
+          :key="groupKey"
+          :label="settingGroup.groupLabel || null">
           <component
             :is="'input-' + setting.type"
-            v-for="(setting,i) in settingGroup.settings"
-            v-if="$can('std-'+component.type+'_'+setting.aclName)"
+            v-for="(setting,i) in settingGroupFilter(settingGroup.settings)"
             :key="i+setting.type"
-            :component="component"
-            :module="module"
-            :column-id="currentComponent.columnId"
-            :show-setting="showSetting(setting)"
-            :setting="setting.type"
-            :name="setting.name"
-            :type="setting.type"
-            :setting-slot="setting.settingSlot"
-            :max-percentage="setting.maxPercentage"
-            :is-inverted="setting.isInverted"
-            :link="setting.link"
-            :label="setting.label"
-            :placeholder="setting.placeholder"
-            :default-value="setting.value"
-            :min-value="setting.minValue"
-            :max-value="setting.maxValue"
-            :sub-component="setting.subComponent"
-            :is-pixel="setting.isPixel"
-            :is-percentage="setting.isPercentage"
-            :options="setting.options"
-            :is-disable-percentage="setting.isDisablePercentage"
-            :element="setting.subComponent ? component[setting.subComponent] : component"
+            v-bind="settingProps(setting)"
             @setting-updated="settingUpdatedHandler" />
         </group-container>
         <group-container v-if="component.plugins.mobileStyles" key="mobile-styles" label="Mobile Settings">
@@ -51,20 +32,22 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="functionalities" accordion="component-setting">
       <b-card class="plugins">
-        <group-container
-          v-for="(pluginGroup, groupKey) in pluginsGroups"
-          v-if="pluginFilter(pluginGroup.plugins).length !== 0"
-          :key="groupKey"
-          :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
-          <component
-            :is="'studio-' + plugin.name"
-            v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
-            :key="'std-'+component.id+'-plugin-' + plugin.name"
-            :element="component"
-            :class="'plugin-' + plugin.name"
-            :name="_.camelCase(plugin.name)"
-            :plugin="component.plugins[_.camelCase(plugin.name)]" />
-        </group-container>
+        <template
+          v-for="(pluginGroup, groupKey) in pluginsGroups">
+          <group-container
+            v-if="pluginFilter(pluginGroup.plugins).length !== 0"
+            :key="groupKey"
+            :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
+            <component
+              :is="'studio-' + plugin.name"
+              v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
+              :key="'std-'+component.id+'-plugin-' + plugin.name"
+              :element="component"
+              :class="'plugin-' + plugin.name"
+              :name="_.camelCase(plugin.name)"
+              :plugin="component.plugins[_.camelCase(plugin.name)]" />
+          </group-container>
+        </template>
       </b-card>
     </b-collapse>
   </div>
@@ -107,6 +90,11 @@ export default {
     settings() {
       return settingsDefault[this.component.type]().componentSettings;
     },
+    filteredSettings() {
+      return this.settings.filter(setting =>
+        this.hasPermissionsInGroup(setting, `std-${this.component.type}_`),
+      );
+    },
     pluginsGroups() {
       return pluginsLayout[this.component.type] ? pluginsLayout[this.component.type]().componentPlugins : undefined;
     },
@@ -119,10 +107,43 @@ export default {
     },
   },
   methods: {
-    pluginFilter(plugins) {
-      return plugins.filter((plugin) => {
-        return this.$can(`std-${this.component.type}-plugin-${plugin.aclName}`) && this.component.plugins[_.camelCase(plugin.name)];
+    settingProps(setting) {
+      return {
+        'column-id': this.currentComponent.columnId,
+        'default-value': setting.value,
+        'false-text': setting.falseText,
+        'is-disable-percentage': setting.isDisablePercentage,
+        'is-inverted': setting.isInverted,
+        'is-percentage': setting.isPercentage,
+        'is-pixel': setting.isPixel,
+        'max-percentage': setting.maxPercentage,
+        'max-value': setting.maxValue,
+        'min-value': setting.minValue,
+        'setting-slot': setting.settingSlot,
+        'show-setting': this.showSetting(setting),
+        'sub-component': setting.subComponent,
+        component: this.component,
+        element: setting.subComponent ? this.component[setting.subComponent] : this.component,
+        label: setting.label,
+        link: setting.link,
+        module: this.module,
+        name: setting.name,
+        'no-label': setting.noLabel,
+        options: setting.options,
+        placeholder: setting.placeholder,
+        setting: setting.type,
+        type: setting.type,
+      };
+    },
+    settingGroupFilter(settings) {
+      return settings.filter((setting) => {
+        return this.$can(`std-${this.component.type}_${setting.aclName}`);
       });
+    },
+    pluginFilter(plugins) {
+      return plugins.filter(plugin =>
+        this.$can(`std-${this.component.type}-plugin-${plugin.aclName}`) && this.component.plugins[_.camelCase(plugin.name)],
+      );
     },
     saveComponentProperty(link, subComponent, name, value) {
       const data = {
