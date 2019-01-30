@@ -67,10 +67,6 @@
           ghostClass: 'ghost-component-menu',  // Class name for the drop placeholder
           chosenClass: 'chosen-component-menu',  // Class name for the chosen item
           dragClass: 'drag-component-menu',  // Class name for the dragging item
-<<<<<<< HEAD
-        },
-      };
-=======
         },
       };
     },
@@ -78,7 +74,6 @@
       customElementArray() {
         return this.$_app.customElements;
       },
->>>>>>> origin/v2.12.0-dev-SV2-933-custom-elements
     },
   };
 </script>
