@@ -213,7 +213,9 @@ mix
         if (writeError) console.error(writeError);
       });
       if (process.env.NODE_ENV === 'development') {
-        console.log('\x1b[37m%s\x1b[36m%s\x1b[0m', `${process.env.APP_NAME} tool running on --> `, process.env.APP_BASE_URL);
+        console.log(
+          '\x1b[37m%s\x1b[36m%s\x1b[0m',
+          `${process.env.APP_NAME} tool running on --> `, process.env.APP_BASE_URL);
       }
     });
   });

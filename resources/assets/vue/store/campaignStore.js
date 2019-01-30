@@ -158,6 +158,9 @@ function campaignStore() {
         }
         return false;
       },
+      libraryConfig(state) {
+        return state.campaign.library_config;
+      },
     },
     mutations: {
       campaignValidated(state, status) {
