@@ -138,7 +138,6 @@
         proofAccess: {
           status: this.$_app.config.proofConfig.status,
           allow: this.$_app.config.permissions.indexOf('edit_proof') >= 0
-            && this.$_app.config.permissions.indexOf('access_proof') >= 0
         },
         trackingEnabled: false,
         showLibraryName: false,
