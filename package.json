@@ -103,7 +103,7 @@
     "jest-vue-preprocessor": "^1.4.0",
     "nock": "^9.3.3",
     "pre-commit": "^1.2.2",
-    "pre-commit-with-lint": "^1.2.5",
+    "stensul-pre-commit-with-lint": "^1.0.1",
     "stackup": "1.0.1",
     "stensul-coverage-metrics": "^1.0.7",
     "stylelint": "^9.6.0"
