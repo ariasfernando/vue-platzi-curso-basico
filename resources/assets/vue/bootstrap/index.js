@@ -7,6 +7,7 @@ import modules from '../modules';
 import fonts from './fonts';
 import utils from '../utils';
 import dictionary from '../resources/dictionary';
+import settingsDefault from '../components/admin/settingsDefault';
 
 export default {
   install(Vue) {
@@ -37,6 +38,9 @@ export default {
 
     // Custom Modules
     this.initModules();
+
+    // Custom Elements
+    this.initCustomElements();
 
     // Register plugins for studio modules ( module, column and components plugins )
     this.initPlugins();
@@ -148,6 +152,31 @@ export default {
       }
 
       this.Vue.prototype.$_app.customModules[module.key] = module;
+    });
+  },
+  initCustomElements() {
+    // Register Custom Elements
+    this.Vue.prototype.$_app.customElements = {};
+
+    _.each(customer.customElements.default, (element, name) => {
+      this.Vue.component(element.key, element.view);
+      this.Vue.component(element.studioKey, element.studio);
+      delete element.view;
+      delete element.studio;
+
+      if (Object.prototype.hasOwnProperty.call(settingsDefault, element.type)) {
+        if (!element.settings) {
+          element.settings = {};
+        }
+        element.settings = Object.assign({}, element.settings, settingsDefault[element.type]().componentSettings);
+      }
+
+      if (element.settings) {
+        this.Vue.component(`custom-settings-${element.key}`, element.settings);
+        delete element.settings;
+      }
+
+      this.Vue.prototype.$_app.customElements[name] = element;
     });
   },
   initPlugins() {

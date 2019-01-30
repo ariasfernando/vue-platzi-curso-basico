@@ -46,7 +46,7 @@
                 v-for="(component, componentId) in columnData.column.components"
                 :key="component.id"
                 @select-component="selectComponent"
-                :is="component.type"
+                :is="component.key?component.key:component.type"
                 :component="component"
                 :module-id="moduleId"
                 :column-id="columnData.columnId"

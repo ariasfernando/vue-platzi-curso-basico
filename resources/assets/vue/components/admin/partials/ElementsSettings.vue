@@ -30,6 +30,15 @@
             <i class="fa fa-code" aria-hidden="true" />
             <p>Custom Code</p>
           </li>
+          <li
+            v-for="customElement in customElementArray"
+            :key="customElement.key"
+            :data-type="customElement.type"
+            :data-custom-type="customElement.key"
+            class="component-item">
+            <i :class="`fa fa-${customElement.icon ? customElement.icon : 'gears'}`" aria-hidden="true" />
+            <p>{{ customElement.title }}</p>
+          </li>
         </draggable>
       </b-card>
     </b-collapse>
@@ -46,7 +55,6 @@
       LabelItemContainer,
       Draggable,
     },
-
     data() {
       return {
         options: {
@@ -59,8 +67,18 @@
           ghostClass: 'ghost-component-menu',  // Class name for the drop placeholder
           chosenClass: 'chosen-component-menu',  // Class name for the chosen item
           dragClass: 'drag-component-menu',  // Class name for the dragging item
+<<<<<<< HEAD
         },
       };
+=======
+        },
+      };
+    },
+    computed: {
+      customElementArray() {
+        return this.$_app.customElements;
+      },
+>>>>>>> origin/v2.12.0-dev-SV2-933-custom-elements
     },
   };
 </script>

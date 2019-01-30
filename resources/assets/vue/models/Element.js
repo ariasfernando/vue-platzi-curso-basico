@@ -1,4 +1,6 @@
+import _ from 'lodash';
 import defaultElements from '../resources/elements';
+import customElements from 'customer/customElements';
 
 class Element {
   constructor(properties) {
@@ -10,12 +12,23 @@ class Element {
     }
 
     // Call function here to avoid override issues
-    const defaultProperties = defaultElements[properties.type]();
+    let defaultProperties = defaultElements[properties.type]();
+
+    if (
+        Object.prototype.hasOwnProperty.call(properties, 'customType') &&
+        properties.customType !== ''
+    ) {
+      const keyName = _.upperFirst(_.camelCase(properties.customType));
+      defaultProperties = _.merge({}, defaultProperties, customElements[keyName]);
+      delete defaultProperties.icon;
+      delete defaultProperties.title;
+    }
 
     this.properties = {
       ...defaultProperties,
       ...properties,
     };
+
   }
 
   getProperties() {

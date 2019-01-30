@@ -40,7 +40,7 @@
                   @add="onAdd">
                   <template v-if="columnData.column.components.length">
                     <component
-                      :is="component.type"
+                      :is="component.studioKey?component.studioKey:component.type"
                       v-for="(component, componentId) in columnData.column.components"
                       :key="component.id"
                       class="st-component"
@@ -160,6 +160,7 @@ module.exports = {
         }
       } else {
         const elType = e.clone.getAttribute('data-type');
+          const elCustomType = e.clone.hasAttribute('data-custom-type') ? e.clone.getAttribute('data-custom-type') : '';
 
         // Get element compatible plugins
         const plugins = {};
@@ -170,7 +171,7 @@ module.exports = {
         });
 
         // Create a new Element with default properties
-        const element = new Element({ type: elType, plugins });
+          const element = new Element({ type: elType, plugins, customType: elCustomType });
 
         // Add it to the list
         this.$store.commit('module/addComponent', {
