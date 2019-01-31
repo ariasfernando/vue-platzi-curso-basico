@@ -3,29 +3,31 @@
     <label-item-container v-b-toggle.general-settings-styles label="General Settings" icon="glyphicon-cog" />
     <b-collapse id="general-settings-styles" visible accordion="general-settings">
       <b-card class="control">
-        <input-generic-text
-          label="Module name"
-          :element="module"
-          placeholder="Module name"
-          name="name"
-          @setting-updated="nameUpdatedHandler" />
-        <input-generic-text
-          label="Description"
-          :element="module"
-          placeholder="Description"
-          name="description"
-          type="textarea"
-          setting-position="setting-bottom"
-          :autosize="{ minRows: 2, maxRows: 4}"
-          resize="none"
-          @setting-updated="descriptionUpdatedHandler" />
-        <input-generic-number
-          label="Columns"
-          name="length"
-          :element="module.structure.columns"
-          :min-value="1"
-          :max-value="8"
-          @setting-updated="settingColumnsHandler" />
+        <group-container>
+          <input-generic-text
+            label="Module name"
+            :element="module"
+            placeholder="Module name"
+            name="name"
+            @setting-updated="nameUpdatedHandler" />
+          <input-generic-text
+            label="Description"
+            :element="module"
+            placeholder="Description"
+            name="description"
+            type="textarea"
+            setting-position="setting-bottom"
+            :autosize="{ minRows: 2, maxRows: 4}"
+            resize="none"
+            @setting-updated="descriptionUpdatedHandler" />
+          <input-generic-number
+            label="Columns"
+            name="length"
+            :element="module.structure.columns"
+            :min-value="1"
+            :max-value="8"
+            @setting-updated="settingColumnsHandler" />
+        </group-container>
       </b-card>
     </b-collapse>
   </div>
@@ -34,6 +36,7 @@
 <script>
 import * as elementSettings from '../settings';
 import LabelItemContainer from '../../common/containers/LabelItemContainer.vue';
+import GroupContainer from '../../common/containers/GroupContainer.vue';
 import settingsDefault from '../settingsDefault';
 
 export default {
@@ -42,6 +45,7 @@ export default {
     LabelItemContainer,
     'input-generic-text': elementSettings.GenericText,
     'input-generic-number': elementSettings.GenericNumber,
+    GroupContainer,
   },
   data() {
     return {

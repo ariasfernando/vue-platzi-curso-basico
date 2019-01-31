@@ -54,18 +54,19 @@ export default {
     border-radius: 2px;
     padding-left: 0;
     padding-right: 15px;
-    border-color: $stui-input-border;
+    border-color: $stui-input-border-color;
   }
   .el-input-number__decrease,
   .el-input-number__increase {
     width: 17px;
+    background-color: $stui-input-control-background;
     &:hover:not(.is-disabled) {
-      color: $color-secondary;
+      color: $stui-color-secondary;
     }
     &:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled) {
-      border-color: $color-grey;
+      border-color: $stui-color-grey;
       &:focus {
-        border-color: $color-secondary;
+        border-color: $stui-color-secondary;
       }
     }
   }

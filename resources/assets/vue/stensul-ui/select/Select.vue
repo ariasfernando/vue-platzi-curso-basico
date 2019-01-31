@@ -1,6 +1,7 @@
 <template>
   <el-select
     v-model="localValue"
+    class="stui-select"
     :class="isNumbered ? 'is-numbered' : ''"
     size="mini"
     :multiple="multiple"
@@ -70,15 +71,30 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
-.stui-input-text /deep/ {
-  .el-select .el-input__inner:focus,
-  .el-select .el-input.is-focus .el-input__inner,
-  .el-input__inner:focus {
-    border-color: rgb(120, 220, 214);
+@import '../scss/stui.scss';
+.stui-select {
+  width: 100%;
+  /deep/ {
+    .el-input__inner {
+      border-radius: 2px;
+      border-color: $stui-input-border-color;
+    }
+    .el-input__inner:focus,
+    .el-input.is-focus .el-input__inner,
+    .el-input__inner:focus {
+      border-color: $stui-color-secondary;
+    }
+    .el-input .el-select__caret {
+      color: $stui-label-color;
+    }
+    .el-input .el-input__suffix {
+      right: 0px;
+      color: $stui-input-border-color;
+    }
   }
 }
 .el-select-dropdown__item.selected{
-  color: #78dcd6!important;
+  color: $stui-color-secondary !important;
 }
 .is-numbered /deep/ span > span.el-tag.el-tag--info {
   counter-increment: step-counter;
@@ -86,8 +102,5 @@ export default {
     content: counter(step-counter);
     margin-right: 5px;
   }
-}
-.el-select {
-    width: 100%;
 }
 </style>

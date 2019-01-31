@@ -38,6 +38,7 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
+@import '../scss/stui.scss';
 .stui-button {
   font-family: "Open Sans", Arial, sans-serif;
   font-size: 13px;
@@ -64,7 +65,7 @@ export default {
   &.is-default {
     background: #ffffff;
     color: #666666;
-    border: 1px solid #dddddd;
+    border: 1px solid $stui-input-border-color;
 
     &:hover {
       background: #ffffff;

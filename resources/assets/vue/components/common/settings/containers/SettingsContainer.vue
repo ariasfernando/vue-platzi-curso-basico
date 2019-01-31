@@ -155,8 +155,16 @@ span.is-danger {
     border-bottom: 1px solid #ddd !important;
     margin-bottom: 6px;
   }
+  .half,
   .half-setting {
-    padding-left: 10px;
+    padding-left: 2px;
+    padding-right: 2px;
+    &:first-child {
+      padding-left: 0px;
+    }
+    &:last-child {
+      padding-right: 0px;
+    }
   }
 }
 .is-setting-half {

@@ -71,13 +71,15 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import '../scss/stui.scss';
+
 .el-color-picker {
   float: right;
   height: 28px;
 }
 .el-color-picker /deep/ .el-color-picker__icon{
   &:before{
-    text-shadow: 0px 1px #666666;
+    text-shadow: 0px 1px $stui-label-color;
   }
 }
 .input-text-hex {
@@ -90,20 +92,24 @@ export default {
   }
   .el-color-picker__trigger {
     padding: 0px;
-    height: 26px;
+    height: 28px;
     width: 34px;
     border-left: 0;
     border-top-right-radius: 2px;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 2px;
-
+    border-color: $stui-input-border-color;
     .el-color-picker__color{
       border: none;
+    }
+    .el-color-picker__color-inner {
+      border-radius: 1px;
     }
   }
   .el-input{
     .el-input__inner {
+      border-color: $stui-input-border-color;
       border-top-left-radius: 2px;
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
@@ -111,12 +117,12 @@ export default {
     }
     &.is-disabled .el-input__inner {
       background-color: #fff;
-      color: #666666;
+      color: $stui-label-color;
       cursor: auto;
       padding: 0;
       font-size: 12px;
       text-align: center;
-      height: 26px;
+      height: 28px;
     }
   }
 }
@@ -129,7 +135,7 @@ export default {
   &:active,
   &:focus{
     color: #666666;
-    border: 1px solid #78dcd6;
+    border: 1px solid $stui-color-secondary;
   }
 }
 
@@ -137,9 +143,9 @@ export default {
   /deep/ {
     .el-input__inner,
     .el-input.is-disabled .el-input__inner {
-      background-color: #f5f7fa;
-      border-color: #e4e7ed;
-      color: #c0c4cc;
+      background-color: $stui-disabled-background;
+      border-color: $stui-disabled-border-color;
+      color: $stui-disabled-color;
       cursor: auto;
     }
     .el-color-picker__mask {

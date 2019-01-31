@@ -20,7 +20,7 @@ export default {
   outline-color: transparent;
   transition: outline-color 150ms linear;
   &.active {
-    outline-color: $color-secondary;
+    outline-color: $stui-color-secondary;
     outline-width: 2px;
     outline-style: solid;
   }

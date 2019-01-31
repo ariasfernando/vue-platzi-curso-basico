@@ -19,7 +19,7 @@ export default {
 @import '../../stensul-ui/scss/stui.scss';
 .empty-column {
   position: absolute;
-  background-color: lighten($color-secondary, 30%);
+  background-color: lighten($stui-color-secondary, 30%);
   pointer-events: none;
   p {
     text-align: center;
@@ -31,7 +31,7 @@ export default {
     position: absolute;
     left: 0;
     right: 0;
-    color: $color-secondary;
+    color: $stui-color-secondary;
   }
 }
 </style>

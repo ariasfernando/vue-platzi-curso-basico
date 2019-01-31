@@ -53,11 +53,11 @@ export default {
 @import '../scss/stui.scss';
 .stui-input-text /deep/ {
   .el-input__inner {
-    border-color: $stui-input-border;
+    border-color: $stui-input-border-color;
   }
   .el-input.is-active .el-input__inner,
   .el-input__inner:focus {
-    border-color: $color-secondary;
+    border-color: $stui-color-secondary;
   }
 }
 .stui-input-text.is-muted {
