@@ -17,6 +17,8 @@ export default {
   pointer-events: none;
   z-index: 2;
   outline-offset: -1px;
+  outline-color: transparent;
+  transition: outline-color 150ms linear;
   &.active {
     outline-color: $color-secondary;
     outline-width: 2px;

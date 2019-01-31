@@ -90,7 +90,7 @@ module.exports = {
       return this.$store.getters['module/draggable'].changed;
     },
     elementSelectorTop() {
-      const top = this.moduleHeight ? this.moduleHeight + 10 : 160;
+      const top = this.moduleHeight ? this.moduleHeight : 150;
       const paddingBottom = _.parseInt(
         this.module.structure.style.paddingBottom || 0,
       );
