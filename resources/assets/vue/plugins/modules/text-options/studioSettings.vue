@@ -1,11 +1,11 @@
 <template>
   <div>
-    <SettingsContainer :label="plugin.title" :arrow="slideToggle" @toggleArrow="setSlideToggles">
+    <SettingsContainer :label="plugin.title" :arrow="arrowState" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
         <toggle-button :value="plugin.enabled" @change="toggle" />
       </template>
     </SettingsContainer>
-    <b-collapse :id="pluginKey" :visible="plugin.enabled && slideToggle">
+    <b-collapse :id="pluginKey" :visible="arrowState">
       <div class="btn-group">
         <ElButton
           v-for="(option, optionName) in options"
@@ -227,6 +227,14 @@ export default {
       set(value) {
         this.changeOption(value, 'backcolor', 'palette_name');
       },
+    },
+    arrowState() {
+      if (this.slideToggle === undefined && !this.plugin.enabled) {
+        return undefined;
+      } else if (this.slideToggle === undefined && this.plugin.enabled) {
+        return true;
+      }
+      return this.slideToggle;
     },
   },
   methods: {
