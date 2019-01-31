@@ -2,15 +2,16 @@
   <el-select
     v-model="localValue"
     class="stui-select"
+    v-bind="$attrs"
     :class="isNumbered ? 'is-numbered' : ''"
     size="mini"
     :multiple="multiple"
     :placeholder="placeholder">
     <el-option
-      v-for="(item) in list"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value" />
+      v-for="(item, index) in list"
+      :key="item.value || index"
+      :label="item.label || item"
+      :value="item.value || item" />
   </el-select>
 </template>
 
@@ -19,12 +20,12 @@ export default {
   name: 'StuiSelect',
   props: {
     value: {
-      type: [String, Boolean],
+      type: [String, Array, Boolean],
       default: '',
     },
     placeholder: {
       type: [String],
-      default: '',
+      default: 'Select',
     },
     list: {
       type: [Array, Object],

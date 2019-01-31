@@ -297,7 +297,6 @@ function campaignStore() {
         this.commit('campaign/setDirty', true);
       },
       saveElementProperty(state, { moduleIdInstance, elementId, property, value, ...scope }) {
-        console.log(scope);
         const module = getModule(state.modules, moduleIdInstance);
         const element = elementId === undefined ? module.structure : getElement(module, elementId);
         let properties = getProperties(element, scope);

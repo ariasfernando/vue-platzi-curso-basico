@@ -70,6 +70,7 @@ export default {
 
 <style lang="scss" scoped>
 .stui-field {
+  clear: both;
   &:not(:last-child) {
     // @todo: padding and margins of stui-inputs should be managed here
   }
@@ -106,6 +107,24 @@ export default {
       }
       &.is-expanded {
         flex-grow: 1;
+      }
+      .el-button,
+      .el-input,
+      .el-select {
+        &:not([disabled]) {
+          &:hover {
+            z-index: 2;
+          }
+          &:focus,
+          &:active,
+          &.is-active,
+          &.active {
+            z-index: 3;
+            &:hover {
+              z-index: 4;
+            }
+          }
+        }
       }
     }
     &.has-addons-centered {

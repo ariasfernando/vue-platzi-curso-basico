@@ -4,22 +4,32 @@
     :label="label"
     :no-label="noLabel">
     <template slot="setting-bottom">
-      <Padding
-        :element="element"
-        :side="'Top'"
-        @setting-updated="settingUpdatedHandler" />
-      <Padding
-        :element="element"
-        :side="'Right'"
-        @setting-updated="settingUpdatedHandler" />
-      <Padding
-        :element="element"
-        :side="'Bottom'"
-        @setting-updated="settingUpdatedHandler" />
-      <Padding
-        :element="element"
-        :side="'Left'"
-        @setting-updated="settingUpdatedHandler" />
+      <stui-field grouped>
+        <div class="control is-expanded">
+          <Padding
+            :element="element"
+            :side="'Top'"
+            @setting-updated="settingUpdatedHandler" />
+        </div>
+        <div class="control is-expanded">
+          <Padding
+            :element="element"
+            :side="'Right'"
+            @setting-updated="settingUpdatedHandler" />
+        </div>
+        <div class="control is-expanded">
+          <Padding
+            :element="element"
+            :side="'Bottom'"
+            @setting-updated="settingUpdatedHandler" />
+        </div>
+        <div class="control is-expanded">
+          <Padding
+            :element="element"
+            :side="'Left'"
+            @setting-updated="settingUpdatedHandler" />
+        </div>
+      </stui-field>
     </template>
   </SettingsContainer>
 </template>

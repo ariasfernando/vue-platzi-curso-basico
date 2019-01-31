@@ -72,6 +72,7 @@ export default {
   width: 100%;
   padding: 4px;
   height: 28px;
+  border-color: $stui-input-border-color;
   &:before{
     color: $stui-input-border-color;
   }
