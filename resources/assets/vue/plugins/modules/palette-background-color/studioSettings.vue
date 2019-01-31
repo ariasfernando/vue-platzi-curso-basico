@@ -1,97 +1,95 @@
 <template>
   <div>
-    <settings-container :label="plugin.title">
+    <SettingsContainer class="custom-width" :label="plugin.title" :arrow="slideToggle" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
-        <toggle-button :value="enabled" @change="toggle" />
+        <toggle-button :value="plugin.enabled" @change="toggle" />
       </template>
-    </settings-container>
-    <settings-container v-if="plugin.enabled" label="Palette">
-      <template slot="setting-right">
-        <el-input
-          v-model="bgColorMap"
-          v-validate="'required'"
-          size="mini"
-          placeholder="000000,474646,79A8C9,CD202C" />
-      </template>
-    </settings-container>
+    </SettingsContainer>
+    <b-collapse :id="pluginKey" :visible="plugin.enabled && slideToggle">
+      <SettingsContainer v-if="plugin.enabled" label="Palette">
+        <template slot="setting-right">
+          <ElInput
+            v-model="bgColorMap"
+            v-validate="'required'"
+            size="mini"
+            placeholder="000000,474646,79A8C9,CD202C" />
+        </template>
+      </SettingsContainer>
+    </b-collapse>
   </div>
 </template>
 <script>
-  import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
-  import pluginMixin from '../mixins/pluginMixin';
-  export default {
-    props: ['name'],
-    components: { SettingsContainer },
-    mixins: [pluginMixin],
-    watch: {
-      component: {
-        handler: function() {
-          if (this.plugin.subComponent === undefined) {
-            switch (this.component.type) {
-              case 'button-element':
-                this.plugin.subComponent = 'button';
-                break;
-              case 'image-element':
-                this.plugin.subComponent = 'container';
-                break;
-              case 'text-element':
-                this.plugin.subComponent = 'container';
-                break;
-              case 'divider-element':
-                this.plugin.subComponent = 'container';
-                break;
-              default:
-                break;
-            }
-          }
-        },
-        deep: true,
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
+import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
+
+export default {
+  components: { SettingsContainer },
+  mixins: [pluginMixinAdmin],
+  computed: {
+    bgColorMap: {
+      get() {
+        return this.plugin.config.options.bgcolor.palette.join(',');
+      },
+      set(value) {
+        this.changeOption(value.split(','), 'palette', 'bgcolor');
       },
     },
-    computed: {
-      bgColorMap: {
-        get() {
-          return this.plugin.config.options.bgcolor.palette.join(',');
-        },
-        set(value) {
-          this.changeOption(value.split(","),'palette','bgcolor');
+  },
+  watch: {
+    component: {
+      handler() {
+        if (this.plugin.subComponent === undefined) {
+          switch (this.component.type) {
+            case 'button-element':
+              this.plugin.subComponent = 'button';
+              break;
+            case 'image-element':
+              this.plugin.subComponent = 'container';
+              break;
+            case 'text-element':
+              this.plugin.subComponent = 'container';
+              break;
+            case 'divider-element':
+              this.plugin.subComponent = 'container';
+              break;
+            default:
+              break;
+          }
         }
       },
+      deep: true,
     },
-    data() {
-      return {
-        enabled: false,
+  },
+  methods: {
+    changeOption(value, setting, subOption) {
+      const option = {};
+      option[subOption] = {};
+      option[subOption][setting] = value;
+
+      const payload = {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        config: {
+          options: option,
+        },
+        subOption,
       };
+
+      // Save plugin data
+      this.$store.commit('module/savePluginSuboption', payload);
     },
-    methods: {
-      toggle(value) {
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          enabled: value,
-        };
-
-        this.$store.commit('module/togglePlugin', payload);
-      },
-      changeOption(value,setting,subOption) {
-        const option = {};
-        option[subOption] = {};
-        option[subOption][setting] = value;
-
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          config: {
-            options: option,
-          },
-          subOption,
-        };
-
-        // Save plugin data
-        this.$store.commit('module/savePluginSuboption', payload);
-      },
-    },
-  };
+  },
+};
 </script>
+<style lang="scss" scoped>
+.custom-width /deep/{
+  .half {
+    width: 64%;
+  }
+  .half-setting {
+    width: 36%;
+  }
+}
+</style>
+

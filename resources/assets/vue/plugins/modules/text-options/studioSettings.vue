@@ -1,13 +1,13 @@
 <template>
   <div>
-    <settings-container :label="plugin.title">
+    <SettingsContainer :label="plugin.title" :arrow="slideToggle" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
-        <toggle-button v-model="pluginEnabled" />
+        <toggle-button :value="plugin.enabled" @change="toggle" />
       </template>
-    </settings-container>
-    <template v-if="pluginEnabled">
+    </SettingsContainer>
+    <b-collapse :id="pluginKey" :visible="plugin.enabled && slideToggle">
       <div class="btn-group">
-        <el-button
+        <ElButton
           v-for="(option, optionName) in options"
           :key="optionName"
           v-b-tooltip.hover
@@ -19,92 +19,92 @@
           @click.prevent="toggleOption(optionName, plugin.config.options[optionName]
             ? plugin.config.options[optionName].value : undefined)" />
       </div>
-      <group-container label="Advanced Settings">
+      <GroupContainer label="Advanced Settings">
         <!-- forecolor -->
         <template v-if="plugin.config.options.forecolor.value && $can('tiny-plugin-forecolor-palette-library')">
-          <settings-container label="Color List By Library">
+          <SettingsContainer label="Color List By Library">
             <template slot="setting-right">
               <toggle-button
                 :value="plugin.config.options.forecolor.textcolor_from_library"
                 @change="newValue => changeOption(newValue, 'forecolor', 'textcolor_from_library')" />
             </template>
-          </settings-container>
+          </SettingsContainer>
         </template>
         <template v-if="plugin.config.options.forecolor.value">
-          <settings-container
+          <SettingsContainer
             v-if="!plugin.config.options.forecolor.textcolor_from_library && $can('tiny-plugin-forecolor-palette')"
             label="Color List">
             <template slot="setting-right">
-              <el-input
+              <ElInput
                 v-model="textColorMap"
                 v-validate="'required'"
                 size="mini"
                 placeholder="[{ label: 'Black', value: '#000000' },{ label: 'Gray', value: '#474646' },
                 { label: 'Blue', value: '#79A8C9' },{ label: 'Red', value: '#CD202C' }]" />
             </template>
-          </settings-container>
+          </SettingsContainer>
         </template>
         <template v-if="plugin.config.options.forecolor.value && $can('tiny-plugin-forecolor-palette-library')">
-          <settings-container
+          <SettingsContainer
             v-if="plugin.config.options.forecolor.textcolor_from_library"
             key="forecolor_palette_name"
             label="Palette Name">
             <template slot="setting-right">
-              <el-input
+              <ElInput
                 v-model="palette_name"
                 v-validate="'required'"
                 size="mini"
                 placeholder="name" />
             </template>
-          </settings-container>
+          </SettingsContainer>
         </template>
         <!-- backcolor -->
         <template v-if="plugin.config.options.backcolor.value && $can('tiny-plugin-forecolor-palette-library')">
-          <settings-container label="Highlight Color List By Library">
+          <SettingsContainer label="Highlight Color List By Library">
             <template slot="setting-right">
               <toggle-button
                 :value="plugin.config.options.backcolor.backcolor_from_library"
                 @change="newValue => changeOption(newValue, 'backcolor', 'backcolor_from_library')" />
             </template>
-          </settings-container>
+          </SettingsContainer>
         </template>
         <template v-if="plugin.config.options.backcolor.value">
-          <settings-container
+          <SettingsContainer
             v-if="!plugin.config.options.backcolor.backcolor_from_library && $can('tiny-plugin-forecolor-palette')"
             label="Highlight Color List">
             <template slot="setting-right">
-              <el-input
+              <ElInput
                 v-model="backColorMap"
                 v-validate="'required'"
                 size="mini"
                 placeholder="[{ label: 'Yellow', value: '#E3EB05' },{ label: 'Orange', value: '#FC9264' },
                 { label: 'Pink', value: '#FC6487' },{ label: 'Blue', value: '#64EAFC' }]" />
             </template>
-          </settings-container>
+          </SettingsContainer>
         </template>
         <template v-if="plugin.config.options.backcolor.value && $can('tiny-plugin-forecolor-palette-library')">
-          <settings-container v-if="plugin.config.options.backcolor.backcolor_from_library" label="Palette Name">
+          <SettingsContainer v-if="plugin.config.options.backcolor.backcolor_from_library" label="Palette Name">
             <template slot="setting-right">
-              <el-input
+              <ElInput
                 v-model="back_palette_name"
                 v-validate="'required'"
                 size="mini"
                 placeholder="name" />
             </template>
-          </settings-container>
+          </SettingsContainer>
         </template>
         <!--settings-->
         <template>
           <div v-for="(tinySetting, key) in settings" :key="key" class="clearfix">
             <!-- Input if config needs it -->
-            <settings-container
+            <SettingsContainer
               v-if="showSetting(tinySetting.dependsOn) && $can(`tiny-plugin-${tinySetting.aclName || key}`)"
               :label="tinySetting.title"
               :checkbox="checkboxValue(tinySetting.checkbox, plugin.config.settings[tinySetting.key].content)"
               :disabled="isDisabled(tinySetting.isDisabled, tinySettingContent(plugin.config.settings[tinySetting.key].content))"
               @checkboxChange="(value)=>checkboxChange(value, tinySetting)">
               <template slot="setting-right">
-                <el-input-number
+                <ElInputNumber
                   v-if="tinySetting.type === 'number'"
                   v-b-tooltip.hover
                   :value="plugin.config.settings[tinySetting.key].content || 0"
@@ -113,18 +113,18 @@
                   :min="0"
                   :name="key"
                   @change="(value)=>changeSetting(value, tinySetting.key)" />
-                <el-select
+                <ElSelect
                   v-else-if="tinySetting.type === 'select'"
                   size="mini"
                   :value="plugin.config.settings[tinySetting.key].content"
                   @change="(value) => changeSetting(value, tinySetting.key)">
-                  <el-option
+                  <ElOption
                     v-for="(opt, optKey) in tinySetting.options"
                     :key="optKey"
                     :value="optKey"
                     :label="opt" />
-                </el-select>
-                <el-input
+                </ElSelect>
+                <ElInput
                   v-else-if="tinySetting.type === 'text'"
                   v-b-tooltip.hover
                   size="mini"
@@ -132,17 +132,17 @@
                   :name="key"
                   :value="tinySettingContent(plugin.config.settings[tinySetting.key].content)"
                   @change="(value)=>changeSetting(value, tinySetting.key)" />
-                <component
+                <Component
                   :is="tinySetting.type"
                   v-else
                   v-bind="props(tinySetting, key)"
                   @change="(value)=>changeSetting(value, tinySetting.key)" />
               </template>
-            </settings-container>
+            </SettingsContainer>
           </div>
         </template>
-      </group-container>
-    </template>
+      </GroupContainer>
+    </b-collapse>
   </div>
 </template>
 
@@ -150,12 +150,14 @@
 import GroupContainer from '../../../components/common/containers/GroupContainer.vue';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 import configsView from './studioConfigsView';
+import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
 
 export default {
   components: {
     GroupContainer,
     SettingsContainer,
   },
+  mixins: [pluginMixinAdmin],
   props: ['name', 'element', 'plugin'],
   computed: {
     currentComponent() {

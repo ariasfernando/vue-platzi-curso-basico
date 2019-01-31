@@ -17,7 +17,7 @@
                 :key="i + setting.name"
                 v-bind="settingProps(setting)"
                 @setting-updated="settingUpdatedHandler" />
-              </template>
+            </template>
           </settings-container>
         </group-container>
       </b-card>
@@ -30,22 +30,22 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="column-settings-functionalities" accordion="column-settings">
       <b-card class="control">
-        <template
-          v-for="(pluginGroup, groupKey) in pluginsGroups">
-          <group-container
-            v-if="pluginFilter(pluginGroup.plugins).length !== 0"
-            :key="groupKey"
-            :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
-            <component
-              :is="'studio-' + plugin.name"
-              v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
-              :key="plugin.name + column.id"
-              :class="'plugin-' + plugin.name"
-              :name="_.camelCase(plugin.name)"
-              :plugin="column.plugins[_.camelCase(plugin.name)]"
-              :column-id="currentComponent.columnId" />
-          </group-container>
-        </template>
+        <group-container
+          v-for="(pluginGroup, groupKey) in pluginsGroups"
+          v-if="pluginFilter(pluginGroup.plugins).length !== 0"
+          :key="groupKey"
+          :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
+          <component
+            :is="'studio-' + plugin.name"
+            v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
+            :key="plugin.name + column.id"
+            :class="'plugin-' + plugin.name"
+            :element="column"
+            :name="_.camelCase(plugin.name)"
+            :plugin-key="`element-${column.id}-plugin-${plugin.name}`"
+            :plugin="column.plugins[_.camelCase(plugin.name)]"
+            :column-id="currentComponent.columnId" />
+        </group-container>
       </b-card>
     </b-collapse>
   </div>

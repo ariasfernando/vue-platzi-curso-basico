@@ -1,63 +1,57 @@
 <template>
   <div>
-    <settings-container :label="plugin.title">
+    <SettingsContainer :label="plugin.title" :arrow="slideToggle" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
-        <toggle-button :value="enabled" @change="toggle" />
+        <toggle-button :value="plugin.enabled" @change="toggle" />
       </template>
-    </settings-container>
-    <template v-if="plugin.enabled">
-      <settings-container label="Required">
+    </SettingsContainer>
+    <b-collapse :id="pluginKey" :visible="plugin.enabled && slideToggle">
+      <SettingsContainer label="Required">
         <template slot="setting-right">
           <toggle-button v-if="$can('std-'+component.type+'-plugin-destination-url-validate')" :value="plugin.config.validations.required" @change="(newValue)=>updateField(newValue, 'validations.required')" />
         </template>
-      </settings-container>
-      <settings-container label="Validate URL">
+      </SettingsContainer>
+      <SettingsContainer label="Validate URL">
         <template slot="setting-right">
-          <el-select
+          <ElSelect
             v-if="$can('std-'+component.type+'-plugin-destination-url-validations')"
             size="mini"
             :value="validationValue"
             @change="(newValue) => updateField(newValue, 'validations.url.selected')">
-            <el-option
+            <ElOption
               v-for="(opt, key) in validateOptions"
               :key="key"
               :value="key"
               :label="opt" />
-          </el-select>
+          </ElSelect>
         </template>
-      </settings-container>
-      <settings-container label="Target">
+      </SettingsContainer>
+      <SettingsContainer label="Target">
         <template slot="setting-right">
           <toggle-button v-if="$can('std-'+component.type+'-plugin-destination-url-target')" :value="plugin.config.target" @change="(newValue)=>updateField(newValue, 'target')" />
         </template>
-      </settings-container>
-      <settings-container label="Title">
+      </SettingsContainer>
+      <SettingsContainer label="Title">
         <template slot="setting-right">
           <toggle-button :value="plugin.config.title" @change="(newValue)=>updateField(newValue, 'title')" />
         </template>
-      </settings-container>
-    </template>
+      </SettingsContainer>
+    </b-collapse>
   </div>
 </template>
 
 <script>
-import _ from 'lodash';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
-import pluginMixin from '../mixins/pluginMixin';
+import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
 
 export default {
   components: { SettingsContainer },
-  mixins: [pluginMixin],
+  mixins: [pluginMixinAdmin],
   props: {
     name: {
       type: String,
       required: true,
     },
-  },
-  data() {
-    return {
-      enabled: false,
-    };
   },
   computed: {
     validateOptions() {
@@ -69,7 +63,7 @@ export default {
   },
   watch: {
     component: {
-      handler: function() {
+      handler() {
         if (this.plugin.subComponent === undefined) {
           switch (this.component.type) {
             case 'button-element':
@@ -90,16 +84,6 @@ export default {
     },
   },
   methods: {
-    toggle(value) {
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        enabled: value,
-      };
-
-      this.$store.commit('module/togglePlugin', payload);
-    },
     updateField(value, option) {
       const config = {};
 

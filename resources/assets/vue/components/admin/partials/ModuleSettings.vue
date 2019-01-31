@@ -33,20 +33,21 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="module-settings-functionalities" accordion="module-settings">
       <b-card class="control">
-        <template v-for="(pluginGroup, groupKey) in pluginsGroups">
-          <group-container
-            v-if="pluginFilter(pluginGroup.plugins).length !== 0"
-            :key="groupKey"
-            :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
-            <component
-              :is="'studio-' + plugin.name"
-              v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
-              :key="plugin.name"
-              :name="_.camelCase(plugin.name)"
-              :plugin="module.plugins[_.camelCase(plugin.name)]"
-              :class="'plugin-' + plugin.name" />
-          </group-container>
-        </template>
+        <group-container
+          v-for="(pluginGroup, groupKey) in pluginsGroups"
+          v-if="pluginFilter(pluginGroup.plugins).length !== 0"
+          :key="groupKey"
+          :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
+          <component
+            :is="'studio-' + plugin.name"
+            v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
+            :key="plugin.name"
+            :name="_.camelCase(plugin.name)"
+            :element="module"
+            :plugin-key="`module-plugin-${plugin.name}`"
+            :plugin="module.plugins[_.camelCase(plugin.name)]"
+            :class="'plugin-' + plugin.name" />
+        </group-container>
       </b-card>
     </b-collapse>
   </div>

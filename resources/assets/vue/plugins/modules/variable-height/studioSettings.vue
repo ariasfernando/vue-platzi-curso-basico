@@ -1,101 +1,70 @@
 <template>
   <div>
-    <settings-container :label="plugin.title">
+    <SettingsContainer :label="plugin.title" :arrow="slideToggle" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
-          <toggle-button :value="plugin.enabled" @change="toggle"></toggle-button>
+        <toggle-button :value="plugin.enabled" @change="toggle" />
       </template>
-    </settings-container>
-    <settings-container  v-if="plugin.enabled" label-left="MIN" label-right="MAX">
-      <template slot="setting-half-left">
-        <el-input-number
-          size="mini" 
-          :value="plugin.config.options.min"
-          @change="(val)=>changeOption(val, 'min')"
-          :max="maxValue('min')"
-          :min="minValue('min')"
-        ></el-input-number>
-      </template>
-      <template slot="setting-half-right">   
-        <el-input-number
-          size="mini" 
-          :value="plugin.config.options.max"
-          @change="(val)=>changeOption(val, 'max')"
-          :max="maxValue('max')"
-          :min="minValue('max')"
-        ></el-input-number>
-      </template>
-    </settings-container>
+    </SettingsContainer>
+    <b-collapse :id="pluginKey" :visible="plugin.enabled && slideToggle">
+      <SettingsContainer label-left="MIN" label-right="MAX">
+        <template slot="setting-half-left">
+          <ElInputNumber
+            size="mini"
+            :value="plugin.config.options.min"
+            :max="maxValue('min')"
+            :min="minValue('min')"
+            @change="(val)=>changeOption(val, 'min')" />
+        </template>
+        <template slot="setting-half-right">
+          <ElInputNumber
+            size="mini"
+            :value="plugin.config.options.max"
+            :max="maxValue('max')"
+            :min="minValue('max')"
+            @change="(val)=>changeOption(val, 'max')" />
+        </template>
+      </SettingsContainer>
+    </b-collapse>
   </div>
 </template>
 
 <script>
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
+import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
 
-import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
 export default {
-  props: ["name"],
+  name: 'VariableHeight',
   components: { SettingsContainer },
+  mixins: [pluginMixinAdmin],
+  props: ['name'],
   computed: {
-    currentComponent() {
-      return this.$store.getters["module/currentComponent"];
+    options() {
+      return this.plugin.config.options;
     },
-    module() {
-      return this.$store.getters["module/module"];
-    },
-    plugin() {
-      const module = this.module,
-        columnId = this.currentComponent.columnId,
-        componentId = this.currentComponent.componentId;
-
-      const plugin =
-        module.structure.columns[columnId].components[componentId].plugins[
-          this.name
-        ];
-      this.enabled = plugin.enabled;
-      this.options = plugin.config.options;
-
-      return plugin;
-    }
-  },
-  data() {
-    return {
-      enabled: false,
-      options: {}
-    };
   },
   methods: {
     maxValue(name) {
-      return name === "min" ? this.options.max -1 : undefined;
+      return name === 'min' ? this.options.max - 1 : undefined;
     },
     minValue(name) {
-      return name === "max" ? this.options.min + 1: undefined;
-    },
-    toggle(value) {
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        enabled: value
-      };
-      // Update state of the component
-      this.$store.commit("module/togglePlugin", payload);
-
+      return name === 'max' ? this.options.min + 1 : undefined;
     },
     changeOption(valueHeight, nameHeight) {
       let maxHeight = this.plugin.config.options.max;
       let minHeight = this.plugin.config.options.min;
       let options = {};
 
-      if (nameHeight === "max") {
+      if (nameHeight === 'max') {
         maxHeight = valueHeight;
       }
 
-      if (nameHeight === "min") {
+      if (nameHeight === 'min') {
         minHeight = valueHeight;
       }
 
       options = {
         max: maxHeight,
-        min: minHeight
+        min: minHeight,
       };
 
       const payload = {
@@ -103,18 +72,18 @@ export default {
         columnId: this.currentComponent.columnId,
         componentId: this.currentComponent.componentId,
         config: {
-          options
-        }
+          options,
+        },
       };
 
       // Save plugin data
-      this.$store.commit("module/savePlugin", payload);
-    }
-  }
+      this.$store.commit('module/savePlugin', payload);
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
 .el-input-number--mini {
-    width: 100%;
+  width: 100%;
 }
 </style>

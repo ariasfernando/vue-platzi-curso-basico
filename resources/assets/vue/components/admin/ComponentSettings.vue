@@ -38,22 +38,21 @@
       title="Settings available in the Email Editor" />
     <b-collapse id="functionalities" accordion="component-setting">
       <b-card class="plugins">
-        <template
-          v-for="(pluginGroup, groupKey) in pluginsGroups">
-          <group-container
-            v-if="pluginFilter(pluginGroup.plugins).length !== 0"
-            :key="groupKey"
-            :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
-            <component
-              :is="'studio-' + plugin.name"
-              v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
-              :key="'std-'+component.id+'-plugin-' + plugin.name"
-              :element="component"
-              :class="'plugin-' + plugin.name"
-              :name="_.camelCase(plugin.name)"
-              :plugin="component.plugins[_.camelCase(plugin.name)]" />
-          </group-container>
-        </template>
+        <group-container
+          v-for="(pluginGroup, groupKey) in pluginsGroups"
+          v-if="pluginFilter(pluginGroup.plugins).length !== 0"
+          :key="groupKey"
+          :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
+          <component
+            :is="'studio-' + plugin.name"
+            v-for="(plugin) in pluginFilter(pluginGroup.plugins)"
+            :key="`element-${component.id}-plugin-${plugin.name}`"
+            :plugin-key="`element-${component.id}-plugin-${plugin.name}`"
+            :element="component"
+            :class="'plugin-' + plugin.name"
+            :name="_.camelCase(plugin.name)"
+            :plugin="component.plugins[_.camelCase(plugin.name)]" />
+        </group-container>
       </b-card>
     </b-collapse>
   </div>

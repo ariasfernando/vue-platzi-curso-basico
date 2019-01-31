@@ -19,6 +19,7 @@ const state = {
   showRaw: false,
   loading: false,
   secondaryLoading: false,
+  slideToggles: {},
 };
 
 const getColumnIndexByElementId = (module, elementId) => {
@@ -71,12 +72,10 @@ const getElement = (module, elementId) => {
   });
   return element;
 };
-
 const getProperties = (element, data) => {
   const subComponent = data.subComponent ? element[data.subComponent] : element;
   return data.link ? subComponent[data.link] : subComponent;
 };
-
 const convertArrayToObject = (element, data) => {
   const valueToConvert =
     data.subComponent !== undefined && data.link !== undefined
@@ -86,7 +85,6 @@ const convertArrayToObject = (element, data) => {
   Vue.set(valueToConvert, lastPosition, {});
   return valueToConvert[lastPosition];
 };
-
 const searchOrCreateLevel = (data, keys) => {
   let subData = data;
   for (let i = 0; i < keys.length - 1; i++) {
@@ -130,6 +128,9 @@ const getters = {
   draggable(state) {
     return state.draggable;
   },
+  slideToggles(state) {
+    return state.slideToggles;
+  },
 };
 
 const mutations = {
@@ -146,6 +147,9 @@ const mutations = {
     _.each(data, (value, field) => {
       state.module[field] = value;
     });
+  },
+  slideToggles(state, { key, value }) {
+    Vue.set(state.slideToggles, key, value);
   },
   setCurrentComponent(state, data) {
     if (data.componentId >= 0) {

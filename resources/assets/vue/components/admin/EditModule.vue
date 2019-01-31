@@ -188,7 +188,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .module /deep/ {
   .mCSB_outside {
     overflow: unset;
