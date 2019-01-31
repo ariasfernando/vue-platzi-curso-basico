@@ -1,5 +1,5 @@
 <template>
-  <div class="stui-icon-hecklist">
+  <div class="stui-icon-checklist">
     <el-button
       v-for="(option, key) in list"
       :key="option.key+key"
@@ -42,7 +42,7 @@ export default {
 <style lang='scss' scoped>
 @import '../scss/stui.scss';
 
-.stui-icon-hecklist {
+.stui-icon-checklist {
   text-align: left;
   /deep/ {
     .el-button:focus,
