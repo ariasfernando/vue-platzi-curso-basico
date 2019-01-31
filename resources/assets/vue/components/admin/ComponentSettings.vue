@@ -13,14 +13,18 @@
           <settings-container
             :label="settingGroup.groupLabel"
             :no-label="!settingGroup.groupLabel"
-            level="first">
+            level="first"
+            :arrow="slideToggles(getsettingGroupKey(component.id, groupKey))"
+            @toggleArrow="(value)=>setSlideToggles(getsettingGroupKey(component.id, groupKey), value)">
             <template slot="setting-bottom">
-              <component
-                :is="'input-' + setting.type"
-                v-for="(setting,i) in settingGroupFilter(settingGroup.settings)"
-                :key="i+setting.type"
-                v-bind="settingProps(setting)"
-                @setting-updated="settingUpdatedHandler" />
+              <b-collapse :id="getsettingGroupKey(component.id, groupKey)" :visible="slideToggles(getsettingGroupKey(component.id, groupKey))">
+                <component
+                  :is="'input-' + setting.type"
+                  v-for="(setting,i) in settingGroupFilter(settingGroup.settings)"
+                  :key="i+setting.type"
+                  v-bind="settingProps(setting)"
+                  @setting-updated="settingUpdatedHandler" />
+              </b-collapse>
             </template>
           </settings-container>
         </group-container>
@@ -177,6 +181,19 @@ export default {
         return element[setting.dependsOn.link][setting.dependsOn.name];
       }
       return true;
+    },
+    getsettingGroupKey(elementId, groupKey) {
+      return `element-${elementId}-settingGroup-${groupKey}`;
+    },
+    slideToggles(key) {
+      const slideToggles = this.$store.getters['module/slideToggles'][key];
+      return slideToggles === undefined ? true : slideToggles;
+    },
+    setSlideToggles(key, value) {
+      this.$store.commit('module/slideToggles', {
+        key,
+        value,
+      });
     },
   },
 };
