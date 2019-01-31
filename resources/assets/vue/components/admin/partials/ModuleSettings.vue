@@ -1,28 +1,26 @@
 <template>
   <div>
-    <label-item-container label="Row Styles" icon="glyphicon-cog" v-b-toggle.module-settings-styles />
+    <label-item-container
+      v-b-toggle.module-settings-styles
+      label="Row Styles"
+      icon="glyphicon-cog" />
     <b-collapse id="module-settings-styles" visible accordion="module-settings">
       <b-card class="control">
-        <group-container v-for="(settingGroup, groupKey) in settingsFiltered" :key="groupKey">
-          <component
-            :is="'input-' + setting.type"
-            v-for="setting in settingGroup.settings"
-            v-if="$can('std-module_'+setting.aclName)"
-            :key="setting.name"
-            :module="module"
-            :setting="setting.type"
-            :name="setting.name"
-            :type="setting.type"
-            :link="setting.link"
-            :label="setting.label"
-            :placeholder="setting.placeholder"
-            :default-value="setting.value"
-            :min-value="setting.minValue"
-            :max-value="setting.maxValue"
-            :options="setting.options"
-            :is-disable-percentage="setting.isDisablePercentage"
-            :element="module.structure"
-            @setting-updated="SettingUpdatedHandler" />
+        <group-container
+          v-for="(settingGroup, groupKey) in settingsFiltered"
+          :key="groupKey">
+          <settings-container
+            :label="settingGroup.groupLabel"
+            :no-label="!settingGroup.groupLabel"
+            level="first">
+            <template slot="setting-bottom">
+              <component
+                :is="'input-' + setting.type"
+                v-for="(setting, i) in settingGroupFilter(settingGroup.settings)"
+                :key="i + setting.name"
+                v-bind="settingProps(setting)" />
+            </template>
+          </settings-container>
         </group-container>
       </b-card>
     </b-collapse>
@@ -58,6 +56,7 @@
 import * as elementSettings from '../settings';
 import GroupContainer from '../../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../../common/containers/LabelItemContainer.vue';
+import SettingsContainer from '../../common/settings/containers/SettingsContainer.vue';
 import settingsDefault from '../settingsDefault';
 import AclMixing from '../mixins/AclMixin';
 import pluginsLayout from '../pluginsLayout';
@@ -66,6 +65,7 @@ export default {
   name: 'GeneralSettings',
   components: {
     GroupContainer,
+    SettingsContainer,
     LabelItemContainer,
     'input-border-group': elementSettings.BorderGroup,
     'input-class-input': elementSettings.ClassInput,
@@ -94,11 +94,34 @@ export default {
     },
   },
   methods: {
+    settingProps(setting) {
+      return {
+        'default-value': setting.value,
+        'is-disable-percentage': setting.isDisablePercentage,
+        'max-value': setting.maxValue,
+        'min-value': setting.minValue,
+        element: this.module.structure,
+        label: setting.label,
+        link: setting.link,
+        module: this.module,
+        name: setting.name,
+        'no-label': setting.noLabel,
+        options: setting.options,
+        placeholder: setting.placeholder,
+        setting: setting.type,
+        type: setting.type,
+      };
+    },
     pluginFilter(plugins) {
       return plugins.filter(
         plugin =>
           this.$can(`std-plugin-${plugin.aclName}`) &&
           this.module.plugins[_.camelCase(plugin.name)],
+      );
+    },
+    settingGroupFilter(settings) {
+      return settings.filter(setting =>
+        this.$can(`std-module_${setting.aclName}`),
       );
     },
     filterSetting(group) {

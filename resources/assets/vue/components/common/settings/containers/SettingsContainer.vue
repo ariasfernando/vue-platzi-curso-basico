@@ -138,7 +138,7 @@ export default {
 }
 label {
   text-align: left;
-  color: #666666;
+  color: #333;
   font-weight: 300;
   padding: 10px 0 5px;
   font-size: 12px;
@@ -159,6 +159,7 @@ span.is-danger {
   label.level-first {
     font-weight: bold;
     border-bottom: 1px solid #ddd !important;
+    margin-bottom: 6px;
   }
   .half-setting {
     padding-left: 10px;

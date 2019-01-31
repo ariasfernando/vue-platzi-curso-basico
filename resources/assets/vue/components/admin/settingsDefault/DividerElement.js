@@ -1,82 +1,73 @@
+import {
+  bgcolor,
+  borderGroup,
+  classes,
+  height,
+  width,
+  padding,
+  textAlign,
+} from './settings';
+
 function dividerDefault() {
   return {
     componentSettings: [
       {
-        settings: [{
-          name: 'classes',
-          aclName: 'classes_classes',
-          type: 'class-input',
-          link: 'attribute',
-          subComponent: 'container',
-        }],
+        groupLabel: 'Design',
+        settings: [
+          bgcolor({
+            subComponent: 'container',
+            aclName: 'style_bgcolor',
+          }),
+          bgcolor({
+            subComponent: 'divider',
+            aclName: 'style_inner-bgcolor',
+            label: 'Divider Color',
+          }),
+          bgcolor({
+            subComponent: 'divider',
+            aclName: 'style_inner-bgcolor_advanced',
+            label: 'Divider Color',
+          }),
+          width({
+            subComponent: 'divider',
+            aclName: 'style_height',
+            isPercentage: true,
+          }),
+          height({
+            subComponent: 'divider',
+            link: 'style',
+            isPixel: true,
+          }),
+          textAlign({
+            subComponent: 'divider',
+            aclName: 'style_height',
+          }),
+        ],
       },
       {
-        settings: [{
-          name: 'bgcolor',
-          aclName: 'style_bgcolor',
-          type: 'generic-color',
-          link: 'attribute',
-          label: 'Container Background Color',
-          subComponent: 'container',
-        },
-        {
-          name: 'bgcolor',
-          aclName: 'style_inner-bgcolor',
-          type: 'generic-color',
-          link: 'attribute',
-          label: 'Divider Color',
-          subComponent: 'divider',
-        },
-        {
-          name: 'bgcolor',
-          aclName: 'style_inner-bgcolor_advanced',
-          type: 'generic-color',
-          link: 'attribute',
-          label: 'Background Color',
-          subComponent: 'divider',
-        },
-        {
-          link: 'style',
-          label: 'Height',
-          name: 'height',
-          aclName: 'style_height',
-          isPixel: true,
-          type: 'generic-number',
-          subComponent: 'divider',
-        },
-        {
-          link: 'attribute',
-          label: 'Width',
-          name: 'width',
-          aclName: 'style_height',
-          isPixel: true,
-          isPercentage: true,
-          type: 'generic-number',
-          subComponent: 'divider',
-        },
-        {
-          name: 'text-align',
-          aclName: 'style_height',
-          type: 'text-align',
-          subComponent: 'divider',
-        }],
+        groupLabel: 'Border',
+        settings: [
+          borderGroup({ subComponent: 'container' }),
+        ],
       },
       {
-        settings: [{
-          name: 'padding',
-          aclName: 'padding_padding',
-          type: 'padding-group',
-          subComponent: 'container',
-          label: 'Element Padding',
-        }],
+        groupLabel: 'Padding (px)',
+        settings: [
+          padding({
+            subComponent: 'container',
+            aclName: 'padding_padding',
+            noLabel: true,
+          }),
+        ],
       },
       {
-        settings: [{
-          name: 'border-group',
-          aclName: 'border_border-group',
-          type: 'border-group',
-          subComponent: 'container',
-        }],
+        groupLabel: 'Behavior',
+        settings: [
+          classes({
+            subComponent: 'container',
+            aclName: 'classes_classes',
+          }),
+        ],
       },
     ],
   };

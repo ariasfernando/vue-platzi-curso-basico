@@ -3,27 +3,22 @@
     <label-item-container v-b-toggle.column-settings-styles :label="columnLabel" icon="glyphicon-pause" />
     <b-collapse id="column-settings-styles" visible accordion="column-settings">
       <b-card class="control" no-block>
-        <group-container v-for="(settingGroup, groupKey) in settings" v-if="hasPermissionsInGroup(settingGroup, 'std-column_')" :key="groupKey">
-          <component
-            :is="'input-' + setting.type"
-            v-for="setting in settingGroup.settings"
-            v-if="$can('std-column_'+setting.aclName)"
-            :key="setting.name"
-            :module="module"
-            :setting="setting.type"
-            :name="setting.name"
-            :type="setting.type"
-            :link="setting.link"
-            :label="setting.label"
-            :placeholder="setting.placeholder"
-            :default-value="setting.value"
-            :min-value="setting.minValue"
-            :max-value="setting.maxValue"
-            :options="setting.options"
-            :sub-component="setting.subComponent"
-            :element="setting.subComponent ? column[setting.subComponent] : column"
-            :is-disable-percentage="setting.isDisablePercentage"
-            @setting-updated="settingUpdatedHandler" />
+        <group-container
+          v-for="(settingGroup, groupKey) in filteredSettings"
+          :key="groupKey">
+          <settings-container
+            :label="settingGroup.groupLabel"
+            :no-label="!settingGroup.groupLabel"
+            level="first">
+            <template slot="setting-bottom">
+              <component
+                :is="'input-' + setting.type"
+                v-for="(setting,i) in settingGroupFilter(settingGroup)"
+                :key="i + setting.name"
+                v-bind="settingProps(setting)"
+                @setting-updated="settingUpdatedHandler" />
+              </template>
+          </settings-container>
         </group-container>
       </b-card>
     </b-collapse>
@@ -61,6 +56,7 @@
 import * as elementSettings from '../settings';
 import GroupContainer from '../../common/containers/GroupContainer.vue';
 import LabelItemContainer from '../../common/containers/LabelItemContainer.vue';
+import SettingsContainer from '../../common/settings/containers/SettingsContainer.vue';
 import settingsDefault from '../settingsDefault';
 import AclMixing from '../mixins/AclMixin';
 import pluginsLayout from '../pluginsLayout';
@@ -68,6 +64,7 @@ import pluginsLayout from '../pluginsLayout';
 export default {
   components: {
     GroupContainer,
+    SettingsContainer,
     LabelItemContainer,
     'input-padding-group': elementSettings.PaddingGroup,
     'input-border-group': elementSettings.BorderGroup,
@@ -87,6 +84,11 @@ export default {
     settings() {
       return settingsDefault['column-element']().componentSettings;
     },
+    filteredSettings() {
+      return this.settings.filter(setting =>
+        this.hasPermissionsInGroup(setting, 'std-column_'),
+      );
+    },
     isInvertedStacking() {
       return this.module.structure.columnsStacking === 'invertedStacking';
     },
@@ -104,6 +106,31 @@ export default {
     },
   },
   methods: {
+    settingProps(setting) {
+      return {
+        'default-value': setting.value,
+        'false-text': setting.falseText,
+        'is-disable-percentage': setting.isDisablePercentage,
+        'max-value': setting.maxValue,
+        'min-value': setting.minValue,
+        'sub-component': setting.subComponent,
+        element: setting.subComponent ? this.column[setting.subComponent] : this.column,
+        label: setting.label,
+        link: setting.link,
+        module: this.module,
+        name: setting.name,
+        'no-label': setting.noLabel,
+        options: setting.options,
+        placeholder: setting.placeholder,
+        setting: setting.type,
+        type: setting.type,
+      };
+    },
+    settingGroupFilter(settingGroup) {
+      return settingGroup.settings.filter(setting =>
+        this.$can(`std-column_${setting.aclName}`),
+      );
+    },
     pluginFilter(plugins) {
       return plugins.filter(
         plugin =>

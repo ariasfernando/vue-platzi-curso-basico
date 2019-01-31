@@ -1,95 +1,50 @@
+import {
+  alt,
+  bgcolor,
+  classes,
+  href,
+  imageSize,
+  noMobileStretch,
+  padding,
+  placeholder,
+  placeholderMobile,
+  textAlign,
+} from './settings';
+
 function imageDefault() {
   return {
     componentSettings: [
       {
-        settings: [{
-          link: 'attribute',
-          label: 'Default Image',
-          name: 'placeholder',
-          aclName: 'placeholder_placeholder-desktop',
-          type: 'generic-file',
-          subComponent: 'image',
-        },
-        {
-          link: 'attribute',
-          label: 'Default Mobile Image',
-          name: 'placeholderMobile',
-          aclName: 'placeholder_placeholder-mobile',
-          type: 'generic-file',
-          subComponent: 'image',
-        },
-        {
-          link: 'styleOption',
-          label: 'Full Width In Mobile',
-          name: 'noMobileStretch',
-          aclName: 'placeholder_placeholder-desktop',
-          type: 'generic-switch',
-          isInverted: true,
-          subComponent: 'image',
-        },
-        {
-          name: 'classes',
-          aclName: 'placeholder_classes',
-          type: 'class-input',
-          link: 'attribute',
-          subComponent: 'container',
-        }],
+        groupLabel: 'Images',
+        settings: [
+          placeholder(),
+          placeholderMobile(),
+          imageSize(),
+          noMobileStretch(),
+        ],
       },
       {
-        settings: [{
-          name: 'image-size',
-          aclName: 'image_image-size',
-          type: 'image-size',
-          subComponent: 'image',
-        }],
+        groupLabel: 'Design',
+        settings: [
+          bgcolor({ subComponent: 'container' }),
+          textAlign({ subComponent: 'image', aclName: 'text_text-align' }),
+        ],
       },
       {
-        settings: [{
-          name: 'text-align',
-          aclName: 'text_text-align',
-          type: 'text-align',
-          subComponent: 'image',
-        }],
+        groupLabel: 'Padding',
+        settings: [
+          padding({ subComponent: 'container' }),
+        ],
       },
       {
-        settings: [{
-          name: 'bgcolor',
-          aclName: 'background_bgcolor',
-          type: 'generic-color',
-          link: 'attribute',
-          label: 'Background Color',
-          subComponent: 'container',
-        }],
+        groupLabel: 'Behavior',
+        settings: [
+          href({ subComponent: 'image' }),
+          alt(),
+          classes({ subComponent: 'container', aclName: 'placeholder_classes' }),
+        ],
       },
-      {
-        settings: [{
-          name: 'padding',
-          aclName: 'padding_padding',
-          type: 'padding-group',
-          subComponent: 'container',
-          label: 'Element Padding',
-        }],
-      },
-      {
-        settings: [{
-          link: 'attribute',
-          label: 'Default URL',
-          name: 'href',
-          aclName: 'url_href',
-          type: 'generic-text',
-          value: '',
-          subComponent: 'image',
-        },
-        {
-          link: 'attribute',
-          label: 'Alt',
-          name: 'alt',
-          aclName: 'url_alt',
-          type: 'generic-text',
-          value: 'Image',
-          subComponent: 'image',
-        }],
-      }],
+    ],
   };
 }
 
