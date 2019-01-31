@@ -31,10 +31,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-textarea /deep/ .el-textarea__inner,
 .el-input /deep/ .el-input__inner {
   border-radius: 2px;
   text-align: left;
   padding-left: 8px;
+  padding-right: 8px;
 
   &:focus {
     border: 1px solid #78dcd6;

@@ -12,12 +12,12 @@
           :key="optionName"
           v-b-tooltip.hover
           :class="[option.icon , {'active': plugin.config.options[optionName]
-          ? plugin.config.options[optionName].value : undefined}]"
+            ? plugin.config.options[optionName].value : undefined}]"
           :title="option.label"
           :data-tooltip="option.label"
           size="mini"
           @click.prevent="toggleOption(optionName, plugin.config.options[optionName]
-          ? plugin.config.options[optionName].value : undefined)" />
+            ? plugin.config.options[optionName].value : undefined)" />
       </div>
       <group-container label="Advanced Settings">
         <!-- forecolor -->
@@ -98,8 +98,11 @@
           <div v-for="(tinySetting, key) in settings" :key="key" class="clearfix">
             <!-- Input if config needs it -->
             <settings-container
-              v-if="showSetting(tinySetting.dependsOn) && $can('tiny-plugin-' + key)"
-              :label="tinySetting.title">
+              v-if="showSetting(tinySetting.dependsOn) && $can(`tiny-plugin-${tinySetting.aclName || key}`)"
+              :label="tinySetting.title"
+              :checkbox="checkboxValue(tinySetting.checkbox, plugin.config.settings[tinySetting.key].content)"
+              :disabled="isDisabled(tinySetting.isDisabled, tinySettingContent(plugin.config.settings[tinySetting.key].content))"
+              @checkboxChange="(value)=>checkboxChange(value, tinySetting)">
               <template slot="setting-right">
                 <el-input-number
                   v-if="tinySetting.type === 'number'"
@@ -132,10 +135,7 @@
                 <component
                   :is="tinySetting.type"
                   v-else
-                  :value="plugin.config.settings[tinySetting.key].content"
-                  :default-value="tinySetting.defaultValue"
-                  :disabled="isDisabled(tinySetting.isDisabled, tinySettingContent(plugin.config.settings[tinySetting.key].content))"
-                  :false-text="tinySetting.falseText"
+                  v-bind="props(tinySetting, key)"
                   @change="(value)=>changeSetting(value, tinySetting.key)" />
               </template>
             </settings-container>
@@ -228,13 +228,29 @@ export default {
     },
   },
   methods: {
+    props(tinySetting) {
+      return {
+        defaulValue: tinySetting.defaultValue,
+        disabled: this.isDisabled(tinySetting.isDisabled, this.tinySettingContent(this.plugin.config.settings[tinySetting.key].content)),
+        falseText: tinySetting.falseText,
+        list: tinySetting.list,
+        min: tinySetting.min,
+        multiselect: tinySetting.multiselect,
+        muteOn: tinySetting.muteOn,
+        option: tinySetting.option,
+        value: this.plugin.config.settings[tinySetting.key].content,
+      };
+    },
     showSetting(dependsOn) {
       if (dependsOn) {
-        return _.get(this.plugin, `config.${dependsOn.config}.${dependsOn.name}.value`, false);
+        return _.get(
+          this.plugin,
+          `config.${dependsOn.config}.${dependsOn.name}.value`,
+          false,
+        );
       }
       return true;
     },
-
     toggleOption(optionName, oldValue) {
       const value = !oldValue;
       const payload = {
@@ -272,7 +288,16 @@ export default {
       return 0;
     },
     isDisabled(isDisabled, content) {
-      return (isDisabled && content) ? isDisabled(this.tinySettingContent(content)) : false;
+      return isDisabled && content
+        ? isDisabled(this.tinySettingContent(content))
+        : false;
+    },
+    checkboxValue(checkbox, val) {
+      return checkbox ? val !== undefined && val !== 0 && val !== '0' && val !== false : undefined;
+    },
+    checkboxChange(value, tinySetting) {
+      const val = value ? tinySetting.defaultValue : false;
+      this.changeSetting(val, tinySetting.key);
     },
   },
 };
