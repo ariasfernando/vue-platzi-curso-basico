@@ -5,6 +5,7 @@
       customClass,
       {'clearfix' : !hasSettingHalf},
       {'is-setting-half' : hasSettingHalf},
+      {'is-setting-bottom' : hasSettingBottom},
       {[`level-${level}-container`] : level},
       {'is-disabled': disabled}
     ]">
@@ -60,6 +61,11 @@
         :class="{[`level-${level}`] : level}"
         :title="title">
         {{ label }}
+        <i
+          v-if="arrow !== undefined"
+          class="glyphicon glyphicon-menu-down"
+          :class="{collapsed: arrow}"
+          @click="$emit('toggleArrow', !arrow)" />
       </label>
       <slot name="setting-bottom" />
     </template>
@@ -183,6 +189,11 @@ span.is-danger {
   }
   &:nth-child(2n + 2) {
     padding-left: 8px;
+  }
+}
+.is-setting-bottom {
+  i.glyphicon-menu-down{
+    float: right;
   }
 }
 .clearfix {
