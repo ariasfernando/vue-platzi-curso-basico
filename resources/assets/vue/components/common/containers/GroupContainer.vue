@@ -3,9 +3,6 @@
     class="group-container"
     :class="[customClass, {'clickeable': clickeable}]"
     @click="e => $emit('click', e)">
-    <label v-if="label">
-      {{ label }}
-    </label>
     <slot />
   </div>
 </template>
@@ -19,10 +16,6 @@ export default {
     },
     clickeable: {
       type: Boolean,
-      default: false,
-    },
-    label: {
-      type: [String, Number, Boolean],
       default: false,
     },
   },
