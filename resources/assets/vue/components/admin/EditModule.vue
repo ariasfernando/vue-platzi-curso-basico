@@ -20,7 +20,7 @@
         </div>
         <!-- END: Module Container -->
         <column-bar-container side="right">
-          <module-settings v-if="showGeneralSettings" />
+          <module-settings v-if="showGeneralSettings" :current-component="currentComponent" />
           <column-settings v-if="showColumnSettings" :current-component="currentComponent" />
           <component-settings v-if="showElementSettings" :current-component="currentComponent" />
         </column-bar-container>
