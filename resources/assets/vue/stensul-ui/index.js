@@ -2,6 +2,7 @@ const Button = require('./button');
 const Checkbox = require('./checkbox');
 const Close = require('./close');
 const ColorPicker = require('./color-picker');
+const Field = require('./field');
 const IconChecklist = require('./icon-checklist');
 const InputDisabled = require('./input-disabled');
 const InputNumber = require('./input-number');
@@ -18,6 +19,7 @@ module.exports = {
   Checkbox,
   Close,
   ColorPicker,
+  Field,
   IconChecklist,
   InputDisabled,
   InputNumber,

@@ -39,32 +39,30 @@ export default {
 .stui-checkbox /deep/ {
   .el-checkbox__label {
     text-align: left;
-    color: #666666;
+    color: $stui-label-color;
     font-weight: 300;
     font-size: 12px;
     line-height: 1.42em;
     margin-bottom: 0;
     padding-left: 5px;
   }
-  .el-checkbox__label {
-    color: #666666;
-  }
+
   &.is-disabled .el-checkbox__label{
-    color: #c0c4cc;
+    color: $stui-disabled-color;
   }
   .el-checkbox__input.is-checked .el-checkbox__inner,
   .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-    background-color: #666666;
-    border-color: #666666;
+    background-color: $stui-label-color;
+    border-color: $stui-label-color;
   }
   &.is-disabled .el-checkbox__input.is-checked .el-checkbox__inner,
   &.is-disabled .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-    background-color: #c0c4cc;
-    border-color: #c0c4cc;
+    background-color: $stui-disabled-color;
+    border-color: $stui-disabled-color;
   }
   .el-checkbox__inner:hover,
   .el-checkbox__input:not(.is-checked).is-focus .el-checkbox__inner {
-    border-color: $color-secondary;
+    border-color: $stui-color-secondary;
   }
 }
 </style>

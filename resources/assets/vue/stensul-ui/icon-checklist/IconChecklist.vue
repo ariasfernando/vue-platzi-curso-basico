@@ -44,6 +44,7 @@ export default {
 
 .stui-icon-checklist {
   text-align: left;
+  border-color: $stui-input-border-color;
   /deep/ {
     .el-button:focus,
     .el-button:hover {
@@ -53,8 +54,8 @@ export default {
     }
     .el-button.active {
       color: #ffffff;
-      border-color: $color-secondary;
-      background-color: $color-secondary;
+      border-color: $stui-color-secondary;
+      background-color: $stui-color-secondary;
     }
     .el-button {
       width: 26px;

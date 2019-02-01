@@ -1,17 +1,9 @@
 <template>
   <settings-container class="input-font-weight" label="Font Weight">
     <template slot="setting-right">
-      <el-select
+      <stui-select
         v-model="fontWeight"
-        class="custom-col"
-        size="mini"
-        placeholder="Font Weight">
-        <el-option
-          v-for="item in weightOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value" />
-      </el-select>
+        :list="weightOptions" />
     </template>
   </settings-container>
 </template>
@@ -62,31 +54,3 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-.el-select {
-  padding: 0;
-}
-.custom-col {
-  width: 100%;
-  float: left;
-  display: block;
-}
-.input-font-weight /deep/ .el-input__inner {
-  text-align: center;
-  border-radius: 2px 0px 0px 2px;
-}
-.input-font-weight /deep/ button.custom-col {
-  border-radius: 2px 0px 0px 2px;
-
-  &:hover,
-  &:focus {
-    border: 1px solid #78dcd6;
-    border-right: none;
-    color: #666666;
-    background: #ffffff;
-  }
-}
-.el-select-dropdown__item.selected {
-  color: #78dcd6;
-}
-</style>

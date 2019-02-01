@@ -52,18 +52,25 @@ export default {
 <style lang='scss' scoped>
 @import '../scss/stui.scss';
 .stui-input-text /deep/ {
-  .el-input__inner {
-    border-color: $stui-input-border;
+  .el-input__inner,
+  .el-textarea__inner {
+    border-color: $stui-input-border-color;
+    border-radius: 2px;
+    padding-left: 8px;
+    padding-right: 8px;
   }
   .el-input.is-active .el-input__inner,
-  .el-input__inner:focus {
-    border-color: $color-secondary;
+  .el-input__inner:focus,
+  .el-textarea.is-active .el-textarea__inner{
+    border-color: $stui-color-secondary;
   }
 }
 .stui-input-text.is-muted {
   /deep/ {
     .el-input__inner,
-    .el-input.is-disabled .el-input__inner {
+    .el-textarea__inner,
+    .el-input.is-disabled .el-input__inner,
+    .el-textarea.is-disabled .el-textarea__inner {
       background-color: #f5f7fa;
       border-color: #e4e7ed;
       color: #c0c4cc;
