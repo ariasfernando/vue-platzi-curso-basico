@@ -49,27 +49,4 @@ export default {
   text-align: center;
   margin-top: 5px;
 }
-
-// .half-style-setting-padding {
-//   width: calc(30% - 15px);
-//   margin-right: 3px;
-//   padding: 5px 0;
-//   float: left;
-//   position: relative;
-
-//   .side-title {
-//     color: $stui-label-color;
-//     font-size: 10px;
-//     font-weight: 100;
-//     text-align: center;
-//     margin-top: 5px;
-//   }
-
-//   .el-input-number /deep/ {
-//     .el-input-number__decrease,
-//     .el-input-number__increase {
-//       width: 17px;
-//     }
-//   }
-// }
 </style>

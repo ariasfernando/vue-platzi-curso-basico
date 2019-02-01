@@ -228,14 +228,6 @@ export default {
         this.changeOption(value, 'backcolor', 'palette_name');
       },
     },
-    arrowState() {
-      if (this.slideToggle === undefined && !this.plugin.enabled) {
-        return undefined;
-      } else if (this.slideToggle === undefined && this.plugin.enabled) {
-        return true;
-      }
-      return this.slideToggle;
-    },
   },
   methods: {
     props(tinySetting) {

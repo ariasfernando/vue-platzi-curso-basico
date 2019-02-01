@@ -1,11 +1,11 @@
 <template>
   <div>
-    <SettingsContainer :label="plugin.title" :arrow="slideToggle" @toggleArrow="setSlideToggles">
+    <SettingsContainer :label="plugin.title" :arrow="arrowState" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
         <toggle-button :value="plugin.enabled" @change="toggle" />
       </template>
     </SettingsContainer>
-    <b-collapse :id="pluginKey" :visible="plugin.enabled && slideToggle">
+    <b-collapse :id="pluginKey" :visible="arrowState">
       <settings-container v-if="plugin.enabled && $can('std-image-element_editor_plugin-mobile-upload')" label="Mobile Image Upload">
         <template slot="setting-right">
           <toggle-button :value="hasImageMobile" @change="toggleImageMobile"></toggle-button>
