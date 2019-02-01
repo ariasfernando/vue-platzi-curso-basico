@@ -8,7 +8,7 @@
     <b-collapse :id="pluginKey" :visible="arrowState">
       <SettingsContainer v-if="plugin.enabled" label="Palette">
         <template slot="setting-right">
-          <ElInput
+          <StuiInputText
             v-model="bgColorMap"
             v-validate="'required'"
             size="mini"

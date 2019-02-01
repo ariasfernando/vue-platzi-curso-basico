@@ -24,7 +24,7 @@
         <template v-if="plugin.config.options.forecolor.value && $can('tiny-plugin-forecolor-palette-library')">
           <SettingsContainer label="Color List By Library">
             <template slot="setting-right">
-              <toggle-button
+              <StuiToggleButton
                 :value="plugin.config.options.forecolor.textcolor_from_library"
                 @change="newValue => changeOption(newValue, 'forecolor', 'textcolor_from_library')" />
             </template>
@@ -35,10 +35,9 @@
             v-if="!plugin.config.options.forecolor.textcolor_from_library && $can('tiny-plugin-forecolor-palette')"
             label="Color List">
             <template slot="setting-right">
-              <ElInput
+              <StuiInputText
                 v-model="textColorMap"
                 v-validate="'required'"
-                size="mini"
                 placeholder="[{ label: 'Black', value: '#000000' },{ label: 'Gray', value: '#474646' },
                 { label: 'Blue', value: '#79A8C9' },{ label: 'Red', value: '#CD202C' }]" />
             </template>
@@ -50,10 +49,9 @@
             key="forecolor_palette_name"
             label="Palette Name">
             <template slot="setting-right">
-              <ElInput
+              <StuiInputText
                 v-model="palette_name"
                 v-validate="'required'"
-                size="mini"
                 placeholder="name" />
             </template>
           </SettingsContainer>
@@ -62,7 +60,7 @@
         <template v-if="plugin.config.options.backcolor.value && $can('tiny-plugin-forecolor-palette-library')">
           <SettingsContainer label="Highlight Color List By Library">
             <template slot="setting-right">
-              <toggle-button
+              <StuiToggleButton
                 :value="plugin.config.options.backcolor.backcolor_from_library"
                 @change="newValue => changeOption(newValue, 'backcolor', 'backcolor_from_library')" />
             </template>
@@ -73,10 +71,9 @@
             v-if="!plugin.config.options.backcolor.backcolor_from_library && $can('tiny-plugin-forecolor-palette')"
             label="Highlight Color List">
             <template slot="setting-right">
-              <ElInput
+              <StuiInputText
                 v-model="backColorMap"
                 v-validate="'required'"
-                size="mini"
                 placeholder="[{ label: 'Yellow', value: '#E3EB05' },{ label: 'Orange', value: '#FC9264' },
                 { label: 'Pink', value: '#FC6487' },{ label: 'Blue', value: '#64EAFC' }]" />
             </template>
@@ -85,10 +82,9 @@
         <template v-if="plugin.config.options.backcolor.value && $can('tiny-plugin-forecolor-palette-library')">
           <SettingsContainer v-if="plugin.config.options.backcolor.backcolor_from_library" label="Palette Name">
             <template slot="setting-right">
-              <ElInput
+              <StuiInputText
                 v-model="back_palette_name"
                 v-validate="'required'"
-                size="mini"
                 placeholder="name" />
             </template>
           </SettingsContainer>
@@ -108,26 +104,18 @@
                   v-if="tinySetting.type === 'number'"
                   v-b-tooltip.hover
                   :value="plugin.config.settings[tinySetting.key].content || 0"
-                  size="mini"
                   :title="key"
                   :min="0"
                   :name="key"
                   @change="(value)=>changeSetting(value, tinySetting.key)" />
                 <ElSelect
                   v-else-if="tinySetting.type === 'select'"
-                  size="mini"
                   :value="plugin.config.settings[tinySetting.key].content"
-                  @change="(value) => changeSetting(value, tinySetting.key)">
-                  <ElOption
-                    v-for="(opt, optKey) in tinySetting.options"
-                    :key="optKey"
-                    :value="optKey"
-                    :label="opt" />
-                </ElSelect>
-                <ElInput
+                  :list="tinySetting.options"
+                  @change="(value) => changeSetting(value, tinySetting.key)" />
+                <StuiInputText
                   v-else-if="tinySetting.type === 'text'"
                   v-b-tooltip.hover
-                  size="mini"
                   :title="key"
                   :name="key"
                   :value="tinySettingContent(plugin.config.settings[tinySetting.key].content)"

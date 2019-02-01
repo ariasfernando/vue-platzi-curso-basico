@@ -7,9 +7,8 @@
     </SettingsContainer>
     <SettingsContainer v-if="isSet" label="Label">
       <template slot="setting-right">
-        <ElInput
-          v-model="value"
-          size="mini" />
+        <StuiInputText
+          v-model="value" />
       </template>
     </SettingsContainer>
   </div>

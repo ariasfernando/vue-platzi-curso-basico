@@ -11,9 +11,9 @@
           <StuiToggleButton :value="plugin.config.usePaletteFromLibrary" @change="(newValue)=>updatePluginConfig(newValue,'usePaletteFromLibrary')" />
         </template>
       </SettingsContainer>
-      <SettingsContainer label="Palette name" v-if="plugin.config.usePaletteFromLibrary">
+      <SettingsContainer v-if="plugin.config.usePaletteFromLibrary" label="Palette name">
         <template slot="setting-right">
-          <ElInput
+          <StuiElInput
             v-model="paletteFromLibrary"
             size="mini"
             placeholder="name" />
@@ -21,7 +21,7 @@
       </SettingsContainer>
       <SettingsContainer v-else label="Custom Palette">
         <template slot="setting-right">
-          <ElInput
+          <StuiElInput
             v-model="customPalette"
             size="mini"
             placeholder="000000,474646,79A8C9,CD202C" />

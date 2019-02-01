@@ -8,7 +8,7 @@
     <b-collapse :id="pluginKey" :visible="arrowState">
       <SettingsContainer v-if="plugin.enabled" label="Fonts options">
         <template slot="setting-right">
-          <ElInput
+          <StuiInputText
             v-model="fontsOptions"
             size="mini" />
         </template>

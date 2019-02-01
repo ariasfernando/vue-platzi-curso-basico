@@ -13,17 +13,12 @@
       </SettingsContainer>
       <SettingsContainer label="Validate URL">
         <template slot="setting-right">
-          <ElSelect
+          <StuiSelect
             v-if="$can('std-'+component.type+'-plugin-destination-url-validations')"
             size="mini"
             :value="validationValue"
-            @change="(newValue) => updateField(newValue, 'validations.url.selected')">
-            <ElOption
-              v-for="(opt, key) in validateOptions"
-              :key="key"
-              :value="key"
-              :label="opt" />
-          </ElSelect>
+            :list="validateOptions"
+            @change="(newValue) => updateField(newValue, 'validations.url.selected')" />
         </template>
       </SettingsContainer>
       <SettingsContainer label="Target">
@@ -53,10 +48,16 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      validateOptions: {
+        disabled: 'No Validation',
+        url: 'Validate Format',
+        urlAndDestination: 'Format and Destination',
+      },
+    };
+  },
   computed: {
-    validateOptions() {
-      return this.plugin.config.validations.url.options;
-    },
     validationValue() {
       return this.plugin.config.validations.url.selected;
     },
