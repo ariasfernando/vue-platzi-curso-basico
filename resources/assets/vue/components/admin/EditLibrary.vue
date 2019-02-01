@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="col-xs-2 header-col">
-        <stui-switch-desktop-mobile v-model="buildingMode" />
+        <StuiSwitchDesktopMobile v-model="buildingMode" />
       </div>
       <div class="col-xs-5 header-col">
         <div class="vertical-center pull-right">

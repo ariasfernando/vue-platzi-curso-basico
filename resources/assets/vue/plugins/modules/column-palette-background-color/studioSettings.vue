@@ -2,13 +2,13 @@
   <div>
     <SettingsContainer class="custom-width" :label="plugin.title" :arrow="arrowState" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
-        <toggle-button :value="plugin.enabled" @change="toggle" />
+        <StuiToggleButton :value="plugin.enabled" @change="toggle" />
       </template>
     </SettingsContainer>
     <b-collapse :id="pluginKey" :visible="arrowState">
       <SettingsContainer class="custom-width" label="Use Palette from Library">
         <template slot="setting-right">
-          <toggle-button :value="plugin.config.usePaletteFromLibrary" @change="(newValue)=>updatePluginConfig(newValue,'usePaletteFromLibrary')" />
+          <StuiToggleButton :value="plugin.config.usePaletteFromLibrary" @change="(newValue)=>updatePluginConfig(newValue,'usePaletteFromLibrary')" />
         </template>
       </SettingsContainer>
       <SettingsContainer label="Palette name" v-if="plugin.config.usePaletteFromLibrary">

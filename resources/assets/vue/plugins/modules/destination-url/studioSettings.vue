@@ -2,13 +2,13 @@
   <div>
     <SettingsContainer :label="plugin.title" :arrow="arrowState" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
-        <toggle-button :value="plugin.enabled" @change="toggle" />
+        <StuiToggleButton :value="plugin.enabled" @change="toggle" />
       </template>
     </SettingsContainer>
     <b-collapse :id="pluginKey" :visible="arrowState">
       <SettingsContainer label="Required">
         <template slot="setting-right">
-          <toggle-button v-if="$can('std-'+component.type+'-plugin-destination-url-validate')" :value="plugin.config.validations.required" @change="(newValue)=>updateField(newValue, 'validations.required')" />
+          <StuiToggleButton v-if="$can('std-'+component.type+'-plugin-destination-url-validate')" :value="plugin.config.validations.required" @change="(newValue)=>updateField(newValue, 'validations.required')" />
         </template>
       </SettingsContainer>
       <SettingsContainer label="Validate URL">
@@ -28,12 +28,12 @@
       </SettingsContainer>
       <SettingsContainer label="Target">
         <template slot="setting-right">
-          <toggle-button v-if="$can('std-'+component.type+'-plugin-destination-url-target')" :value="plugin.config.target" @change="(newValue)=>updateField(newValue, 'target')" />
+          <StuiToggleButton v-if="$can('std-'+component.type+'-plugin-destination-url-target')" :value="plugin.config.target" @change="(newValue)=>updateField(newValue, 'target')" />
         </template>
       </SettingsContainer>
       <SettingsContainer label="Title">
         <template slot="setting-right">
-          <toggle-button :value="plugin.config.title" @change="(newValue)=>updateField(newValue, 'title')" />
+          <StuiToggleButton :value="plugin.config.title" @change="(newValue)=>updateField(newValue, 'title')" />
         </template>
       </SettingsContainer>
     </b-collapse>

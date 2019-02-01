@@ -2,7 +2,7 @@
   <div>
     <SettingsContainer class="custom-width" :label="plugin.title" :arrow="arrowState" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
-        <toggle-button :value="plugin.enabled" @change="toggle" />
+        <StuiToggleButton :value="plugin.enabled" @change="toggle" />
       </template>
     </SettingsContainer>
     <b-collapse :id="pluginKey" :visible="arrowState">

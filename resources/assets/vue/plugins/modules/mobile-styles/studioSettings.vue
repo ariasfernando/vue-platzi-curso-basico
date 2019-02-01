@@ -2,7 +2,7 @@
   <div>
     <settings-container v-for="(mobileSetting, key) in plugin.config.settings" :label="mobileSetting.title" :key="key">
       <template slot="setting-right">
-        <toggle-button :value="mobileSetting.value" @change="(newValue)=>toggleSetting(newValue,key)" />
+        <StuiToggleButton :value="mobileSetting.value" @change="(newValue)=>toggleSetting(newValue,key)" />
       </template>
     </settings-container>
   </div>
