@@ -14,7 +14,7 @@
             @toggleArrow="(value)=>setSlideToggles(getsettingGroupKey(currentElement.id, groupKey), value)">
             <template slot="setting-bottom">
               <b-collapse :id="getsettingGroupKey(currentElement.id, groupKey)" :visible="slideToggles(getsettingGroupKey(currentElement.id, groupKey))">
-                <component
+                <Component
                   :is="'input-' + setting.type"
                   v-for="(setting,i) in settingGroup.settings"
                   :key="i+setting.type"
@@ -38,7 +38,7 @@
           v-for="(pluginGroup, groupKey) in pluginsGroups"
           :key="groupKey"
           :label="pluginGroup.showLabel ? pluginGroup.groupLabel : null">
-          <component
+          <Component
             :is="'studio-' + plugin.name"
             v-for="(plugin) in pluginGroup.plugins"
             :key="plugin.name + currentElement.id"

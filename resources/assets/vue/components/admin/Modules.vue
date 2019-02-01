@@ -241,7 +241,6 @@ export default {
     },
     setTab(type) {
       this.activeTab = type;
-      this.filteredModules[type] = this.modules[type];
     },
   },
 };
