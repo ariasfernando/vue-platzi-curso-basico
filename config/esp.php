@@ -150,5 +150,8 @@ return [
             'url' => 'content-blocks'
         ],
     ],
-
+    'epsilon' => [
+        'title' => 'Epsilon',
+        'class' => 'Epsilon',
+    ]
 ];

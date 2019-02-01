@@ -84,7 +84,7 @@
                 </div>
                 <div class="form-group">
                   <label>Message for all reviewers</label>
-                  <textarea name="notification_message_4_all" id="notification_message_4_all" class="form-control" rows="3" maxlength="200" v-model="notificationMessage4All"></textarea>
+                  <textarea name="notification_message_4_all" id="notification_message_4_all" class="form-control" rows="3" maxlength="1000" v-model="notificationMessage4All"></textarea>
                 </div>
               </form>
             </div>
@@ -395,7 +395,6 @@
         proofAccess: {
           status: this.$_app.config.proofConfig.status,
           allow: this.$_app.config.permissions.indexOf('edit_proof') >= 0
-            && this.$_app.config.permissions.indexOf('access_proof') >= 0
         }
       }
     },

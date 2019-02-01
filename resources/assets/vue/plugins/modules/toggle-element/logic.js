@@ -5,7 +5,7 @@ export default {
       status = status ? 'on' : 'off';
 
       // check if current toggle has settings rules
-      for (let index in this.plugin.data.elements) {
+      for (const index in this.plugin.data.elements) {
         if (elementId === this.plugin.data.elements[index].id) {
           const logic = this.plugin.data.elements[index].logic;
           // check if logic points to a shortcut
@@ -19,7 +19,7 @@ export default {
 
       if (logicRules) {
         // for each rule, applyLogic
-        for (let index in logicRules) {
+        for (const index in logicRules) {
           const rule = logicRules[index];
           const settings = {
             type: rule.type,
@@ -103,10 +103,10 @@ export default {
       for (const index in settings.applyIf) {
         const data = settings.applyIf[index];
         switch (data.status) {
-          case "enabled":
+          case 'enabled':
             return this.getValue(data.target);
             break;
-          case "disabled":
+          case 'disabled':
             return !this.getValue(data.target);
             break;
         }
