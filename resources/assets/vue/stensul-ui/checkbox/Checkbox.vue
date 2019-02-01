@@ -42,7 +42,7 @@ export default {
     color: $stui-label-color;
     font-weight: 300;
     font-size: 12px;
-    line-height: 1.42em;
+    line-height: 17px;
     margin-bottom: 0;
     padding-left: 5px;
   }

@@ -13,80 +13,75 @@
 </template>
 
 <script>
-  import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
-  import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
-  import validatorMixin from '../mixins/validatorMixin';
-  import logicMixin from './logic.js';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
+import validatorMixin from '../mixins/validatorMixin';
+import logicMixin from './logic.js';
 
-  export default {
-    components: { SettingsContainer },
-    mixins: [validatorMixin, logicMixin, pluginCampaignMixin],
-    data() {
-      return {
-        subComponent: 'container',
-      };
+export default {
+  components: { SettingsContainer },
+  mixins: [validatorMixin, logicMixin, pluginCampaignMixin],
+  data() {
+    return {
+      subComponent: 'container',
+    };
+  },
+  methods: {
+    getValue(elementId) {
+      if (this.isCustom) {
+        return this.getElement(elementId).enableElement;
+      }
+      return this.getElement(elementId).container.styleOption.enableElement;
     },
-    methods: {
-      getValue(elementId) {
-        if (this.isCustom) {
-          return this.getElement(elementId).enableElement;
-        }
-        return this.getElement(elementId).container.styleOption.enableElement;
-      },
-      toggleElement(value, elementId) {
-        if (this.isCustom) {
-          this.$store.dispatch('campaign/updateCustomElementProperty', {
-            moduleId: this.currentCustomModule,
-            subComponent: elementId,
-            property: 'enableElement',
-            value,
-          });
-          this.resetErrors(value, this.currentCustomModule);
-        } else {
-          const payload = {
-            elementId,
-            link: 'styleOption',
-            property: 'enableElement',
-            value,
-          };
-          this.saveElementProperty(payload);
-          this.resetErrors(value, this.moduleId);
-        }
-
-        this.runLogic(value, elementId);
-
-        this.$emit('changed', {
-          elementId,
+    toggleElement(value, elementId) {
+      if (this.isCustom) {
+        this.$store.dispatch('campaign/updateCustomElementProperty', {
+          moduleId: this.currentCustomModule,
+          subComponent: elementId,
+          property: 'enableElement',
           value,
         });
-      },
-      toggleChange(value, elementId) {
-        if (this.plugin.data.preventEmpty && !value){
-          for (const i in this.plugin.data.elements) {
-            if (this.plugin.data.elements[i].id !== elementId && this.getValue(this.plugin.data.elements[i].id)){
-              this.toggleElement(value, elementId);
-              return;
-            }
-          }
-          this.$root.$toast("You've to leave at least one element", {
-            className: 'et-error',
-            horizontalPosition: 'right',
-          });
-        } else {
-          this.toggleElement(value, elementId);
-        }
-      },
-      resetErrors(value, moduleId) {
-        this.$store.commit('campaign/clearErrorsByModuleId', moduleId);
-        if (this.isCustom) {
-          this.registerCustomModuleDefaultValidationErrors(moduleId);
-        }
-      },
+        this.resetErrors(value, this.currentCustomModule);
+      } else {
+        const payload = {
+          elementId,
+          link: 'styleOption',
+          property: 'enableElement',
+          value,
+        };
+        this.saveElementProperty(payload);
+        this.resetErrors(value, this.moduleId);
+      }
+
+      this.runLogic(value, elementId);
+
+      this.$emit('changed', {
+        elementId,
+        value,
+      });
     },
-  };
+    toggleChange(value, elementId) {
+      if (this.plugin.data.preventEmpty && !value) {
+        for (const i in this.plugin.data.elements) {
+          if (this.plugin.data.elements[i].id !== elementId && this.getValue(this.plugin.data.elements[i].id)) {
+            this.toggleElement(value, elementId);
+            return;
+          }
+        }
+        this.$root.$toast("You've to leave at least one element", {
+          className: 'et-error',
+          horizontalPosition: 'right',
+        });
+      } else {
+        this.toggleElement(value, elementId);
+      }
+    },
+    resetErrors(value, moduleId) {
+      this.$store.commit('campaign/clearErrorsByModuleId', moduleId);
+      if (this.isCustom) {
+        this.registerCustomModuleDefaultValidationErrors(moduleId);
+      }
+    },
+  },
+};
 </script>
-<style lang="scss" scoped>
-.settings-container .el-switch{
-  float: left;
-}
-</style>

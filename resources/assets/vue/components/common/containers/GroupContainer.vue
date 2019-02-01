@@ -31,7 +31,7 @@ export default {
 <style lang="scss" scoped>
   .group-container {
     border: 1px solid #C0C0C0;
-    padding: 4px 6px 0 6px;
+    padding: 10px 6px;
     margin: 5px 0;
     background: #FCFCFC;
     border-radius: 3px;
@@ -74,6 +74,9 @@ export default {
         opacity: 0.8;
         right: 5px;
       }
+    }
+    &:last-of-type {
+      margin-bottom: 0px;
     }
   }
 </style>

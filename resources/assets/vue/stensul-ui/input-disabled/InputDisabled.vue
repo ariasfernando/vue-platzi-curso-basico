@@ -38,6 +38,6 @@ export default {
   border-color: #e4e7ed;
   color: #c0c4cc;
   text-overflow: ellipsis;
-  overflow: hidden;
+  // @todo: check overflow: hidden;
 }
 </style>
