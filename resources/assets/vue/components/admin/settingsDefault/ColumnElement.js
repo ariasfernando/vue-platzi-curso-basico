@@ -12,7 +12,7 @@ function columnDefault() {
       {
         groupLabel: 'Design',
         settings: [
-          width({ subComponent: 'container' }),
+          width({ subComponent: 'container', type: 'width' }),
           bgcolor({ subComponent: 'container' }),
         ],
       },
