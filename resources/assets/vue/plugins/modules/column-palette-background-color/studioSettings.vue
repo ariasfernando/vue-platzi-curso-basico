@@ -13,7 +13,7 @@
       </SettingsContainer>
       <SettingsContainer v-if="plugin.config.usePaletteFromLibrary" label="Palette name">
         <template slot="setting-right">
-          <StuiElInput
+          <StuiInputText
             v-model="paletteFromLibrary"
             size="mini"
             placeholder="name" />
@@ -21,7 +21,7 @@
       </SettingsContainer>
       <SettingsContainer v-else label="Custom Palette">
         <template slot="setting-right">
-          <StuiElInput
+          <StuiInputText
             v-model="customPalette"
             size="mini"
             placeholder="000000,474646,79A8C9,CD202C" />

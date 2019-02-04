@@ -43,7 +43,7 @@ export default {
       );
     },
     pluginsGroups() {
-      const pluginsGroups = pluginsLayout[this.type] ? pluginsLayout[this.type]().componentPlugins : undefined;
+      const pluginsGroups = pluginsLayout[this.type] ? pluginsLayout[this.type]().componentPlugins : [];
       return pluginsGroups.filter(this.filterPlugin);
     },
     module() {
