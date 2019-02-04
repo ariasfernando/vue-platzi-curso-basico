@@ -43,7 +43,7 @@ export default {
       );
     },
     pluginsGroups() {
-      const pluginsGroups = pluginsLayout[this.type] ? pluginsLayout[this.type]().componentPlugins : undefined;
+      const pluginsGroups = pluginsLayout[this.type] ? pluginsLayout[this.type]().componentPlugins : [];
       return pluginsGroups.filter(this.filterPlugin);
     },
     module() {
@@ -60,7 +60,7 @@ export default {
       return this.$store.getters['module/currentElementId'];
     },
     currentElement() {
-      if (this.currentComponent.columnId === undefined) {
+      if (!this.currentElementId) {
         return this.module;
       }
       let element = false;

@@ -2,7 +2,8 @@ function textOptions() {
   return {
     enabled: true,
     config: {
-      toolbarString: 'undo redo | alignleft aligncenter alignright alignjustify | bold italic underline | link | forecolor backcolor',
+      toolbarString:
+        'undo redo | alignleft aligncenter alignright alignjustify | bold italic underline | link | forecolor backcolor',
       settings: {
         link_validate_url: {
           content: 'disabled',
@@ -13,8 +14,12 @@ function textOptions() {
         lines_limit: {
           content: false,
         },
+        autocomplete_http: {
+          content: false,
+        },
         fontsize_formats: {
-          content: [{
+          content: [
+            {
               value: '12px',
             },
             {
@@ -32,7 +37,8 @@ function textOptions() {
           content: false,
         },
         formats: {
-          content: '{"light_font":{"inline":"span","styles":{"fontWeight":"300"}},"normal_font":{"inline":"span","styles":{"fontWeight":"400"}},"semi_bold_font":{"inline":"span","styles":{"fontWeight":"600"}},"bold_font":{"inline":"span","styles":{"fontWeight":"700"}}}',
+          content:
+            '{"light_font":{"inline":"span","styles":{"fontWeight":"300"}},"normal_font":{"inline":"span","styles":{"fontWeight":"400"}},"semi_bold_font":{"inline":"span","styles":{"fontWeight":"600"}},"bold_font":{"inline":"span","styles":{"fontWeight":"700"}}}',
         },
       },
     },

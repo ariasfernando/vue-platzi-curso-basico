@@ -87,16 +87,16 @@ const convertArrayToObject = (element, data) => {
 };
 const searchOrCreateLevel = (data, keys) => {
   let subData = data;
-  for (let i = 0; i < keys.length - 1; i++) {
-    if (!_.has(subData, [keys[i]])) {
+  for (let i = 0; i < keys.length; i++) {
+    if (!_.has(subData, [keys[i]]) || (Array.isArray(subData[keys[i]]) && isNaN(keys[i]))) {
+      // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
       Vue.set(subData, [keys[i]], {});
     }
-    subData = subData[keys[i]];
+    if (i < keys.length - 1) {
+      subData = subData[keys[i]];
+    }
   }
-  return {
-    data: subData,
-    property: keys[keys.length - 1],
-  };
+  return subData;
 };
 
 const getters = {
@@ -145,6 +145,21 @@ const mutations = {
   },
   setModuleData(state, data) {
     state.module = data;
+  },
+  setElementData(state, { componentId, columnId, value }) {
+    let containerElement = {};
+    let property = false;
+    if (componentId >= 0) {
+      containerElement = state.module.structure.columns[columnId].components;
+      property = componentId;
+    } else if (columnId >= 0) {
+      containerElement = state.module.structure.columns;
+      property = columnId;
+    } else {
+      containerElement = state;
+      property = 'module';
+    }
+    Vue.set(containerElement, property, value);
   },
   setModuleFields(state, data) {
     _.each(data, (value, field) => {
@@ -282,7 +297,7 @@ const mutations = {
     const pluginData = component.plugins[plugin];
     const pathArray = _.concat([type || 'config'], path ? path.split('.') : []);
     const pluginOption = searchOrCreateLevel(pluginData, pathArray);
-    Vue.set(pluginOption.data, pluginOption.property, value);
+    Vue.set(pluginOption, pathArray[pathArray.length - 1], value);
   },
   setPluginComponentConfig(state, data) {
     // DEPRECATE
@@ -291,7 +306,7 @@ const mutations = {
         .plugins[data.plugin];
     const path = _.concat(['config'], data.path ? data.path.split('.') : []);
     const pluginOption = searchOrCreateLevel(plugin, path);
-    Vue.set(pluginOption.data, pluginOption.property, data.value);
+    Vue.set(pluginOption, path[path.length - 1], data.value);
   },
   savePluginSuboption(state, payload) {
     let pluginOptions = state.module;
