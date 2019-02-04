@@ -51,7 +51,7 @@ export default {
 
       // Save plugin data
       this.$store.commit('module/savePlugin', payload);
-    }
+    },
   },
 };
 </script>

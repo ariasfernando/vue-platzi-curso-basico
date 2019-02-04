@@ -163,6 +163,10 @@ export default {
       margin-bottom: 10px;
     }
   }
+  
+  .el-switch {
+    float: right;
+  }
 
   &.is-setting-right /deep/,
   &.is-setting-half /deep/,
@@ -211,8 +215,9 @@ export default {
   .clearfix {
     clear: both;
   }
-  .is-danger /deep/ input {
-    border-color: #ce5f5f;
+  .is-danger /deep/ input,
+  .is-danger /deep/ textarea {
+    border-color: #ce5f5f!important;
   }
   .arrow {
     padding: 0px 6px;
