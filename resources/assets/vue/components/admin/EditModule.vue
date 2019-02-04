@@ -1,33 +1,31 @@
 <template>
   <div class="col-xs-12 module">
-    <module-header />
+    <ModuleHeader />
     <div v-if="ready" class="row">
       <section id="edit-container" class="col-xs-12 section-container">
-        <column-bar-container side="left">
-          <general-settings v-if="ready" />
-          <elements-settings v-if="ready" />
-        </column-bar-container>
+        <ColumnBarContainer side="left">
+          <GeneralSettings v-if="ready" />
+          <ElementsSettings v-if="ready" />
+        </ColumnBarContainer>
         <!-- START: Module Container -->
         <div class="col-xs-8 module-container" @mouseup="clickModuleContainer">
-          <scrollbar-container>
-            <div v-if="showRaw" class="module-wrapper">
-              <code-editor v-model="moduleRow" />
-            </div>
-            <module-container v-else :building-mode="buildingMode" :width-desktop="640" :width-mobile="480">
-              <module :module="module" />
-            </module-container>
-          </scrollbar-container>
+          <ScrollbarContainer>
+            <CodeEditor v-if="showRaw" v-model="moduleRow" height="calc(100vh - 135px)" />
+            <ModuleContainer v-else :building-mode="buildingMode" :width-desktop="640" :width-mobile="480">
+              <Module :module="module" />
+            </ModuleContainer>
+          </ScrollbarContainer>
         </div>
         <!-- END: Module Container -->
-        <column-bar-container side="right">
-          <module-settings v-if="showGeneralSettings" :current-component="currentComponent" />
-          <column-settings v-if="showColumnSettings" :current-component="currentComponent" />
-          <component-settings v-if="showElementSettings" :current-component="currentComponent" />
-        </column-bar-container>
+        <ColumnBarContainer side="right">
+          <ModuleSettings v-if="showGeneralSettings" :current-component="currentComponent" />
+          <ColumnSettings v-if="showColumnSettings" :current-component="currentComponent" />
+          <ComponentSettings v-if="showElementSettings" :current-component="currentComponent" />
+        </ColumnBarContainer>
       </section>
     </div>
     <div v-else class="container-spinner">
-      <stui-spinner />
+      <StuiSpinner />
     </div>
   </div>
 </template>
@@ -376,6 +374,10 @@ export default {
   height: calc(~'100vh - 102px');
 }
 #studio .module-container .scrollbar-container-inner {
-  padding: 40px 20px 100px;
+  padding: 15px 15px 0 15px;
+  .module-wrapper-width{
+    padding-bottom: 100px;
+    padding-top: 25px;
+  }
 }
 </style>
