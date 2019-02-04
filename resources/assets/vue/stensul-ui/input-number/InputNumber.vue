@@ -1,17 +1,18 @@
 <template>
   <stui-input-disabled v-if="disabled" :value="value" :false-text="falseText" />
-  <el-input-number
-    v-else
-    v-bind="$attrs"
-    class="stui-input-number"
-    :class="{'is-muted' : isMuted}"
-    :value="Number(value)"
-    size="mini"
-    :controls="true"
-    controls-position="right"
-    :disabled="isMuted"
-    @blur="$emit('blur')"
-    @change="(value)=>change(value)" />
+  <div v-else class="control">
+    <el-input-number
+      v-bind="$attrs"
+      class="stui-input-number"
+      :class="{'is-muted' : isMuted}"
+      :value="Number(value)"
+      size="mini"
+      :controls="true"
+      controls-position="right"
+      :disabled="isMuted"
+      @blur="$emit('blur')"
+      @change="(value)=>change(value)" />
+  </div>
 </template>
 
 <script>

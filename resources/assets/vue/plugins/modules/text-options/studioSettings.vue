@@ -94,52 +94,52 @@
           </SettingsContainer>
         </template>
         <!--settings-->
-        <template>
-          <div v-for="(tinySetting, key) in settings" :key="key" class="clearfix">
-            <!-- Input if config needs it -->
-            <SettingsContainer
-              v-if="showSetting(tinySetting.dependsOn) && $can(`tiny-plugin-${tinySetting.aclName || key}`)"
-              :label="tinySetting.title"
-              :checkbox="checkboxValue(tinySetting.checkbox, plugin.config.settings[tinySetting.key].content)"
-              :disabled="isDisabled(tinySetting.isDisabled, tinySettingContent(plugin.config.settings[tinySetting.key].content))"
-              @checkboxChange="(value)=>checkboxChange(value, tinySetting)">
-              <template slot="setting-right">
-                <ElInputNumber
-                  v-if="tinySetting.type === 'number'"
-                  v-b-tooltip.hover
-                  :value="plugin.config.settings[tinySetting.key].content || 0"
-                  size="mini"
-                  :title="key"
-                  :min="0"
-                  :name="key"
-                  @change="(value)=>changeSetting(value, tinySetting.key)" />
-                <ElSelect
-                  v-else-if="tinySetting.type === 'select'"
-                  size="mini"
-                  :value="plugin.config.settings[tinySetting.key].content"
-                  @change="(value) => changeSetting(value, tinySetting.key)">
-                  <ElOption
-                    v-for="(opt, optKey) in tinySetting.options"
-                    :key="optKey"
-                    :value="optKey"
-                    :label="opt" />
-                </ElSelect>
-                <ElInput
-                  v-else-if="tinySetting.type === 'text'"
-                  v-b-tooltip.hover
-                  size="mini"
-                  :title="key"
-                  :name="key"
-                  :value="tinySettingContent(plugin.config.settings[tinySetting.key].content)"
-                  @change="(value)=>changeSetting(value, tinySetting.key)" />
-                <Component
-                  :is="tinySetting.type"
-                  v-else
-                  v-bind="props(tinySetting, key)"
-                  @change="(value)=>changeSetting(value, tinySetting.key)" />
-              </template>
-            </SettingsContainer>
-          </div>
+        <template
+          v-for="(tinySetting, key) in settings">
+          <!-- Input if config needs it -->
+          <SettingsContainer
+            v-if="showSetting(tinySetting.dependsOn) && $can(`tiny-plugin-${tinySetting.aclName || key}`)"
+            :key="key"
+            :label="tinySetting.title"
+            :checkbox="checkboxValue(tinySetting.checkbox, plugin.config.settings[tinySetting.key].content)"
+            :disabled="isDisabled(tinySetting.isDisabled, tinySettingContent(plugin.config.settings[tinySetting.key].content))"
+            @checkboxChange="(value)=>checkboxChange(value, tinySetting)">
+            <template slot="setting-right">
+              <ElInputNumber
+                v-if="tinySetting.type === 'number'"
+                v-b-tooltip.hover
+                :value="plugin.config.settings[tinySetting.key].content || 0"
+                size="mini"
+                :title="key"
+                :min="0"
+                :name="key"
+                @change="(value)=>changeSetting(value, tinySetting.key)" />
+              <ElSelect
+                v-else-if="tinySetting.type === 'select'"
+                size="mini"
+                :value="plugin.config.settings[tinySetting.key].content"
+                @change="(value) => changeSetting(value, tinySetting.key)">
+                <ElOption
+                  v-for="(opt, optKey) in tinySetting.options"
+                  :key="optKey"
+                  :value="optKey"
+                  :label="opt" />
+              </ElSelect>
+              <ElInput
+                v-else-if="tinySetting.type === 'text'"
+                v-b-tooltip.hover
+                size="mini"
+                :title="key"
+                :name="key"
+                :value="tinySettingContent(plugin.config.settings[tinySetting.key].content)"
+                @change="(value)=>changeSetting(value, tinySetting.key)" />
+              <Component
+                :is="tinySetting.type"
+                v-else
+                v-bind="props(tinySetting, key)"
+                @change="(value)=>changeSetting(value, tinySetting.key)" />
+            </template>
+          </SettingsContainer>
         </template>
       </GroupContainer>
     </b-collapse>

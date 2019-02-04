@@ -64,6 +64,9 @@ export default {
       },
     },
   },
+  mounted() {
+    this.defineStyleOption();
+  },
   methods: {
     checkboxChange(value) {
       const newValue = value ? this.valueOnTrue + this.unit : this.valueOnFalse;
@@ -74,6 +77,12 @@ export default {
         value: newValue,
       });
       this.isNormalLetterSpacing = value;
+    },
+    defineStyleOption() {
+      // set styleOption to default if is undefined
+      if (this.element.styleOption.isNormalLetterSpacing === undefined) {
+        this.isNormalLetterSpacing = false;
+      }
     },
   },
 };

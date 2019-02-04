@@ -1,18 +1,20 @@
 <template>
-  <el-select
-    v-model="localValue"
-    class="stui-select"
-    v-bind="$attrs"
-    :class="isNumbered ? 'is-numbered' : ''"
-    size="mini"
-    :multiple="multiple"
-    :placeholder="placeholder">
-    <el-option
-      v-for="(item, index) in list"
-      :key="item.value || index"
-      :label="item.label || item"
-      :value="item.value || item" />
-  </el-select>
+  <div class="control">
+    <el-select
+      v-model="localValue"
+      class="stui-select"
+      v-bind="$attrs"
+      :class="isNumbered ? 'is-numbered' : ''"
+      size="mini"
+      :multiple="multiple"
+      :placeholder="placeholder">
+      <el-option
+        v-for="(item, index) in list"
+        :key="item.value || index"
+        :label="item.label || item"
+        :value="item.value || item" />
+    </el-select>
+  </div>
 </template>
 
 <script>

@@ -7,7 +7,6 @@
         size="mini"
         :value="mainSetting"
         :placeholder="placeholder || ''"
-        class="clearfix"
         :type="type"
         :autosize="autosize"
         :resize="resize" />

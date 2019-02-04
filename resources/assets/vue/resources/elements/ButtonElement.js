@@ -24,6 +24,8 @@ function buttonDefault() {
         textAlign: 'center',
         fontWeight: 'normal',
         letterSpacing: 'normal',
+        paddingLeft: '15px',
+        paddingRight: '15px',
       },
       styleOption: {
       },

@@ -1,12 +1,12 @@
 <template>
-  <el-input
-    class="stui-input-disabled"
-    size="mini"
-    disabled
-    :placeholder="_value" />
+  <div class="control">
+    <el-input
+      class="stui-input-disabled"
+      size="mini"
+      disabled
+      :placeholder="_value" />
+  </div>
 </template>
-
-
 <script>
 export default {
   name: 'InputDisabled',
@@ -37,7 +37,10 @@ export default {
   background-color: #f5f7fa;
   border-color: #e4e7ed;
   color: #c0c4cc;
-  text-overflow: ellipsis;
-  // @todo: check overflow: hidden;
+  /deep/ .el-input__inner {
+    text-overflow: ellipsis;
+    text-align: center;
+    border-radius: 2px;
+  }
 }
 </style>

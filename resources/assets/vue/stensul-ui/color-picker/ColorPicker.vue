@@ -1,7 +1,7 @@
 
 <template>
   <div
-    class="stui-color-picker"
+    class="control stui-color-picker"
     :class="{'is-muted' : isMuted}">
     <div class="input-text-hex" @click="openColorPicker()">
       <el-input

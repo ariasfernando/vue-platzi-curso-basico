@@ -1,25 +1,12 @@
 <template>
   <div
     class="settings-container"
-    :class="[
-      customClass,
-      {'clearfix' : !hasSettingHalf},
-      {'is-setting-right': hasSettingRight},
-      {'is-setting-half' : hasSettingHalf},
-      {'is-setting-bottom' : hasSettingBottom},
-      {'is-setting-side' : hasSettingSideBySide},
-      {[`level-${level}-container`] : level},
-      {'is-disabled': disabled},
-      {'has-arrow': arrow !== undefined},
-      {'is-active': arrow},
-    ]">
+    :class="rootClasses">
     <template v-if="hasSettingRight">
-      <stui-field grouped>
-        <div class="control">
+      <stui-field>
+        <div v-if="!noLabel && checkbox === undefined" class="control">
           <label
-            v-if="!noLabel && checkbox === undefined"
-            :class="{[`level-${level}`] : level}"
-            class="half"
+            :class="{[`is-level-${level}`] : level}"
             :title="title">
             {{ label }}
             <span
@@ -31,26 +18,24 @@
                 :class="{collapsed: arrow}" />
             </span>
           </label>
-          <stui-checkbox
-            v-if="checkbox !== undefined"
-            :label="label"
-            :value="checkbox"
-            :class="{[`level-${level}`] : level}" class="half"
-            :disabled="disabled"
-            @change="(value)=>{$emit('checkboxChange', value)}" />
         </div>
-        <div class="control">
-          <slot name="setting-right" />
-        </div>
+        <stui-checkbox
+          v-if="checkbox !== undefined"
+          :label="label"
+          :value="checkbox"
+          :class="{[`level-${level}`] : level}"
+          :disabled="disabled"
+          @change="(value)=>{$emit('checkboxChange', value)}" />
+        <slot name="setting-right" />
       </stui-field>
     </template>
 
     <template v-if="hasSettingSideBySide">
-      <stui-field grouped>
+      <stui-field>
         <div class="control half-setting--left">
           <label
             v-if="!noLabel"
-            :class="{[`level-${level}`] : level}"
+            :class="{[`is-level-${level}`] : level}"
             :title="titleLeft">
             {{ labelLeft }}
           </label>
@@ -71,7 +56,7 @@
     <template v-if="hasSettingBottom">
       <label
         v-if="!noLabel"
-        :class="{[`level-${level}`] : level}"
+        :class="{[`is-level-${level}`] : level}"
         :title="title">
         {{ label }}
         <span
@@ -90,7 +75,7 @@
     <template v-if="hasSettingHalf">
       <label
         v-if="!noLabel"
-        :class="{[`level-${level}`] : level}"
+        :class="{[`is-level-${level}`] : level}"
         :title="title">
         {{ label }}
       </label>
@@ -131,38 +116,58 @@ export default {
     hasSettingHalf() {
       return Boolean(this.$slots['setting-half']);
     },
+    rootClasses() {
+      return [
+        this.customClass,
+        { 'is-setting-right': this.hasSettingRight },
+        { 'is-setting-half': this.hasSettingHalf },
+        { 'is-setting-bottom': this.hasSettingBottom },
+        { 'is-setting-side': this.hasSettingSideBySide },
+        { [`is-level-${this.level}`]: this.level },
+        { 'is-disabled': this.disabled },
+        { 'has-arrow': this.arrow !== undefined },
+        { 'is-active': this.arrow },
+      ];
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
+@import '../../../../stensul-ui/scss/stui.scss';
+
 .settings-container {
   margin-bottom: 10px;
   margin-left: 0;
   margin-right: 0;
   position: relative;
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-  &:last-of-type {
+  &:last-of-type:not(.keep-margin) {
     margin-bottom: 0px;
-  }
-  .control /deep/ .el-switch {
-    margin-top: 4px;
   }
 
   label {
     text-align: left;
-    color: #333;
+    color: $stui-label-color;
     font-weight: 300;
     padding: 6px 0 7px;
     font-size: 12px;
     line-height: 15px;
     margin-bottom: 0;
     position: relative;
+    &.is-level-first {
+      width: 100%;
+      font-weight: bold;
+      border-bottom: 1px solid #ddd;
+      padding-top: 0px;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
   }
 
-  &.is-setting-right,
-  &.is-setting-half,
-  &.is-setting-side {
-    .control {
+  &.is-setting-right /deep/,
+  &.is-setting-half /deep/,
+  &.is-setting-side /deep/ {
+     > .stui-field > .control {
       width: calc(50% - 2px);
     }
   }
@@ -190,23 +195,11 @@ export default {
     margin-bottom: 0px;
   }
 
-  &.level-first-container {
-    label {
-      width: 100%;
-      &.level-first {
-        font-weight: bold;
-        border-bottom: 1px solid #ddd;
-        padding-top: 0px;
-        padding-bottom: 10px;
-        margin-bottom: 10px;
-      }
-    }
-    &.has-arrow:not(.is-active) {
-      label.level-first {
-        border-bottom: 0px;
-        margin-bottom: 0px;
-        padding-bottom: 0px;
-      }
+  &.has-arrow:not(.is-active) {
+    label.is-level-first {
+      border-bottom: 0px;
+      margin-bottom: 0px;
+      padding-bottom: 0px;
     }
   }
 
@@ -248,7 +241,7 @@ export default {
     }
   }
 }
-[class^="plugin-"] > .settings-container {
+[class^="plugin-"] > .settings-container:not(.keep-margin) {
   margin-bottom: 0px;
 }
 </style>

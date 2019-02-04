@@ -1,7 +1,7 @@
 <template>
   <settings-container label="Horizontal position">
     <template slot="setting-right">
-      <stui-field>
+      <stui-field addons>
         <div class="control is-expanded">
           <el-button
             plain size="mini"

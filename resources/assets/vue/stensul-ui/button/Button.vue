@@ -1,7 +1,9 @@
 <template>
-  <button :class="clasess" :disabled="disabled" @click="$emit('click')">
-    <slot>{{ text }}</slot>
-  </button>
+  <div class="control">
+    <button :class="clasess" :disabled="disabled" @click="$emit('click')">
+      <slot>{{ text }}</slot>
+    </button>
+  </div>
 </template>
 
 <script>
@@ -41,9 +43,9 @@ export default {
 @import '../scss/stui.scss';
 .stui-button {
   font-family: "Open Sans", Arial, sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 400;
-  background: #514960;
+  background: $stui-color-primary;
   color: #fff;
   transition: all 0.3s linear;
   display: inline-block;
@@ -57,7 +59,7 @@ export default {
   white-space: nowrap;
   padding: 6px 12px;
   line-height: 1.42857143;
-  border-radius: 4px;
+  border-radius: 2px;
   user-select: none;
   text-decoration: none;
   outline: none;
@@ -75,31 +77,49 @@ export default {
   }
 
   &.is-primary {
-    background: #514960;
+    background: $stui-color-primary;
     color: #fff;
     border: 1px solid transparent;
     &:hover {
-      background: lighten(#514960, 10%);
+      background: lighten($stui-color-primary, 10%);
       color: #fff;
-      border-color: darken(#514960, 12%);
+      border-color: darken($stui-color-primary, 12%);
     }
   }
   &.is-secondary {
     color: #fff;
-    background-color: rgb(120, 220, 214);
+    background-color: $stui-color-secondary;
     border: 1px solid transparent;
     &.is-disabled,
     &.is-disabled:active,
     &.is-disabled:focus,
     &.is-disabled:hover {
       opacity: 0.4;
-      border-color: rgb(120, 220, 214);
-      background-color: rgb(120, 220, 214);
+      border-color: $stui-color-secondary;
+      background-color: $stui-color-secondary;
     }
     &:hover {
-      background: lighten(rgb(120, 220, 214), 10%);
+      background: lighten($stui-color-secondary, 10%);
       color: #fff;
-      border-color: darken(rgb(120, 220, 214), 12%);
+      border-color: darken($stui-color-secondary, 12%);
+    }
+  }
+  &.is-gray {
+    color: #fff;
+    background-color: #999999;
+    border: 1px solid transparent;
+    &.is-disabled,
+    &.is-disabled:active,
+    &.is-disabled:focus,
+    &.is-disabled:hover {
+      opacity: 0.4;
+      border-color: #999999;
+      background-color: #999999;
+    }
+    &:hover {
+      background: lighten(#999999, 10%);
+      color: #fff;
+      border-color: darken(#999999, 12%);
     }
   }
   &.full-width {

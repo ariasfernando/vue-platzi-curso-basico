@@ -195,7 +195,7 @@ export function placeholder() {
     name: 'placeholder',
     aclName: 'placeholder_placeholder-desktop',
     type: 'generic-file',
-    label: 'Default Image',
+    label: 'Upload Desktop',
     link: 'attribute',
     subComponent: 'image',
   };
@@ -206,7 +206,7 @@ export function placeholderMobile() {
     name: 'placeholderMobile',
     aclName: 'placeholder_placeholder-mobile',
     type: 'generic-file',
-    label: 'Default Mobile Image',
+    label: 'Upload Mobile',
     link: 'attribute',
     subComponent: 'image',
   };
