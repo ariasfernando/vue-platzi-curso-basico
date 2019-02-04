@@ -67,12 +67,20 @@ export default {
     module() {
       return this.$store.getters['module/module'];
     },
+    currentElementId() {
+      return this.$store.getters['module/currentElementId'];
+    },
     moduleRow: {
       get() {
-        return this.module;
+        return this.currentElement;
       },
-      set(values) {
-        this.$store.commit('module/setModuleData', JSON.parse(values));
+      set(value) {
+        const data = {
+          columnId: this.currentComponent.columnId,
+          componentId: this.currentComponent.componentId,
+          value: JSON.parse(value),
+        };
+        this.$store.commit('module/setElementData', data);
       },
     },
     currentComponent() {
@@ -105,6 +113,27 @@ export default {
         this.currentComponent.columnId >= 0 &&
         this.currentComponent.componentId >= 0
       );
+    },
+    currentElement() {
+      if (!this.currentElementId) {
+        return this.module;
+      }
+      let element = false;
+      _.forEach(this.module.structure.columns, (column) => {
+        if (column.id === this.currentElementId) {
+          element = column;
+          return false;
+        }
+        _.forEach(column.components, (CurrentComponent) => {
+          if (CurrentComponent.id === this.currentElementId) {
+            element = CurrentComponent;
+            return false;
+          }
+          return true;
+        });
+        return !element;
+      });
+      return element;
     },
   },
   watch: {
@@ -144,7 +173,7 @@ export default {
           } else if (this.module.inUse) {
             this.$root.$toast(
               'This module is already in use. Any changes will not affect or update the module instance in ' +
-                  'the existing campaigns. To create a new version you can clone the module in the module list.',
+                'the existing campaigns. To create a new version you can clone the module in the module list.',
               {
                 className: 'et-info',
                 closeable: true,
@@ -375,7 +404,7 @@ export default {
 }
 #studio .module-container .scrollbar-container-inner {
   padding: 15px 15px 0 15px;
-  .module-wrapper-width{
+  .module-wrapper-width {
     padding-bottom: 100px;
     padding-top: 25px;
   }

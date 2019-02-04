@@ -146,6 +146,21 @@ const mutations = {
   setModuleData(state, data) {
     state.module = data;
   },
+  setElementData(state, { componentId, columnId, value }) {
+    let containerElement = {};
+    let property = false;
+    if (componentId >= 0) {
+      containerElement = state.module.structure.columns[columnId].components;
+      property = componentId;
+    } else if (columnId >= 0) {
+      containerElement = state.module.structure.columns;
+      property = columnId;
+    } else {
+      containerElement = state;
+      property = 'module';
+    }
+    Vue.set(containerElement, property, value);
+  },
   setModuleFields(state, data) {
     _.each(data, (value, field) => {
       state.module[field] = value;

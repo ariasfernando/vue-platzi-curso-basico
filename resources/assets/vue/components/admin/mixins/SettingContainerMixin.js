@@ -60,7 +60,7 @@ export default {
       return this.$store.getters['module/currentElementId'];
     },
     currentElement() {
-      if (this.currentComponent.columnId === undefined) {
+      if (!this.currentElementId) {
         return this.module;
       }
       let element = false;
