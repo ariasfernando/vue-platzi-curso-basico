@@ -2,19 +2,19 @@
   <div>
     <SettingsContainer :label="plugin.title" :arrow="arrowState" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
-        <toggle-button :value="plugin.enabled" @change="toggle" />
+        <StuiToggleButton :value="plugin.enabled" @change="toggle" />
       </template>
     </SettingsContainer>
     <b-collapse :id="pluginKey" :visible="arrowState">
       <settings-container v-if="plugin.enabled && $can('std-image-element_editor_plugin-mobile-upload')" label="Mobile Image Upload">
         <template slot="setting-right">
-          <toggle-button :value="hasImageMobile" @change="toggleImageMobile"></toggle-button>
+          <StuiToggleButton :value="hasImageMobile" @change="toggleImageMobile" />
         </template>
       </settings-container>
       <template v-for="(option, name) in plugin.config" v-if="plugin.enabled">
         <settings-container v-if="$can('std-image-element_editor_'+name)" :label="option.label" :key="name">
           <template slot="setting-right">
-            <toggle-button v-if="option.type === 'switch'" :disabled="!plugin.enabled" :value="option.value" @change="(newValue)=>updateField(newValue, name)"></toggle-button>
+            <StuiToggleButton v-if="option.type === 'switch'" :disabled="!plugin.enabled" :value="option.value" @change="(newValue)=>updateField(newValue, name)" />
             <el-input-number
               v-if="option.type === 'number'" 
               size="mini" 
@@ -44,7 +44,7 @@
         <template  v-if="option.value && option.config" v-for="(subopt, subname) in option.config">
           <settings-container v-if="$can('std-image-element_editor_'+subname)" :label="subopt.label" :key="subname">
             <template slot="setting-right">
-              <toggle-button v-if="subopt.type === 'switch'" :value="subopt.value" active-color="#78DCD6" @change="(newValue)=>updateSubField(newValue, name, subname)"></toggle-button>
+              <StuiToggleButton v-if="subopt.type === 'switch'" :value="subopt.value" active-color="#78DCD6" @change="(newValue)=>updateSubField(newValue, name, subname)" />
               <el-input size="mini"  v-if="subopt.type === 'text'" :value="subopt.value" @change="(newValue)=>updateSubField(newValue, name, subname)"></el-input>
               <el-input-number
                 v-if="subopt.type === 'number'" 
@@ -72,7 +72,7 @@
           <template v-if="subopt.value && subopt.config" v-for="(interop, intername) in subopt.config">
             <settings-container v-if="$can('std-image-element_editor_'+intername)" :label="interop.label" :key="intername">
               <template slot="setting-right">
-                <toggle-button v-if="interop.type === 'switch'" :value="interop.value" active-color="#78DCD6" @change="(newValue)=>updateInterField(newValue, name, subname, intername)"></toggle-button>
+                <StuiToggleButton v-if="interop.type === 'switch'" :value="interop.value" active-color="#78DCD6" @change="(newValue)=>updateInterField(newValue, name, subname, intername)" />
                 <el-input size="mini"  v-if="interop.type === 'text'" :value="interop.value" @change="(newValue)=>updateInterField(newValue, name, subname, subninternameame)"></el-input>
                 <el-input-number
                   v-if="interop.type === 'number'" 

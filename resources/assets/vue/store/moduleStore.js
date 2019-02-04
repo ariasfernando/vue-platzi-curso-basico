@@ -119,6 +119,9 @@ const getters = {
     }
     return {};
   },
+  currentElementId(state) {
+    return state.currentElementId;
+  },
   buildingMode(state) {
     return state.buildingMode;
   },
@@ -206,9 +209,8 @@ const mutations = {
     // Set attribute
     column.container.attribute.width = `${data.width}%`;
   },
-  saveElementProperty(state, { moduleIdInstance, elementId, property, value, ...scope }) {
-    const element = elementId === undefined ? state.module : getElement(state.module, elementId);
-    if (element.structure) scope.subComponent = 'structure';
+  saveElementProperty(state, { elementId, property, value, ...scope }) {
+    const element = elementId ? getElement(state.module, elementId) : state.module.structure;
     let properties = getProperties(element, scope);
     if (Array.isArray(properties) && isNaN(property)) {
       // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.

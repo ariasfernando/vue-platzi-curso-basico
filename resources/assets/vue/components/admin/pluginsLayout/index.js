@@ -11,5 +11,5 @@ module.exports = {
   'image-element': ImageElement,
   'button-element': ButtonElement,
   'divider-element': DividerElement,
-   Module,
+  module: Module,
 };

@@ -2,13 +2,13 @@
   <div>
     <SettingsContainer :label="plugin.title" :arrow="arrowState" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
-        <toggle-button :value="plugin.enabled" @change="toggle" />
+        <StuiToggleButton :value="plugin.enabled" @change="toggle" />
       </template>
     </SettingsContainer>
     <b-collapse :id="pluginKey" :visible="arrowState">
       <SettingsContainer v-if="plugin.enabled" label="Fonts options">
         <template slot="setting-right">
-          <ElInput
+          <StuiInputText
             v-model="fontsOptions"
             size="mini" />
         </template>

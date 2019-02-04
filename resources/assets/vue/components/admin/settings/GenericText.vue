@@ -5,7 +5,6 @@
         v-model="mainSetting"
         v-validate="'required'"
         size="mini"
-        :value="mainSetting"
         :placeholder="placeholder || ''"
         :type="type"
         :autosize="autosize"

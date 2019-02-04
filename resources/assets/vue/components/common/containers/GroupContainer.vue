@@ -3,9 +3,6 @@
     class="group-container"
     :class="[customClass, {'clickeable': clickeable}]"
     @click="e => $emit('click', e)">
-    <label v-if="label">
-      {{ label }}
-    </label>
     <slot />
   </div>
 </template>
@@ -19,10 +16,6 @@ export default {
     },
     clickeable: {
       type: Boolean,
-      default: false,
-    },
-    label: {
-      type: [String, Number, Boolean],
       default: false,
     },
   },
@@ -39,22 +32,6 @@ export default {
       padding: 0;
       border: 0;
       margin: 0;
-    }
-    /* @todo: label should be removed
-    after complete settings update STD 513 */
-    label {
-      text-align: left;
-      color: #333333;
-      font-weight: 400;
-      padding: 7px 0 6px;
-      font-size: 12px;
-      line-height: 15px;
-      width: 100%;
-      float: left;
-      margin-bottom: 0;
-      &.half {
-        width: 50%;
-      }
     }
     &.clickeable {
       cursor: pointer;

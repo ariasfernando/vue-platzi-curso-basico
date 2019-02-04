@@ -1,18 +1,23 @@
 <template>
   <div>
-    <SettingsContainer class="custom-width" :label="plugin.title" :arrow="arrowState" @toggleArrow="setSlideToggles">
+    <SettingsContainer
+      :label="plugin.title"
+      :arrow="arrowState"
+      :label-expanded="true"
+      @toggleArrow="setSlideToggles">
       <template slot="setting-right">
-        <toggle-button :value="plugin.enabled" @change="toggle" />
+        <StuiToggleButton :value="plugin.enabled" @change="toggle" />
       </template>
     </SettingsContainer>
     <b-collapse :id="pluginKey" :visible="arrowState">
       <SettingsContainer v-if="plugin.enabled" label="Palette">
         <template slot="setting-right">
-          <ElInput
+          <StuiInputText
             v-model="bgColorMap"
             v-validate="'required'"
             size="mini"
-            placeholder="000000,474646,79A8C9,CD202C" />
+            placeholder="000000,474646,79A8C9,CD202C"
+            expanded />
         </template>
       </SettingsContainer>
     </b-collapse>
@@ -82,14 +87,3 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-.custom-width /deep/{
-  .half {
-    width: 64%;
-  }
-  .half-setting {
-    width: 36%;
-  }
-}
-</style>
-

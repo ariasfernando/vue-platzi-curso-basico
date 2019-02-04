@@ -4,7 +4,9 @@
     :class="rootClasses">
     <template v-if="hasSettingRight">
       <stui-field>
-        <div v-if="!noLabel && checkbox === undefined" class="control">
+        <div
+          v-if="!noLabel && checkbox === undefined"
+          class="control">
           <label
             :class="{[`is-level-${level}`] : level}"
             :title="title">
@@ -32,7 +34,8 @@
 
     <template v-if="hasSettingSideBySide">
       <stui-field>
-        <div class="control half-setting--left">
+        <div
+          class="control half-setting--left">
           <label
             v-if="!noLabel"
             :class="{[`is-level-${level}`] : level}"
@@ -41,7 +44,8 @@
           </label>
           <slot name="setting-half-left" />
         </div>
-        <div class="control half-setting--right">
+        <div
+          class="control half-setting--right">
           <label
             v-if="!noLabel"
             :class="{[`level-${level}`] : level}"
@@ -54,31 +58,35 @@
     </template>
 
     <template v-if="hasSettingBottom">
-      <label
-        v-if="!noLabel"
-        :class="{[`is-level-${level}`] : level}"
-        :title="title">
-        {{ label }}
-        <span
-          v-if="arrow !== undefined"
-          class="arrow"
-          @click="$emit('toggleArrow', !arrow)">
-          <i
-            class="glyphicon glyphicon-menu-down"
-            :class="{collapsed: arrow}"
-            @click="$emit('toggleArrow', !arrow)" />
-        </span>
-      </label>
+      <div class="control">
+        <label
+          v-if="!noLabel"
+          :class="{[`is-level-${level}`] : level}"
+          :title="title">
+          {{ label }}
+          <span
+            v-if="arrow !== undefined"
+            class="arrow"
+            @click="$emit('toggleArrow', !arrow)">
+            <i
+              class="glyphicon glyphicon-menu-down"
+              :class="{collapsed: arrow}"
+              @click="$emit('toggleArrow', !arrow)" />
+          </span>
+        </label>
+      </div>
       <slot name="setting-bottom" />
     </template>
 
     <template v-if="hasSettingHalf">
-      <label
-        v-if="!noLabel"
-        :class="{[`is-level-${level}`] : level}"
-        :title="title">
-        {{ label }}
-      </label>
+      <div class="control">
+        <label
+          v-if="!noLabel"
+          :class="{[`is-level-${level}`] : level}"
+          :title="title">
+          {{ label }}
+        </label>
+      </div>
       <slot name="setting-half" />
     </template>
   </div>
@@ -92,6 +100,7 @@ export default {
     'customClass',
     'disabled',
     'label',
+    'labelExpanded',
     'labelLeft',
     'labelRight',
     'level',
@@ -126,6 +135,7 @@ export default {
         { [`is-level-${this.level}`]: this.level },
         { 'is-disabled': this.disabled },
         { 'has-arrow': this.arrow !== undefined },
+        { 'has-label-expanded': this.labelExpanded },
         { 'is-active': this.arrow },
       ];
     },
@@ -163,7 +173,7 @@ export default {
       margin-bottom: 10px;
     }
   }
-  
+
   .el-switch {
     float: right;
   }
@@ -173,6 +183,14 @@ export default {
   &.is-setting-side /deep/ {
      > .stui-field > .control {
       width: calc(50% - 2px);
+    }
+  }
+
+  &.has-label-expanded  /deep/ {
+    > .stui-field > .control {
+      width: auto;
+      flex-grow: 1;
+      flex-shrink: 1;
     }
   }
 

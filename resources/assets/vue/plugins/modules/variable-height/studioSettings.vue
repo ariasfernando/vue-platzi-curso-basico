@@ -2,22 +2,20 @@
   <div>
     <SettingsContainer :label="plugin.title" :arrow="arrowState" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
-        <toggle-button :value="plugin.enabled" @change="toggle" />
+        <StuiToggleButton :value="plugin.enabled" @change="toggle" />
       </template>
     </SettingsContainer>
     <b-collapse :id="pluginKey" :visible="arrowState">
       <SettingsContainer label-left="MIN" label-right="MAX">
         <template slot="setting-half-left">
-          <ElInputNumber
-            size="mini"
+          <StuiInputNumber
             :value="plugin.config.options.min"
             :max="maxValue('min')"
             :min="minValue('min')"
             @change="(val)=>changeOption(val, 'min')" />
         </template>
         <template slot="setting-half-right">
-          <ElInputNumber
-            size="mini"
+          <StuiInputNumber
             :value="plugin.config.options.max"
             :max="maxValue('max')"
             :min="minValue('max')"

@@ -1,15 +1,15 @@
 <template>
   <div>
-    <settings-container
+    <SettingsContainer
       v-for="(mobileSetting, key) in plugin.config.settings"
-      :label="mobileSetting.title"
-      :key="key">
+      :key="key"
+      :label="mobileSetting.title">
       <template slot="setting-right">
-        <stui-toggle-button
+        <StuiToggleButton
           :value="mobileSetting.value"
           @change="(newValue)=>toggleSetting(newValue,key)" />
       </template>
-    </settings-container>
+    </SettingsContainer>
   </div>
 </template>
 

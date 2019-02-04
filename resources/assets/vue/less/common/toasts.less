@@ -42,22 +42,25 @@
     top: 50%!important;
     right: 10px!important;
     transform: translateY(-50%);
-    height: 15px;
-    width: 15px;
+    height: 16px;
+    width: 16px;
     background-color: rgba(255,255,255, .6);
     border-radius: 100%;
     font-size: 0;
 
+    &:before,
     &:after {
-      content: "×";
-      font-weight: bold;
+      content: "";
       position: absolute;
-      left: 0;
+      left: 50%;
       top: 50%;
-      text-align: center;
-      width: 100%;
-      transform: translateY(-50%);
-      font-size: 14px;
+      transform: translate(-50%, -50%) rotate(45deg);
+      width: 8px;
+      height: 2px;
+    }
+    &:after {
+      width: 2px;
+      height: 8px;
     }
   }
 
@@ -65,17 +68,27 @@
     background-color: rgba(102,102,102, .6);
   }
 
-  &.et-error .et-close:after {
-    color: #CE5F5F;
+  &.et-error .et-close {
+    &:before,
+    &:after {
+      background-color: #CE5F5F;
+    }
   }
 
-  &.et-info .et-close:after {
-    color: #F1E8BD;
+  &.et-info .et-close {
+    &:before,
+    &:after {
+      background-color: #F1E8BD;
+    }
   }
 
-  &.et-success .et-close:after {
-    color: #7BAF73;
+  &.et-success .et-close {
+    &:before,
+    &:after {
+      background-color: #7BAF73;
+    }
   }
+
   @keyframes slide-bottom {
 
     0% {

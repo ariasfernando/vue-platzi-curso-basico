@@ -20,11 +20,6 @@ module.exports = {
       required: false,
       url: {
         selected: 'disabled',
-        options: {
-          disabled: 'No Validation',
-          url: 'Validate Format',
-          urlAndDestination: 'Format and Destination',
-        },
       },
     },
     target: false,

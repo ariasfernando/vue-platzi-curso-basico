@@ -126,28 +126,28 @@
             </tbody>
           </table>
         </div>
-        <ElPagination
-          v-if="ready"
-          style="text-align: center;"
-          layout="prev, pager, next"
-          :page-size="20"
-          :total="filteredModules[activeTab].length"
-          @current-change="(value)=>{currentPagination = value}" />
         <div v-if="ready && filteredModules[activeTab].length === 0" class="no-results">
           No results were found.
         </div>
+        <ElPagination
+          v-if="ready && filteredModules[activeTab].length !== 0"
+          style="text-align: center;"
+          layout="prev, pager, next"
+          :page-size="pageSize"
+          :total="filteredModules[activeTab].length"
+          @current-change="(value)=>{currentPagination = value}" />
         <div v-if="ready === false" class="no-results">
           <stui-spinner />
         </div>
       </div>
     </div>
-    <modal-container
+    <ModalContainer
       v-if="modulePreview === true"
       button-close-text="Close"
       :title="moduleSelected.name"
       @close-modal="modulePreview = false">
-      <module-preview :module="moduleSelected" />
-    </modal-container>
+      <ModulePreview :module="moduleSelected" />
+    </ModalContainer>
   </section>
 </template>
 
@@ -241,7 +241,6 @@ export default {
     },
     setTab(type) {
       this.activeTab = type;
-      this.filteredModules[type] = this.modules[type];
     },
   },
 };
