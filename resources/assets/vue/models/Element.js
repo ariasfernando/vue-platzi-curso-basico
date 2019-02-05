@@ -29,6 +29,10 @@ class Element {
       ...properties,
     };
 
+    if (!_.isEmpty(defaultProperties.plugins)) {
+      this.properties.plugins = _.extend(this.properties.plugins, defaultProperties.plugins);
+    }
+
   }
 
   getProperties() {
