@@ -53,11 +53,13 @@ class Campaign extends Eloquent
         'parent_campaign_id',
         'tracking',
         'internal',
+        'mask_link_html',
+        'mask_link_text',
         'email_title',
         'archive'
     ];
 
-    protected $appends = ['api', 'library_config', 'uploads', 'can_be_processed', 'has_active_proof', 'proof_token', 'body_html_minified'];
+    protected $appends = ['api', 'library_config', 'uploads', 'can_be_processed', 'has_active_proof', 'proof_token', 'body_html_minified', 'mask_link_html_minified'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -95,6 +97,8 @@ class Campaign extends Eloquent
         'parent_campaign_id' => null,
         'proof_id' => null,
         'tracking',
+        'mask_link_html' => null,
+        'mask_link_text' => null,
         'email_title' => '',
         'archive' => false
     );
@@ -399,4 +403,13 @@ class Campaign extends Eloquent
             'removeComment' => false,
         ])) : '';
     }
+
+    public function getMaskLinkHtmlMinifiedAttribute()
+    {
+        $parser = HTMLCompressor::construct();
+        return isset($this->attributes['mask_link_html'])
+            ? $parser->compress(HTMLMinify::minify($this->attributes['mask_link_html']))
+            : '';
+    }
+
 }

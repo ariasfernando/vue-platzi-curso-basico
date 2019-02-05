@@ -12,7 +12,7 @@ import interceptors from './interceptors';
 import store from './store';
 import acl from './resources/plugins/acl';
 import { studioLibraryRoutes } from './router';
-import { customValidators } from 'stensul/resources/validator_rules'
+import { customValidators } from 'stensul/resources/validator_rules';
 
 Vue.use(BootstrapVue);
 Vue.use(Bootstrap);

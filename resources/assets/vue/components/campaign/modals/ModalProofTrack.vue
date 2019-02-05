@@ -80,7 +80,6 @@
     watch: {
       modalProofTrack (value) {
         if (value) {
-          this.checkCampaign();
           this.fetchReviewers();
         }
       }
@@ -89,27 +88,6 @@
       close () {
         this.reviewers = [];
         this.$store.commit('campaign/toggleModal', 'modalProofTrack');
-      },
-      checkCampaign () {
-        proofService.getJSON('campaign', this.campaign.campaign_data._id).then((response) => {
-          if (response.status === 'success') {
-            this.campaignData = response.data;
-            if (this.campaignData.proof_id !== null) {
-              // If a proof already exists, set the 'Start proof from scratch' off
-              this.startProof = false;
-            }
-            if ('can_be_processed' in this.campaignData && this.campaignData.can_be_processed === false) {
-              this.$root.$toast(
-                this.campaignData.alert,
-                {className: 'et-info'}
-              );
-              this.$store.commit('campaign/campaignCanBeProcessed', false);
-            }
-          }
-        })
-        .catch((error) => {
-          this.$root.$toast(error, {className: 'et-error'});
-        });
       },
       fetchReviewers () {
         proofService.getJSON('reviewers', this.campaign.campaign_data._id).then((response) => {
@@ -159,16 +137,8 @@
     data () {
       return {
         campaignData: {},
-        users: [],
         reviewers: [],
-        currentReviewer: {},
-        currentNotificationMessage: '',
-        startProof: true,
-        proofAccess: {
-          status: this.$_app.config.proofConfig.status,
-          allow: this.$_app.config.permissions.indexOf('edit_proof') >= 0
-            && this.$_app.config.permissions.indexOf('access_proof') >= 0
-        }
+        startProof: true
       }
     },
   };

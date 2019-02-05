@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
 function Library(data = {}) {
-
   this.id = data._id || undefined;
   this.name = data.name || 'Unnamed Library';
   this.description = data.description || '';
