@@ -1,5 +1,5 @@
 <template>
-  <div class="control">
+  <div class="control" :class="{'is-expanded': expanded}">
     <el-select
       v-model="localValue"
       class="stui-select"
@@ -51,6 +51,7 @@ export default {
       type: [Boolean],
       default: false,
     },
+    expanded: Boolean,
   },
   computed: {
     localValue: {

@@ -2,23 +2,30 @@
   <div v-show="(elementKey === currentElementKey)">
     <settings-container :no-label="true">
       <template slot="setting-bottom">
-        <el-button type="primary" @click="showModal('desktop')">
+        <stui-button
+          type="gray"
+          width="full"
+          @click="showModal('desktop')">
           <i class="glyphicon glyphicon-cloud-upload" />
           Upload Image
-        </el-button>
+        </stui-button>
       </template>
     </settings-container>
     <settings-container v-if="hasImageMobile" :no-label="true">
       <template slot="setting-bottom">
-        <el-button type="primary" size="mini" @click="showModal('mobile')" :disabled="!plugin.data.img">
+        <stui-button
+          type="gray"
+          width="full"
+          :disabled="!plugin.data.img"
+          @click="showModal('mobile')">
           <i class="glyphicon glyphicon-cloud-upload" />
           Upload Mobile Image
-        </el-button>
+        </stui-button>
       </template>
     </settings-container>
-    <settings-container label="Alt">
-      <template slot="setting-bottom">
-        <el-input
+    <settings-container label="Alternative Text">
+      <template slot="setting-right">
+        <stui-input-text
           v-if="validationRules"
           v-model="alt"
           v-validate.initial="validationRules"
@@ -28,7 +35,7 @@
           size="mini"
           class="image-alt-text"
           :class="{'input': true, 'is-danger': hasError }" />
-        <el-input
+        <stui-input-text
           v-else
           v-model="alt"
           class="image-alt-text"
@@ -261,43 +268,3 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-.el-button {
-  border-color: rgb(120, 220, 214);
-  background-color: rgb(120, 220, 214);
-  width: 100%;
-  font-size: 12px;
-  font-weight: 300;
-  padding: 6px 20px;
-  border-radius: 2px;
-  margin-top: 5px;
-}
-
-.el-button--primary {
-  &.is-disabled,
-  &.is-disabled:active,
-  &.is-disabled:focus,
-  &.is-disabled:hover {
-    opacity: 0.4;
-    border-color: rgb(120, 220, 214);
-    background-color: rgb(120, 220, 214);
-    margin-left: 0px;
-  }
-}
-
-.el-button + .el-button {
-  margin-left: 0;
-}
-
-.el-input /deep/ .el-input__inner{
-  border-radius: 2px;
-  font-weight: 300;
-  padding-left: 8px;
-  height: 26px;
-  font-size: 12px;
-
-  &:focus{
-    border: 1px solid #78dcd6;
-  }
-}
-</style>

@@ -1,6 +1,6 @@
 <template>
   <stui-input-disabled v-if="disabled" :value="value" :false-text="falseText" />
-  <div v-else class="control">
+  <div v-else class="control" :class="{'is-expanded': expanded}">
     <el-input-number
       v-bind="$attrs"
       class="stui-input-number"
@@ -34,6 +34,7 @@ export default {
       type: Boolean,
       default: false,
     },
+    expanded: Boolean,
   },
   methods: {
     change(value) {

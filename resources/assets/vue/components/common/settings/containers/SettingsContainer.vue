@@ -174,10 +174,6 @@ export default {
     }
   }
 
-  .el-switch {
-    float: right;
-  }
-
   &.is-setting-right /deep/,
   &.is-setting-half /deep/,
   &.is-setting-side /deep/ {
@@ -199,11 +195,12 @@ export default {
     width: calc(50% - 2px);
     &:nth-of-type(2n + 1) {
       margin-right: 4px;
+      clear: both;
     }
     label {
       display: block;
     }
-    .el-switch {
+    /deep/ .stui-toggle-button {
       float: none;
     }
   }
@@ -264,7 +261,7 @@ export default {
     }
   }
 }
-[class^="plugin-"] > .settings-container:not(.keep-margin) {
-  margin-bottom: 0px;
-}
+// [class^="plugin-"] > .settings-container:last-of-type:not(.keep-margin) {
+//   margin-bottom: 0px;
+// }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="control">
+  <div class="control" :class="{'is-expanded': expanded}">
     <div class="stui-icon-checklist">
       <el-button
         v-for="(option, key) in list"
@@ -27,6 +27,7 @@ export default {
       type: [Object],
       required: true,
     },
+    expanded: Boolean,
   },
   methods: {
     toggleOption(option) {

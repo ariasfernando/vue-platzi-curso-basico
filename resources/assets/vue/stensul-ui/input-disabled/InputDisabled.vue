@@ -1,5 +1,5 @@
 <template>
-  <div class="control">
+  <div class="control" :class="{'is-expanded': expanded}">
     <el-input
       class="stui-input-disabled"
       size="mini"
@@ -19,6 +19,7 @@ export default {
       type: String,
       default: undefined,
     },
+    expanded: Boolean,
   },
   computed: {
     _value() {

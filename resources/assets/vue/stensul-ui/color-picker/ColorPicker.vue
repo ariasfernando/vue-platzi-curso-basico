@@ -1,32 +1,45 @@
 
 <template>
   <div
-    class="control stui-color-picker"
-    :class="{'is-muted' : isMuted}">
-    <div class="input-text-hex" @click="openColorPicker()">
-      <el-input
-        :placeholder="placeholder"
-        disabled="disabled"
-        :value="inputValue"
-        size="mini" />
-    </div>
-    <el-color-picker
-      :ref="`color-picker-${instance}`"
-      :value="pickerValue"
-      color-format="hex"
+    class="control"
+    :class="rootClasses">
+    <compact-picker
+      v-if="palette"
+      ref="compact"
+      :value="paletteValue"
+      :palette="palette"
       :disabled="disabled || isMuted"
-      @change="(value)=>change(value)" />
+      @input="(value)=>change(value)" />
+    <template v-else>
+      <div class="input-text-hex" @click="openColorPicker()">
+        <el-input
+          :placeholder="placeholder"
+          disabled="disabled"
+          :value="inputValue"
+          size="mini" />
+      </div>
+      <el-color-picker
+        :ref="`color-picker-${instance}`"
+        :value="pickerValue"
+        color-format="hex"
+        :disabled="disabled || isMuted"
+        @change="(value)=>change(value)" />
+    </template>
   </div>
 </template>
 <script>
+import { Compact } from 'vue-color';
 import muted from '../mixins/muted';
 
 export default {
   name: 'ColorPicker',
+  components: {
+    'compact-picker': Compact,
+  },
   mixins: [muted],
   props: {
     value: {
-      type: [String, Boolean],
+      type: [String, Object, Boolean],
       default: '',
     },
     falseText: {
@@ -37,6 +50,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    palette: {
+      type: Array,
+      default: undefined,
+    },
+    expanded: Boolean,
   },
   data() {
     return {
@@ -54,8 +72,19 @@ export default {
       // el-color-picker Expects a String, so we convert false to null
       return this.value === false ? null : this.value;
     },
+    paletteValue() {
+      return this.value;
+    },
     placeholder() {
       return this.falseText !== undefined ? this.falseText : 'transparent';
+    },
+    rootClasses() {
+      return {
+        'is-muted': this.isMuted,
+        'stui-color-picker': !this.palette,
+        'stui-color-palette': this.palette,
+        'is-expanded': this.expanded,
+      };
     },
   },
   methods: {
@@ -159,5 +188,16 @@ export default {
       cursor: auto;
     }
   }
+}
+
+.stui-color-palette /deep/ .vc-compact-color-item {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px !important;
+}
+.stui-color-palette /deep/ .vc-compact {
+  padding-top: 5px;
+  padding-left: 6px;
+  border: 1px solid $stui-input-border-color !important;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="control">
+  <div class="control" :class="{'is-expanded': expanded}">
     <el-checkbox
       :value="value"
       :disabled="disabled"
@@ -26,6 +26,7 @@ export default {
       type: Boolean,
       default: false,
     },
+    expanded: Boolean,
   },
   methods: {
     change(value) {

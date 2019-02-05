@@ -1,5 +1,5 @@
 <template>
-  <div class="control">
+  <div class="control" :class="{'is-expanded': expanded}">
     <el-switch
       v-model="toggled"
       class="stui-toggle-button"
@@ -35,6 +35,7 @@ export default {
       type: Boolean,
       default: false,
     },
+    expanded: Boolean,
   },
   computed: {
     toggled: {

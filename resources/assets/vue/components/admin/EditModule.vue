@@ -10,7 +10,7 @@
         <!-- START: Module Container -->
         <div class="col-xs-8 module-container" @mouseup="clickModuleContainer">
           <ScrollbarContainer>
-            <CodeEditor v-if="showRaw" v-model="moduleRow" height="calc(100vh - 135px)" />
+            <CodeEditor v-if="showRaw" v-model="raw" height="calc(100vh - 135px)" />
             <ModuleContainer v-else :building-mode="buildingMode" :width-desktop="640" :width-mobile="480">
               <Module :module="module" />
             </ModuleContainer>
@@ -61,6 +61,7 @@ export default {
   data() {
     return {
       ready: false,
+      timer: null,
     };
   },
   computed: {
@@ -70,17 +71,32 @@ export default {
     currentElementId() {
       return this.$store.getters['module/currentElementId'];
     },
-    moduleRow: {
+    raw: {
       get() {
         return this.currentElement;
       },
       set(value) {
-        const data = {
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          value: JSON.parse(value),
-        };
-        this.$store.commit('module/setElementData', data);
+        if (this.timer) {
+          clearTimeout(this.timer);
+        }
+        this.timer = setTimeout(() => {
+          const validJson = Application.utils.isJsonString(value);
+          if (validJson) {
+            const data = {
+              columnId: this.currentComponent.columnId,
+              componentId: this.currentComponent.componentId,
+              value: JSON.parse(value),
+            };
+            this.$store.commit('module/setElementData', data);
+            this.$root.$toast('Raw updated', {
+              className: 'et-success',
+            });
+          } else {
+            this.$root.$toast('Couldn\'t update. Raw isn\'t a valid JSON format', {
+              className: 'et-error',
+            });
+          }
+        }, 500);
       },
     },
     currentComponent() {

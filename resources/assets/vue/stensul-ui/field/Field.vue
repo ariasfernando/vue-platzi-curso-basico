@@ -76,37 +76,47 @@ export default {
   &.has-addons {
     display: flex;
     justify-content: flex-start;
+
     .control {
       &:not(:last-child) {
         margin-right: -1px;
       }
+
       &:not(:first-child):not(:last-child) {
         .el-button,
+        /deep/ .stui-button,
         .el-input,
         .el-select select {
           border-radius: 0;
         }
       }
+
       &:first-child {
         .el-button,
+        /deep/ .stui-button,
         .el-input,
         .el-select{
           border-bottom-right-radius: 0;
           border-top-right-radius: 0;
         }
       }
+
       &:last-child {
         .el-button,
+        /deep/ .stui-button,
         .el-input,
         .el-select {
           border-bottom-left-radius: 0;
           border-top-left-radius: 0;
         }
       }
+
       &.is-expanded {
         flex-grow: 1;
       }
+
       .el-button,
+      /deep/ .stui-button,
       .el-input,
       .el-select {
         &:not([disabled]) {
@@ -125,12 +135,15 @@ export default {
         }
       }
     }
+
     &.has-addons-centered {
       justify-content: center;
     }
+
     &.has-addons-right {
       justify-content: flex-end;
     }
+
     &.has-addons-fullwidth {
       .control {
         flex-grow: 1;
@@ -138,6 +151,7 @@ export default {
       }
     }
   }
+
   &.is-grouped {
     display: flex;
     justify-content: flex-start;
@@ -164,9 +178,11 @@ export default {
       }
     }
   }
+
   &.is-horizontal {
     display: flex;
   }
+
   .control {
     clear: both;
     position: relative;

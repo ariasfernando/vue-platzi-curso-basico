@@ -1,13 +1,20 @@
 <template>
-  <settings-container v-if="module" :label="plugin.title" level="first">
+  <settings-container
+    v-if="module"
+    :label="plugin.title"
+    level="first"
+    label-expanded="true">
     <template slot="setting-bottom">
-      <settings-container v-for="element in plugin.data.elements" :key="element.id" :label="element.label">
-        <template slot="setting-half">
-          <toggle-button
-            :value="getValue(element.id)"
-            @change="value => toggleChange(value, element.id)" />
-        </template>
-      </settings-container>
+      <div class="clearfix">
+        <settings-container v-for="element in plugin.data.elements" :key="element.id" :label="element.label">
+          <template slot="setting-half">
+            <stui-toggle-button
+              :value="getValue(element.id)"
+              expanded
+              @change="value => toggleChange(value, element.id)" />
+          </template>
+        </settings-container>
+      </div>
     </template>
   </settings-container>
 </template>

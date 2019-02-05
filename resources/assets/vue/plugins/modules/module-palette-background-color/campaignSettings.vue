@@ -1,19 +1,17 @@
 <template>
   <settings-container label="Background Color" custom-class="plugin-palette">
     <template slot="setting-right">
-      <compact-picker ref="compact" v-model="colors" :palette="palette()" />
+      <stui-color-picker v-model="colors" :palette="palette()" />
     </template>
   </settings-container>
 </template>
 
 <script>
-import { Compact } from 'vue-color';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 
 export default {
   components: {
     SettingsContainer,
-    'compact-picker': Compact,
   },
   props: ['name', 'plugin', 'moduleId'],
   computed: {
@@ -64,15 +62,3 @@ export default {
   },
 };
 </script>
-<style lang='scss' scoped>
-.plugin-palette /deep/ .vc-compact-color-item {
-  width: 16px;
-  height: 16px;
-  margin-right: 6px !important;
-}
-.plugin-palette /deep/ .vc-compact {
-  padding-top: 5px;
-  padding-left: 6px;
-  border: 1px solid #dddddd!important;
-}
-</style>

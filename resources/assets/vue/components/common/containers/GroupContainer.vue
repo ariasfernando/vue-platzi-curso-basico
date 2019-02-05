@@ -65,7 +65,8 @@ export default {
 
     /deep/ {
       > .settings-container:first-of-type {
-        > label {
+        > label,
+        > .control > label {
           padding-top: 0px;
         }
       }

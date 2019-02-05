@@ -2,29 +2,30 @@
   <settings-container label="Horizontal position">
     <template slot="setting-right">
       <stui-field addons>
-        <div class="control is-expanded">
-          <el-button
-            plain size="mini"
-            class="glyphicon glyphicon-object-align-left"
-            :class="{ active: align === 'left' }"
-            @click="changeAlignment('left')" />
-        </div>
-        <div class="control is-expanded">
-          <el-button
-            plain
-            size="mini"
-            class="glyphicon glyphicon-object-align-vertical"
-            :class="{ active: align === 'center' }"
-            @click="changeAlignment('center')" />
-        </div>
-        <div class="control is-expanded">
-          <el-button
-            plain
-            size="mini"
-            class="glyphicon glyphicon-object-align-right"
-            :class="{ active: align === 'right' }"
-            @click="changeAlignment('right')" />
-        </div>
+        <stui-button
+          size="mini"
+          :active="align === 'left'"
+          highlight
+          expanded
+          @click="changeAlignment('left')">
+          <i class="glyphicon glyphicon-object-align-left" />
+        </stui-button>
+        <stui-button
+          size="mini"
+          :active="align === 'center'"
+          highlight
+          expanded
+          @click="changeAlignment('center')">
+          <i class="glyphicon glyphicon-object-align-vertical" />
+        </stui-button>
+        <stui-button
+          size="mini"
+          :active="align === 'right'"
+          highlight
+          expanded
+          @click="changeAlignment('right')">
+          <i class="glyphicon glyphicon-object-align-right" />
+        </stui-button>
       </stui-field>
     </template>
   </settings-container>
@@ -66,29 +67,3 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-@import '../../../stensul-ui/scss/stui.scss';
-.el-button {
-  width: 100%;
-  padding: 4px;
-  height: 28px;
-  border-color: $stui-input-border-color;
-  &:before{
-    color: $stui-input-border-color;
-  }
-  &:focus,
-  &:hover {
-    color: inherit;
-    border-color: $stui-color-secondary;
-    background-color: inherit;
-  }
-  &.active {
-    color: #ffffff;
-    border-color: $stui-color-secondary;;
-    background-color: $stui-color-secondary;
-    &:before{
-      color: #ffffff;
-    }
-  }
-}
-</style>

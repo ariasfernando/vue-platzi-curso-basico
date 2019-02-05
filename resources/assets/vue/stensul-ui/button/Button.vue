@@ -1,6 +1,12 @@
 <template>
-  <div class="control">
-    <button :class="clasess" :disabled="disabled" @click="$emit('click')">
+  <div
+    v-b-tooltip.hover
+    class="control"
+    :class="{'is-expanded': expanded}">
+    <button
+      :class="rootClasess"
+      :disabled="disabled"
+      @click="$emit('click')">
       <slot>{{ text }}</slot>
     </button>
   </div>
@@ -22,18 +28,25 @@ export default {
       type: [String],
       default: undefined,
     },
-    disabled: {
-      type: [Boolean],
-      default: false,
+    size: {
+      type: String,
+      default: '',
     },
+    active: Boolean,
+    disabled: Boolean,
+    expanded: Boolean,
+    highlight: Boolean,
   },
   computed: {
-    clasess() {
+    rootClasess() {
       return [
         'stui-button',
         `is-${this.type}`,
-        { 'full-width': this.width === 'full' },
+        { 'is-full-width': this.width === 'full' },
+        { 'is-active': this.active },
         { 'is-disabled': this.disabled },
+        { 'is-mini': this.size === 'mini' },
+        { 'is-highlight': this.highlight },
       ];
     },
   },
@@ -47,7 +60,7 @@ export default {
   font-weight: 400;
   background: $stui-color-primary;
   color: #fff;
-  transition: all 0.3s linear;
+  transition: all 150ms linear;
   display: inline-block;
   margin-bottom: 0;
   text-align: center;
@@ -55,31 +68,32 @@ export default {
   touch-action: manipulation;
   cursor: pointer;
   background-image: none;
-  border: 1px solid transparent;
+  border: 1px solid $stui-color-primary;
   white-space: nowrap;
-  padding: 6px 12px;
-  line-height: 1.42857143;
+  padding: 8px 12px;
+  line-height: 1;
   border-radius: 2px;
   user-select: none;
   text-decoration: none;
   outline: none;
+  position: relative;
 
   &.is-default {
     background: #ffffff;
     color: #666666;
-    border: 1px solid $stui-input-border-color;
+    border-color: $stui-input-border-color;
 
     &:hover {
       background: #ffffff;
       color: #666666;
-      border: 1px solid darken(#666666, 20%);
+      border-color: darken(#666666, 20%);
     }
   }
 
   &.is-primary {
     background: $stui-color-primary;
     color: #fff;
-    border: 1px solid transparent;
+    border-color: $stui-color-primary;
     &:hover {
       background: lighten($stui-color-primary, 10%);
       color: #fff;
@@ -89,7 +103,7 @@ export default {
   &.is-secondary {
     color: #fff;
     background-color: $stui-color-secondary;
-    border: 1px solid transparent;
+    border-color: $stui-color-secondary;
     &.is-disabled,
     &.is-disabled:active,
     &.is-disabled:focus,
@@ -107,7 +121,7 @@ export default {
   &.is-gray {
     color: #fff;
     background-color: #999999;
-    border: 1px solid transparent;
+    border-color: #999999;
     &.is-disabled,
     &.is-disabled:active,
     &.is-disabled:focus,
@@ -122,8 +136,32 @@ export default {
       border-color: darken(#999999, 12%);
     }
   }
-  &.full-width {
+
+  &.is-highlight{
+    color: $stui-input-border-color;
+    &:focus,
+    &:hover {
+      color: $stui-input-border-color;
+      border-color: $stui-color-secondary;
+      background-color: inherit;
+    }
+    &.is-active{
+      background: $stui-color-secondary;
+      color: #fff;
+      border-color: $stui-color-secondary;
+    }
+  }
+
+  &.is-full-width {
     width: 100%;
   }
+  &.is-mini {
+    font-size: 12px;
+    padding: 0px 12px;
+    line-height: 26px;
+  }
+}
+.control.is-expanded > .stui-button {
+  width: 100%;
 }
 </style>
