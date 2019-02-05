@@ -19,7 +19,7 @@ export default {
     palette() {
       return this.plugin.config.options.bgcolor.palette.map(
         color =>
-          color[0] !== '#' ? `#${color.toUpperCase()}` : color.toUpperCase()
+          (color[0] !== '#' ? `#${color.toUpperCase()}` : color.toUpperCase()),
       );
     },
     color: {

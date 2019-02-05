@@ -47,16 +47,13 @@ export default {
 
         // Library colorPalettes array have this pattern: ffffff, white, 000000, black,
         // but we don't want the name ot the color, just the hex, so we need to filter the palette so that it returns only even positions of array
-        const paletteFiltered = palette.filter(function (color, index) {
-          return (index % 2) == 0;
-        });
+        const paletteFiltered = palette.filter((color, index) => (index % 2) == 0);
 
         // then check if it has # or not and return
-        return paletteFiltered.map( color => color[0] !== '#' ? `#${color.toUpperCase()}` : color.toUpperCase());
-
+        return paletteFiltered.map(color => (color[0] !== '#' ? `#${color.toUpperCase()}` : color.toUpperCase()));
       } else if (this.plugin.config.paletteMap.length > 0) {
         // return palette map
-        return this.plugin.config.paletteMap.map( color => color[0] !== '#' ? `#${color.toUpperCase()}` : color.toUpperCase());
+        return this.plugin.config.paletteMap.map(color => (color[0] !== '#' ? `#${color.toUpperCase()}` : color.toUpperCase()));
       }
     },
   },

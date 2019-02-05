@@ -58,7 +58,7 @@
 import ImageModal from '../../../components/common/ImageModal';
 import imageService from '../../../services/image';
 import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
-import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 import validatorMixin from '../mixins/validatorMixin';
 
 export default {
@@ -100,8 +100,8 @@ export default {
     },
     validationRules() {
       const rules = [];
-      if (this.plugin.config.alt && this.plugin.config.alt.validations){
-        _.each(this.plugin.config.alt.validations, (e,i) => {
+      if (this.plugin.config.alt && this.plugin.config.alt.validations) {
+        _.each(this.plugin.config.alt.validations, (e, i) => {
           if (e) {
             rules.push(i);
           }
@@ -116,13 +116,13 @@ export default {
   created() {
     if (this.plugin.config.library.config.set_images && this.plugin.config.library.config.set_images.value) {
       imageService.getMedia(this.plugin.config.library.config.set_images.value)
-        .then(res => {
+        .then((res) => {
           this.libraryImages = res.map(image => image.path);
         });
     }
     const ovGallery = _.get(this.plugin.config, 'sie-plugin-image-overlay_image.config.overlay_gallery.config.set_images.value');
     if (ovGallery !== null) {
-      imageService.getMedia(ovGallery).then(res => {
+      imageService.getMedia(ovGallery).then((res) => {
         this.overlayImages = res.map(image => image.path);
       });
     }
@@ -135,7 +135,7 @@ export default {
     },
     submitImage(data) {
       const imgs = [];
-      data.images.forEach(image => {
+      data.images.forEach((image) => {
         imgs.push(image.image);
       });
       this.$store
@@ -143,7 +143,7 @@ export default {
           images: imgs,
           campaignId: this.campaign.campaign_id,
         })
-        .then(uploadedImgs => {
+        .then((uploadedImgs) => {
           this.updateAttribute(uploadedImgs[imgs.length - 1], data.newImage);
           if (typeof this.plugin.config.adjust !== 'undefined' && this.plugin.config.adjust.value) {
             this.saveAttributeInThisElement({
@@ -175,12 +175,12 @@ export default {
         });
     },
     updatePluginData(uploadedImgs, images, data, newImage) {
-      images.slice(0, images.length - 1).forEach(image => {
+      images.slice(0, images.length - 1).forEach((image) => {
         const i = images.indexOf(image);
         const keys = image.key.split('.');
         const img = uploadedImgs[i];
         let subData = data[`state${this.type === 'mobile' ? 'Mobile' : ''}`].preset;
-        keys.forEach(key => {
+        keys.forEach((key) => {
           if (keys.indexOf(key) === keys.length - 1) {
             subData[key] = img;
           } else {
@@ -247,20 +247,18 @@ export default {
               state: temp.state,
             };
           }
+        } else if (typeof temp.imgMobile !== 'undefined') {
+          this.isEdit = true;
+          this.image = {
+            img: temp.imgMobile,
+            state: temp.stateMobile,
+          };
         } else {
-          if (typeof temp.imgMobile !== 'undefined') {
-            this.isEdit = true;
-            this.image = {
-              img: temp.imgMobile,
-              state: temp.stateMobile,
-            };
-          } else {
-            this.isEdit = true;
-            this.image = {
-              img: temp.img,
-              state: temp.state,
-            };
-          }
+          this.isEdit = true;
+          this.image = {
+            img: temp.img,
+            state: temp.state,
+          };
         }
       }
       this.showImageEditor = true;

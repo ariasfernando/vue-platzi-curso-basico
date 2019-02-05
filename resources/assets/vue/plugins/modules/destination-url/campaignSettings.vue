@@ -68,61 +68,61 @@
 </template>
 
 <script>
-  import validatorMixin from '../mixins/validatorMixin';
-  import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
-  import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
+import validatorMixin from '../mixins/validatorMixin';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 
-  export default {
-    components: { SettingsContainer },
-    mixins: [validatorMixin, pluginCampaignMixin],
-    computed: {
-      target() {
-        return this.element[this.plugin.subComponent].attribute ? this.element[this.plugin.subComponent].attribute.target : '_blank';
+export default {
+  components: { SettingsContainer },
+  mixins: [validatorMixin, pluginCampaignMixin],
+  computed: {
+    target() {
+      return this.element[this.plugin.subComponent].attribute ? this.element[this.plugin.subComponent].attribute.target : '_blank';
+    },
+    href: {
+      get() {
+        return this.element[this.plugin.subComponent].attribute.href;
       },
-      href: {
-        get() {
-          return this.element[this.plugin.subComponent].attribute.href;
-        },
-        set(value) {
-          this.saveAttributeInThisElement({ property: 'href', value });
-        },
-      },
-      title: {
-        get() {
-          return this.element[this.plugin.subComponent].attribute.title;
-        },
-        set(value) {
-          this.saveAttributeInThisElement({ property: 'title', value });
-        },
-      },
-      validationRules() {
-        const rules = [];
-        _.each(this.plugin.config.validations, (e, i) => {
-          if (e === true) {
-            rules.push(i);
-          } else if (typeof e === 'object' && e.selected !== 'disabled') {
-            rules.push(e.selected);
-          }
-        });
-        return rules.join('|');
+      set(value) {
+        this.saveAttributeInThisElement({ property: 'href', value });
       },
     },
-    watch: {
-      href() {
-        this.$nextTick(() => {
-          if (this.validationRules) {
-            this.validate();
-          }
-        });
+    title: {
+      get() {
+        return this.element[this.plugin.subComponent].attribute.title;
+      },
+      set(value) {
+        this.saveAttributeInThisElement({ property: 'title', value });
       },
     },
-    methods: {
-      changeTarget(value) {
-        this.saveAttributeInThisElement({
-          property: 'target',
-          value,
-        });
-      },
+    validationRules() {
+      const rules = [];
+      _.each(this.plugin.config.validations, (e, i) => {
+        if (e === true) {
+          rules.push(i);
+        } else if (typeof e === 'object' && e.selected !== 'disabled') {
+          rules.push(e.selected);
+        }
+      });
+      return rules.join('|');
     },
-  };
+  },
+  watch: {
+    href() {
+      this.$nextTick(() => {
+        if (this.validationRules) {
+          this.validate();
+        }
+      });
+    },
+  },
+  methods: {
+    changeTarget(value) {
+      this.saveAttributeInThisElement({
+        property: 'target',
+        value,
+      });
+    },
+  },
+};
 </script>
