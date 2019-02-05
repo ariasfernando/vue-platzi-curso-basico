@@ -1,8 +1,8 @@
 export default {
-	filters: {
-		charConvert: function (value) {
-			if (!value) return '';
-			return value.replace(/&amp;/g, '&');
-		}
-	}
-}
+  filters: {
+    charConvert(value) {
+      if (!value) return '';
+      return value.replace(/&amp;/g, '&');
+    },
+  },
+};

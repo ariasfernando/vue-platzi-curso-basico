@@ -29,7 +29,7 @@ export const studioModuleRoutes = [
     props: true,
   },
   {
-    name:'create',
+    name: 'create',
     path: '/create',
     component: EditModule,
   },

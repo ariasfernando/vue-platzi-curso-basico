@@ -98,7 +98,6 @@ export default [
         aclName: 'library-advance-settings',
         validate: 'required|isValidJson',
         type: 'stui-input-text',
-        label: 'Enable Tracking',
         path: 'library.config',
         placeholder: '"Add the tracking configuration in JSON format...',
         propType: 'textarea',

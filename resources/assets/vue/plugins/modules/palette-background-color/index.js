@@ -21,9 +21,9 @@ module.exports = {
           '79A8C9',
           'CD202C',
         ],
-        defaultValue: 'transparent'
+        defaultValue: 'transparent',
       },
-    }
+    },
   },
   data: {},
   render: true,

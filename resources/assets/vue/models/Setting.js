@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
 function Setting(data = {}) {
-
   this.id = data._id || undefined;
   this.name = data.name || '';
   this.key = data.key || '';

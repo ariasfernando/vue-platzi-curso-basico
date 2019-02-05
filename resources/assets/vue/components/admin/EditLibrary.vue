@@ -67,241 +67,254 @@
 </template>
 
 <script>
-  import CodeEditor from './CodeEditor.vue';
-  import ColumnBarContainer from '../common/containers/ColumnBarContainer.vue';
-  import configService from '../../services/config';
-  import DummyModule from './partials/DummyModule.vue'
-  import LabelItemContainer from '../common/containers/LabelItemContainer.vue';
-  import LibraryMenuEditor from './LibraryMenuEditor.vue';
-  import libraryService from '../../services/library';
-  import ModalContainer from '../common/containers/ModalContainer.vue';
-  import settingsLayout from './libraryLayout/Settings';
-  import SettingsGroupContainer from '../common/containers/SettingsGroupContainer.vue';
-  import stylesLayout from './libraryLayout/Styles';
+import CodeEditor from './CodeEditor.vue';
+import ColumnBarContainer from '../common/containers/ColumnBarContainer.vue';
+import configService from '../../services/config';
+import DummyModule from './partials/DummyModule.vue'
+import LabelItemContainer from '../common/containers/LabelItemContainer.vue';
+import LibraryMenuEditor from './LibraryMenuEditor.vue';
+import libraryService from '../../services/library';
+import ModalContainer from '../common/containers/ModalContainer.vue';
+import settingsLayout from './libraryLayout/Settings';
+import SettingsGroupContainer from '../common/containers/SettingsGroupContainer.vue';
+import stylesLayout from './libraryLayout/Styles';
 
-  export default {
-    name: 'EditLibrary',
-    components: {
-      CodeEditor,
-      ColumnBarContainer,
-      DummyModule,
-      LabelItemContainer,
-      LibraryMenuEditor,
-      ModalContainer,
-      SettingsGroupContainer,
+export default {
+  name: 'EditLibrary',
+  components: {
+    CodeEditor,
+    ColumnBarContainer,
+    DummyModule,
+    LabelItemContainer,
+    LibraryMenuEditor,
+    ModalContainer,
+    SettingsGroupContainer,
+  },
+  data() {
+    return {
+      campaignConfig: {},
+      editMenu: false,
+      editPropietaryStyles: false,
+      espList: {},
+      library: {},
+      libraryCopy: {},
+      propietaryStyles: {},
+      modules: [],
+      ready: false,
+      state: '',
+      buildingMode: 'desktop',
+    };
+  },
+  computed: {
+    settingsLayout() {
+      return settingsLayout;
     },
-    data() {
+    stylesLayout() {
+      return stylesLayout;
+    },
+    settingsProps() {
       return {
-        campaignConfig: {},
-        editMenu: false,
-        editPropietaryStyles: false,
-        espList: {},
-        library: {},
-        libraryCopy: {},
-        propietaryStyles: {},
-        modules: [],
-        ready: false,
-        state: '',
-        buildingMode: 'desktop',
+        library: this.library,
+        campaignConfig: this.campaignConfig,
       };
     },
-    computed: {
-      settingsLayout() {
-        return settingsLayout;
-      },
-      stylesLayout() {
-        return stylesLayout;
-      },
-      settingsProps() {
-        return {
-          library: this.library,
-          campaignConfig: this.campaignConfig,
-        };
-      },
-      stylesProps() {
-        return {
-          library: this.library,
-        };
-      },
+    stylesProps() {
+      return {
+        library: this.library,
+      };
     },
-    methods: {
-      setValue({ value, path, name }) {
-        const completePath = (path !== undefined ? `${path}.` : '') + name;
-        _.set(this, completePath, value);
-      },
-      updateToggle(element) {
-        this.library.config[element] = !this.library.config[element];
-      },
-      loadLibrary() {
-        libraryService.espProviders()
+  },
+  methods: {
+    setValue({ value, path, name }) {
+      const completePath = (path !== undefined ? `${path}.` : '') + name;
+      _.set(this, completePath, value);
+    },
+    loadLibrary() {
+      libraryService.espProviders()
+        .then((response) => {
+          // const espList = { none: { label: 'none', value: 'none' } }; We will need this in [STD-444]
+          _.forEach(response, (esp, key) => {
+            response[key].label = esp.title;
+            response[key].value = key;
+          });
+          // this.espList = { ...espList, ...response }; We will need this in [STD-444]
+          this.espList = response; // We will remove this line in [STD-444]
+        })
+        .catch(() => {
+          this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
+        });
+      const libraryId = this.$route.params.id;
+
+      if (libraryId) {
+        libraryService.getLibrary(libraryId)
           .then((response) => {
-            // const espList = { none: { label: 'none', value: 'none' } }; We will need this in [STD-444]
-            _.forEach(response, (esp, key) => {
-              response[key].label = esp.title;
-              response[key].value = key;
-            });
-            // this.espList = { ...espList, ...response }; We will need this in [STD-444]
-            this.espList = response; // We will remove this line in [STD-444]
+            this.library = response.library;
+            if (response.modules) {
+              this.loadModules(response.modules);
+            }
+            this.ready = true;
           })
           .catch(() => {
             this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
           });
-        const libraryId = this.$route.params.id;
-
-        if (libraryId) {
-          libraryService.getLibrary(libraryId)
-            .then((response) => {
-              this.library = response.library;
-              if (response.modules) {
-                this.loadModules(response.modules);
-              }
-              this.ready = true;
-            })
-            .catch(() => {
-              this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
-            });
-        } else {
-          libraryService.newLibrary()
-            .then((response) => {
-              this.library = response.library;
-              this.loadModules(response.modules);
-              this.ready = true;
-            })
-            .catch(() => {
-              this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
-            });
+      } else {
+        libraryService.newLibrary()
+          .then((response) => {
+            this.library = response.library;
+            this.loadModules(response.modules);
+            this.ready = true;
+          })
+          .catch(() => {
+            this.$root.$toast('Oops! Something went wrong! Please try again. If it doesn\'t work, please contact our support team.', {className: 'et-error'});
+          });
+      }
+    },
+    openEditModal() {
+      this.libraryCopy = _.cloneDeep(this.library);
+      this.editMenu = true;
+    },
+    saveMenu() {
+      const emptyModules = this.libraryCopy.modules.find((element) => {
+        if (element.type === 'sub-menu') {
+          return element.modules.length === 0 || this.areEmptyModules(element.modules);
         }
-      },
-      openEditModal() {
-        this.libraryCopy = _.cloneDeep(this.library);
-        this.editMenu = true;
-      },
-      saveMenu() {
-        const emptyModules = this.libraryCopy.modules.find((element) => {
-          if (element.type === 'sub-menu') {
-            return element.modules.length === 0 || this.areEmptyModules(element.modules);
-          }
-          return element.name === '' || element.moduleId === '';
-        });
+        return element.name === '' || element.moduleId === '';
+      });
 
-        if (emptyModules) {
-          this.$root.$toast('To continue, please complete all fields before saving.', { className: 'et-error' });
+      if (emptyModules) {
+        this.$root.$toast('To continue, please complete all fields before saving.', { className: 'et-error' });
+        return;
+      }
+
+      this.library.modules = this.libraryCopy.modules;
+      this.library.config.fixedModules = this.libraryCopy.config.fixedModules;
+      this.libraryCopy = {};
+      this.editMenu = false;
+    },
+    areEmptyModules(modulesList) {
+      return modulesList.find(module => (
+        module.name === '' || module.moduleId === ''
+      ));
+    },
+    savePropietaryStyles() {
+      this.library.config.propietaryCss = this.propietaryStyles;
+      this.editPropietaryStyles = false;
+    },
+    closePropietaryStyles() {
+      this.editPropietaryStyles = false;
+    },
+    openPropietaryStyles() {
+      this.propietaryStyles = this.library.config.propietaryCss;
+      this.editPropietaryStyles = true;
+    },
+    saveLibrary() {
+      const formData = {
+        name: this.library.name,
+        description: this.library.description,
+        config: this.library.config,
+        modules: this.library.modules,
+      };
+
+      if (typeof formData.config.propietaryCss !== 'undefined' && formData.config.propietaryCss !== '') {
+        if (!this.checkCSS(formData.config.propietaryCss)) {
+          this.$root.$toast('Proprietary Css it must be valid css rules, plus it must start with the style tag', {
+            className: 'et-error',
+            closeable: true,
+            duration: 10000,
+          });
           return;
         }
-
-        this.library.modules = this.libraryCopy.modules;
-        this.library.config.fixedModules = this.libraryCopy.config.fixedModules;
-        this.libraryCopy = {};
-        this.editMenu = false;
-      },
-      areEmptyModules(modulesList) {
-        return modulesList.find(module => (
-          module.name === '' || module.moduleId === ''
-        ));
-      },
-      savePropietaryStyles() {
-        this.library.config.propietaryCss = this.propietaryStyles;
-        this.editPropietaryStyles = false;
-      },
-      closePropietaryStyles() {
-        this.editPropietaryStyles = false;
-      },
-      openPropietaryStyles() {
-        this.propietaryStyles = this.library.config.propietaryCss;
-        this.editPropietaryStyles = true;
-      },
-      saveLibrary() {
-        const formData = {
-          name: this.library.name,
-          description: this.library.description,
-          config: this.library.config,
-          modules: this.library.modules,
-        };
-
-        if (this.library.id) {
-          formData.libraryId = this.library.id;
-          libraryService.saveLibrary(formData)
-            .then((response) => {
-              if (response.message === 'SUCCESS') {
-                window.location.href = `${this.$_app.config.baseUrl}/admin/library`;
-              }
-            })
-            .catch((error) => {
-              if (error.status === 422) {
-                this.$root.$toast(
-                  this.$options.filters.parseValidationErrors(error), {
-                    className: 'et-error',
-                    closeable: true,
-                    duration: 10000,
-                  },
-                );
-              } else {
-                this.$root.$toast('Oops! There was an error', {className: 'et-error'});
-              }
-            });
-        } else {
-          libraryService.createLibrary(formData)
-            .then((response) => {
-              if (response.message === 'SUCCESS') {
-                window.location.href = `${this.$_app.config.baseUrl}/admin/library`;
-              } else if (response.message === 'ERROR_EXISTS') {
-                this.$root.$toast('Library already exists', { className: 'et-error' });
-              }
-            })
-            .catch((error) => {
-              if (error.status === 422) {
-                this.$root.$toast(
-                  this.$options.filters.parseValidationErrors(error), {
-                    className: 'et-error',
-                    closeable: true,
-                    duration: 10000,
-                  },
-                );
-              } else {
-                this.$root.$toast('Oops! There was an error', { className: 'et-error' });
-              }
-            });
-        }
-      },
-      extractErrors(errArr) {
-        const errors = [];
-        Object.keys(errArr).forEach(key => {
-          errors.push(errArr[key][0]);
-        });
-        return errors;
-      },
-      toggleSidebar() {
-        const sidebar = document.getElementById('admin-sidebar');
-        sidebar.style.display = 'none';
-
-        const libMargin = document.getElementById('admin-library-container');
-        libMargin.className -= ('col-xs-12');
-
-        const container = document.getElementsByClassName('base-admin')[0];
-        container.style.paddingLeft = 0;
-      },
-      loadModules(modules) {
-        const modulesToAdd = [];
-        modules.forEach((data) => {
-          modulesToAdd.push({ value: data });
-        });
-        this.modules = modulesToAdd;
-      },
-      handleSelect(item) {
-        this.addItem(item.value);
-        this.state = '';
-      },
+      }
+      if (this.library.id) {
+        formData.libraryId = this.library.id;
+        libraryService.saveLibrary(formData)
+          .then((response) => {
+            if (response.message === 'SUCCESS') {
+              window.location.href = `${this.$_app.config.baseUrl}/admin/library`;
+            }
+          })
+          .catch((error) => {
+            if (error.status === 422) {
+              this.$root.$toast(
+                this.$options.filters.parseValidationErrors(error), {
+                  className: 'et-error',
+                  closeable: true,
+                  duration: 10000,
+                },
+              );
+            } else {
+              this.$root.$toast('Oops! There was an error', {className: 'et-error'});
+            }
+          });
+      } else {
+        libraryService.createLibrary(formData)
+          .then((response) => {
+            if (response.message === 'SUCCESS') {
+              window.location.href = `${this.$_app.config.baseUrl}/admin/library`;
+            } else if (response.message === 'ERROR_EXISTS') {
+              this.$root.$toast('Library already exists', { className: 'et-error' });
+            }
+          })
+          .catch((error) => {
+            if (error.status === 422) {
+              this.$root.$toast(
+                this.$options.filters.parseValidationErrors(error), {
+                  className: 'et-error',
+                  closeable: true,
+                  duration: 10000,
+                },
+              );
+            } else {
+              this.$root.$toast('Oops! There was an error', { className: 'et-error' });
+            }
+          });
+      }
     },
-    created() {
-      configService.getConfig('campaign').then((response) => {
-        this.campaignConfig = response;
-        this.loadLibrary();
+    extractErrors(errArr) {
+      const errors = [];
+      Object.keys(errArr).forEach((key) => {
+        errors.push(errArr[key][0]);
       });
+      return errors;
     },
-    mounted() {
-      this.toggleSidebar();
+    toggleSidebar() {
+      const sidebar = document.getElementById('admin-sidebar');
+      sidebar.style.display = 'none';
+
+      const libMargin = document.getElementById('admin-library-container');
+      libMargin.className -= ('col-xs-12');
+
+      const container = document.getElementsByClassName('base-admin')[0];
+      container.style.paddingLeft = 0;
     },
-  };
+    loadModules(modules) {
+      const modulesToAdd = [];
+      modules.forEach((data) => {
+        modulesToAdd.push({ value: data });
+      });
+      this.modules = modulesToAdd;
+    },
+    checkCSS(value) {
+      const parser = new DOMParser();
+      const el = parser.parseFromString(value.toString(), 'text/xml');
+      if (el.childNodes[0].tagName === 'style') {
+        if (el.childNodes[0].childNodes[0].tagName !== 'parsererror') {
+          return true;
+        }
+      }
+      return false;
+    },
+  },
+  created() {
+    configService.getConfig('campaign').then((response) => {
+      this.campaignConfig = response;
+      this.loadLibrary();
+    });
+  },
+  mounted() {
+    this.toggleSidebar();
+  },
+};
 </script>
 
 <style lang='less'>

@@ -205,9 +205,9 @@ export default {
         })
         .catch(() => {
           this.$root.$toast(
-            "Oops! Something went wrong! Please try again. If it doesn't work, please contact our support team.",
-            { className: 'et-error' },
-          );
+            "Oops! Something went wrong! Please try again. If it doesn't work, please contact our support team.", {
+              className: 'et-error',
+            });
         });
     },
     toggleSidebar() {
