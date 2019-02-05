@@ -1,20 +1,20 @@
 <template>
   <div>
-    <el-button
+    <ElButton
       v-if="!value"
       class="custom-col"
       size="mini"
       disabled>
       {{ falseText }}
-    </el-button>
+    </ElButton>
 
-    <el-input
+    <ElInput
       v-else
       v-model="textValue"
       :controls="false"
       class="custom-col toggleable-text"
       size="mini" />
-    <el-button
+    <ElButton
       size="mini"
       class="el-icon-setting"
       @click="toggle()" />
@@ -127,14 +127,6 @@ export default {
       padding-left: 0;
       padding-right: 0;
     }
-    .el-input-number__decrease{
-      border-radius: 2px 0px 0px 2px;
-      background: #f8f8f8;
-    }
-    .el-input-number__increase{
-      border-radius: 0px;
-      background: #f8f8f8;
-    }
     .el-input__inner{
       text-align: center;
       border-top-right-radius: 0px;
@@ -142,10 +134,6 @@ export default {
       &:focus{
         border: 1px solid #78dcd6;
       }
-    }
-    .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled),
-    .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){
-      border: 1px solid #78dcd6;
     }
   }
 </style>

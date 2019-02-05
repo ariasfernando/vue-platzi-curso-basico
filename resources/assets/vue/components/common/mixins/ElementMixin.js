@@ -66,6 +66,15 @@ export default {
     textOptions() {
       return this.isPreview ? false : textOptions();
     },
+    moduleHeight() {
+      return this.$store.getters['module/moduleHeight'];
+    },
+    dragging() {
+      return this.$store.getters['module/draggable'].dragging;
+    },
+    draggableChanged() {
+      return this.$store.getters['module/draggable'].changed;
+    },
   },
   methods: {
     // Get an string of classes

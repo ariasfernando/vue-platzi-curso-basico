@@ -140,17 +140,19 @@ class ModuleController extends Controller
         ];
 
         $user = new \stdClass();
-        $user->_id = Auth::user()->id;
+        $user->id = new ObjectID(Auth::user()->id);
         $user->email = Auth::user()->email;
 
         //If the module has id we are editing it, if not, we are creating it
         if ($request->input("moduleId")) {
             $module = Module::findOrFail($request->input("moduleId"));
             $module->updated_by = $user;
+            $log_title = 'Module updated';
         } else {
             $module = new Module;
             $module->key = ModelKeyManager::getStandardKey($module, $request->input('name'));
             $module->created_by = $user;
+            $log_title = 'Module created';
         }
 
         foreach ($params as $key => $value) {
@@ -159,6 +161,17 @@ class ModuleController extends Controller
 
         try {
             $module->save();
+
+            Activity::log(
+                $log_title,
+                [
+                    'properties' => [
+                        'module_id' => new ObjectID($module->id),
+                        'module_name' => $module->name,
+                        'module_status' => $module->status,
+                    ]
+                ]
+            );
 
             return [
                 'id' => $module->id,
@@ -199,7 +212,12 @@ class ModuleController extends Controller
 
         Activity::log(
             'Module deleted',
-            array('properties' => ['module_id' => new ObjectID($module->id)])
+            [
+                'properties' => [
+                    'module_id' => new ObjectID($module->id),
+                    'module_name' => $module->name,
+                ]
+            ]
         );
 
         return ["deleted" => $request->input("moduleId")];
@@ -217,7 +235,8 @@ class ModuleController extends Controller
         return $image->saveImage($request->input('data_image'), 'local:modules:studio');
     }
 
-    private function moduleUniqueValidator($id) {
+    private function moduleUniqueValidator($id)
+    {
         $uniqueValidator = Rule::unique('modules', 'name')->where(function ($query) {
             return $query->where('deleted_at', null);
         });

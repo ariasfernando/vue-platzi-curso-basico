@@ -20,6 +20,9 @@ return [
         'silverpop' => [
             'title', 'class'
         ],
+        'epsilon' => [
+            'title', 'class'
+        ],
         'responsys' => [
             'title', 'class'
         ],

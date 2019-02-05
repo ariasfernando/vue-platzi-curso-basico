@@ -85,7 +85,6 @@
       BackgroundImage,
       ButtonElement,
       ColumnManager,
-      CustomCodeElement,
       DividerElement,
       ImageElement,
       ModuleToolbar,
@@ -98,9 +97,6 @@
       }
     },
     computed: {
-        _(){
-            return _;
-      },
       moduleErrors() {
         return this.module.data.errors || [];
       },

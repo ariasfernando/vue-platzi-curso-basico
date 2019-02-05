@@ -105,8 +105,8 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    xit('"setChangeSettingComponent" with data, expect of the "changeSettingComponent" state has been same to passed data', () => {});
     it('"setCurrentComponent" with data, expect of the "currentComponent" state has been same to passed data', (done) => {
+      store.commit('module/setModuleData', mocks.module.getModule);
       let dataSetting = {
         columnId: 0,
         componentId: 0,
@@ -114,7 +114,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setCurrentComponent', dataSetting);
 
-      let stateCurrentComponent = store.state.module.currentComponent;
+      let stateCurrentComponent = store.getters['module/currentComponent'];
 
       expect(stateCurrentComponent).toEqual(dataSetting);
 
@@ -123,6 +123,7 @@ describe('== Module Store ==', () => {
       done();
     });
     it('"clearCurrentComponent", expect of the "currentComponent" state has been empty object', (done) => {
+      store.commit('module/setModuleData', mocks.module.getModule);
       let dataSetting = {
         columnId: 0,
         componentId: 0,
@@ -131,7 +132,7 @@ describe('== Module Store ==', () => {
       store.commit('module/setCurrentComponent', dataSetting);
       store.commit('module/clearCurrentComponent');
 
-      let stateCurrentComponent = store.state.module.currentComponent;
+      let stateCurrentComponent = store.getters['module/currentComponent'];
       expect(stateCurrentComponent).toBeEmptyObject();
 
       dataSetting = stateCurrentComponent = null;
@@ -354,7 +355,6 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    xit('"sortColumn" ', () => {});
     it('"setColumnWidth" with data, expect in the "module" state of each column width has modified with the new value', (done) => {
       let data = {
         colId: 0,
@@ -770,11 +770,9 @@ describe('== Module Store ==', () => {
       done();
     });
     xit('"attachPlugins", ', () => {});
-    it('"removeComponents" with data, expect of the state "module" has been removed the component data', (done) => {
+    it('"removeElement" with data, expect of the state "module" has been removed the component data', (done) => {
       let data = {
-        index: 0,
-        number: 1,
-        colId: 0,
+        elementId: 731844,
       };
       let dataComponent = {
         el: {
@@ -1110,7 +1108,7 @@ describe('== Module Store ==', () => {
 
       store.commit('module/setModuleData', newStruct);
       store.commit('module/addComponent', dataComponent);
-      store.commit('module/removeComponents', data);
+      store.commit('module/removeElement', data);
 
       let stateComponent = store.state.module.module.structure.columns[0].components;
 
@@ -1610,7 +1608,6 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    xit('"sortColumn"', () => {});
     it('"normalizeColumns", expect to columns are equal in width', (done) => {
       let Columns = [
         {
@@ -2061,7 +2058,6 @@ describe('== Module Store ==', () => {
       const objectModule = {
         moduleId: undefined,
         name: 'Untitled module',
-        description: null,
         title: undefined,
         description: '',
         created_by: '',
@@ -4207,23 +4203,17 @@ describe('== Module Store ==', () => {
     });
 
     it('"module", expect state module has object', (done) => {
-      let dataModule = {
-        module: {},
-        moduleId: 'edsr345',
-        name: 'name',
-      };
-
-      store.commit('module/setModuleData', dataModule);
-
+      store.commit('module/setModuleData', mocks.module.getModule);
       let getDataModule = store.getters['module/module'];
 
-      expect(getDataModule).toEqual(dataModule);
+      expect(getDataModule).toEqual(mocks.module.getModule);
 
-      dataModule = getDataModule = null;
+      getDataModule = null;
 
       done();
     });
     it('"currentComponent", expect state module has object', (done) => {
+      store.commit('module/setModuleData', mocks.module.getModule);
       let dataSetting = {
         columnId: 0,
         componentId: 0,
@@ -4239,7 +4229,6 @@ describe('== Module Store ==', () => {
 
       done();
     });
-    xit('"changeSettingComponent", expect state module has 1', () => {});
     it('"buildingMode", expect state buildingMode has \'mobile\'', (done) => {
       store.commit('module/setBuildingMode', 'mobile');
 

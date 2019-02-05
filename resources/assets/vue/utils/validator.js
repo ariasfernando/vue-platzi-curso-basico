@@ -1,14 +1,14 @@
-import _ from "lodash";
+import _ from 'lodash';
 
 module.exports = {
-  imagesErrors(selector){
+  imagesErrors(selector) {
     let errorFound = false;
 
     // Check if all images are uploaded.
     const nonEditedImages = $(selector).find("img[src*='/default/']:visible, img[src*='base64,']");
 
     if (nonEditedImages.length) {
-      $.each(nonEditedImages, function (index, img) {
+      $.each(nonEditedImages, (index, img) => {
         $(img).parent().addClass('default-image-error');
       });
 
@@ -19,7 +19,7 @@ module.exports = {
   },
   modulesErrors(selector) {
     if ($(selector).find('div.default-module-error').length > 0) {
-      $(selector).find('div.default-module-error').show();   
+      $(selector).find('div.default-module-error').show();
     }
   },
   tinyErrors(selector) {

@@ -30,7 +30,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'InputToggleableNumber',
   props: ['value', 'falseText', 'disabled'],
@@ -53,95 +52,103 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
-  .custom-col {
-    width: calc(100% - 28px);
-    float: left;
-    display: block;
-    border-right: 0;
-  }
+.custom-col {
+  width: calc(100% - 28px);
+  float: left;
+  display: block;
+  border-right: 0;
+}
 
-  .el-button {
-    transition: unset;
-    border-radius: 2px;
-    &.active {
-      background-color: #78dcd6;
-      padding: 7px 4px;
-      font-weight: 300;
-      color: #ffffff;
-      border: 1px solid #78dcd6;
-      border-radius: 0px 2px 2px 0px;
-      height: 28px!important;
-    }
-    &--mini,
-    &--mini.is-round {
-      padding: 7px;
-    }
-    & + .el-button {
-      margin-left: 0;
-    }
-    &:not(.custom-col) {
-      width: 28px;
-      padding: 4px 0;
-      height: 26px;
-      display: block;
-      float: left;
-    }
-    &.is-disabled,
-    &.is-disabled:focus,
-    &.is-disabled:hover {
-      color: #666666;
-      cursor: auto;
-    }
-  }
-
-  .el-icon-setting{
-    background: #f8f8f8;
-    color: #666666;
-    cursor: inherit;
-    border: 1px solid #dcdfe6;
-    font-size: 11px;
+.el-button {
+  transition: unset;
+  border-radius: 2px;
+  &.active {
+    background-color: #78dcd6;
+    padding: 7px 4px;
     font-weight: 300;
-    line-height: 14px;
+    color: #ffffff;
+    border: 1px solid #78dcd6;
     border-radius: 0px 2px 2px 0px;
-    height: 28px!important;
-
-    &:hover{
-      color: #78dcd6;
-    }
+    height: 28px !important;
   }
-
-  .toggleable-number-disabled /deep/ {
-    span {
-      display: block;
-      overflow: hidden;
-    }
+  &--mini,
+  &--mini.is-round {
+    padding: 7px;
   }
+  & + .el-button {
+    margin-left: 0;
+  }
+  &:not(.custom-col) {
+    width: 28px;
+    padding: 4px 0;
+    height: 26px;
+    display: block;
+    float: left;
+  }
+  &.is-disabled,
+  &.is-disabled:focus,
+  &.is-disabled:hover {
+    color: #666666;
+    cursor: auto;
+  }
+}
 
-  .toggleable-number /deep/ {
-    input.el-input__inner[type="text"] {
-      padding-left: 0;
-      padding-right: 0;
-    }
-    .el-input-number__decrease{
-      border-radius: 2px 0px 0px 2px;
-      background: #f8f8f8;
-    }
-    .el-input-number__increase{
-      border-radius: 0px;
-      background: #f8f8f8;
-    }
-    .el-input__inner{
-      text-align: center;
-      border-top-right-radius: 0px;
-      border-bottom-right-radius: 0px;
-      &:focus{
-        border: 1px solid #78dcd6;
-      }
-    }
-    .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled), 
-    .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){
+.el-icon-setting {
+  background: #f8f8f8;
+  color: #666666;
+  cursor: inherit;
+  border: 1px solid #dcdfe6;
+  font-size: 11px;
+  font-weight: 300;
+  line-height: 14px;
+  border-radius: 0px 2px 2px 0px;
+  height: 28px !important;
+
+  &:hover {
+    color: #78dcd6;
+  }
+}
+
+.toggleable-number-disabled /deep/ {
+  span {
+    display: block;
+    overflow: hidden;
+  }
+}
+
+.toggleable-number /deep/ {
+  input.el-input__inner[type='text'] {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .el-input-number__decrease {
+    border-radius: 2px 0px 0px 2px;
+    background: #f8f8f8;
+  }
+  .el-input-number__increase {
+    border-radius: 0px;
+    background: #f8f8f8;
+  }
+  .el-input__inner {
+    text-align: center;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    &:focus {
       border: 1px solid #78dcd6;
     }
   }
+  .el-input-number__decrease:hover:not(.is-disabled)
+    ~ .el-input
+    .el-input__inner:not(.is-disabled),
+  .el-input-number__increase:hover:not(.is-disabled)
+    ~ .el-input
+    .el-input__inner:not(.is-disabled) {
+    border: 1px solid #78dcd6;
+  }
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    width: 17px;
+  }
+}
 </style>
 

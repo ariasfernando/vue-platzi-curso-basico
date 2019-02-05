@@ -14,13 +14,11 @@
         :bgcolor="component.divider.attribute.bgcolor"
         :height="component.divider.attribute.height || component.divider.style.height" />
     </table>
-    <component-toolbar v-if="isStudio" :component-id="componentId" :column-id="columnId" />
   </element-container>
   <!-- DIVIDER ELEMENT ENDS -->
 </template>
 
 <script>
-import ComponentToolbar from './ComponentToolbar.vue';
 import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import ElementMixin from '../../common/mixins/ElementMixin';
 import ElementContainer from '../../common/containers/ElementContainer.vue';
@@ -29,7 +27,6 @@ import Spacer from '../../common/Spacer.vue';
 export default {
   name: 'DividerElement',
   components: {
-    ComponentToolbar,
     ElementContainer,
     Spacer,
   },

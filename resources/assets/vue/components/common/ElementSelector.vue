@@ -1,16 +1,16 @@
 <template>
   <button
-    :style="[{left :leftPosition + 'px'},{bottom: bottom +'px'}]"
+    :style="[{left :leftPosition + 'px'},{bottom: bottom +'px'},{top:top +'px'}]"
     :class="`element-selector ${active ? 'active': ''}`"
-    @click="e => $emit('element-selected', e)" >
-    <i :class="selectorIcon"  aria-hidden="true"></i> {{label}}
+    @click="e => $emit('element-selected', e)">
+    <i :class="selectorIcon" aria-hidden="true" /> {{ label }}
   </button>
 </template>
 
 <script>
 export default {
   name: 'ElementSelector',
-  props: ['label', 'selectorIcon', 'active', 'left-position', 'bottom'],
+  props: ['label', 'selectorIcon', 'active', 'leftPosition', 'bottom', 'top'],
 };
 </script>
 
@@ -24,9 +24,8 @@ export default {
   font-weight: normal;
   color: #ffffff;
   outline: none;
-  transition: all 0.3s linear;
+  transition: background 0.3s linear;
   padding: 2px 7px 3px 7px;
-  bottom: -40px;
   position: absolute;
   transform: translateX(-50%);
 

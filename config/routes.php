@@ -168,6 +168,7 @@ if (env("APP_ADMIN", false)) {
             '/admin/module/edit'       => 'Admin\ModuleController@getEdit',
             '/admin/module/modules/{type?}' => 'Admin\ModuleController@getModules',
             '/admin/setting'           => 'Admin\SettingController@getIndex',
+            '/admin/setting/all'       => 'Admin\SettingController@getAll',
         ],
         'post' => [
             '/admin/login'                 => 'Admin\Auth\AdminAuthController@postLogin',
@@ -189,6 +190,7 @@ if (env("APP_ADMIN", false)) {
             '/admin/module/delete'         => 'Admin\ModuleController@postDelete',
             '/admin/module/upload-image'   => 'Admin\ModuleController@postUploadImage',
             '/admin/setting/edit'          => 'Admin\SettingController@postEdit',
+            '/admin/setting/upload-font'   => 'Admin\SettingController@postUploadFont',
         ],
     ];
     $default['web']['get'] = array_merge($adminRoutes['get'], $default['web']['get']);
