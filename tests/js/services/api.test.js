@@ -108,7 +108,7 @@ describe('== Api Service ==', () => {
         },
       };
       let responseResolved = {
-        url:'http://localhost:3000/api/history?campaign_id=5bc0e9a9f01f0e00153c94d2',
+        url: 'http://localhost:3000/api/history?campaign_id=5bc0e9a9f01f0e00153c94d2',
         ok: true,
         status: 200,
         statusText: 'OK',
@@ -123,7 +123,7 @@ describe('== Api Service ==', () => {
             Server: ['Apache'],
             'X-Backend': ['977d91350fbb'],
             'X-RateLimit-Limit': ['60'],
-            'X-RateLimit-Remaining': ['59']
+            'X-RateLimit-Remaining': ['59'],
           },
         },
         body: [{

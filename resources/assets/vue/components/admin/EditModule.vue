@@ -11,7 +11,7 @@
         <div class="col-xs-8 module-container" @mouseup="clickModuleContainer">
           <scrollbar-container>
             <div v-if="showRaw" class="module-wrapper">
-              <code-editor v-model="moduleRow" />
+              <code-editor v-model="moduleRow" type="javascript" height="calc(100vh - 126px)" />
             </div>
             <module-container v-else :building-mode="buildingMode" :width-desktop="640" :width-mobile="480">
               <module :module="module" />
@@ -161,9 +161,9 @@ export default {
         })
         .catch(() => {
           this.$root.$toast(
-            "Oops! Something went wrong! Please try again. If it doesn't work, please contact our support team.",
-            { className: 'et-error' },
-          );
+            "Oops! Something went wrong! Please try again. If it doesn't work, please contact our support team.", {
+              className: 'et-error',
+            });
         });
     },
     toggleSidebar() {
