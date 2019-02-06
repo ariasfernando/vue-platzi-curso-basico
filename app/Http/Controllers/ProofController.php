@@ -34,7 +34,7 @@ class ProofController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('acl.permission:access_proof');
+        $this->middleware('acl.permission:edit_proof')->only('postCreate');
 
         if (!\Config::get('proof.status')) {
             abort(401, 'Not available.');
@@ -166,7 +166,8 @@ class ProofController extends Controller
             '_id' => $proof->campaign->_id,
             'body_html' => $proof->campaign->body_html,
             'template_width' => $proof->campaign->getLibraryConfig('templateWidth'),
-            'template_mobile_width' => $proof->campaign->getLibraryConfig('templateMobileWidth')
+            'template_mobile_width' => $proof->campaign->getLibraryConfig('templateMobileWidth'),
+            'propietaryCss' => $proof->campaign->getLibraryConfig('propietaryCss'),
         ];
 
         $params['locales'] = \Config::get('locales');

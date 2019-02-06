@@ -106,7 +106,7 @@ const mutations = {
     state.currentComponent = {};
   },
   updateElement(state, payload) {
-    const update = { 
+    const update = {
       ...state.module.structure.columns[payload.columnId].components[payload.componentId].data,
       ...payload.data,
     };
@@ -159,7 +159,7 @@ const mutations = {
   },
   savePlugin(state, payload) {
     let pluginData = state.module;
-    
+
     if (payload.componentId >= 0) {
       // save component plugin
       pluginData = pluginData.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].config;
@@ -247,7 +247,7 @@ const mutations = {
   setListLibraries(state, data) {
     state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config.library.config.set_images.options = data.response;
     state.module.structure.columns[data.columnId].components[data.componentId].plugins[data.plugin].config['sie-plugin-image-overlay_image'].config.overlay_gallery.config.set_images.options = data.response;
-  }
+  },
 };
 
 const actions = {

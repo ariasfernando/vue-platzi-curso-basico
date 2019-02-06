@@ -187,21 +187,21 @@ export default {
   },
 
   addCSSHacks($target, newStyles) {
-      newStyles.replace(';','');
+    newStyles.replace(';', '');
     const originalStyles = $target.attr('style');
     let originalStylesArray = originalStyles.split(';');
 
-      if(!originalStyles.includes(newStyles)){
-          originalStylesArray.push(newStyles);
-      }
+    if (!originalStyles.includes(newStyles)) {
+      originalStylesArray.push(newStyles);
+    }
 
     for (let i = 0; i < originalStylesArray.length; i++) {
-          originalStylesArray[i] = originalStylesArray[i].replace(' ','');
-      }
+      originalStylesArray[i] = originalStylesArray[i].replace(' ', '');
+    }
 
     originalStylesArray = originalStylesArray.filter(item => item !== '');
-      newStyles = originalStylesArray.join('; ');
-      $target.attr('style', newStyles);
+    newStyles = originalStylesArray.join('; ');
+    $target.attr('style', newStyles);
   },
 
   encodeHtmlEntities($cleanedHtml) {

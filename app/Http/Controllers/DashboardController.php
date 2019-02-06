@@ -80,7 +80,6 @@ class DashboardController extends Controller
             'flash' => $flash,
             'locked_by' => CampaignManager::whoIsLocking(session()->get('campaign_lock'))
         ];
-
         return $this->renderView('dashboard', ['params' => $params]);
     }
 

@@ -28,6 +28,7 @@
         "allowFirstLine": true
       }
     }],
+    "vue/component-name-in-template-casing": [2, "PascalCase"],
     "vue/require-prop-types": [0],
     "vue/html-closing-bracket-newline": [2, {
       "singleline": "never",
