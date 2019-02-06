@@ -91,10 +91,6 @@
     {{-- Mobile Styles --}}
     @include('layouts.partials.mobile_styles')
 
-    @if(isset($params['campaign_data']['library_config']['propietaryCss']))
-        {{ $params['campaign_data']->getLibraryConfig('propietaryCss') }}
-    @endif
-
     <?php
         if (isset($params['campaign_data']['campaign_fonts'])) {
             if (isset($params['campaign_data']['campaign_fonts']['custom'])) {
@@ -143,6 +139,11 @@
     ?>
 </style>
 
+{{-- Client Styles --}}
+@if(isset($params['campaign_data']['library_config']['propietaryCss']))
+    {!! $params['campaign_data']->getLibraryConfig('propietaryCss') !!}
+@endif
+
 <!--[if mso]>
 	<style>
 		td, span, p, a, h5, h6, div {
@@ -164,6 +165,14 @@
                  color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
             }
         @endif
+        span.MsoHyperlink {
+            mso-style-priority:99;
+            color:inherit;
+        }
+        span.MsoHyperlinkFollowed {
+            mso-style-priority:99;
+            color:inherit;
+        }
 	</style>
 <![endif]-->
 

@@ -61,10 +61,6 @@ function configsView() {
         label: 'Link',
         icon: 'fa fa-link',
       },
-      stformatsmenu: {
-        label: 'Custom Format',
-        icon: 'fa fa-edit',
-      },
     },
     settings: {
       link_validate_url: {
@@ -120,15 +116,6 @@ function configsView() {
         dependsOn: {
           config: 'options',
           name: 'link',
-        },
-      },
-      formats: {
-        key: 'formats',
-        title: 'Formats',
-        type: 'text',
-        dependsOn: {
-          config: 'options',
-          name: 'stformatsmenu',
         },
       },
     },

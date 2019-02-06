@@ -18,5 +18,5 @@ class Setting extends Eloquent
      *
      * @var array
      */
-    protected $fillable = ['name', 'key', 'value'];
+    protected $fillable = ['name', 'key', 'value', 'properties'];
 }

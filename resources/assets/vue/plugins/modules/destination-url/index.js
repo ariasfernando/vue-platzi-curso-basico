@@ -34,4 +34,5 @@ module.exports = {
   render: true,
   enabled: false,
   validated: false,
+  runBackground: true,
 };

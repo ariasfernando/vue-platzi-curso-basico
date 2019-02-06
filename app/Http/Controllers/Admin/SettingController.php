@@ -40,7 +40,7 @@ class SettingController extends Controller
         return $this->renderView('admin.settings', ['global_settings' => $global_settings]);
     }
 
-        /**
+    /**
      * Show the settings admin view.
      *
      * @return View
@@ -59,5 +59,15 @@ class SettingController extends Controller
         }
 
         return $response_message;
+    }
+
+    /**
+     * Get all global settings
+     *
+     * @return array of settings
+     */
+    public function getAll()
+    {
+        return Setting::all(['name', 'key', 'value', 'properties'])->toArray();
     }
 }

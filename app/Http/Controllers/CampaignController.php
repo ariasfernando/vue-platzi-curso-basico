@@ -75,7 +75,7 @@ class CampaignController extends Controller
                 $params['library'] = new ObjectID($libraries[0]['_id']);
                 $library = Library::find($libraries[0]['_id']);
             }
-
+            
             if($library['config']['preheader']){
                 $params['campaign_preheader'] = $library['config']['preheaderDefault'];
             }
@@ -280,7 +280,8 @@ class CampaignController extends Controller
             $request->all(),
             [
                 'campaign_name' => 'not_regex:/<.*?>/',
-                'campaign_preheader' => 'not_regex:/<.*?>/'
+                'campaign_preheader' => 'not_regex:/<.*?>/',
+                'email_title' => 'not_regex:/<.*?>/'
             ]
         );
 

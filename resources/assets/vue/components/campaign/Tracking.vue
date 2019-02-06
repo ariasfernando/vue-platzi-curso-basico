@@ -48,7 +48,7 @@
                     :data-vv-as="item.label"
                     size="mini"
                     @input="onInputChange(`trk-${item.name}`, $event)"
-                    @blur="onBlur(`trk-${item.name}`, $event.target.value)" />
+                    @blur="onBlur(`trk-${item.name}`, $event.target.value, item.input_type)" />
                   <span
                     v-show="errors.has(`trk-${item.name}`)"
                     class="help is-danger">{{ errors.first(`trk-${item.name}`) }}
@@ -101,6 +101,12 @@
         }
       }
     },
+    mounted() {
+      this.$store.commit('campaign/saveCampaignData', {
+        name: 'tracking',
+        value: { ...this.trackingData },
+      });
+    },
     methods: {
       onInputChange(key, value) {
         this.$store.commit('campaign/saveCampaignData', {
@@ -108,10 +114,12 @@
           value: {...this.trackingData, [key]: value}
         });
       },
-      onBlur(key, value) {
-        this.onInputChange(key, value.replace(/[\<\>\s]/g, ''));
-      }
-    }
+      onBlur(key, value, inputType) {
+        if (inputType !== 'text_without_validation') {
+          this.onInputChange(key, value.replace(/[\<\>\s]/g, ''));
+        }
+      },
+    },
   };
 </script>
 <style lang="less" scoped>

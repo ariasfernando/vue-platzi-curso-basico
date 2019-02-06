@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import Adapter from './tinymce/Adapter';
+import Adapter from './tinyMce/Adapter';
+import listStylesFix from './tinyMce/listStyles.fix';
 
 export default {
   props: ['name', 'plugin'],
@@ -16,7 +17,7 @@ export default {
       return this.component.plugins.textOptions;
     },
     $textElement() {
-      return $('#' + this.editorId);
+      return $(`#${this.editorId}`);
     },
   },
   methods: {
@@ -30,7 +31,7 @@ export default {
 
       if (nameComponent === 'button-element' && button_inline_color) {
         this.changeStyles('p', {
-          color: this.component.button.style.color || libraryLinkColor
+          color: this.component.button.style.color || libraryLinkColor,
         });
       }
       if (p_fixed_style && Application.utils.isJsonString(p_fixed_style)) {
@@ -99,18 +100,16 @@ export default {
             }
           }
         }
-      } else {
-        if (editorLinks.length) {
-          for (let i = 0; i < editorLinks.length; i++) {
-            const $el = $(editorLinks[i]);
+      } else if (editorLinks.length) {
+        for (let i = 0; i < editorLinks.length; i++) {
+          const $el = $(editorLinks[i]);
             // return the first parent that has a color
-            const $parentEl = $el.parents().filter(function () {
-              return $(this).css('color');
-            });
+          const $parentEl = $el.parents().filter(function () {
+            return $(this).css('color');
+          });
             // get the color of the parent and apply it to the link
-            const parentColor = $parentEl.css('color');
-            $el.css('color', parentColor);
-          }
+          const parentColor = $parentEl.css('color');
+          $el.css('color', parentColor);
         }
       }
 
@@ -129,7 +128,7 @@ export default {
        */
 
       $.each(editorLinks, (index, el) => {
-        if (link_fixed_styles && link_fixed_styles["text-decoration"] === "underline") {
+        if (link_fixed_styles && link_fixed_styles['text-decoration'] === 'underline') {
           const $el = $(el);
           $el.find('span').css('text-decoration', 'underline');
 
@@ -163,7 +162,7 @@ export default {
         editorLists.each((index, el) => {
           const firstTextElement = $(el).find('span')[0];
           if (firstTextElement) {
-            const computedStyle = document.defaultView.getComputedStyle(firstTextElement)
+            const computedStyle = document.defaultView.getComputedStyle(firstTextElement);
             const fontSize = computedStyle.getPropertyValue('font-size');
             const lineHeight = computedStyle.getPropertyValue('line-height');
             const letterSpacing = computedStyle.getPropertyValue('letter-spacing');
@@ -231,7 +230,15 @@ export default {
         firstTextNode = firstTextElement;
       }
 
-      const lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
+      let lineHeight = 0;
+
+      if (firstTextNode.nodeName === 'SUP') {
+        // if the first node is a superscript, we should check with the line-height of the container
+        lineHeight = parseInt(this.$textElement.css('line-height').replace('px', ''));
+      } else {
+        // otherwise, check with the line-height of the first text
+        lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
+      }
 
       // note: to perform the correct calculation, actualLines must be an integer
       const actualLines = Math.floor(divHeight / lineHeight);
@@ -326,7 +333,7 @@ export default {
             console.log('Error: behaviour type not defined');
         }
         return result;
-      }
+      };
 
       const getTitle = (tmp, val, unit) => {
         let template = tmp || '%fontVal%unit';
@@ -404,9 +411,10 @@ export default {
       const settings = {
         selector: `#${editorId}`,
         fixed_toolbar_container: `.toolbar-${editorId}`,
-        document_base_url: `${Application.globals.cdnHost  }/js/tinymce/`,
+        document_base_url: `${Application.globals.cdnHost}/js/tinymce/`,
+        convert_urls: false,
         skin: 'lightgray',
-        skin_url: `${Application.globals.cdnHost  }/css/tinymce/lightgray`,
+        skin_url: `${Application.globals.cdnHost}/css/tinymce/lightgray`,
         toolbar,
         plugins: 'paste advlist autolink lists stlinkextended textcolor sttextcolorextended  stformatsmenu',
         inline: true,
@@ -529,7 +537,7 @@ export default {
               editor.bodyElement.dispatchEvent(new Event('tiny-change'));
 
               if (!(_this.tinyMax() || _this.tinyMaxLines() || _this.tinyMin())) {
-                //if truncate is NAN, returns and avoid validations
+                // if truncate is NAN, returns and avoid validations
                 return;
               }
 
@@ -541,7 +549,6 @@ export default {
 
               // Check for Lines Limit
               _this.maxLinesValidation(e);
-
             })
             .on('change', (e) => {
               _this.setStyles();
@@ -551,6 +558,7 @@ export default {
                 _this.setLinkStyles();
               }
             });
+          listStylesFix(editor);
         },
         paste_preprocess: (plugin, args) => {
           const editor = tinymce.get(this.editorId);

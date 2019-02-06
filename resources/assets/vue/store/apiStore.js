@@ -8,7 +8,7 @@ function apiStore() {
       setOauthToken(state, token) {
         state.oauthToken = token;
       },
-      error(err) {
+      error(state, err) {
         console.error(err);
       },
     },
