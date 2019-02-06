@@ -16,7 +16,7 @@ class ProprietaryStyles extends Migration
     {
         foreach (Library::all() as $key => $library) {
             $config = $library->config;
-            if (strpos($config['propietaryCss'], '<style>') === false && $config['propietaryCss'] !== '') {
+            if (strpos($config['propietaryCss'] !== '' && $config['propietaryCss'], '<style>') === false) {
                 $config['propietaryCss'] = "<style>\n{$config['propietaryCss']}\n</style>";
                 $library->config = $config;
                 $library->save();
