@@ -200,8 +200,8 @@ return [
 
     'enable_html_minify' => true,
 
-    'mask_links' => true,
+    'mask_links' => false,
 
-    'mask_links_title' => 'GAMMA',
+    'mask_links_title' => 'MASK',
 
 ];
