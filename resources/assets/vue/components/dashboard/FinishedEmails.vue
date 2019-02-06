@@ -68,9 +68,11 @@
             </td>
             <td class="actions icons" width="250">
 
-
               <p class="dash-code-option">
                 <a @click.prevent="code(campaign._id, 'normal_html')" href="#" class="html-code">NORMAL HTML</a><br>
+                <template v-if="isMaskLinksEnabled">
+                  <a @click.prevent="code(campaign._id, 'mask_link_html')" href="#" class="html-code">{{maskLinkTitle}} HTML</a><br>
+                </template>
                 <a @click.prevent="code(campaign._id, 'plaintext')" href="#" class="plaintext" v-if="campaign.library_config.plainText">Plaintext</a>
               </p>
 
@@ -82,8 +84,7 @@
                   data-toggle="tooltip"
                   data-placement="bottom"
                   :data-tooltip="wasArchive(campaign.archive) ?  'Archive Email' : 'Unarchive Email'"
-                  v-html="isArchive(campaign)"
-                >
+                  v-html="isArchive(campaign)" >
                 </a>
 
               <a href="#" v-on:click.prevent="preview(campaign._id)" data-tooltip="Preview" target="_blank">
@@ -206,6 +207,14 @@
         type: Boolean,
         default: false
       }
+    },
+    computed: {
+      isMaskLinksEnabled() {
+        return (Application.globals.maskLinks !== undefined && Application.globals.maskLinks);
+      },
+      maskLinkTitle() {
+        return (Application.globals.maskLinksTitle !== undefined) ? Application.globals.maskLinksTitle : 'MASK';
+      },
     },
     methods: {
       goProof (token) {
