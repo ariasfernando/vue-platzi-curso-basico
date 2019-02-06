@@ -34,6 +34,7 @@ class ModuleController extends Controller
     {
         $this->middleware('AdminAuthenticate');
         $this->middleware('acl.permission:access_admin_modules');
+        $this->middleware('acl.permission:access_admin_studio_modules');
     }
 
     /**
@@ -106,8 +107,9 @@ class ModuleController extends Controller
      */
     public function postSave(Request $request)
     {
+
         $request->validate([
-            'name' => 'required|max:255',
+            'name' => ['required', 'max:255', $this->moduleUniqueValidator($request->input('moduleId'))],
             'structure' => 'required',
             'plugins' => 'required',
             'status' => ['required', Rule::in(['draft', 'publish'])],
@@ -190,5 +192,19 @@ class ModuleController extends Controller
     {
         $image = new Imagine;
         return $image->saveImage($request->input('data_image'), 'local:modules:studio');
+    }
+
+    private function moduleUniqueValidator($id) {
+        $uniqueValidator = Rule::unique('modules', 'name')->where(function ($query) {
+            return $query->where('deleted_at', null);
+        });
+
+        if ($id) {
+            $uniqueValidator = Rule::unique('modules', 'name')->where(function ($query) {
+                return $query->where('deleted_at', null);
+            })->ignore($id, '_id');
+        }
+        
+        return $uniqueValidator;
     }
 }

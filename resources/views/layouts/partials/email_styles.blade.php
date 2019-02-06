@@ -91,10 +91,6 @@
     {{-- Mobile Styles --}}
     @include('layouts.partials.mobile_styles')
 
-    @if(isset($params['campaign_data']['library_config']['propietaryCss']))
-        {{ $params['campaign_data']->getLibraryConfig('propietaryCss') }}
-    @endif
-
     <?php
         if (isset($params['campaign_data']['campaign_fonts'])) {
             if (isset($params['campaign_data']['campaign_fonts']['custom'])) {
@@ -113,9 +109,7 @@
                                     $ie = "src: url('" . $fontPath . $font['folder'] . "/" . $file['name'] . "." . $file['file'] . "?#iefix');";
                                 }
                             }
-                        }
 
-                        foreach ($font['types'] as $b => $type) {
                             $definition .= "@font-face {font-family: '" . $font['name'] . "';";
                             $definition .= $ie;
                             $definition .= "src: ";
@@ -130,7 +124,12 @@
                                 }
                             }
 
+                            if(isset($type['style']) && !empty($type['style'])) {
+                                $definition .= "font-style: " . $type['style'] . ";";
+                            }
+
                             $definition .= "font-weight: " . $type['weight'] . ";}";
+                            $ie = "";
                         }
                         echo $definition;
                     }
@@ -139,6 +138,11 @@
         }
     ?>
 </style>
+
+{{-- Client Styles --}}
+@if(isset($params['campaign_data']['library_config']['propietaryCss']))
+    {!! $params['campaign_data']->getLibraryConfig('propietaryCss') !!}
+@endif
 
 <!--[if mso]>
 	<style>
@@ -161,6 +165,14 @@
                  color: {{ $params['campaign_data']->getLibraryConfig('linkColor') }};
             }
         @endif
+        span.MsoHyperlink {
+            mso-style-priority:99;
+            color:inherit;
+        }
+        span.MsoHyperlinkFollowed {
+            mso-style-priority:99;
+            color:inherit;
+        }
 	</style>
 <![endif]-->
 

@@ -29,7 +29,13 @@
 
           <settings-container label="Preheader Text" v-if="enablePreheader" title="The best practice is to limit preheaders to 50 characters." key="preheader-text">
             <template slot="setting-bottom">
-              <el-input size="mini" placeholder="Preheader Text" name="campaignPreheader" maxlength="140" :value="form.campaignPreheader" @blur="saveSettings"/>
+              <el-input v-model="campaignPreheader" size="mini" placeholder="Preheader Text" maxlength="140" />
+            </template>
+          </settings-container>
+
+          <settings-container label="Email Title" v-if="enableTitle" title="Email Title" key="email-title">
+            <template slot="setting-bottom">
+              <el-input size="mini" placeholder="Email Title" name="emailTitle" maxlength="140" :value="form.emailTitle" @blur="saveSettings"/>
             </template>
           </settings-container>
 
@@ -105,10 +111,11 @@
         enableTagging: false,
         enableAutoSave: false,
         enableLocking: false,
+        enableTitle: false,
         form: {
           campaignName: '',
-          campaignPreheader: '',
           campaignProcess: false,
+          emailTitle: '',
           tags: []
         },
         defaultTemplateBackgroundColor() {
@@ -125,6 +132,9 @@
       }
     },
     computed: {
+      editedSettings() {
+        return this.$store.getters['campaign/editedSettings'];
+      },
       locked() {
         return this.$store.getters["campaign/campaign"].campaign_data.locked;
       },
@@ -165,6 +175,17 @@
           this.saveCampaignName(value);
         },
       },
+      campaignPreheader: {
+        get() {
+          return this.editedSettings.campaignPreheader;
+        },
+        set(value) {
+          this.$store.commit('campaign/saveSetting', {
+            name: 'campaignPreheader',
+            value,
+          });
+        },
+      },
       templateBackgroundColor: {
         get() {
           return { hex: this.campaign.campaign_settings.templateBackgroundColor || this.templatePalette.default };
@@ -191,7 +212,8 @@
       this.enableTagging = this.campaign.library_config.tagging;
       this.form.tags = _.cloneDeep(this.campaign.tags);
       this.form.campaignName = this.campaign.campaign_name || '';
-      this.form.campaignPreheader =  this.campaign.campaign_preheader || '';
+      this.form.campaignPreheader = this.campaign.campaign_preheader || '';
+      this.form.emailTitle = this.campaign.email_title || '';
 
       this.loadConfig();
     },
@@ -204,7 +226,7 @@
     },
     methods: {
       changeTags(values) {
-        let tags = [];
+        const tags = [];
         for (let n = 0; n < values.length; n++) {
           if (values[n].match(/[^a-z0-9-_]+/i)) {
             this.$root.$toast('Only alphanumeric characters, hyphens and underscores are allowed.', {className: 'et-error'});
@@ -215,7 +237,7 @@
         this.form.tags = tags;
         this.$store.commit('campaign/saveSetting', {
           name: 'tags',
-          value: tags
+          value: tags,
         });
       },
       validate() {
@@ -243,7 +265,7 @@
         }
 
         if(e.target.name in this.form){
-          this.form[e.target.name] = e.target.value;
+          this.form[e.target.name] = value;
         }
 
         this.$store.commit('campaign/saveSetting', {
@@ -256,6 +278,7 @@
           this.globalConfig = this.$store.getters["config/config"].global_settings;
           this.enableAutoSave = this.globalConfig.auto_save === '1';
           this.enablePreheader = this.campaign.library_config.preheader;
+          this.enableTitle = this.globalConfig.enable_title === '1';
         }, error => {
           this.$store.commit("global/setLoader", false);
           this.$root.$toast(
@@ -598,6 +621,9 @@
     }
     .glyphicon-star {
       color: #eac827;
+    }
+    .form-group {
+      margin-bottom: 0px;
     }
   }
 </style>

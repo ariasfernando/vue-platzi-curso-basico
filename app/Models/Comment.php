@@ -24,4 +24,14 @@ class Comment extends Eloquent
     {
         return $this->belongsTo('ProofModel');
     }
+
+    /**
+     * User.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo('Stensul\Models\User');
+    }
 }

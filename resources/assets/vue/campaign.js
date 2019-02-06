@@ -12,6 +12,7 @@ import Bootstrap from './bootstrap';
 import store from './store';
 import acl from './resources/plugins/acl';
 import Campaign from './components/campaign/Campaign.vue';
+import { customValidators } from './resources/validator_rules';
 
 Vue.use(Bootstrap);
 Vue.use(VueResource);
@@ -19,6 +20,10 @@ Vue.use(acl);
 Vue.use(VeeValidate);
 
 VeeValidate.Validator.localize('en', Vue.prototype.$_app.dictionary.campaign);
+
+Object.keys(customValidators).forEach((key) => {
+  VeeValidate.Validator.extend(key, customValidators[key].method, customValidators[key].options);
+});
 
 Vue.use(Toast, {
   horizontalPosition: 'center',

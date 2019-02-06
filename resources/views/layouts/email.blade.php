@@ -27,7 +27,11 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 		<meta name="HandheldFriendly" content="true"/>
 		<meta name="MobileOptimized" content="320"/>
 		<meta name="viewport" content="width=device-width" />
-		<title></title>
+		@if (config('global_settings.enable_title') && isset($params['campaign_data']['email_title']))
+		<title>{{ $params['campaign_data']['email_title'] }}</title>
+        @else
+        <title></title>
+        @endif
 
 		@if(isset($params['library_config']['externalCssLink']) && !empty($params['library_config']['externalCssLink']))
 			<link href="{{ $params['library_config']['externalCssLink'] }}" rel="stylesheet">
@@ -48,8 +52,6 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 		@if (isset($params['library_config']['prependHtml']))
 			<?php echo $params['library_config']['prependHtml']; ?>
 		@endif
-		
-		@include('layouts.partials.email_styles')
 		
 		@if (isset($params['campaign_data']['campaign_fonts']))
 			@if (isset($params['campaign_data']['campaign_fonts']['custom']))
@@ -74,7 +76,7 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
                 {{-- CAMPAIGN PREHEADER --}}
                 <div style="font-size:0px; display:none; visibility:hidden; opacity:0; color:transparent; max-height:0px; height:0; width:0; mso-hide:all;">{{ $params['campaign_data']['campaign_preheader'] or '' }}
                     @if ((190 - mb_strlen($params['campaign_data']['campaign_preheader']) > 0))
-                        {{ str_repeat('&zwnj;&nbsp;', 190 - mb_strlen($params['campaign_data']['campaign_preheader'])) }}
+					{!! str_repeat('&zwnj;&nbsp;', 190 - mb_strlen($params['campaign_data']['campaign_preheader'])) !!}
                     @endif
                 </div>
             @endif

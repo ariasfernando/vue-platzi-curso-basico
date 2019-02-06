@@ -35,7 +35,7 @@
 			)) !!}
 		</div>
 
-		@if (Auth::user()->can('allows_role_change'))
+		@if ($params['change_roles'])
 			<!-- Select Role -->
 			<div class="modal-mpf-row selector">
 				<label>Select Role</label>
@@ -50,7 +50,10 @@
 							'name' => 'roles[]',
 							'multiple' => 'true',
 							'title' => '',
-							'data-validation' => '{"required":"true"}'
+							'data-validation' => '{"required":"true"}',
+							'data-selected-text-format' => 'count > 3',
+							'data-actions-box '=> 'true',
+							'data-live-search'=> 'true',
 						]
 					);
 				!!}

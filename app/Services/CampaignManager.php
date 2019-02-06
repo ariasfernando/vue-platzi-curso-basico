@@ -19,7 +19,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use ProofModel as Proof;
 use CampaignModel as Campaign;
 use StoreAssetsInCdn;
-use ProcessCampaign;
+use Stensul\Jobs\ProcessCampaign;
 use SendReviewersEmail;
 use Stensul\Exceptions\PermissionDeniedException;
 use HtmlCreator as Html;
@@ -70,7 +70,9 @@ class CampaignManager
         ];
         $campaign->campaign_settings = $campaign_settings;
         $campaign->campaign_preheader = $inputs['campaign_preheader'] ?? '';
+        $campaign->email_title = $inputs['email_title'] ?? '';
         $campaign->auto_save = isset($inputs['auto_save']) && $inputs['auto_save'] ? true : false;
+        $campaign->mask_link_pixel = (isset($inputs['mask_link_pixel']))? $inputs['mask_link_pixel'] : 0;
 
         if (isset($inputs['campaign_fonts'])) {
             $campaign->campaign_fonts = $inputs['campaign_fonts'];
@@ -81,7 +83,11 @@ class CampaignManager
         }
 
         if (isset($inputs['plain_text'])) {
-            $campaign->plain_text = $inputs['plain_text'];
+            $campaign->mask_link_text = $inputs['plain_text'];
+            $campaign->plain_text = self::replaceNormalText($inputs['plain_text']);
+        } else {
+            $campaign->mask_link_text = Text::htmlToText($campaign->body_html);
+            $campaign->plain_text = self::replaceNormalText($campaign->mask_link_text);
         }
 
         if (isset($inputs['tracking'])) {
@@ -121,6 +127,31 @@ class CampaignManager
             'campaign_id' => $campaign_id,
             'updated_at' => $campaign->updated_at
         ];
+    }
+
+    /**
+     * Replace the mask_link links to make the normal plain text.
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    public static function replaceNormalText($text = null)
+    {
+        $regexp_mask_link = "(?<={track\(\").+(?=\")";
+        $regexp_lines = "/((\r?\n)|(\r\n?))/";
+        $regexp_replace = "/\\\${track(.+)}/";
+        $new_text = "";
+        foreach (preg_split($regexp_lines, $text) as $line) {
+            if (preg_match_all("/$regexp_mask_link/siU", $line, $matches, PREG_SET_ORDER) &&
+                isset($matches[0]) && isset($matches[0][0])) {
+                $new_text .= preg_replace($regexp_replace, $matches[0][0], $line) . "\n";
+            } else {
+                $new_text .= $line ."\n";
+            }
+        }
+
+        return trim($new_text);
     }
 
     /**
@@ -176,13 +207,15 @@ class CampaignManager
 
         if ($campaign_data = Campaign::find($campaign_id)) {
             $campaign_data->status = 2;
-            $campaign_data->deleted_at = Carbon::now();
+
             $campaign_data->deleted_by = [
                 'id' => new ObjectID(Auth::id()),
                 'email' => Auth::user()->email
             ];
 
-            if ($campaign_data->save()) {
+            $campaign_data->save();
+
+            if ($campaign_data->delete()) {
                 Activity::log('Campaign deleted', array('properties' => ['campaign_id' => new ObjectId($campaign_id)]));
                 // Check proof
                 if ($campaign_data->has_active_proof) {
@@ -195,6 +228,7 @@ class CampaignManager
                         dispatch(new SendReviewersEmail($proof, 'deleted_proof'));
                     }
                 }
+
                 return array('success' => $campaign_id);
             }
         }
@@ -358,6 +392,7 @@ class CampaignManager
     public static function text($campaign_id = null)
     {
         $campaign = Campaign::findOrFail($campaign_id);
+        $mask_link = (isset($inputs["mask_link"]))? filter_var($inputs["mask_link"], FILTER_VALIDATE_BOOLEAN) : false;
 
         if ($campaign->processed == 0 || $campaign->plain_text == '') {
             $response = Text::htmlToText($campaign->body_html);
@@ -366,8 +401,9 @@ class CampaignManager
                 array('properties' => ['campaign_id' => new ObjectID($campaign_id)])
             );
         } else {
-            $response = $campaign->plain_text;
+            $response = $mask_link ? $campaign->mask_link_text : $campaign->plain_text;
         }
+        $response = str_replace('${optout()}', '<${optout()}>', $response);
 
         return $response;
     }
@@ -381,9 +417,11 @@ class CampaignManager
      */
     public static function html($campaign_id = null)
     {
+        $campaign_id = (isset($inputs['campaign_id']))? $inputs['campaign_id'] : null;
+        $mask_link = (isset($inputs["mask_link"]))? filter_var($inputs["mask_link"], FILTER_VALIDATE_BOOLEAN) : false;
         $campaign = Campaign::findOrFail($campaign_id);
-
-        return $campaign->body_html;
+        return (isset($campaign->mask_link_html) && $mask_link && $campaign->mask_link_html != '')?
+            $campaign->mask_link_html :  $campaign->body_html;
     }
 
     /**
@@ -777,5 +815,42 @@ class CampaignManager
         $campaign = Campaign::findOrFail($campaign_id);
         $assets = new Assets($campaign);
         return $assets->trimImage($options);
+    }
+
+    /**
+     * Toggle archive flag on a campaign.
+     *
+     * @param  array $inputs
+     *
+     * @return array
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public static function archive($inputs)
+    {
+        $campaign_id = $inputs['campaign_id'];
+
+        if (isset($campaign_id)) {
+            // Retrieve the campaign
+            $campaign = Campaign::findOrFail($campaign_id);
+
+            // Toogle the archive status of the campaign
+            if ($campaign->archive) {
+                $campaign->archive = false;
+                $log_message = 'Archive campaign';
+            } else {
+                $campaign->archive = true;
+                $log_message = 'Unarchive campaign';
+            }
+
+            $campaign->save();
+
+            Activity::log($log_message, array('properties' =>
+                ['campaign_id' => new ObjectId($campaign_id)]
+            ));
+            return ['success' => $campaign_id];
+        }
+
+        return ['error' => $campaign_id];
     }
 }

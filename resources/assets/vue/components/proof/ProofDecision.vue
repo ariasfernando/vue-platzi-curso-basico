@@ -14,7 +14,7 @@
         <proof-decision-button
             decision="approve-with-comments"
             icon="ok"
-            title="Approve with comments"
+            title="Approve with message"
             :loading-decision="loadingDecision"
             :selected-decision="selectedDecision"
             @submit-decision="askComment"
@@ -34,7 +34,7 @@
         <proof-decision-button
             decision="reject-with-comments"
             icon="remove"
-            title="Reject with comments"
+            title="Reject with message"
             :loading-decision="loadingDecision"
             :selected-decision="selectedDecision"
             @submit-decision="askComment"
@@ -131,6 +131,7 @@
             },
             undoDecision: function() {
                 this.showUndoDecisionModal = true;
+                this.comment = '';
             },
             closeUndoDecisionModal: function() {
                 this.showUndoDecisionModal = false

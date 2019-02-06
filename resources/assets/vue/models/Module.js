@@ -19,6 +19,7 @@ function Module(data = {}) {
   this.type = data.type || 'studio';
   this.status = data.status || '';
   this.data = data.data || {};
+  this.inUse = data.in_use || 0;
   const style = (data.structure && data.structure.style) ? data.structure.style : {};
   const settings = (data.structure && data.structure.settings) ? data.structure.settings : [];
   const attribute = (data.structure && data.structure.attribute) ? data.structure.attribute : {};
@@ -68,9 +69,8 @@ function Module(data = {}) {
 
   _.extend(this.structure.settings, settings);
   _.extend(this.structure.attribute, attribute);
-  
+
   return this;
 }
 
 module.exports = Module;
-  

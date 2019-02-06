@@ -83,6 +83,18 @@
                 ><i class="glyphicon glyphicon-blackboard"></i></a>
               <a href="#" v-if="$can('clone_campaign')" @click.prevent="clone(campaign._id)" class="clone" data-tooltip="Copy and re-use"><i class="glyphicon glyphicon-duplicate"></i></a>
 
+              <a
+                  href="#"
+                  class="archive-campaign"
+                  v-if="$can('access_archive')"
+                  @click.prevent="doArchive(campaign._id)"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  :data-tooltip="wasArchive(campaign.archive) ?  'Archive Email' : 'Unarchive Email'"
+                  v-html="isArchive(campaign)"
+                >
+                </a>
+
               <a :data-campaign-id="campaign._id"
                 data-toggle="tooltip"
                 data-placement="top"
@@ -120,13 +132,13 @@
               >
                 <i class="glyphicon fa fa-unlock"></i>
               </a>
-              <a href="#" data-tooltip="Delete" @click.prevent="askToDeleteCampaign(campaign._id)"
+              <a href="#" data-tooltip="Delete" @click.prevent="askToDeleteCampaign(campaign)"
                 ><i class="glyphicon glyphicon-trash"></i></a>
             </td>
           </tr>
           <tr v-if="!campaigns.data.length">
             <td :colspan="showTags ? 7 : 6">
-              There are no emails to show in this list
+              {{ askDeleteMessage }}
             </td>
           </tr>
         </tbody>
@@ -164,7 +176,7 @@
         proof: {
           status: this.$_app.config.proofConfig.status,
           allow: this.$_app.config.permissions.indexOf('edit_proof') >= 0
-            && this.$_app.config.permissions.indexOf('access_proof') >= 0
+            || this.$_app.config.permissions.indexOf('access_proof') >= 0
         }
       }
     },

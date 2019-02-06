@@ -3,6 +3,7 @@ function imageDefault() {
     componentSettings: [
       {
         groupLabel: 'Placeholders',
+        showLabel: false,
         settings: [{
           link: 'attribute',
           label: 'Default Image',
@@ -29,6 +30,7 @@ function imageDefault() {
       },
       {
         groupLabel: 'Image size',
+        showLabel: false,
         settings: [{
           name: 'image-size',
           aclName: 'image_image-size',
@@ -38,6 +40,7 @@ function imageDefault() {
       },
       {
         groupLabel: 'Text align',
+        showLabel: false,
         settings: [{
           name: 'text-align',
           aclName: 'text_text-align',
@@ -47,6 +50,7 @@ function imageDefault() {
       },
       {
         groupLabel: 'Background color',
+        showLabel: false,
         settings: [{
           name: 'bgcolor',
           aclName: 'background_bgcolor',
@@ -58,6 +62,7 @@ function imageDefault() {
       },
       {
         groupLabel: 'Padding group',
+        showLabel: false,
         settings: [{
           name: 'padding',
           aclName: 'padding_padding',
@@ -68,6 +73,7 @@ function imageDefault() {
       },
       {
         groupLabel: 'Url Settings',
+        showLabel: false,
         settings: [{
           link: 'attribute',
           label: 'Default URL',

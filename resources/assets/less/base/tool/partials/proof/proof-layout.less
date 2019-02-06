@@ -1,164 +1,175 @@
-#proof{
-	padding: 0px;
-    margin: 0 -5px;
-    float: none!important;
-    display: table;
-    width: 100%;
-    min-height: 100%;
-    height: 100%;
-	position: absolute;
-	min-width: 1280px;
+#proof {
+  padding: 0;
+  margin: 0 -5px;
+  float: none!important;
+  display: table;
+  width: 100%;
+  min-height: 100%;
+  height: 100%;
+  position: absolute;
+  min-width: 1280px;
 
-    .module-toolbar{
-    	display: none;
+  .module-toolbar {
+    display: none;
+  }
+
+  .section-canvas-email {
+    display: inline-block;
+    width: calc(~"100% - 300px");
+
+    .section-canvas-container {
+      box-sizing: border-box;
+      min-width: 650px;
+      background-color: #f4f4f4;
+      padding-top: 40px;
+      padding-bottom: 80px;
     }
 
-    .section-canvas-email {
-    	display: inline-block;
-    	width: calc(~"100% - 300px");
+  }
+
+  .proof-top-bar {
+    background-color: #FFFFFF;
+    height: 53px;
+    padding: 9px 0;
+    box-shadow: 0 0 4px #999999;
+
+    .switch {
+      position: relative;
+      height: 29px;
+      width: 100px;
+      background: @stensul-white;
+      border-radius: 3px;
+      margin: 0 auto;
+      border: 1px solid #DFDFDF;
+      margin-top: 4px;
     }
 
-    .proof-top-bar{
-        background-color: #FFFFFF;
-	    height: 53px;
-	    padding: 9px 0;
-	    box-shadow: 0px 0px 4px #999999;
+    .switch-label {
+      position: relative;
+      z-index: 2;
+      float: left;
+      width: 49px;
+      line-height: 21px;
+      font-size: 16px;
+      color: @stensul-purple;
+      text-align: center;
+      cursor: pointer;
+      margin: 0 !important;
 
-	    .switch {
-	        position: relative;
-	        height: 29px;
-	        width: 100px;
-	        background: @stensul-white;
-	        border-radius: 3px;
-	        margin: 0 auto;
-	        border: 1px solid #DFDFDF;
-	        margin-top: 4px;
-	    }
-
-	    .switch-label {
-	        position: relative;
-	        z-index: 2;
-	        float: left;
-	        width: 49px;
-	        line-height: 21px;
-	        font-size: 16px;
-	        color: @stensul-purple;
-	        text-align: center;
-	        cursor: pointer;
-	        margin: 0 !important;
-
-	        i {
-	        	display: inline-block;
-	        	vertical-align: sub;
-	        }
-	    }
-
-	    .switch-label:active {
-	        font-weight: bold;
-	    }
-
-	    .switch-label-off {
-	        padding-left: 2px;
-	    }
-
-	    .switch-label-on {
-	        padding-right: 2px;
-	    }
-
-	    .switch-input {
-	        display: none;
-	    }
-
-	    .switch-input:checked + .switch-label {
-	        font-weight: bold;
-	        color: #fff;
-	        -webkit-transition: 0.15s ease-out;
-	        -moz-transition: 0.15s ease-out;
-	        -o-transition: 0.15s ease-out;
-	        transition: 0.15s ease-out;
-	    }
-
-	    .switch-input:checked + .switch-label-on ~ .switch-selection {
-	        left: 50px;
-	    }
-
-	    .switch-selection {
-	        display: block;
-	        position: absolute;
-	        z-index: 1;
-	        top: 2px;
-	        left: 2px;
-	        width: 46px;
-	        height: 23px;
-	        border-radius: 2px;
-	        background: @stensul-purple;
-	        -webkit-transition: left 0.15s ease-out;
-	        -moz-transition: left 0.15s ease-out;
-	        -o-transition: left 0.15s ease-out;
-	        transition: left 0.15s ease-out;
-	    }
+      i {
+        display: inline-block;
+        vertical-align: sub;
+      }
     }
 
-	aside{
-		background: none;
-		width: 300px!important;
-		font-weight: 300;
-		padding-top: 20px!important;
-		padding-bottom: 50px;
-		padding-right: 15px;
-		float: right;
-		display: inline-block;
+    .switch-label:active {
+      font-weight: bold;
+    }
 
-		textarea{
-			border-radius: 2px;
-			padding: 7px;
-			color: @stensul-gray;
-			font-weight: 300;
-			background: @stensul-white;
-		}
-	}
+    .switch-label-off {
+      padding-left: 2px;
+    }
 
-	.beta-btn-primary{
-		margin-top: 2px;
-	}
+    .switch-label-on {
+      padding-right: 2px;
+    }
 
-	.beta-btn-secondary{
-		margin-top: 2px;
+    .switch-input {
+      display: none;
+    }
 
-		.glyphicon{
-		    line-height: 19px;
-		    font-size: 12px;
-		    margin-right: 2px;
-		}
-	}
+    .switch-input:checked + .switch-label {
+      font-weight: bold;
+      color: #fff;
+      -webkit-transition: 0.15s ease-out;
+      -moz-transition: 0.15s ease-out;
+      -o-transition: 0.15s ease-out;
+      transition: 0.15s ease-out;
+    }
+
+    .switch-input:checked + .switch-label-on ~ .switch-selection {
+      left: 50px;
+    }
+
+    .switch-selection {
+      display: block;
+      position: absolute;
+      z-index: 1;
+      top: 2px;
+      left: 2px;
+      width: 46px;
+      height: 23px;
+      border-radius: 2px;
+      background: @stensul-purple;
+      -webkit-transition: left 0.15s ease-out;
+      -moz-transition: left 0.15s ease-out;
+      -o-transition: left 0.15s ease-out;
+      transition: left 0.15s ease-out;
+    }
+  }
+
+  aside {
+    background: none;
+    width: 300px!important;
+    font-weight: 300;
+    padding-top: 20px!important;
+    padding-bottom: 50px;
+    padding-right: 15px;
+    float: right;
+    display: inline-block;
+
+    textarea {
+      border-radius: 2px;
+      padding: 7px;
+      color: @stensul-gray;
+      font-weight: 300;
+      background: @stensul-white;
+    }
+  }
+
+  .beta-btn-primary {
+    margin-top: 2px;
+  }
+
+  .beta-btn-secondary {
+    margin-top: 2px;
+
+    .glyphicon {
+      line-height: 19px;
+      font-size: 12px;
+      margin-right: 2px;
+    }
+  }
 }
 
 .proof {
-	.container{
-		width: 100%!important;
-	}
+
+  .container {
+    width: 100%!important;
+  }
 }
 
 .base-proof {
 
-	.row {
-		margin-bottom: 15px;
-	}
+  .row {
+    margin-bottom: 15px;
+  }
 
-    .campaign-title {
-        color: #ffffff;
-        font-size: 15px;
-		margin-top: 13px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		line-height: 20px;
-    }
+  .campaign-title {
+    color: #ffffff;
+    font-size: 15px;
+    margin-top: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 20px;
+  }
 }
 
 
 .stx-email-canvas {
-	p {
-		margin: 0;
-	}
+
+  p {
+    margin: 0;
+  }
 }

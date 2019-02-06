@@ -4,6 +4,7 @@ namespace Stensul\Services;
 
 use MongoDB\BSON\ObjectID as ObjectID;
 use CampaignModel;
+use Stensul\Models\Proof;
 use LibraryModel as Library;
 use UserModel as User;
 use Activity;
@@ -44,7 +45,7 @@ class EmailSender
 
         $subject = !empty($params['subject']) ? $params['subject'] : env('MAIL_PREVIEW_SUBJECT', 'Preview email!');
 
-        $preheader = $params['preheader'] ?? false;
+        $preheader = isset($params['preheader']) ? $params['preheader'] : false;
 
         $library = Library::find($campaign_data->library);
 
@@ -174,40 +175,73 @@ class EmailSender
     }
 
     /**
-     * Send a proof notification email to one reviewer.
+     * Send an approvals notification email.
      *
-     * @param  array $reviewer
-     * @param  array $data
+     * @param  Stensul\Models\User  $user  To send notification
+     * @param  Stensul\Models\Proof $proof Related proof
+     * @param  string               $type  Type of notification
+     * @param  array                $data  Any required data
      * @return array Response
      */
-    public static function sendReviewerEmail($reviewer, $data)
+    public static function sendApprovalsEmail(User $user, Proof $proof, $type, $data = [])
     {
-        if (!isset($reviewer['email'])) {
+        if (!isset($user->email)) {
             return ['error' => 'invalid email'];
         }
 
-        switch ($data['type']) {
+        switch ($type) {
             case 'new_proof':
                 $email_layout = 'emails.proof.new_proof';
-                $subject = sprintf('Review Request: %s, from %s', $data['campaign_name'], $data['requestor']);
-                $data['notification_message'] =
-                    isset($reviewer['notification_message']) ? $reviewer['notification_message'] : '';
+                $subject = sprintf('Review Request: %s (from %s)',
+                    $proof->campaign->campaign_name,
+                    $data['requestor']
+                );
+                $data['notification_message'] = isset($data['reviewer']['notification_message'])
+                	? $data['reviewer']['notification_message']
+                	: '';
                 break;
             case 'deleted_proof':
                 $email_layout = 'emails.proof.deleted_proof';
-                $subject = sprintf(
-                    'The email "%s" has been deleted, and your feedback is no longer needed.',
-                    $data['campaign_name']
+                $subject = sprintf('The email "%s" has been deleted, and your feedback is no longer needed.',
+                    $proof->campaign->campaign_name
+                );
+                break;
+            case 'new_comment':
+                $email_layout = 'emails.proof.new_comment';
+                $subject = sprintf('New Comment Received: %s, from %s',
+                    $proof->campaign->campaign_name,
+                    $data['comment']->user->fullname
+                );
+                break;
+            case 'proof_approved':
+                $email_layout = 'emails.proof.proof_approved';
+                $subject = sprintf('Email Approved: %s, by %s',
+                    $proof->campaign->campaign_name,
+                    $data['reviewer_data']->fullname
+                );
+                break;
+            case 'proof_fully_approved':
+                $email_layout = 'emails.proof.proof_fully_approved';
+                $subject = sprintf('Email Approved and Ready to Complete: %s',
+                    $proof->campaign->campaign_name
+                );
+                break;
+            case 'proof_rejected':
+                $email_layout = 'emails.proof.proof_rejected';
+                $subject = sprintf('Email Rejected: %s, by %s',
+                    $proof->campaign->campaign_name,
+                    $data['reviewer_data']->fullname
                 );
                 break;
         }
 
         $params = [
             'params' => $data,
-            'email' => $reviewer['email'],
-            'reviewer_name' => User::find($reviewer['user_id'])->name,
-            'from_name' => \Config::get('proof.email.from_name'),
-            'from_email' => \Config::get('proof.email.from_email'),
+            'email' => $user->email,
+            'user' => $user,
+            'proof' => $proof,
+            'from_name' => config('proof.email.from_name'),
+            'from_email' => config('proof.email.from_email'),
             'subject' => $subject
         ];
 
@@ -226,19 +260,19 @@ class EmailSender
 
         if (count(Mail::failures()) > 0) {
             \Log::error(sprintf(
-                "Failed to send email (%s) to a reviewer %s. [proof %s]",
-                $data['type'],
-                $reviewer['email'],
-                $data['proof_id']
+                "Failed to send email (%s) to a user %s. [proof %s]",
+                $type,
+                $user->email,
+                $proof->_id
             ));
             return false;
         }
 
-        Activity::log('Email sent to reviewer', [
+        Activity::log('Email sent to user', [
             'properties' => [
-                'proof_id' => new ObjectId($data['proof_id']),
-                'email' => $reviewer['email'],
-                'type' => $data['type']
+                'proof_id' => new ObjectID($proof->_id),
+                'email' => $user->email,
+                'type' => $type
             ]
         ]);
 

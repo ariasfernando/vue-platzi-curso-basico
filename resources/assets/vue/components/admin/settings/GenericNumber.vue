@@ -4,10 +4,10 @@
       <el-input-number
         v-model="mainSettingNumeric"
         v-validate="'required'"
-        :controls="!(isPercentage || isPixel)"
-        controls-position="right"
+        :controls="true"
         :class="isPercentage || isPixel ? 'width-unit' : 'without-unit'"
         size="mini"
+        controls-position="right"
         :min="minValue"
         :max="maxCaluculate" />
       <el-button
@@ -149,8 +149,9 @@ export default {
   }
 }
 .el-input-number--mini.width-unit {
-  width: 80px;
+  width: 95px;
   margin-right: 25px;
+  padding-right: 26px;
   float: right;
 }
 .half-style-setting-padding {
@@ -166,7 +167,7 @@ export default {
   padding-left: 0;
 }
 .without-unit {
-  width: 105px;
+  width: 127px;
   padding-right: 28px;
 }
 .is-setting-half .el-input-number--mini.width-unit {

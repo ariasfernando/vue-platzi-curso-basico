@@ -32,6 +32,9 @@
 				'id' => 'permissions',
 				'name' => 'permissions[]',
 				'multiple' => 'true',
+				'data-selected-text-format' => 'count > 3',
+				'data-actions-box '=> 'true',
+				'data-live-search'=> 'true',
 			)); !!}
 		</div>
 

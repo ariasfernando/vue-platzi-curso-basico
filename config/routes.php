@@ -63,6 +63,7 @@ $default = [
             '/campaign/gif-layer'          => 'CampaignController@postGifLayer',
             '/campaign/email-sent-history' => 'CampaignController@postEmailSentHistory',
             '/campaign/favorite'           => 'CampaignController@postFavorite',
+            '/campaign/archive'           => 'CampaignController@postArchive',
             '/campaign/trim-image'         => 'CampaignController@postTrimImage',
             '/campaign/spent-time'         => 'MetricController@postSpentTime',
             '/template/move-library'       => 'TemplateController@postMoveLibrary',
@@ -167,6 +168,7 @@ if (env("APP_ADMIN", false)) {
             '/admin/module/edit'       => 'Admin\ModuleController@getEdit',
             '/admin/module/modules'    => 'Admin\ModuleController@getModules',
             '/admin/setting'           => 'Admin\SettingController@getIndex',
+            '/admin/setting/all'       => 'Admin\SettingController@getAll',
         ],
         'post' => [
             '/admin/login'                 => 'Admin\Auth\AdminAuthController@postLogin',

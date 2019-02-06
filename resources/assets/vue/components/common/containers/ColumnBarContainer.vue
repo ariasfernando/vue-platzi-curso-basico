@@ -105,22 +105,6 @@ export default {
       width: 100%;
     }
 
-    select {
-      height: 22px;
-      font-size: 11px;
-      color: #666666;
-      border: none;
-      background: #f4f4f4;
-      box-shadow: none;
-      font-weight: 300;
-      width: 65px;
-      float: right;
-    }
-
-    select[multiple] {
-      height: 50px;
-    }
-
     .vue-js-switch {
       float: right;
       padding-top: 0px;

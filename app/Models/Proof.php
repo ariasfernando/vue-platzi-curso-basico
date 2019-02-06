@@ -46,7 +46,7 @@ class Proof extends Eloquent
      */
     public function campaign()
     {
-        return $this->belongsTo('CampaignModel', 'campaign_id');
+        return $this->belongsTo('Stensul\Models\Campaign', 'campaign_id')->withTrashed();
     }
 
     /**

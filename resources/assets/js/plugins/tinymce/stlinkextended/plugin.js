@@ -1,6 +1,6 @@
 /**
  * plugin.js
- * 
+ *
  * currently, stlinkextended plugin is mounted always even if link option is disabled in editor settings
  * for this reason is why if (linkButton) is in several parts of the code
  */
@@ -16,7 +16,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
     }
     var linkButton = null;
 
-    function createLinkList(callback) {  
+    function createLinkList(callback) {
         return function () {
             var linkList = editor.settings.link_list;
 
@@ -77,7 +77,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         }
 
         var data = {}, selection = editor.selection, dom = editor.dom, selectedElm, anchorElm, initialText;
-        var win, onlyText, textListCtrl, linkListCtrl, tagListCtrl, relListCtrl, targetListCtrl, classListCtrl, linkTitleCtrl, value;
+        var win, onlyText, textListCtrl, linkListCtrl, tagListCtrl, relListCtrl, targetListCtrl, classListCtrl, colorsListCtrl, linkTitleCtrl, value, dataDescCtrl;
 
         function linkListChangeHandler(e) {
             var textCtrl = win.find('#text');
@@ -171,6 +171,23 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
             data.href = href;
         }
 
+        function validateDescription(target){
+            var description = target.value;
+            return validateNoSpaces( description );
+        }
+
+        function validateNoSpaces( value ){
+            if( !value ){
+                return true;
+            }
+
+            if( value.indexOf(" ") >= 0 ){
+                return false;
+            }
+
+            return true;
+        }
+
         function isOnlyTextSelected(anchorElm) {
             var html = selection.getContent();
 
@@ -199,9 +216,12 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         selectedElm = selection.getNode();
         anchorElm = dom.getParent(selectedElm, 'a[href]');
         onlyText = isOnlyTextSelected();
-
-        data.text = initialText = anchorElm ? (anchorElm.innerText || anchorElm.textContent) : selection.getContent({ format: 'text' });
+        var content = (selectedElm.textContent === selection.getContent()) ? selectedElm.outerHTML : selection.getContent();
+        data.text = initialText = anchorElm ? (anchorElm.innerText || anchorElm.textContent) : content;
         data.href = anchorElm ? dom.getAttrib(anchorElm, 'href') : '';
+        data.dataDescription = anchorElm ? dom.getAttrib(anchorElm, 'data-description') : '';
+
+        data.style = [];
 
         if (anchorElm) {
             data.target = dom.getAttrib(anchorElm, 'target');
@@ -273,6 +293,19 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
             };
         }
 
+        if (editor.settings.data_description) {
+            dataDescCtrl = {
+                name: 'data_description',
+                type: 'textbox',
+                size: 40,
+                label: 'Description',
+                value: data.dataDescription || '',
+                onfocusout: function (e) {
+                    validateDescription(e.target);
+                }
+            };
+        }
+
         if (editor.settings.target_list !== false) {
             if (!editor.settings.target_list) {
                 editor.settings.target_list = [
@@ -337,7 +370,6 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                     size: 40,
                     autofocus: true,
                     label: 'Url',
-                    tooltip: 'Insert a valid URL',
                     onchange: urlChange,
                     onkeyup: updateText,
                     onfocusout: function (e) {
@@ -351,15 +383,24 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                 tagListCtrl,
                 relListCtrl,
                 targetListCtrl,
-                classListCtrl
+                classListCtrl,
+                dataDescCtrl,
             ],
             onSubmit: function (e) {
 
                 // Force validate url input
                 urlValidate($('.mce-link-input .mce-textbox')[0]);
 
+                var validDescription = true;
+                // Validate data description format.
+                if( $('.mce-container-body .mce-textbox:eq(1)').length ){
+                    validDescription = validateDescription($('.mce-container-body .mce-textbox:eq(1)')[0]);
+                }
+
                 var href;
                 href = data.href;
+
+                var dataDescription = e.data.data_description || undefined;
 
                 // Validate an url
                 function validateUrl(url) {
@@ -409,6 +450,9 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                         "data-mce-href": href
                     };
 
+                    if (dataDescription) {
+                        linkAttrs["data-description"] = dataDescription;
+                    }
                     if (anchorElm) {
                         editor.focus();
 
@@ -434,9 +478,11 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                                 matches = editor.settings.tag_list.filter(function (tag) {
                                     return tag.value == win.find('#href').value();
                                 });
+                                // Encode only urls
+                                editor.insertContent(dom.createHTML('a', linkAttrs, (!matches.length) ? dom.encode(data.text) : data.text));
+                            } else {
+                                editor.insertContent(dom.createHTML('a', linkAttrs, data.text));
                             }
-                            // Encode only urls
-                            editor.insertContent(dom.createHTML('a', linkAttrs, (!matches.length) ? dom.encode(data.text) : data.text));
                         } else {
                             editor.execCommand('mceInsertLink', false, linkAttrs);
                         }
@@ -449,7 +495,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                 }
 
                 // Validate the inserted url
-                if (editor.settings.link_validate_url) {
+                if (editor.settings.link_validate_url !== 'disabled') {
                     var matches = [];
 
                     if (editor.settings.tag_list) {
@@ -459,20 +505,37 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                     }
 
                     // Validate only urls
-                    if (!matches.length && !validateUrl(href)) {
-                        var errorMessage = 'Entered URL is invalid or incomplete.';
+                    if ((editor.settings.link_validate_url === 'url' || editor.settings.link_validate_url === 'urlAndDestination')
+                        && !matches.length 
+                        && !validateUrl(href)) {
+                        $('.mce-link-input #errorMessage').remove();
+
                         if (Application.utils.validate.messages.url){
                             errorMessage = Application.utils.validate.messages.url;
                         }
                         $('.mce-link-input .mce-textbox')
                             .css('cssText', 'border-color: red')
                             .focus();
-                        win.find('#href')[0].tooltip().text(errorMessage).show();
+
+                        $('.mce-link-input').append("<span id='errorMessage' class='is-danger' style='display:inherit; position:fixed'>Please, enter a valid URL.</span>");
+
                         return false;
                     }
 
+                    if( !validDescription ){
+                        var noSpacesAllowTxt = 'Spaces are not allow.';
+                        $('.mce-container-body .mce-textbox:eq(1)')
+                            .addClass('error')
+                            .focus();
+                        win.find('#data_description')[0].tooltip().text(noSpacesAllowTxt).show();
+                        // Fix tooltip position.
+                        $(".mce-tooltip:contains("+noSpacesAllowTxt+")").css("top","+=40");
+                        return false;
+                    }
+
+
                     // validateUrlExists
-                    if(Application.globals.validateUrlExists) {
+                    if(Application.globals.validateUrlExists && editor.settings.link_validate_url === 'urlAndDestination') {
                         var $input = $('.mce-link-input .mce-textbox');
                         var urlValidated = false;
                         var dataUrlValidated = $input.data("url-validated")
@@ -543,7 +606,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         shortcut: 'Meta+K',
         onclick: createLinkList(showDialog),
         stateSelector: 'a[href]',
-        onPostRender : function() { 
+        onPostRender : function() {
             linkButton = this;
             stLinksExtended.buttons[editor.id] = this;
          },
@@ -586,8 +649,8 @@ var stLinksExtended = {
 
             if (linkButton) {
                 /* If there is no selection, disable the button */
-                if (!textSelection || $.trim( textSelection ) == '') {      
-                    /* But, if button is active, it means that already has a link added, 
+                if (!textSelection || $.trim( textSelection ) == '') {
+                    /* But, if button is active, it means that already has a link added,
                     so we have to enable the button, even if there is no selection made */
                     if (stLinksExtended.buttons[editor.id].active()) {
                         linkButton.disabled(false);

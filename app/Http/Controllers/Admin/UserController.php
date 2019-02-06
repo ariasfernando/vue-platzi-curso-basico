@@ -48,7 +48,7 @@ class UserController extends Controller
     {
         $search_type = ($request->input('type'))? $request->input("type") : null;
         $search_text = ($request->input('q'))? '%'.trim($request->input("q")).'%' : null;
-        $data_order_field = ($request->input('order_field')) ?: 'created_at';
+        $data_order_field = ($request->input('order_field')) ?: 'updated_at';
         $data_order_type = ($request->input('order_type')) ?: 'DESC';
         $data_page = $request->input('limit') ?: config('admin.sections.users.limit_per_page', 10);
         $search_operator = 'like';
@@ -126,7 +126,8 @@ class UserController extends Controller
     {
         $params = [
             "title" => "Create User",
-            "roles" => $this->listRoles()
+            "roles" => $this->listRoles(),
+            "change_roles" => true
         ];
 
         return $this->renderView('admin.modals.user_form', array('params' => $params));
@@ -145,6 +146,7 @@ class UserController extends Controller
         $params = [
             "title" => "Edit User",
             "roles" => $this->listRoles(),
+            "change_roles" => Auth::user()->can('allows_role_change'),
             "user" => $user_data
         ];
 
@@ -245,10 +247,9 @@ class UserController extends Controller
 
         if (env('USER_LOGIN', 'default') === 'default') {
             $user_auth = User::where('email', '=', $request->input('email'))->first();
-
             if (is_null($user_auth['status']) || $user_auth['status'] != "deleted") {
                 $pass_token = $this->passwords->getRepository()->create($user_auth);
-                $user_auth->notify(new WelcomePasswordNotification($pass_token, $user_auth['name']));
+                $user_auth->notify(new WelcomePasswordNotification($pass_token, $user_auth['name'], $user_auth['roles']));
 
                 return response()->json([
                     'code' => 0,

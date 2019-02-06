@@ -1,87 +1,118 @@
 <template>
   <div>
-  <settings-container :label="plugin.title">
-    <template slot="setting-right">
-        <toggle-button :value="enabled" @change="toggle"></toggle-button>
-    </template>
-  </settings-container>
-  <template v-if="plugin.enabled">
+    <settings-container :label="plugin.title">
+      <template slot="setting-right">
+        <toggle-button :value="enabled" @change="toggle" />
+      </template>
+    </settings-container>
+    <template v-if="plugin.enabled">
       <settings-container label="Required">
         <template slot="setting-right">
-            <toggle-button v-if="$can('std-'+component.type+'-plugin-destination-url-validate')" :value="plugin.config.validations.required" @change="(newValue)=>updateField(newValue, 'validations.required')"></toggle-button>
+          <toggle-button v-if="$can('std-'+component.type+'-plugin-destination-url-validate')" :value="plugin.config.validations.required" @change="(newValue)=>updateField(newValue, 'validations.required')" />
         </template>
       </settings-container>
       <settings-container label="Validate URL">
         <template slot="setting-right">
-            <toggle-button v-if="$can('std-'+component.type+'-plugin-destination-url-validations')" :value="plugin.config.validations.url" @change="(newValue)=>updateField(newValue, 'validations.url')"></toggle-button>
+          <el-select
+            v-if="$can('std-'+component.type+'-plugin-destination-url-validations')"
+            size="mini"
+            :value="validationValue"
+            @change="(newValue) => updateField(newValue, 'validations.url.selected')">
+            <el-option
+              v-for="(opt, key) in validateOptions"
+              :key="key"
+              :value="key"
+              :label="opt" />
+          </el-select>
         </template>
       </settings-container>
       <settings-container label="Target">
         <template slot="setting-right">
-            <toggle-button v-if="$can('std-'+component.type+'-plugin-destination-url-target')" :value="plugin.config.target" @change="(newValue)=>updateField(newValue, 'target')"></toggle-button>
+          <toggle-button v-if="$can('std-'+component.type+'-plugin-destination-url-target')" :value="plugin.config.target" @change="(newValue)=>updateField(newValue, 'target')" />
         </template>
       </settings-container>
       <settings-container label="Title">
         <template slot="setting-right">
-            <toggle-button :value="plugin.config.title" @change="(newValue)=>updateField(newValue, 'title')"></toggle-button>
+          <toggle-button :value="plugin.config.title" @change="(newValue)=>updateField(newValue, 'title')" />
         </template>
       </settings-container>
-  </template>
+    </template>
   </div>
 </template>
 
 <script>
+import _ from 'lodash';
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
+import pluginMixin from '../mixins/pluginMixin';
 
-  import _ from 'lodash';
-  import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
-  import pluginMixin from '../mixins/pluginMixin';
-
-  export default {
-    props: {
-      name: {
-        type: String,
-        required: true,
-      },
+export default {
+  components: { SettingsContainer },
+  mixins: [pluginMixin],
+  props: {
+    name: {
+      type: String,
+      required: true,
     },
-    mixins: [pluginMixin],
-    components: { SettingsContainer },
-    watch: {
-      component: {
-        handler: function() {
-          this.plugin.subComponent = this.component.type === 'button-element' ? 'button' : 'image';
-        },
-        deep: true,
-      },
+  },
+  data() {
+    return {
+      enabled: false,
+    };
+  },
+  computed: {
+    validateOptions() {
+      return this.plugin.config.validations.url.options;
     },
-    data() {
-      return {
-        enabled: false
-      }
+    validationValue() {
+      return this.plugin.config.validations.url.selected;
     },
-    methods: {
-      toggle(value) {
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          enabled: value,
-        };
-
-        this.$store.commit('module/togglePlugin', payload);
+  },
+  watch: {
+    component: {
+      handler: function() {
+        if (this.plugin.subComponent === undefined) {
+          switch (this.component.type) {
+            case 'button-element':
+              this.plugin.subComponent = 'button';
+              break;
+            case 'image-element':
+              this.plugin.subComponent = 'image';
+              break;
+            case 'text-element':
+              this.plugin.subComponent = 'text';
+              break;
+            default:
+              break;
+          }
+        }
       },
-      updateField(value, option) {
-        const config = {};
+      deep: true,
+    },
+  },
+  methods: {
+    toggle(value) {
+      const payload = {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        enabled: value,
+      };
 
-        _.set(config, option, value);
+      this.$store.commit('module/togglePlugin', payload);
+    },
+    updateField(value, option) {
+      const config = {};
 
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          config,
-        };
-        this.$store.commit('module/savePlugin', payload);
-      },
-    }
-  }
+      _.set(config, option, value);
+
+      const payload = {
+        plugin: this.name,
+        columnId: this.currentComponent.columnId,
+        componentId: this.currentComponent.componentId,
+        config,
+      };
+      this.$store.commit('module/savePlugin', payload);
+    },
+  },
+};
 </script>

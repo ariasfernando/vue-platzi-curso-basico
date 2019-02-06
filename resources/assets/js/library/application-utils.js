@@ -1100,6 +1100,17 @@ Application.utils = {
         return true;
     },
 
+    isJsonObjectString: function(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        var jsonString = JSON.parse(str);
+
+        return typeof jsonString == 'object';
+    },
+
     // Remove wrappers element
     removeWrappers: function(html) {
       var $wrapperElementRemove = html.find('.stx-wrapper');
