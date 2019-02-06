@@ -202,6 +202,6 @@ return [
 
     'mask_links' => true,
 
-    'mask_links_title' => 'MASK',
+    'mask_links_title' => 'GAMMA',
 
 ];
