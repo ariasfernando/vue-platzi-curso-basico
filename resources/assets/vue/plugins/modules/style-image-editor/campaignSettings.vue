@@ -1,5 +1,5 @@
 <template>
-  <div v-show="(elementKey === currentElementKey)">
+  <div v-show="(elementKey === currentElementKey)" class="settings-wrapper">
     <settings-container :no-label="true">
       <template slot="setting-bottom">
         <stui-button

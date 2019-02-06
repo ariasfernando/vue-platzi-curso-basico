@@ -151,7 +151,8 @@ export default {
   margin-right: 0;
   position: relative;
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-  &:last-of-type:not(.keep-margin) {
+  &:last-of-type:not(.keep-margin),
+  &.has-no-margin-bottom:not(.keep-margin) {
     margin-bottom: 0px;
   }
 
@@ -261,7 +262,4 @@ export default {
     }
   }
 }
-// [class^="plugin-"] > .settings-container:last-of-type:not(.keep-margin) {
-//   margin-bottom: 0px;
-// }
 </style>

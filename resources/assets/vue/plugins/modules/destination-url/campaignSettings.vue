@@ -1,9 +1,8 @@
 <template>
-  <div v-show="isCurrentElement">
+  <div v-show="isCurrentElement" class="settings-wrapper">
     <settings-container
       key="destination-url"
-      label="Destination Url"
-      custom-class="keep-margin">
+      label="Destination Url">
       <template slot="setting-bottom">
         <div v-if="validationRules">
           <stui-input-text
@@ -30,8 +29,7 @@
     <settings-container
       v-if="plugin.config.target"
       key="target"
-      label="Target"
-      custom-class="keep-margin">
+      label="Target">
       <template slot="setting-right">
         <stui-field addons>
           <stui-button
@@ -53,8 +51,7 @@
     <settings-container
       v-if="plugin.config.title"
       key="title"
-      label="Title"
-      custom-class="keep-margin">
+      label="Title">
       <template slot="setting-right">
         <stui-input-text
           v-model="title"

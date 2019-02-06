@@ -59,16 +59,19 @@ export default {
       margin-bottom: 0px;
     }
 
-    > label {
-      padding-top: 0px;
-    }
-
     /deep/ {
       > .settings-container:first-of-type {
         > label,
         > .control > label {
           padding-top: 0px;
         }
+      }
+    }
+
+    .settings-wrapper {
+      margin-bottom: 10px;
+      &.has-no-margin-bottom {
+        margin-bottom: 0px;
       }
     }
   }
