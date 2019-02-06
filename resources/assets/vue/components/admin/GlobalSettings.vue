@@ -26,10 +26,10 @@
                 <tr v-for="setting in settings">
                   <td :title="setting.name">{{ setting.name }}</td>
                   <td>
-                      <toggle-button v-if="setting.properties.type == 'toogle'" 
-                        class="pull-left" 
-                        :value="setting.value == 1" 
-                        id="setting" 
+                      <toggle-button v-if="setting.properties.type == 'toogle'"
+                        class="pull-left"
+                        :value="setting.value == 1"
+                        id="setting"
                         @change="updateToogle(setting.key, setting.value)">
                       </toggle-button>
                       <el-input v-if="setting.properties.type == 'textarea'"
@@ -37,7 +37,7 @@
                         class="setting-textarea"
                         :rows="5"
                         placeholder="Please input"
-                        :value="JSON.stringify(setting.value, null, 2)" 
+                        :value="JSON.stringify(setting.value, null, 2)"
                         @change="updateTextarea($event, setting.key)">
                       </el-input>
                   </td>
@@ -77,18 +77,19 @@
       }
     },
     components: {
-    }, 
+    },
     methods: {
       fetchSettings () {
         this.loading = true;
         settingService.fetchSettings()
           .then((response) => {
+
             this.settings = response;
             this.ready = true;
             this.loading = false;
           })
           .catch((error) => {
-            this.$root.$toast(error, {className: 'et-error'});
+            this.$root.$toast(error, { className: 'et-error' });
           });
       },
       updateToogle(settingKey, value) {
@@ -112,7 +113,7 @@
             this.loading = false;
           })
           .catch((error) => {
-            this.$root.$toast(error, {className: 'et-error'});
+            this.$root.$toast(error, { className: 'et-error' });
           });
       }
     },

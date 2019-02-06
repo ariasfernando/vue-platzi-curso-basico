@@ -238,7 +238,7 @@ class EmailHtmlCreator
                 // append cdn prefix
                 $cdn_url = rtrim($cdn_path, DS).DS.'images'.DS.$basename;
 
-                // replace the url in body 
+                // replace the url in body
                 $body = str_replace($url, $cdn_url, $body);
             }
         }
@@ -405,7 +405,7 @@ class EmailHtmlCreator
                     $basename = $font_folder . DS . $basename;
                 }
                 $fragment = (isset($url['fragment'])) ? '#' . $url['fragment'] : '';
-                
+
                 if (in_array(strtolower($extension), $font_extensions)) {
                     // append cdn prefix
                     $cdn_url = rtrim($cdn_path, DS) . DS . 'fonts' . DS . $basename . $fragment;
@@ -550,7 +550,7 @@ class EmailHtmlCreator
 
         preg_match_all("/$regexp_href/siU", $body, $matches_href, PREG_SET_ORDER);
         preg_match_all("/$regexp_description/siU", $body, $matches_description, PREG_SET_ORDER);
-        
+
         $replaceFn = function(&$output, $matches, $case) {
             if (!empty($matches)) {
                 $link_structure = \View::make("layouts.partials.link_structure_mask_link")->render();
@@ -573,7 +573,7 @@ class EmailHtmlCreator
                                 continue;
                             }
                         }
-                        if (isset($url) && isset($description)) {
+                        if (isset($url) && isset($description) && strlen($description)) {
                             $replace_tags_with = [$url, $description];
                             $new_url = str_replace($replace_tags, $replace_tags_with, $link_structure);
                             $pos = strpos($output, $match[0]);
