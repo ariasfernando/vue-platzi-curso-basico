@@ -10,7 +10,8 @@
           <settings-container
             v-for="(setting) in getSettings(settingGroup.settings)"
             :key="`settingGroup-${groupKey}-setting-${setting.name}`"
-            :label="setting.label">
+            :label="setting.label"
+            :no-label="!setting.label">
             <template :slot="setting.settingSlot || 'setting-bottom'">
               <component
                 :is="setting.type"

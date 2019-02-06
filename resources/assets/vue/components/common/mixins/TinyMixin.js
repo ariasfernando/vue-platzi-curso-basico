@@ -17,7 +17,7 @@ export default {
       return this.config;
     },
     $textElement() {
-      return $('#' + this.editorId);
+      return $(`#${this.editorId}`);
     },
     libraryConfig() {
       return this.$store.state.campaign.campaign.library_config;
@@ -33,7 +33,7 @@ export default {
 
       if (this.type === 'button-element' && button_inline_color) {
         this.changeStyles('p', {
-          color: this.fontStyles.color || libraryLinkColor
+          color: this.fontStyles.color || libraryLinkColor,
         });
       }
       if (p_fixed_style && Application.utils.isJsonString(p_fixed_style)) {
@@ -102,18 +102,16 @@ export default {
             }
           }
         }
-      } else {
-        if (editorLinks.length) {
-          for (let i = 0; i < editorLinks.length; i++) {
-            const $el = $(editorLinks[i]);
+      } else if (editorLinks.length) {
+        for (let i = 0; i < editorLinks.length; i++) {
+          const $el = $(editorLinks[i]);
             // return the first parent that has a color
-            const $parentEl = $el.parents().filter(function () {
-              return $(this).css('color');
-            });
+          const $parentEl = $el.parents().filter(function () {
+            return $(this).css('color');
+          });
             // get the color of the parent and apply it to the link
-            const parentColor = $parentEl.css('color');
-            $el.css('color', parentColor);
-          }
+          const parentColor = $parentEl.css('color');
+          $el.css('color', parentColor);
         }
       }
 
@@ -132,7 +130,7 @@ export default {
        */
 
       $.each(editorLinks, (index, el) => {
-        if (link_fixed_styles && link_fixed_styles["text-decoration"] === "underline") {
+        if (link_fixed_styles && link_fixed_styles['text-decoration'] === 'underline') {
           const $el = $(el);
           $el.find('span').css('text-decoration', 'underline');
 
@@ -166,7 +164,7 @@ export default {
         editorLists.each((index, el) => {
           const firstTextElement = $(el).find('span')[0];
           if (firstTextElement) {
-            const computedStyle = document.defaultView.getComputedStyle(firstTextElement)
+            const computedStyle = document.defaultView.getComputedStyle(firstTextElement);
             const fontSize = computedStyle.getPropertyValue('font-size');
             const lineHeight = computedStyle.getPropertyValue('line-height');
             const letterSpacing = computedStyle.getPropertyValue('letter-spacing');
@@ -337,7 +335,7 @@ export default {
             console.log('Error: behaviour type not defined');
         }
         return result;
-      }
+      };
 
       const getTitle = (tmp, val, unit) => {
         let template = tmp || '%fontVal%unit';
@@ -547,7 +545,7 @@ export default {
               editor.bodyElement.dispatchEvent(new Event('tiny-change'));
 
               if (!(_this.tinyMax() || _this.tinyMaxLines() || _this.tinyMin())) {
-                //if truncate is NAN, returns and avoid validations
+                // if truncate is NAN, returns and avoid validations
                 return;
               }
 
@@ -559,7 +557,6 @@ export default {
 
               // Check for Lines Limit
               _this.maxLinesValidation(e);
-
             })
             .on('change', (e) => {
               _this.setStyles();

@@ -3,12 +3,12 @@ export default {
     return {
       trackingConfigReady: false,
       trackingConfig: {},
-    }
+    };
   },
   computed: {
     campaignData() {
       return this.$store.getters['campaign/campaign'].campaign_data;
-    }
+    },
   },
   created() {
     this.loadConfig();
@@ -20,26 +20,26 @@ export default {
       this.trackingConfigReady = true;
     },
 
-    validateTracking () {
+    validateTracking() {
       if (typeof this.campaignData.tracking === 'undefined' || !this.campaignData.tracking) {
         this.$root.$toast(
           'Error: Tracking Configuration is required',
           {
             className: 'et-error',
             duration: 10000,
-            closeable: true
-          }
+            closeable: true,
+          },
         );
 
         return false;
       }
 
-      let trackingData = this.campaignData.tracking;
-      let $toast = this.$root.$toast;
+      const trackingData = this.campaignData.tracking;
+      const $toast = this.$root.$toast;
       let ret = true;
 
       Object.keys(this.trackingConfig).forEach((param) => {
-        let key = `trk-${param}`;
+        const key = `trk-${param}`;
 
         if (typeof trackingData[key] === 'undefined' || trackingData[key] === '') {
           $toast(
@@ -47,8 +47,8 @@ export default {
             {
               className: 'et-error',
               duration: 10000,
-              closeable: true
-            }
+              closeable: true,
+            },
           );
           ret = false;
         }
@@ -56,8 +56,8 @@ export default {
       return ret;
     },
 
-    addTrackingParams (html) {
-      const trackingData   = this.campaignData.tracking;
+    addTrackingParams(html) {
+      const trackingData = this.campaignData.tracking;
       const trackingConfig = this.trackingConfig;
 
       if (typeof trackingConfig === 'undefined' || typeof trackingData === 'undefined') {
@@ -93,15 +93,15 @@ export default {
           const anchorPos = linkHref.indexOf('#');
 
           if (anchorPos !== -1) {
-            anchor   = linkHref.substring(anchorPos);
+            anchor = linkHref.substring(anchorPos);
             linkHref = linkHref.replace(anchor, '');
           }
 
           if (linkHref.length > 0) {
             Object.keys(trackingConfigGroups.replaceLinks).forEach((param) => {
-              let key = `trk-${param}`;
-              let separator = linkHref.indexOf('?') !== -1 ? '&' : '?';
-              let value = typeof trackingData[key] !== 'undefined' ? trackingData[key] : '';
+              const key = `trk-${param}`;
+              const separator = linkHref.indexOf('?') !== -1 ? '&' : '?';
+              const value = typeof trackingData[key] !== 'undefined' ? trackingData[key] : '';
               linkHref += `${separator}${param}=${value}`;
             });
           }
