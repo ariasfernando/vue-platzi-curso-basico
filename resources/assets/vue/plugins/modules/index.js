@@ -20,6 +20,7 @@ import toggleElement from './toggle-element';
 import toggleElementSetter from './toggle-element-setter';
 import variableHeight from './variable-height';
 import verticalAlignment from './vertical-alignment';
+import maskLink from './mask-link';
 
 export default {
   alignment,
@@ -29,6 +30,7 @@ export default {
   columnPaletteBackgroundColor,
   destinationUrl,
   fontFamily,
+  maskLink,
   mobileStyles,
   moduleBackgroundColor,
   moduleEqualHeightForColumn,

@@ -14,6 +14,7 @@
       :target="component.button.attribute.target || '_blank'"
       :style="component.button.style.textDecoration || 'text-decoration:none;'"
       :title="component.button.attribute.title || ''"
+      :data-description="component.button.attribute.dataDescription || ''"
       @click.prevent>
       <table
         cellpadding="0"
