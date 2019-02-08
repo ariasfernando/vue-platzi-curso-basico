@@ -1223,7 +1223,7 @@ describe('== Campaign Store ==', () => {
         done();
       });
     });
-    it('"updateText" with \'payload\' data, expect to call "saveComponentProperty" mutation', (done) => {
+    xit('"updateText" with \'payload\' data, expect to call "saveComponentProperty" mutation', (done) => {
       let setDataMock = jest.fn();
       let storeCampaign = cloneDeep(campaignStore);
       let campStore = createStore({
@@ -1236,9 +1236,8 @@ describe('== Campaign Store ==', () => {
         actions: storeCampaign.actions,
       });
       let payload = {
-        moduleId: 0,
-        columnId: 0,
-        componentId: 0,
+        idInstance: 799228,
+        elementId: 731844,
         link: 'data',
         property: 'text',
         sync: false,
@@ -1246,9 +1245,9 @@ describe('== Campaign Store ==', () => {
       };
 
       let payload2 = {
-        moduleId: 0,
-        columnId: 0,
-        componentId: 0,
+        idInstance: 799228,
+        elementId: 731844,
+        property: 'text',
         link: 'data',
         sync: true,
       };

@@ -457,11 +457,11 @@ const actions = {
     return deferred.promise;
   },
   updateText(context, payload) {
-    context.commit('saveComponentProperty', payload);
+    context.commit('saveElementProperty', payload);
     if (payload.sync !== false) {
       payload.property = 'textDirty';
       payload.value = Math.floor(100000 + (Math.random() * 900000));
-      context.commit('saveComponentProperty', payload);
+      context.commit('saveElementProperty', payload);
     }
   },
   getLibraries(context, data) {
