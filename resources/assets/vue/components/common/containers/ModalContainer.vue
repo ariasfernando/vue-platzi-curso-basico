@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-container-component">
+  <div class="modal-container-component" @click.self="$emit('close-modal')">
     <el-row type="flex">
       <el-col>
         <stui-close @click="$emit('close-modal')" />

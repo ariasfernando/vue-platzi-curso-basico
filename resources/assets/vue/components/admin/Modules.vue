@@ -276,6 +276,9 @@ $stensul-purple: #514960;
   }
   .list-body {
     .table {
+      tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+      }
       &.is-empty {
         margin-bottom: 0px;
       }
@@ -294,7 +297,7 @@ $stensul-purple: #514960;
         &.status {
           width: 72px;
         }
-        &.actions{
+        &.actions {
           width: 122px;
         }
       }
@@ -427,6 +430,5 @@ $stensul-purple: #514960;
   vertical-align: baseline;
   white-space: nowrap;
 }
-
 </style>
 
