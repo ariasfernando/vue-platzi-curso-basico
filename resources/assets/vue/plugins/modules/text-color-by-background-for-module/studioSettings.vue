@@ -1,7 +1,9 @@
 <template>
-  <SettingsContainer :label="plugin.title">
+  <SettingsContainer 
+    :label="plugin.title"
+    :label-expanded="true">
     <template slot="setting-right">
-      <toggle-button :value="plugin.enabled" @change="toggle" />
+      <StuiToggleButton :value="plugin.enabled" @change="toggle" />
     </template>
   </SettingsContainer>
 </template>

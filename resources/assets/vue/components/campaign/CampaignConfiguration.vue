@@ -1,27 +1,28 @@
 <template>
   <div class="expand configuration-mod">
-    <label-item-container label="EMAIL SETTINGS" icon="glyphicon-cog"  v-b-toggle.emailSettings></label-item-container>
+    <label-item-container v-b-toggle.emailSettings label="EMAIL SETTINGS" icon="glyphicon-cog" />
     <b-collapse id="emailSettings" visible>
       <!-- Configuration Inputs -->
       <div class="card">
         <group-container>
           <settings-container custom-class="field-Tags" label="Email Name" key="email-name">
             <template slot="setting-bottom">
-              <el-input type="text"
+              <stui-input-text
+                id="campaignName"
+                v-model="campaignName"
+                v-validate.initial="'required'"
+                type="text"
                 placeholder="Email Name"
                 name="campaignName"
-                id="campaignName"
-                v-validate.initial="'required'"
-                v-model="campaignName"
                 :class="{'input': true, 'is-danger': errors.has('campaignName') }"
                 @change="saveCampaignName"
-                @focus="checkName"
-                size="mini"
-              ></el-input>
-              <a v-if="enableFavorite" @click.prevent="toggleFavorite" href="#" title="Favorite">
-                <i class="glyphicon"
-                  v-bind:class="favoriteClass">
-                </i>
+                @focus="checkName" />
+              <a
+                v-if="enableFavorite"
+                href="#"
+                title="Favorite"
+                @click.prevent="toggleFavorite">
+                <i :class="favoriteClass" class="glyphicon" />
               </a>
               <span v-show="errors.has('campaignName')" class="help is-danger">{{ errors.first('campaignName') }}</span>
             </template>
@@ -29,56 +30,79 @@
 
           <settings-container label="Preheader Text" v-if="enablePreheader" title="The best practice is to limit preheaders to 50 characters." key="preheader-text">
             <template slot="setting-bottom">
-              <el-input v-model="campaignPreheader" size="mini" placeholder="Preheader Text" maxlength="140" />
+              <stui-input-text v-model="campaignPreheader" size="mini" placeholder="Preheader Text" maxlength="140" />
             </template>
           </settings-container>
 
-          <settings-container label="Email Title" v-if="enableTitle" title="Email Title" key="email-title">
+          <settings-container v-if="enableTitle" key="email-title" label="Email Title" title="Email Title">
             <template slot="setting-bottom">
-              <el-input size="mini" placeholder="Email Title" name="emailTitle" maxlength="140" :value="form.emailTitle" @blur="saveSettings"/>
+              <stui-input-text
+                size="mini"
+                placeholder="Email Title"
+                name="emailTitle"
+                maxlength="140"
+                :value="form.emailTitle"
+                @blur="saveSettings" />
             </template>
           </settings-container>
 
-          <settings-container custom-class="field-Tags" label="Tags" v-if="enableTagging" key="tags">
+          <settings-container
+            v-if="enableTagging"
+            key="tags"
+            custom-class="field-Tags"
+            label="Tags">
             <template slot="setting-bottom">
-              <el-select
+              <stui-select
+                v-model="form.tags"
+                :list="tagOptions"
                 class="width-full"
                 multiple
                 filterable
                 default-first-option
                 allow-create
                 placeholder="Choose tag"
-                v-model="form.tags"
-                @change="changeTags"
                 size="mini"
-              >
-                <el-option
-                  v-for="item in tagOptions"
-                  :key="item"
-                  :label="item"
-                  :value="item"
-                  >
-                </el-option>
-              </el-select>
+                @change="changeTags" />
             </template>
           </settings-container>
 
-          <settings-container label="Email Color" v-if="campaign.library_config.templateBackgroundPalettes" key="email-color">
-            <template slot="setting-bottom" v-if="templatePalette">
-              <compact-picker ref="compact" v-model="templateBackgroundColor" :palette="Object.values(templatePalette.options)"></compact-picker>
+          <settings-container
+            v-if="campaign.library_config.templateBackgroundPalettes"
+            key="email-color"
+            label="Email Color">
+            <template v-if="templatePalette" slot="setting-bottom">
+              <stui-color-picker
+                ref="compact"
+                v-model="templateBackgroundColor"
+                :palette="Object.values(templatePalette.options)" />
             </template>
           </settings-container>
 
           <settings-container v-if="enableAutoSave" label="Auto Save" class="last-saved" key="auto-save">
             <template slot="setting-right">
-              <toggle-button class="pull-right" :value="campaign.auto_save" id="autoSave" @change="autoSaveChange"></toggle-button>
-              <label v-if="!secondaryLoading" class="autosave-message pull-right">last saved: {{this.campaign.updated_at.substring(0,16)}}</label>
-              <secondary-spinner></secondary-spinner>
+              <stui-toggle-button
+                id="autoSave"
+                class="pull-right"
+                :value="campaign.auto_save"
+                @change="autoSaveChange" />
+              <label
+                v-if="!secondaryLoading"
+                class="autosave-message pull-right">
+                last saved: {{ campaign.updated_at.substring(0,16) }}
+              </label>
+              <secondary-spinner />
             </template>
           </settings-container>
-          <settings-container  v-if="enableAutoSave && $can('fix_layout')" label="Fix Layout" key="fix-layout">
+          <settings-container
+            v-if="enableAutoSave && $can('fix_layout')"
+            key="fix-layout"
+            label="Fix Layout">
             <template slot="setting-right">
-              <toggle-button class="pull-right" :value="campaign.locked" id="fixLayout" @change="toggleLockCampaign"></toggle-button>
+              <stui-toggle-button
+                id="fixLayout"
+                class="pull-right"
+                :value="campaign.locked"
+                @change="toggleLockCampaign" />
             </template>
           </settings-container>
         </group-container>
@@ -88,7 +112,6 @@
 </template>
 
 <script>
-  import _ from 'lodash';
   import { Compact } from 'vue-color';
   import SettingsContainer from "../common/settings/containers/SettingsContainer.vue";
   import secondarySpinner from '../common/secondarySpinner.vue';
@@ -156,7 +179,7 @@
       tagOptions() {
         let tagOptions = [];
         let tagList = this.$store.getters["campaign/campaign"].tag_list;
-        
+
         for (let n = 0; n < tagList.length; n++) {
           tagOptions.push(tagList[n].name);
         }
@@ -405,46 +428,9 @@
   padding: 0;
   text-align: right;
 }
-.field-Tags /deep/ .el-select {
-  .el-select__input.is-mini {
-    height: 24px;
-  }
-  .el-tag__close.el-icon-close {
-    right: -2px;
-    top: -5px;
-  }
-  span.el-select__tags-text {
-    overflow: hidden;
-    max-width: 177px;
-    text-overflow: ellipsis;
-    display: inline-block;
-  }
-}
-.el-select /deep/ .is-focus{
-  .el-input__inner{
-    border-color: #78dcd6;
-  }
-}
-.el-select /deep/ .el-input__inner,
-.el-input /deep/ .el-input__inner{
-  border-radius: 2px;
-  font-weight: 300;
-  padding-left: 8px;
-  height: 26px;
-
-  &:focus{
-    border: 1px solid #78dcd6;
-  }
-}
-.el-select-dropdown.is-multiple .el-select-dropdown__item.selected{
-  color: #61bab5;
-}
 </style>
 
 <style lang="less">
-  .el-select-dropdown__item span {
-    margin-right: 20px;
-  }
   @stensul-purple: #514960;
   @stensul-secondary: #625876;
   @stensul-white: #FFFFFF;
@@ -501,113 +487,6 @@
       font-weight: 300 !important;
       margin-left: 3px;
       font-size: 10px;
-    }
-    .multiselect {
-      z-index: 999;
-
-      .multiselect__select{
-        display: none;
-      }
-
-      .multiselect__input{
-        margin-top: 1px!important;
-        clear: both;
-        margin-bottom: 0px;
-      }
-
-      .multiselect__option--selected.multiselect__option--highlight:after {
-        background: #F4F4F4;
-      }
-
-      .multiselect__tags{
-        border-radius: 2px;
-        border: none;
-        padding: 0px;
-        display: flex;
-        flex-flow: column;
-
-        .multiselect__input {
-          position: relative !important;
-          display: block!important;
-          order: 1;
-        }
-
-        .multiselect__tags-wrap{
-          order: 2;
-          margin-top: 7px;
-        }
-      }
-
-      .multiselect__content-wrapper{
-        top: 41px;
-        box-shadow: 0px 2px 3px #cccccc;
-      }
-
-      .multiselect__option{
-        font-size: 13px;
-        color: @stensul-gray;
-        padding: 9px;
-        line-height: 24px;
-        font-weight:300;
-
-        &:hover{
-          color: @stensul-gray;
-        }
-      }
-
-      .multiselect__option--highlight{
-        background: #F4F4F4;
-        color: @stensul-gray;
-      }
-
-      .multiselect__option--highlight:after {
-        background: #F4F4F4;
-        color: @stensul-gray;
-      }
-
-      .multiselect__tag{
-        border-radius: 2px;
-        margin-top: 1px;
-        font-size: 13px;
-        font-weight: 300;
-        color: @stensul-gray;
-        background: @stensul-gray-secondary;
-        padding: 4px 23px 4px 4px;
-
-      span{
-        max-width: 140px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        display: inline-block;
-      }
-
-        .multiselect__tag-icon{
-
-          &:hover,
-          &:focus{
-            background: none;
-          }
-        }
-
-        .multiselect__tag-icon:after {
-          color: @stensul-gray;
-        }
-
-        .multiselect__tag-icon:focus:after,
-        .multiselect__tag-icon:hover:after {
-          color: @stensul-gray;
-        }
-
-        .multiselect__tag-icon:focus,
-        .multiselect__tag-icon:hover{
-          background: none;
-        }
-      }
-    }
-    label {
-      font-weight: 300;
-      color: #666666;
     }
     .vue-js-switch {
       float: right;

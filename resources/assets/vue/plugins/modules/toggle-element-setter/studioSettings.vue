@@ -2,14 +2,13 @@
   <div>
     <SettingsContainer :label="plugin.title">
       <template slot="setting-right">
-        <toggle-button :value="isSet" @change="setActive" />
+        <StuiToggleButton :value="isSet" @change="setActive" />
       </template>
     </SettingsContainer>
     <SettingsContainer v-if="isSet" label="Label">
       <template slot="setting-right">
-        <ElInput
-          v-model="value"
-          size="mini" />
+        <StuiInputText
+          v-model="value" />
       </template>
     </SettingsContainer>
   </div>

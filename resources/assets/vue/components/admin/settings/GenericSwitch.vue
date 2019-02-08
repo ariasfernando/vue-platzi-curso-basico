@@ -1,10 +1,8 @@
 <template>
   <SettingsContainer v-if="showSetting" :label="label">
     <template slot="setting-right">
-      <ElSwitch
-        v-model="mainSettingSwitch"
-        active-color="#78dcd6"
-        :width="40" />
+      <stui-toggle-button
+        v-model="mainSettingSwitch" />
     </template>
   </SettingsContainer>
 </template>

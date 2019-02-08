@@ -1,3 +1,10 @@
+import {
+  bgcolor,
+  borderGroup,
+  classes,
+  padding,
+} from './settings';
+
 function codeDefault() {
   return {
     componentSettings: [
@@ -8,36 +15,43 @@ function codeDefault() {
           aclName: 'settings_data',
           type: 'generic-code',
           subComponent: 'code',
-        },
-        {
-          name: 'classes',
-          aclName: 'settings_classes',
-          type: 'class-input',
-          link: 'attribute',
-          subComponent: 'container',
-        },
-        {
-          name: 'bgcolor',
-          aclName: 'settings_bgcolor',
-          type: 'generic-color',
-          link: 'attribute',
-          label: 'Background Color',
-          subComponent: 'container',
-        },
-        {
-          name: 'padding',
-          aclName: 'settings_padding',
-          type: 'padding-group',
-          subComponent: 'container',
         }],
       },
       {
-        settings: [{
-          name: 'border-group',
-          aclName: 'border_border-group',
-          type: 'border-group',
-          subComponent: 'container',
-        }],
+        groupLabel: 'Design',
+        settings: [
+          bgcolor({
+            aclName: 'settings_bgcolor',
+            subComponent: 'container',
+          }),
+        ],
+      },
+      {
+        groupLabel: 'Padding (px)',
+        settings: [
+          padding({
+            aclName: 'settings_padding',
+            subComponent: 'container',
+          }),
+        ],
+      },
+      {
+        groupLabel: 'Border',
+        settings: [
+          borderGroup({
+            aclName: 'border_border-group',
+            subComponent: 'container',
+          }),
+        ],
+      },
+      {
+        groupLabel: 'Behavior',
+        settings: [
+          classes({
+            aclName: 'settings_classes',
+            subComponent: 'container',
+          }),
+        ],
       },
     ],
   };

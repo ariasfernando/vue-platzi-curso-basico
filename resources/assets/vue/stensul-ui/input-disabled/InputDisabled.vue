@@ -1,12 +1,12 @@
 <template>
-  <el-input
-    class="stui-input-disabled"
-    size="mini"
-    disabled
-    :placeholder="_value" />
+  <div class="control" :class="{'is-expanded': expanded}">
+    <el-input
+      class="stui-input-disabled"
+      size="mini"
+      disabled
+      :placeholder="_value" />
+  </div>
 </template>
-
-
 <script>
 export default {
   name: 'InputDisabled',
@@ -19,6 +19,7 @@ export default {
       type: String,
       default: undefined,
     },
+    expanded: Boolean,
   },
   computed: {
     _value() {
@@ -37,7 +38,10 @@ export default {
   background-color: #f5f7fa;
   border-color: #e4e7ed;
   color: #c0c4cc;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  /deep/ .el-input__inner {
+    text-overflow: ellipsis;
+    text-align: center;
+    border-radius: 2px;
+  }
 }
 </style>

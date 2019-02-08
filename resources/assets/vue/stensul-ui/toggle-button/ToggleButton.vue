@@ -1,11 +1,14 @@
 <template>
-  <el-switch
-    v-model="toggled"
-    v-bind="$attrs"
-    :active-color="activeColor"
-    :inactive-color="inactiveColor"
-    :width="width"
-    :disabled="disabled" />
+  <div class="control" :class="{'is-expanded': expanded}">
+    <el-switch
+      v-model="toggled"
+      class="stui-toggle-button"
+      v-bind="$attrs"
+      :active-color="activeColor"
+      :inactive-color="inactiveColor"
+      :width="width"
+      :disabled="disabled" />
+  </div>
 </template>
 
 <script>
@@ -32,6 +35,7 @@ export default {
       type: Boolean,
       default: false,
     },
+    expanded: Boolean,
   },
   computed: {
     toggled: {
@@ -47,21 +51,23 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.el-switch /deep/ .el-switch__core {
-  width: 34px !important;
-  height: 18px;
-
-  &:after {
-    width: 14px;
-    height: 14px;
-  }
-}
-.el-switch.is-checked /deep/ .el-switch__core {
-  &:after {
-    margin-left: -15px;
-  }
-}
-.el-switch {
+.stui-toggle-button {
   float: right;
+  padding-top: 6px;
+
+  /deep/ .el-switch__core {
+    width: 34px !important;
+    height: 18px;
+
+    &:after {
+      width: 14px;
+      height: 14px;
+    }
+  }
+  &.is-checked /deep/ .el-switch__core {
+    &:after {
+      margin-left: -15px;
+    }
+  }
 }
 </style>

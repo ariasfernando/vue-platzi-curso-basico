@@ -1,15 +1,16 @@
 <template>
   <stui-input-disabled v-if="disabled" :value="value" />
-  <el-input
-    v-else
-    v-bind="$attrs"
-    class="stui-input-text"
-    :class="{'is-muted' : isMuted}"
-    :value="_value"
-    size="mini"
-    :disabled="isMuted"
-    @blur="$emit('blur')"
-    @change="(value)=>change(value)" />
+  <div v-else class="control" :class="{'is-expanded': expanded}">
+    <el-input
+      v-bind="$attrs"
+      class="stui-input-text"
+      :class="{'is-muted' : isMuted}"
+      :value="_value"
+      size="mini"
+      :disabled="isMuted"
+      @blur="$emit('blur')"
+      @change="(value)=>change(value)" />
+  </div>
 </template>
 
 <script>
@@ -21,7 +22,7 @@ export default {
   props: {
     value: {
       type: [String, Number, Object, Boolean],
-      default: false,
+      default: '',
     },
     falseText: {
       type: String,
@@ -31,6 +32,7 @@ export default {
       type: Boolean,
       default: false,
     },
+    expanded: Boolean,
   },
   computed: {
     _value() {

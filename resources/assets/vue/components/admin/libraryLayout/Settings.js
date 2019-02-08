@@ -99,8 +99,8 @@ export default [
         validate: 'required|isValidJson',
         type: 'stui-input-text',
         path: 'library.config',
-        propType: 'textarea',
         placeholder: '"Add the tracking configuration in JSON format...',
+        propType: 'textarea',
         settingSlot: 'setting-bottom',
         dependsOn: [
           { path: 'library.config.tracking' }],

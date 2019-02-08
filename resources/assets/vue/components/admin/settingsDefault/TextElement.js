@@ -20,7 +20,7 @@ function textDefault() {
           fontFamily({ subComponent: 'text' }),
           fontSize({ subComponent: 'text' }),
           lineHeight({ subComponent: 'text' }),
-          letterSpacing({ subComponent: 'text' }),
+          letterSpacing({ subComponent: 'text', checkbox: true }),
           fontWeight({ subComponent: 'text' }),
         ],
       },

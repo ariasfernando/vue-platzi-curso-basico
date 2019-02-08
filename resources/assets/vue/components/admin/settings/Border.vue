@@ -1,32 +1,30 @@
 <template>
-  <settings-container :label="`${side} (px)`" custom-class="field-border">
+  <settings-container :label="`${side} (px)`">
     <template slot="setting-bottom">
-      <div class="clearfix">
-        <stui-field grouped>
-          <div class="control border-number">
-            <stui-input-number
-              v-model="width"
-              v-validate="'required'"
-              :min="min" />
+      <stui-field grouped>
+        <div class="control border-number">
+          <stui-input-number
+            v-model="width"
+            v-validate="'required'"
+            :min="min" />
+        </div>
+        <div class="control is-expanded">
+          <div class="border-style-preview">
+            <div
+              class="preview"
+              :class="`is-${style}`"
+              :style="`border-style: ${style}`" />
           </div>
-          <div class="control is-expanded">
-            <div class="border-style-preview">
-              <div
-                class="preview"
-                :class="`is-${style}`"
-                :style="`border-style: ${style}`" />
-            </div>
-            <stui-select
-              v-model="style"
-              size="mini"
-              class="control-item hide-input"
-              :list="optionsBorderStyle" />
-          </div>
-          <div class="control is-half">
-            <stui-color-picker v-model="color" />
-          </div>
-        </stui-field>
-      </div>
+          <stui-select
+            v-model="style"
+            size="mini"
+            class="control-item hide-input"
+            :list="optionsBorderStyle" />
+        </div>
+        <div class="control is-half">
+          <stui-color-picker v-model="color" />
+        </div>
+      </stui-field>
     </template>
   </settings-container>
 </template>

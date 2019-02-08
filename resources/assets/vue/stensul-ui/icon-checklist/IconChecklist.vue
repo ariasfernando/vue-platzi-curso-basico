@@ -1,13 +1,15 @@
 <template>
-  <div class="stui-icon-checklist">
-    <el-button
-      v-for="(option, key) in list"
-      :key="option.key+key"
-      v-b-tooltip.hover
-      :class="[option.icon , {'active': isActive(option)}]"
-      :title="option.label"
-      :data-tooltip="option.label"
-      @click.prevent="toggleOption(option)" />
+  <div class="control" :class="{'is-expanded': expanded}">
+    <div class="stui-icon-checklist">
+      <el-button
+        v-for="(option, key) in list"
+        :key="option.key+key"
+        v-b-tooltip.hover
+        :class="[option.icon , {'active': isActive(option)}]"
+        :title="option.label"
+        :data-tooltip="option.label"
+        @click.prevent="toggleOption(option)" />
+    </div>
   </div>
 </template>
 
@@ -25,6 +27,7 @@ export default {
       type: [Object],
       required: true,
     },
+    expanded: Boolean,
   },
   methods: {
     toggleOption(option) {

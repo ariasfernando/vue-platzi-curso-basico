@@ -1,9 +1,11 @@
 <template>
-  <div v-show="isCurrentElement">
-    <settings-container key="destination-url" label="Destination Url" custom-class="destination-url">
+  <div v-show="isCurrentElement" class="settings-wrapper">
+    <settings-container
+      key="destination-url"
+      label="Destination Url">
       <template slot="setting-bottom">
-        <p v-if="validationRules">
-          <el-input
+        <div v-if="validationRules">
+          <stui-input-text
             v-model="href"
             v-validate.initial="validationRules"
             name="href"
@@ -12,34 +14,46 @@
             placeholder="http://examp.le"
             :class="{'input': true, 'is-danger': hasError }" />
           <span v-show="hasError" class="help is-danger">{{ getErrorMessage }}</span>
-        </p>
-        <p v-else>
-          <el-input
+        </div>
+        <div v-else>
+          <stui-input-text
             v-model="href"
             name="href"
             type="text"
             size="mini"
             placeholder="http://examp.le" />
-        </p>
+        </div>
       </template>
     </settings-container>
 
-    <settings-container v-if="plugin.config.target" key="target" label="Target">
+    <settings-container
+      v-if="plugin.config.target"
+      key="target"
+      label="Target">
       <template slot="setting-right">
-        <el-button
-          v-for="(icon, option) in plugin.config.options"
-          :key="option"
-          :data-tooltip="option"
-          plain
-          size="mini"
-          :class="[`glyphicon glyphicon-${icon}`,{ 'active': target === option }]"
-          @click="changeTarget(option)" />
+        <stui-field addons>
+          <stui-button
+            v-for="(icon, option) in plugin.config.options"
+            :key="option"
+            :data-tooltip="option"
+            :title="option"
+            size="mini"
+            :active="target === option"
+            highlight
+            expanded
+            @click="changeTarget(option)">
+            <i :class="`glyphicon glyphicon-${icon}`" />
+          </stui-button>
+        </stui-field>
       </template>
     </settings-container>
 
-    <settings-container v-if="plugin.config.title" key="title" label="Title">
-      <template slot="setting-bottom">
-        <el-input
+    <settings-container
+      v-if="plugin.config.title"
+      key="title"
+      label="Title">
+      <template slot="setting-right">
+        <stui-input-text
           v-model="title"
           name="title"
           type="text"
@@ -51,131 +65,61 @@
 </template>
 
 <script>
-  import validatorMixin from '../mixins/validatorMixin';
-  import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
-  import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
+import validatorMixin from '../mixins/validatorMixin';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 
-  export default {
-    components: { SettingsContainer },
-    mixins: [validatorMixin, pluginCampaignMixin],
-    computed: {
-      target() {
-        return this.element[this.plugin.subComponent].attribute ? this.element[this.plugin.subComponent].attribute.target : '_blank';
+export default {
+  components: { SettingsContainer },
+  mixins: [validatorMixin, pluginCampaignMixin],
+  computed: {
+    target() {
+      return this.element[this.plugin.subComponent].attribute ? this.element[this.plugin.subComponent].attribute.target : '_blank';
+    },
+    href: {
+      get() {
+        return this.element[this.plugin.subComponent].attribute.href;
       },
-      href: {
-        get() {
-          return this.element[this.plugin.subComponent].attribute.href;
-        },
-        set(value) {
-          this.saveAttributeInThisElement({ property: 'href', value });
-        },
-      },
-      title: {
-        get() {
-          return this.element[this.plugin.subComponent].attribute.title;
-        },
-        set(value) {
-          this.saveAttributeInThisElement({ property: 'title', value });
-        },
-      },
-      validationRules() {
-        const rules = [];
-        _.each(this.plugin.config.validations, (e, i) => {
-          if (e === true) {
-            rules.push(i);
-          } else if (typeof e === 'object' && e.selected !== 'disabled') {
-            rules.push(e.selected);
-          }
-        });
-        return rules.join('|');
+      set(value) {
+        this.saveAttributeInThisElement({ property: 'href', value });
       },
     },
-    watch: {
-      href() {
-        this.$nextTick(() => {
-          if (this.validationRules) {
-            this.validate();
-          }
-        });
+    title: {
+      get() {
+        return this.element[this.plugin.subComponent].attribute.title;
+      },
+      set(value) {
+        this.saveAttributeInThisElement({ property: 'title', value });
       },
     },
-    methods: {
-      changeTarget(value) {
-        this.saveAttributeInThisElement({
-          property: 'target',
-          value,
-        });
-      },
+    validationRules() {
+      const rules = [];
+      _.each(this.plugin.config.validations, (e, i) => {
+        if (e === true) {
+          rules.push(i);
+        } else if (typeof e === 'object' && e.selected !== 'disabled') {
+          rules.push(e.selected);
+        }
+      });
+      return rules.join('|');
     },
-  };
+  },
+  watch: {
+    href() {
+      this.$nextTick(() => {
+        if (this.validationRules) {
+          this.validate();
+        }
+      });
+    },
+  },
+  methods: {
+    changeTarget(value) {
+      this.saveAttributeInThisElement({
+        property: 'target',
+        value,
+      });
+    },
+  },
+};
 </script>
-
-<style lang="scss" scoped>
-.el-button:focus,
-.el-button:hover {
-  color: inherit;
-  border-color: #78dcd6;
-  background-color: inherit;
-}
-.el-button.active {
-  color: #ffffff;
-  border-color: rgb(120, 220, 214);
-  background-color: rgb(120, 220, 214);
-
-  &:before{
-    color: #ffffff;
-  }
-}
-.el-button + .el-button {
-  margin-left: 0;
-}
-.el-button {
-  width: 33%;
-  padding: 4px 0;
-  margin-right: 0px;
-  height: 26px;
-  border-radius: 0px;
-  border-right: none;
-
-  &:before{
-    color: #999999;
-  }
-
-  &:first-of-type {
-    margin: 0;
-    border-radius: 2px 0px 0px 2px;
-    border-right: none;
-  }
-
-  &:last-of-type {
-    margin: 0;
-    border-radius: 0px 2px 2px 0px;
-    border-right: 1px solid #dddddd;
-  }
-}
-.el-button:first-child:nth-last-child(2),
-.el-button:first-child:nth-last-child(2) ~ button {
-    width: 50%;
-}
-.el-button:first-child:nth-last-child(3),
-.el-button:first-child:nth-last-child(3) ~ button {
-    width: 33%;
-}
-.el-button:first-child:nth-last-child(4),
-.el-button:first-child:nth-last-child(4) ~ button{
-    width: 25%;
-}
-.padding-zero {
-  padding: 0;
-}
-.el-input >>> .el-input__inner{
-  border-radius: 2px;
-  font-weight: 300;
-  padding-left: 8px;
-  height: 26px;
-
-  &:focus{
-    border: 1px solid #78dcd6;
-  }
-}
-</style>

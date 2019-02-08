@@ -25,7 +25,7 @@ function buttonDefault() {
           fontFamily({ subComponent: 'button' }),
           fontSize({ subComponent: 'button' }),
           lineHeight({ subComponent: 'button' }),
-          letterSpacing({ subComponent: 'button' }),
+          letterSpacing({ subComponent: 'button', checkbox: true }),
           fontWeight({ subComponent: 'button' }),
         ],
       },
@@ -46,7 +46,6 @@ function buttonDefault() {
             aclName: 'dimentions_width',
             type: 'button-width',
             checkbox: true,
-            defaultValue: 'auto',
             value: 150,
           }),
           height({

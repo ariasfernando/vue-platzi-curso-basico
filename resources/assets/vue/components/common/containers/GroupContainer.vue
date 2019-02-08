@@ -3,9 +3,6 @@
     class="group-container"
     :class="[customClass, {'clickeable': clickeable}]"
     @click="e => $emit('click', e)">
-    <label v-if="label">
-      {{ label }}
-    </label>
     <slot />
   </div>
 </template>
@@ -21,17 +18,13 @@ export default {
       type: Boolean,
       default: false,
     },
-    label: {
-      type: [String, Number, Boolean],
-      default: false,
-    },
   },
 };
 </script>
 <style lang="scss" scoped>
   .group-container {
     border: 1px solid #C0C0C0;
-    padding: 4px 6px 0 6px;
+    padding: 10px 6px;
     margin: 5px 0;
     background: #FCFCFC;
     border-radius: 3px;
@@ -39,19 +32,6 @@ export default {
       padding: 0;
       border: 0;
       margin: 0;
-    }
-    label {
-      text-align: left;
-      color: #333333;
-      font-weight: 400;
-      padding: 10px 0 5px;
-      font-size: 13px;
-      width: 100%;
-      float: left;
-      margin-bottom: 0;
-      &.half {
-        width: 50%;
-      }
     }
     &.clickeable {
       cursor: pointer;
@@ -73,6 +53,25 @@ export default {
         font-size: 13px;
         opacity: 0.8;
         right: 5px;
+      }
+    }
+    &:last-of-type {
+      margin-bottom: 0px;
+    }
+
+    /deep/ {
+      > .settings-container:first-of-type {
+        > label,
+        > .control > label {
+          padding-top: 0px;
+        }
+      }
+    }
+
+    .settings-wrapper {
+      margin-bottom: 10px;
+      &.has-no-margin-bottom {
+        margin-bottom: 0px;
       }
     }
   }

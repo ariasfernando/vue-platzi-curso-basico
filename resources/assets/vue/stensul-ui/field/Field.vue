@@ -7,7 +7,11 @@
 export default {
   name: 'StuiField',
   props: {
-    grouped: Boolean,
+    addons: Boolean,
+    grouped: {
+      type: Boolean,
+      default: true,
+    },
     groupMultiline: Boolean,
     position: {
       type: String,
@@ -15,10 +19,6 @@ export default {
     },
     expanded: Boolean,
     horizontal: Boolean,
-    addons: {
-      type: Boolean,
-      default: true,
-    },
     customClass: {
       type: String,
       default: '',
@@ -46,12 +46,12 @@ export default {
   },
   methods: {
     /**
-     * Field has addons if there are more than one slot
+     * Field is grouped if there are more than one slot
      * (element / component) in the Field.
-     * Or is grouped when prop is set.
+     * Or has addons when prop is set.
      */
     fieldType() {
-      if (this.grouped) return 'is-grouped';
+      if (this.addons) return 'has-addons';
       let renderedNode = 0;
       if (this.$slots.default) {
         renderedNode = this.$slots.default.reduce(
@@ -59,8 +59,8 @@ export default {
           0,
         );
       }
-      if (renderedNode > 1 && this.addons) {
-        return 'has-addons';
+      if (renderedNode > 1 && this.grouped) {
+        return 'is-grouped';
       }
       return null;
     },
@@ -71,44 +71,52 @@ export default {
 <style lang="scss" scoped>
 .stui-field {
   clear: both;
-  &:not(:last-child) {
-    // @todo: padding and margins of stui-inputs should be managed here
-  }
+  width: 100%;
   // Modifiers
   &.has-addons {
     display: flex;
     justify-content: flex-start;
+
     .control {
       &:not(:last-child) {
         margin-right: -1px;
       }
+
       &:not(:first-child):not(:last-child) {
         .el-button,
+        /deep/ .stui-button,
         .el-input,
         .el-select select {
           border-radius: 0;
         }
       }
+
       &:first-child {
         .el-button,
+        /deep/ .stui-button,
         .el-input,
         .el-select{
           border-bottom-right-radius: 0;
           border-top-right-radius: 0;
         }
       }
+
       &:last-child {
         .el-button,
+        /deep/ .stui-button,
         .el-input,
         .el-select {
           border-bottom-left-radius: 0;
           border-top-left-radius: 0;
         }
       }
+
       &.is-expanded {
         flex-grow: 1;
       }
+
       .el-button,
+      /deep/ .stui-button,
       .el-input,
       .el-select {
         &:not([disabled]) {
@@ -127,12 +135,15 @@ export default {
         }
       }
     }
+
     &.has-addons-centered {
       justify-content: center;
     }
+
     &.has-addons-right {
       justify-content: flex-end;
     }
+
     &.has-addons-fullwidth {
       .control {
         flex-grow: 1;
@@ -140,13 +151,13 @@ export default {
       }
     }
   }
+
   &.is-grouped {
     display: flex;
     justify-content: flex-start;
     & > .control {
       flex-shrink: 0;
       &:not(:last-child) {
-        margin-bottom: 0;
         margin-right: 4px;
       }
       &.is-expanded {
@@ -163,22 +174,15 @@ export default {
     &.is-grouped-multiline {
       flex-wrap: wrap;
       & > .control {
-        &:last-child,
-        &:not(:last-child) {
-          margin-bottom: 4px;
-        }
-      }
-      &:last-child {
-        margin-bottom: -4px;
-      }
-      &:not(:last-child) {
-        margin-bottom: 0;
+        margin-bottom: 4px;
       }
     }
   }
+
   &.is-horizontal {
     display: flex;
   }
+
   .control {
     clear: both;
     position: relative;

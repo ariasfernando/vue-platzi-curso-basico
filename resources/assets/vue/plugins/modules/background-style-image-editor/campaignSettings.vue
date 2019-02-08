@@ -2,51 +2,51 @@
   <div class="settings-wrapper plugin-wrapper">
     <settings-container :no-label="true">
       <template slot="setting-bottom">
-        <el-button @click="showModal" type="primary">
-          <i class="glyphicon glyphicon-cloud-upload"></i>
+        <stui-button
+          type="gray"
+          width="full"
+          @click="showModal">
+          <i class="glyphicon glyphicon-cloud-upload" />
           Upload Background Image
-        </el-button>
+        </stui-button>
       </template>
     </settings-container>
     <image-modal
-    :config="plugin.config"
-    v-if="showImageEditor"
-    :libraryImages="libraryImages"
-    :overlayImages="overlayImages"
-    :data="image"
-    @close="close"
-    @submitImage="submitImage">
-    </image-modal>
+      v-if="showImageEditor"
+      :config="plugin.config"
+      :library-images="libraryImages"
+      :overlay-images="overlayImages"
+      :data="image"
+      @close="close"
+      @submitImage="submitImage" />
   </div>
 </template>
 
 <script>
-import imageService from '../../../services/image';
-import ImageModal from '../../../components/common/ImageModal';
+import ImageModal from '../../../components/common/ImageModal/index.vue';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
-import _ from 'lodash';
 import validatorMixin from '../mixins/validator';
 
 export default {
-  props: ['name', 'plugin', 'pluginKey', 'moduleId', 'module'],
-  mixins: [validatorMixin],
   components: {
     ImageModal,
-    SettingsContainer
+    SettingsContainer,
   },
+  mixins: [validatorMixin],
+  props: ['name', 'plugin', 'pluginKey', 'moduleId', 'module'],
   data() {
     return {
       showImageEditor: false,
       libraryImages: [],
       overlayImages: [],
       image: {},
-      isEdit: false
+      isEdit: false,
     };
   },
   computed: {
     campaign() {
       return this.$store.getters['campaign/campaign'];
-    }
+    },
   },
   methods: {
     close() {
@@ -55,43 +55,43 @@ export default {
     },
     submitImage(data) {
       const imgs = [];
-      data.images.forEach(image => {
-        imgs.push(image.image);
-      });
+      data.images.forEach(image =>
+        imgs.push(image.image),
+      );
       this.$store
         .dispatch('campaign/uploadImages', {
           images: imgs,
-          campaignId: this.campaign.campaign_id
+          campaignId: this.campaign.campaign_id,
         })
-        .then(uploadedImgs => {
+        .then((uploadedImgs) => {
           this.updateProperty('style', 'backgroundImage', uploadedImgs[imgs.length - 1]);
-          if (this.plugin.config['background-style-image-editor'].config.backgroundSize){
+          if (this.plugin.config['background-style-image-editor'].config.backgroundSize) {
             this.updateProperty('style', 'backgroundSize', this.plugin.config['background-style-image-editor'].config.backgroundSize);
           }
-          if (this.plugin.config['background-style-image-editor'].config.assignHeight){
+          if (this.plugin.config['background-style-image-editor'].config.assignHeight) {
             this.updateProperty('attribute', 'height', data.state.outputSize.height);
           }
-          if (this.plugin.config['background-style-image-editor'].config.addClassEqualHeight){
+          if (this.plugin.config['background-style-image-editor'].config.addClassEqualHeight) {
             this.addClassEqualHeight();
           }
           const temp = {};
           temp.img = data.img;
           temp.state = data.state;
           this.updatePluginData(uploadedImgs, data.images, {
-              ...this.plugin.data,
-              ...temp
-            }, data.newImage);
+            ...this.plugin.data,
+            ...temp,
+          }, data.newImage);
           this.$store.commit('global/setLoader', false);
           this.showImageEditor = false;
         });
     },
-    updatePluginData(uploadedImgs, images, data, newImage) {
-      images.slice(0, images.length - 1).forEach(image => {
+    updatePluginData(uploadedImgs, images, data) {
+      images.slice(0, images.length - 1).forEach((image) => {
         const i = images.indexOf(image);
         const keys = image.key.split('.');
         const img = uploadedImgs[i];
         let subData = data.state.preset;
-        keys.forEach(key => {
+        keys.forEach((key) => {
           if (keys.indexOf(key) === keys.length - 1) {
             subData[key] = img;
           } else {
@@ -103,20 +103,20 @@ export default {
       this.$store.commit('campaign/savePlugin', {
         plugin: this.pluginKey,
         moduleId: this.moduleId,
-        data: data
+        data,
       });
     },
     updateProperty(link, property, value) {
-    this.$store.commit('campaign/saveModuleProperty', {
+      this.$store.commit('campaign/saveModuleProperty', {
         moduleId: this.moduleId,
         link,
         property,
-        value
+        value,
       });
     },
     addClassEqualHeight() {
       let classes = this.module.structure.attribute.classes;
-      let classesArr = classes ? classes.split(' ') : [];
+      const classesArr = classes ? classes.split(' ') : [];
       const index = classesArr.indexOf('st-equal-height');
       if (index === -1) {
         classesArr.push('st-equal-height');
@@ -131,52 +131,17 @@ export default {
           this.isEdit = true;
           this.image = {
             img: temp.img,
-            state: temp.state
+            state: temp.state,
           };
         }
       }
       this.showImageEditor = true;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
-.el-button {
-  border-color: rgb(120, 220, 214);
-  background-color: rgb(120, 220, 214);
-  width: 100%;
-  font-size: 12px;
-  font-weight: 300;
-  padding: 6px 20px;
-  border-radius: 2px;
-  margin-top: 5px;
-}
-
-.el-button--primary {
-  &.is-disabled,
-  &.is-disabled:active,
-  &.is-disabled:focus,
-  &.is-disabled:hover {
-    opacity: 0.4;
-    border-color: rgb(120, 220, 214);
-    background-color: rgb(120, 220, 214);
-    margin-left: 0px;
+  .settings-wrapper {
+    margin-bottom: 10px;
   }
-}
-
-.el-button + .el-button {
-  margin-left: 0;
-}
-
-.el-input /deep/ .el-input__inner {
-  border-radius: 2px;
-  font-weight: 300;
-  padding-left: 8px;
-  height: 26px;
-  font-size: 12px;
-
-  &:focus {
-    border: 1px solid #78dcd6;
-  }
-}
 </style>

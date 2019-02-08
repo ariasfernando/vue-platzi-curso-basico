@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <stui-switch-desktop-mobile v-model="buildingMode" />
+      <StuiSwitchDesktopMobile v-model="buildingMode" />
     </el-row>
     <el-row class="preview-module-container mt-20">
       <module-container :building-mode="buildingMode" :width-desktop="640" :width-mobile="480">

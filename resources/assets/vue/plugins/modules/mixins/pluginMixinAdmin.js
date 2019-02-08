@@ -19,6 +19,14 @@ export default {
     slideToggle() {
       return this.$store.getters['module/slideToggles'][this.pluginKey];
     },
+    arrowState() {
+      if (this.slideToggle === undefined && !this.plugin.enabled) {
+        return undefined;
+      } else if (this.slideToggle === undefined && this.plugin.enabled) {
+        return true;
+      }
+      return this.slideToggle;
+    },
   },
   methods: {
     setSlideToggles(value) {

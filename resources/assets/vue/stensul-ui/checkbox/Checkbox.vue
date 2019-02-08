@@ -1,11 +1,13 @@
 <template>
-  <el-checkbox
-    :value="value"
-    :disabled="disabled"
-    class="stui-checkbox"
-    @change="change">
-    {{ label }}
-  </el-checkbox>
+  <div class="control" :class="{'is-expanded': expanded}">
+    <el-checkbox
+      :value="value"
+      :disabled="disabled"
+      class="stui-checkbox"
+      @change="change">
+      {{ label }}
+    </el-checkbox>
+  </div>
 </template>
 
 <script>
@@ -24,6 +26,7 @@ export default {
       type: Boolean,
       default: false,
     },
+    expanded: Boolean,
   },
   methods: {
     change(value) {
@@ -35,34 +38,38 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '../scss/stui.scss';
-
-.stui-checkbox /deep/ {
-  .el-checkbox__label {
-    text-align: left;
-    color: $stui-label-color;
-    font-weight: 300;
-    font-size: 12px;
-    line-height: 1.42em;
-    margin-bottom: 0;
-    padding-left: 5px;
-  }
-
-  &.is-disabled .el-checkbox__label{
-    color: $stui-disabled-color;
-  }
-  .el-checkbox__input.is-checked .el-checkbox__inner,
-  .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-    background-color: $stui-label-color;
-    border-color: $stui-label-color;
-  }
-  &.is-disabled .el-checkbox__input.is-checked .el-checkbox__inner,
-  &.is-disabled .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-    background-color: $stui-disabled-color;
-    border-color: $stui-disabled-color;
-  }
-  .el-checkbox__inner:hover,
-  .el-checkbox__input:not(.is-checked).is-focus .el-checkbox__inner {
-    border-color: $stui-color-secondary;
+.stui-checkbox {
+  margin-bottom: 0px;
+  /deep/ {
+    .el-checkbox__label {
+      text-align: left;
+      color: $stui-label-color;
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 15px;
+      margin-bottom: 0;
+      padding: 6px 0 7px 5px;
+    }
+    &.is-disabled .el-checkbox__label{
+      color: $stui-disabled-color;
+    }
+    .el-checkbox__input {
+      margin-bottom: -2px;
+      &.is-checked .el-checkbox__inner,
+      &.is-indeterminate .el-checkbox__inner {
+        background-color: $stui-label-color;
+        border-color: $stui-label-color;
+      }
+    }
+    &.is-disabled .el-checkbox__input.is-checked .el-checkbox__inner,
+    &.is-disabled .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+      background-color: $stui-disabled-color;
+      border-color: $stui-disabled-color;
+    }
+    .el-checkbox__inner:hover,
+    .el-checkbox__input:not(.is-checked).is-focus .el-checkbox__inner {
+      border-color: $stui-color-secondary;
+    }
   }
 }
 </style>

@@ -1,19 +1,25 @@
 <template>
   <div>
-    <SettingsContainer class="custom-width" :label="plugin.title" :arrow="slideToggle" @toggleArrow="setSlideToggles">
+    <SettingsContainer
+      :label="plugin.title"
+      :arrow="arrowState"
+      :label-expanded="true"
+      @toggleArrow="setSlideToggles">
       <template slot="setting-right">
-        <toggle-button :value="plugin.enabled" @change="toggle" />
+        <StuiToggleButton :value="plugin.enabled" @change="toggle" />
       </template>
     </SettingsContainer>
-    <b-collapse :id="pluginKey" :visible="plugin.enabled && slideToggle">
-      <SettingsContainer label="Use Palette from Library">
+    <b-collapse :id="pluginKey" :visible="arrowState">
+      <SettingsContainer
+        label="Use Palette from Library"
+        :label-expanded="true">
         <template slot="setting-right">
-          <toggle-button :value="plugin.config.usePaletteFromLibrary" @change="(newValue)=>updatePluginConfig(newValue,'usePaletteFromLibrary')" />
+          <StuiToggleButton :value="plugin.config.usePaletteFromLibrary" @change="(newValue)=>updatePluginConfig(newValue,'usePaletteFromLibrary')" />
         </template>
       </SettingsContainer>
       <SettingsContainer v-if="plugin.config.usePaletteFromLibrary" label="Palette name">
         <template slot="setting-right">
-          <ElInput
+          <StuiInputText
             v-model="paletteFromLibrary"
             size="mini"
             placeholder="name" />
@@ -21,7 +27,7 @@
       </SettingsContainer>
       <SettingsContainer v-else label="Custom Palette">
         <template slot="setting-right">
-          <ElInput
+          <StuiInputText
             v-model="customPalette"
             size="mini"
             placeholder="000000,474646,79A8C9,CD202C" />
@@ -71,15 +77,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.custom-width /deep/{
-  .half {
-    width: 64%;
-  }
-  .half-setting {
-    width: 36%;
-  }
-}
-</style>
-
