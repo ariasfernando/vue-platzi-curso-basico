@@ -16,6 +16,7 @@ class ImageTransformer
     public $image_small = '';
     public $image_large = '';
     public $text = '';
+    public $title = '';
     public $sub_text = '';
     public $likes = null;
     public $source = '';
@@ -41,12 +42,14 @@ class ImageTransformer
 
         return [
             "source" => $this->source,
+            "title" => !empty($this->title) ? $this->title : $this->text,
             "text" => $this->text,
             "sub_text" => $this->sub_text,
             "likes" => (!is_null($this->likes))? (int) $this->likes : null,
             "created_time" => $this->created_time,
             "link" => $this->link,
             "user" => $this->user,
+            "id" => !empty($this->id) ? $this->id : null,
             "images" => [
                 "small" => $small,
                 "large" => $large

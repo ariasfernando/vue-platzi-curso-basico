@@ -11,7 +11,7 @@
         <div class="col-xs-8 module-container" @mouseup="clickModuleContainer">
           <scrollbar-container>
             <div v-if="showRaw" class="module-wrapper">
-              <code-editor v-model="moduleRow" />
+              <code-editor v-model="moduleRow" type="javascript" height="calc(100vh - 126px)" />
             </div>
             <div v-else class="module-wrapper" :class="`stx-${buildingMode}-mode`">
               <module />
@@ -32,7 +32,7 @@
 
 <script>
 import CodeEditor from './CodeEditor.vue';
-import ColumnBarContainer from '../common/containers/ColumnBarContainer';
+import ColumnBarContainer from '../common/containers/ColumnBarContainer.vue';
 import ColumnSettings from './partials/ColumnSettings.vue';
 import ComponentSettings from './ComponentSettings.vue';
 import ElementsSettings from './partials/ElementsSettings.vue';
@@ -135,7 +135,7 @@ export default {
       // TODO: Trigger event editModule.onInit
       this.$store
         .dispatch('module/getModuleData', moduleId)
-        .then((response) => {
+        .then(() => {
           if (this.$route.path.match(/^\/clone\//)) {
             const cloned = Object.assign({}, this.module);
             cloned.moduleId = undefined;
@@ -160,11 +160,11 @@ export default {
           }
 
         })
-        .catch((error) => {
+        .catch(() => {
           this.$root.$toast(
-            "Oops! Something went wrong! Please try again. If it doesn't work, please contact our support team.",
-            { className: 'et-error' },
-          );
+            "Oops! Something went wrong! Please try again. If it doesn't work, please contact our support team.", {
+              className: 'et-error',
+            });
         });
     },
     toggleSidebar() {

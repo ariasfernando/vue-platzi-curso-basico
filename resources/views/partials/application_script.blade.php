@@ -22,4 +22,6 @@
 	Application.globals.showPopularTags = ("{{ isset($app_config["campaign"]["search_settings"]["show_popular_tags"]) && $app_config["campaign"]["search_settings"]["show_popular_tags"]  }}") ? true : false;
 	Application.globals.cleanEmptyLinks = ("{{ isset($app_config["campaign"]["clean_empty_links"]) && $app_config["campaign"]["clean_empty_links"] }}") ? true : false;
 	Application.globals.sieAPI = {url: "{{env('SIE_URL')}}", token: "{{env('SIE_TOKEN')}}"};
+  Application.globals.maskLinks = ("{{ isset($app_config["campaign"]["mask_links"]) && $app_config["campaign"]["mask_links"] }}") ? true : false;
+	Application.globals.maskLinksTitle = "<?php echo (isset($app_config['campaign']['mask_links_title']))? $app_config['campaign']['mask_links_title'] : ''  ?>";
 </script>

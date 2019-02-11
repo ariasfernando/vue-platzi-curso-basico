@@ -83,12 +83,13 @@
         this.loading = true;
         settingService.fetchSettings()
           .then((response) => {
+
             this.settings = response;
             this.ready = true;
             this.loading = false;
           })
           .catch((error) => {
-            this.$root.$toast(error, {className: 'et-error'});
+            this.$root.$toast(error, { className: 'et-error' });
           });
       },
       updateToogle(settingKey, value) {
@@ -112,7 +113,7 @@
             this.loading = false;
           })
           .catch((error) => {
-            this.$root.$toast(error, {className: 'et-error'});
+            this.$root.$toast(error, { className: 'et-error' });
           });
       }
     },

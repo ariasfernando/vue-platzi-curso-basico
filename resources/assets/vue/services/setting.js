@@ -7,7 +7,7 @@ export default {
     const endpoint = endpoints.setting.fetchSettings;
     const deferred = Q.defer();
     const params = {
-      endpoint
+      endpoint,
     };
 
     request[endpoint.method](params).then((response) => {
@@ -33,5 +33,5 @@ export default {
     });
 
     return deferred.promise;
-  }
+  },
 };
