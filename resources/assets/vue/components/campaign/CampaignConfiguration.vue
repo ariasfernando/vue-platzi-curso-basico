@@ -37,12 +37,10 @@
           <settings-container v-if="enableTitle" key="email-title" label="Email Title" title="Email Title">
             <template slot="setting-bottom">
               <stui-input-text
-                size="mini"
                 placeholder="Email Title"
                 name="emailTitle"
                 maxlength="140"
-                :value="form.emailTitle"
-                @blur="saveSettings" />
+                v-model="emailTitle"  />
             </template>
           </settings-container>
 
@@ -144,7 +142,6 @@
         form: {
           campaignName: '',
           campaignProcess: false,
-          emailTitle: '',
           tags: []
         },
         defaultTemplateBackgroundColor() {
@@ -215,6 +212,17 @@
           });
         },
       },
+      emailTitle: {
+        get() {
+          return this.editedSettings.emailTitle;
+        },
+        set(value) {
+          this.$store.commit('campaign/saveSetting', {
+            name: 'emailTitle',
+            value,
+          });
+        },
+      },
       templateBackgroundColor: {
         get() {
           return { hex: this.campaign.campaign_settings.templateBackgroundColor || this.templatePalette.default };
@@ -241,8 +249,8 @@
       this.enableTagging = this.campaign.library_config.tagging;
       this.form.tags = _.cloneDeep(this.campaign.tags);
       this.form.campaignName = this.campaign.campaign_name || '';
-      this.form.campaignPreheader = this.campaign.campaign_preheader || '';
-      this.form.emailTitle = this.campaign.email_title || '';
+      this.campaignPreheader = this.campaign.campaign_preheader || '';
+      this.emailTitle = this.campaign.email_title || '';
 
       this.loadConfig();
     },
@@ -284,22 +292,6 @@
             this.$store.commit('campaign/clearErrorsByScope', '');
           }
 
-        });
-      },
-      saveSettings(e) {
-        let value = e.target.value;
-
-        if (e.target.type === 'checkbox') {
-          value = e.target.checked;
-        }
-
-        if(e.target.name in this.form){
-          this.form[e.target.name] = value;
-        }
-
-        this.$store.commit('campaign/saveSetting', {
-          name: e.target.name,
-          value
         });
       },
       loadConfig() {
