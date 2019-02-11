@@ -23,22 +23,22 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="setting in settings">
+                <tr v-for="setting in settings" :key="setting.name">
                   <td :title="setting.name">{{ setting.name }}</td>
                   <td>
-                      <toggle-button v-if="setting.properties.type == 'toogle'" 
-                        class="pull-left" 
-                        :value="setting.value == 1" 
-                        id="setting" 
-                        @change="updateToogle(setting.key, setting.value)">
+                      <toggle-button v-if="setting.properties.type == 'toogle'"
+                        class="pull-left"
+                        :value="setting.value == 1"
+                        id="setting"
+                        @change="(value)=>updateToogle(setting.key, value)">
                       </toggle-button>
                       <el-input v-if="setting.properties.type == 'textarea'"
                         type="textarea"
                         class="setting-textarea"
                         :rows="5"
                         placeholder="Please input"
-                        :value="JSON.stringify(setting.value, null, 2)" 
-                        @change="updateTextarea($event, setting.key)">
+                        :value="JSON.stringify(setting.value, null, 2)"
+                        @change="(value) => updateTextarea(value, setting.key)">
                       </el-input>
                   </td>
                 </tr>
@@ -77,26 +77,27 @@
       }
     },
     components: {
-    }, 
+    },
     methods: {
       fetchSettings () {
         this.loading = true;
         settingService.fetchSettings()
           .then((response) => {
+
             this.settings = response;
             this.ready = true;
             this.loading = false;
           })
           .catch((error) => {
-            this.$root.$toast(error, {className: 'et-error'});
+            this.$root.$toast(error, { className: 'et-error' });
           });
       },
       updateToogle(settingKey, value) {
-        let newValue = value ? 0 : 1;
+        const newValue = value ? '1' : '0';
         this.saveSetting(settingKey, newValue);
       },
-      updateTextarea(event, settingKey) {
-        let newValue = JSON.parse(event);
+      updateTextarea(value, settingKey) {
+        let newValue = JSON.parse(value);
         this.saveSetting(settingKey, newValue);
       },
       saveSetting (key, value) {
@@ -112,7 +113,7 @@
             this.loading = false;
           })
           .catch((error) => {
-            this.$root.$toast(error, {className: 'et-error'});
+            this.$root.$toast(error, { className: 'et-error' });
           });
       }
     },

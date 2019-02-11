@@ -19,7 +19,7 @@
                   </div>
                   <textarea ref="normal_html" v-model="minified.normal_html.output" readonly />
                 </b-tab>
-                <b-tab title="MASKED HTML" @click="changeTypeTextArea('mask_link_html')" >
+                <b-tab :title="maskLinksTitle + ' HTML'" @click="changeTypeTextArea('mask_link_html')" v-if="maskLinks">
                   <div class="html_minify_toggle pull-right">
                     <label for="htmlMinify">Minify Code</label>
                     <toggle-button :value="this.minified.mask_link_html.toggle" :sync="false" id="htmlMinify" active-color="#78DCD6" @change="htmlMinifyChange('mask_link_html')"></toggle-button>
@@ -71,6 +71,9 @@
     computed: {
       maskLinks() {
         return (Application.globals.maskLinks !== undefined && Application.globals.maskLinks);
+      },
+      maskLinksTitle() {
+        return (Application.globals.maskLinksTitle !== undefined) ? Application.globals.maskLinksTitle : 'MASK';
       },
       modalComplete () {
         return this.$store.state.campaign.modalComplete;
