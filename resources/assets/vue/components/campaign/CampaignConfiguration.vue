@@ -78,19 +78,25 @@
             </template>
           </settings-container>
 
-          <settings-container v-if="enableAutoSave" label="Auto Save" class="last-saved" key="auto-save">
+          <settings-container v-if="enableAutoSave" label="Auto Save" class="last-saved" key="auto-save" :label-expanded="true">
             <template slot="setting-right">
-              <stui-toggle-button
-                id="autoSave"
-                class="pull-right"
-                :value="campaign.auto_save"
-                @change="autoSaveChange" />
-              <label
-                v-if="!secondaryLoading"
-                class="autosave-message pull-right">
-                last saved: {{ campaign.updated_at.substring(0,16) }}
-              </label>
-              <secondary-spinner />
+              <div class="control">
+                <stui-field>
+                  <div class="control is-expanded">
+                    <secondary-spinner />
+                  </div>
+                  <stui-toggle-button
+                    id="autoSave"
+                    class="pull-right"
+                    :value="campaign.auto_save"
+                    @change="autoSaveChange" />
+                </stui-field>
+                <label
+                  v-if="!secondaryLoading"
+                  class="autosave-message pull-right">
+                  last saved: {{ campaign.updated_at.substring(0,16) }}
+                </label>
+              </div>
             </template>
           </settings-container>
           <settings-container
@@ -416,12 +422,7 @@
 .width-full {
   width: 100%;
 }
-.last-saved /deep/ label.half {
-  width: 30%;
-}
-.last-saved /deep/ .half-setting {
-  width: 70%;
-}
+
 .autosave-message{
   font-size: 10px;
   font-style: italic;
