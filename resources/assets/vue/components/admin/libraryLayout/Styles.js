@@ -1,6 +1,5 @@
 export default [
   {
-    // groupLabel: 'groupLabel',
     settings: [
       {
         name: 'templateWidth',

@@ -5,15 +5,15 @@
       :checkbox="isPxWidth === undefined ? false : isPxWidth"
       @checkboxChange="(value)=>onTogglePxWidth()">
       <template slot="setting-right">
-        <stui-input-disabled v-if="!isPxWidth" :false-text="isPxWidth ? 'Custom Size' : 'Full Width'" />
+        <StuiInputDisabled v-if="!isPxWidth" :false-text="isPxWidth ? 'Custom Size' : 'Full Width'" />
       </template>
     </SettingsContainer>
     <SettingsContainer
       v-if="isPxWidth"
       :no-label="true">
       <template slot="setting-bottom">
-        <stui-field addons>
-          <stui-input-number
+        <StuiField addons>
+          <StuiInputNumber
             v-model="width"
             controls-position="right"
             class="generic-number"
@@ -25,14 +25,14 @@
               <i v-else class="fa fa-unlock" />
             </span>
           </div>
-          <stui-input-number
+          <StuiInputNumber
             v-model="height"
             controls-position="right"
             class="generic-number"
             false-text="auto"
             :disabled="isBlockHeight"
             :min="min" />
-        </stui-field>
+        </StuiField>
       </template>
     </SettingsContainer>
   </div>
@@ -49,14 +49,6 @@ export default {
   data() {
     return {
       min: this.minValue ? this.minValue : 10,
-      slotsValues: {
-        default: 'setting-right',
-        left: 'setting-half-left',
-        right: 'setting-half-right',
-      },
-      slotDefault: 'setting-right',
-      slotValueLeft: undefined,
-      slotValueRight: undefined,
     };
   },
   computed: {
