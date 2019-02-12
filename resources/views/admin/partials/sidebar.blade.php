@@ -7,7 +7,7 @@
 			@if(isset($section['action']))
 				<a href="{{ action($section['action']) }}">
 			@elseif(isset($section['children']))
-				<a href="" class="beta-accordion-trigger">
+				<a href="" class="beta-accordion-trigger" id="studioDropdown">
 			@else
 				<a href="">
 			@endif
