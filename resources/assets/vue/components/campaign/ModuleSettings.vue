@@ -19,7 +19,7 @@
             <b-tab
               v-for="(column, columnKey) in columns(module.structure.columns)"
               :key="columnKey"
-              :title="columnKey+1"
+              :title="`${columnKey+1}`"
               :button-id="`column-${columnKey}`">
               <GroupContainer>
                 <Component :is="'campaign-' + plugin.name" v-for="(plugin, pluginKey) in columnPlugins(column, $_app)"
