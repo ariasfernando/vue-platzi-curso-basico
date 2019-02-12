@@ -12,9 +12,9 @@
       @input="(value)=>change(value)" />
     <template v-else>
       <div class="input-text-hex" @click="openColorPicker()">
-        <ElInput
+        <StuiInputText
           :placeholder="placeholder"
-          disabled="disabled"
+          input-disabled
           :value="inputValue"
           size="mini" />
       </div>

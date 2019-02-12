@@ -9,7 +9,7 @@
       size="mini"
       :controls="true"
       controls-position="right"
-      :disabled="isMuted"
+      :disabled="isMuted || inputDisabled"
       @blur="$emit('blur')"
       @change="(value)=>change(value)" />
   </div>
@@ -35,6 +35,7 @@ export default {
       default: false,
     },
     expanded: Boolean,
+    inputDisabled: Boolean,
   },
   methods: {
     change(value) {
