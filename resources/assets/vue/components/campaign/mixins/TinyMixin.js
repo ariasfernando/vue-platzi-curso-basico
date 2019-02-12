@@ -407,7 +407,6 @@ export default {
         previousInstance.destroy();
       }
 
-
       const settings = {
         selector: `#${editorId}`,
         fixed_toolbar_container: `.toolbar-${editorId}`,
@@ -433,7 +432,7 @@ export default {
         target_list: false,
         invalid_elements: 'img',
         link_validate_url: true,
-        data_description: true,
+        data_description: Application.globals.maskLinks || false,
         paste_as_text: true,
         relative_urls: false,
         min_chars: this.textOptions.config.settings.min_chars ? this.textOptions.config.settings.min_chars.content : undefined,
