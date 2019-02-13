@@ -8,7 +8,7 @@
     <b-collapse :id="pluginKey" :visible="arrowState">
       <SettingsContainer label="Required">
         <template slot="setting-right">
-          <StuiToggleButton v-if="$can('std-'+component.type+'-plugin-destination-url-validate')" :value="plugin.config.validations.required" @change="(newValue)=>updateField(newValue, 'validations.required')" />
+          <StuiToggleButton v-if="$can('std-'+component.type+'-plugin-destination-url-validate')" :value="plugin.config.validations.required" @change="(value)=>updatePluginConfig({ value, path: 'validations.required' })" />
         </template>
       </SettingsContainer>
       <SettingsContainer label="Validate URL">
@@ -18,17 +18,17 @@
             size="mini"
             :value="validationValue"
             :list="validateOptions"
-            @change="(newValue) => updateField(newValue, 'validations.url.selected')" />
+            @change="(value) => updatePluginConfig({ value, path: 'validations.url.selected' })" />
         </template>
       </SettingsContainer>
       <SettingsContainer label="Target">
         <template slot="setting-right">
-          <StuiToggleButton v-if="$can('std-'+component.type+'-plugin-destination-url-target')" :value="plugin.config.target" @change="(newValue)=>updateField(newValue, 'target')" />
+          <StuiToggleButton v-if="$can('std-'+component.type+'-plugin-destination-url-target')" :value="plugin.config.target" @change="(value)=>updatePluginConfig({ value, path: 'target' })" />
         </template>
       </SettingsContainer>
       <SettingsContainer label="Title">
         <template slot="setting-right">
-          <StuiToggleButton :value="plugin.config.title" @change="(newValue)=>updateField(newValue, 'title')" />
+          <StuiToggleButton :value="plugin.config.title" @change="(value)=>updatePluginConfig({ value, path: 'title' })" />
         </template>
       </SettingsContainer>
     </b-collapse>
@@ -50,11 +50,21 @@ export default {
   },
   data() {
     return {
-      validateOptions: {
-        disabled: 'No Validation',
-        url: 'Validate Format',
-        urlAndDestination: 'Format and Destination',
-      },
+      validateOptions:
+      [
+        {
+          value:'disabled',
+          label: 'No Validation',
+        },
+        {
+          value:'url',
+          label: 'Validate Format',
+        },
+        {
+          value:'urlAndDestination',
+          label: 'Format and Destination',
+        }
+      ],
     };
   },
   computed: {

@@ -16,7 +16,7 @@
           :title="option.label"
           :data-tooltip="option.label"
           size="mini"
-          @click.prevent="toggleOption(optionName, plugin.config.options[optionName]
+          @click.prevent="toggleOption(`options.${optionName}.value`, plugin.config.options[optionName]
             ? plugin.config.options[optionName].value : undefined)" />
       </div>
       <GroupContainer label="Advanced Settings">
@@ -240,35 +240,21 @@ export default {
       }
       return true;
     },
-    toggleOption(optionName, oldValue) {
+    toggleOption(path, oldValue) {
       const value = !oldValue;
-      const payload = {
-        plugin: this.name,
-        componentId: this.element.id,
-        path: `options.${optionName}.value`,
-        value,
-      };
-      this.$store.commit('module/setPluginElementConfig', payload);
+      this.updatePluginConfig({value, path})
     },
     changeOption(value, subOption, settingName) {
-      const payload = {
-        plugin: this.name,
-        componentId: this.element.id,
-        path: `options.${subOption}.${settingName}`,
-        value,
-      };
-      this.$store.commit('module/setPluginElementConfig', payload);
+      const path = `options.${subOption}.${settingName}`;
+
+      this.updatePluginConfig({value, path})
     },
-    changeSetting(value, settingName) {
-      const payload = {
-        plugin: this.name,
-        componentId: this.element.id,
-        path: `settings.${settingName}.content`,
-        value: Application.utils.isJsonString(value)
-          ? JSON.parse(value)
-          : value,
-      };
-      this.$store.commit('module/setPluginElementConfig', payload);
+    changeSetting(newValue, settingName) {
+      const path = `settings.${settingName}.content`;
+      const value = Application.utils.isJsonString(newValue)
+        ? JSON.parse(newValue)
+        : newValue;
+      this.updatePluginConfig({value, path})
     },
     tinySettingContent(content) {
       if (content) {

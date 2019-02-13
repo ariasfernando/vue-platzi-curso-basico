@@ -10,18 +10,17 @@
       </template>
     </SettingsContainer>
     <b-collapse :id="pluginKey" :visible="arrowState">
-      <SettingsContainer
+      <SettingsContainer 
         label="Use Palette from Library"
         :label-expanded="true">
         <template slot="setting-right">
-          <StuiToggleButton :value="plugin.config.usePaletteFromLibrary" @change="(newValue)=>updatePluginConfig(newValue,'usePaletteFromLibrary')" />
+          <StuiToggleButton :value="plugin.config.usePaletteFromLibrary" @change="(value)=>updatePluginConfig({value, path:'usePaletteFromLibrary'})" />
         </template>
       </SettingsContainer>
       <SettingsContainer v-if="plugin.config.usePaletteFromLibrary" label="Palette name">
         <template slot="setting-right">
           <StuiInputText
             v-model="paletteFromLibrary"
-            size="mini"
             placeholder="name" />
         </template>
       </SettingsContainer>
@@ -29,7 +28,6 @@
         <template slot="setting-right">
           <StuiInputText
             v-model="customPalette"
-            size="mini"
             placeholder="000000,474646,79A8C9,CD202C" />
         </template>
       </SettingsContainer>
@@ -49,7 +47,7 @@ export default {
         return this.plugin.config.paletteName;
       },
       set(value) {
-        this.updatePluginConfig(value, 'paletteName');
+        this.updatePluginConfig({value, path: 'paletteName'});
       },
     },
     customPalette: {
@@ -57,23 +55,10 @@ export default {
         return this.plugin.config.paletteMap.join(',');
       },
       set(value) {
-        this.updatePluginConfig(value.split(','), 'paletteMap');
+        this.updatePluginConfig({value: value.split(','), path: 'paletteMap'});
       },
     },
   },
-  methods: {
-    updatePluginConfig(value, option) {
-      const config = {};
 
-      _.set(config, option, value);
-
-      const payload = {
-        plugin: this.name,
-        config,
-      };
-
-      this.$store.commit('module/savePlugin', payload);
-    },
-  },
 };
 </script>

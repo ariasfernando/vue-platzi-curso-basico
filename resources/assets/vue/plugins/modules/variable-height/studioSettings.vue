@@ -60,22 +60,12 @@ export default {
         minHeight = valueHeight;
       }
 
-      options = {
+      value = {
         max: maxHeight,
         min: minHeight,
       };
 
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        config: {
-          options,
-        },
-      };
-
-      // Save plugin data
-      this.$store.commit('module/savePlugin', payload);
+      this.updatePluginConfig({value})
     },
   },
 };

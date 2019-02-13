@@ -225,7 +225,8 @@ const mutations = {
     column.container.attribute.width = `${data.width}%`;
   },
   saveElementProperty(state, { elementId, property, value, ...scope }) {
-    const element = elementId ? getElement(state.module, elementId) : state.module.structure;
+    let element = elementId ? getElement(state.module, elementId) : state.module;
+    element = scope.outStructure || elementId ?  element : element.structure;
     let properties = getProperties(element, scope);
     if (Array.isArray(properties) && isNaN(property)) {
       // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
@@ -287,14 +288,9 @@ const mutations = {
     _.merge(pluginData, payload.config);
   },
 
-  setPluginElementConfig(state, { componentId, type, plugin, path, value }) {
-    let component = {};
-    if (componentId === undefined) {
-      component = state.module;
-    } else {
-      component = getElement(state.module, componentId);
-    }
-    const pluginData = component.plugins[plugin];
+  setPluginElementConfig(state, { elementId, type, plugin, path, value }) {
+    let element = elementId ? getElement(state.module, elementId) : state.module;
+    const pluginData = element.plugins[plugin];
     const pathArray = _.concat([type || 'config'], path ? path.split('.') : []);
     const pluginOption = searchOrCreateLevel(pluginData, pathArray);
     Vue.set(pluginOption, pathArray[pathArray.length - 1], value);

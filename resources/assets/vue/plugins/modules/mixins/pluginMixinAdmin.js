@@ -36,15 +36,18 @@ export default {
       });
     },
     toggle(value) {
+      this.updatePluginConfig({type: 'enabled', value});
+      this.setSlideToggles(value ? true : undefined);
+    },
+    updatePluginConfig({ type, path, value }) {
       const payload = {
         plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        enabled: value,
+        elementId: this.element.id,
+        path,
+        type,
+        value,
       };
-      // Update state of the component
-      this.$store.commit('module/togglePlugin', payload);
-      this.setSlideToggles(value ? true : undefined);
+      this.$store.commit('module/setPluginElementConfig', payload);
     },
   },
 };

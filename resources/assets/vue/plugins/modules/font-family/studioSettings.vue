@@ -30,13 +30,7 @@ export default {
       },
       set(value) {
         if (Application.utils.isJsonString(value)) {
-          const payload = {
-            plugin: this.name,
-            columnId: this.currentComponent.columnId,
-            componentId: this.currentComponent.componentId,
-            value: JSON.parse(value),
-          };
-          this.$store.commit('module/setPluginComponentConfig', payload);
+          this.updatePluginConfig({ value: JSON.parse(value)});
         }
       },
     },

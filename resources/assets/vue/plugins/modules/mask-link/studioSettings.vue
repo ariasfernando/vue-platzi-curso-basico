@@ -31,51 +31,22 @@ export default {
   computed: {
     dataDescription: {
       get() {
-        return 'options' in this.plugin.config &&
-          this.plugin.config.options.data
-          ? this.plugin.config.options.data
-          : '';
+        return this.plugin.config.options.data;
       },
       set(value) {
-        const options = {
-          data: value,
-        };
-
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          config: {
-            options,
-          },
-        };
-
-        // Save plugin data
-        this.$store.commit('module/savePlugin', payload);
+        this.updatePluginConfig({value, path: 'options.data'});
       },
     },
   },
   watch: {
-    component: {
+    element: {
       handler() {
-        this.plugin.subComponent =
-          this.component.type === 'button-element' ? 'button' : 'image';
+        this.plugin.subComponent = this.element.type === 'button-element' ? 'button' : 'image';
         if (!this.component.plugins.destinationUrl.enabled) {
           this.toggle(false);
         }
       },
       deep: true,
-    },
-  },
-  methods: {
-    toggle(value) {
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        enabled: value,
-      };
-      this.$store.commit('module/togglePlugin', payload);
     },
   },
 };
