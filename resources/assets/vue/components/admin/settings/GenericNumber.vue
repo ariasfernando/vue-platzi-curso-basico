@@ -1,16 +1,13 @@
 <template>
-  <settings-container :label="label">
+  <SettingsContainer :label="label">
     <template :slot="settingSlot || 'setting-right'">
-      <el-input-number
+      <stui-input-number
         v-model="mainSettingNumeric"
         v-validate="'required'"
-        :controls="true"
         :class="isPercentage || isPixel ? 'width-unit' : 'without-unit'"
-        size="mini"
-        controls-position="right"
         :min="minValue"
-        :max="maxCaluculate" />
-      <el-button
+        :max="maxCalculated" />
+      <ElButton
         v-if="isPercentage || isPixel"
         slot="append"
         :style="isPercentage && isPixel ? 'cursor: pointer' : 'cursor: default'"
@@ -18,9 +15,9 @@
         :disabled="!(isPercentage && isPixel)"
         @click="onToggleUnit">
         {{ isNumberPercentage ? "%": "px" }}
-      </el-button>
+      </ElButton>
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 <script>
 import SettingsContainer from '../../common/settings/containers/SettingsContainer.vue';
@@ -39,8 +36,8 @@ export default {
         if (typeof this.mainSetting === 'string' && this.mainSetting.endsWith('%')) {
           this.mainSetting = `${Math.min(this.maxPercentage || 100, newValue)}%`;
         } else {
-          const parceSetting = parseFloat(newValue);
-          this.mainSetting = this.link === 'style' ? `${parceSetting}px` : parceSetting;
+          const parseSetting = parseFloat(newValue);
+          this.mainSetting = this.link === 'style' ? `${parseSetting}px` : parseSetting;
         }
       },
     },
@@ -49,18 +46,18 @@ export default {
         typeof this.mainSetting === 'string' && this.mainSetting.endsWith('%')
       );
     },
-    maxCaluculate() {
+    maxCalculated() {
       return this.isNumberPercentage ? this.maxPercentage || 100 : this.maxValue;
     },
   },
   methods: {
     onToggleUnit() {
       if (this.isPercentage && this.isPixel) {
-        const parceSetting = parseFloat(this.mainSetting);
+        const parseSetting = parseFloat(this.mainSetting);
         if (this.isNumberPercentage) {
-          this.mainSetting = this.link === 'attribute' ? parceSetting : `${parceSetting}px`;
+          this.mainSetting = this.link === 'attribute' ? parseSetting : `${parseSetting}px`;
         } else {
-          this.mainSetting = `${Math.min(100, parceSetting)}%`;
+          this.mainSetting = `${Math.min(100, parseSetting)}%`;
         }
       }
     },
@@ -122,11 +119,15 @@ export default {
   }
   .el-input-number--mini .el-input-number__decrease,
   .el-input-number--mini .el-input-number__increase {
-    width: 30px;
+    width: 17px;
   }
   .el-input-number__decrease,
   .el-input-number__increase {
     background: #f8f8f8;
+  }
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    width: 17px;
   }
 }
 .el-button.is-active .el-input__inner,
@@ -151,7 +152,7 @@ export default {
 .el-input-number--mini.width-unit {
   width: 95px;
   margin-right: 25px;
-  padding-right: 26px;
+  padding-right: 16px;
   float: right;
 }
 .half-style-setting-padding {
@@ -168,7 +169,7 @@ export default {
 }
 .without-unit {
   width: 127px;
-  padding-right: 28px;
+  padding-right: 16px;
 }
 .is-setting-half .el-input-number--mini.width-unit {
   float: left;

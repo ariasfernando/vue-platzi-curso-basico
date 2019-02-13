@@ -8,6 +8,7 @@ import moduleStore from './moduleStore';
 import campaignStore from './campaignStore';
 import apiStore from './apiStore';
 import configStore from './configStore';
+import settingStore from './settingStore';
 
 Vue.use(Vuex);
 
@@ -20,6 +21,7 @@ const store = new Vuex.Store({
     module: moduleStore,
     campaign: campaignStore,
     config: configStore,
+    setting: settingStore,
   },
 });
 

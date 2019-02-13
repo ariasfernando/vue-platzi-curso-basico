@@ -2,8 +2,6 @@ function codeDefault() {
   return {
     componentSettings: [
       {
-        groupLabel: 'Settings',
-        showLabel: false,
         settings: [{
           label: 'Edit Code',
           name: 'data',
@@ -34,8 +32,6 @@ function codeDefault() {
         }],
       },
       {
-        groupLabel: 'Border',
-        showLabel: false,
         settings: [{
           name: 'border-group',
           aclName: 'border_border-group',
