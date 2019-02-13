@@ -1,16 +1,16 @@
 <template>
   <div>
-    <label-item-container
+    <LabelItemContainer
       v-if="showCurrentSettings"
       :label="toCamel(currentElement.type.replace('-element', ''))"
       icon="glyphicon-tasks"
       :collapsable="false" />
     <div class="card card-custom" :class="{hidden: !showCurrentSettings}">
-      <group-container ref="component-settings-group" class="group-container-custom">
+      <GroupContainer ref="component-settings-group" class="group-container-custom">
         <template v-for="(module, moduleId) in modulesFiltered">
           <template v-for="(column, columnId) in module.structure.columns">
             <template v-for="(component, componentId) in column.components">
-              <component
+              <Component
                 :is="'campaign-' + plugin.name"
                 v-for="(plugin, pluginKey) in componentPluginsFiltered(module, component)"
                 :key="`${getElementKey(module ,component)}-plugin-${plugin.name}`"
@@ -26,7 +26,7 @@
             </template>
           </template>
         </template>
-      </group-container>
+      </GroupContainer>
     </div>
   </div>
 </template>
@@ -95,26 +95,26 @@ export default {
   updated() {
     const groupContainer = this.$refs['component-settings-group'].$el;
     const childElements = groupContainer.children;
-    // set margin bottom 0 to last visible setting-container
+    // add class to first visible setting-container
     if (childElements) {
-      for (let i = childElements.length - 1; i >= 0; i--) {
+      for (let i = 0; i < childElements.length; i++) {
         if (
           childElements[i].classList &&
           (childElements[i].classList.contains('settings-container') ||
           childElements[i].classList.contains('settings-wrapper')) &&
           childElements[i].style.display !== 'none'
         ) {
-          const nextElement = childElements[i].nextElementSibling;
+          const prevElement = childElements[i].previousElementSibling;
           if (
-            nextElement &&
-            nextElement.classList &&
-            (nextElement.classList.contains('settings-container') ||
-            nextElement.classList.contains('settings-wrapper')) &&
-            nextElement.style.display === 'none'
+            prevElement &&
+            prevElement.classList &&
+            (prevElement.classList.contains('settings-container') ||
+            prevElement.classList.contains('settings-wrapper')) &&
+            prevElement.style.display === 'none'
           ) {
-            childElements[i].classList.add('has-no-margin-bottom');
+            childElements[i].classList.add('is-first');
+            break;
           }
-          break;
         }
       }
     }

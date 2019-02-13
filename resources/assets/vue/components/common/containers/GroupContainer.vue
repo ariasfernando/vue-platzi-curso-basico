@@ -60,18 +60,18 @@ export default {
     }
 
     /deep/ {
-      > .settings-container:first-of-type {
+      > .settings-container:first-of-type,
+      > .settings-container.is-first,
+      > .settings-wrapper > .settings-container:first-of-type,
+      > .settings-wrapper > .settings-container.is-first {
         > label,
-        > .control > label {
+        &.is-setting-bottom > .control > label {
           padding-top: 0px;
         }
       }
-    }
-
-    .settings-wrapper {
-      margin-bottom: 10px;
-      &.has-no-margin-bottom {
-        margin-bottom: 0px;
+      .settings-container + div:not(.is-first),
+      .settings-wrapper + div:not(.is-first){
+        padding-top: 10px;
       }
     }
   }

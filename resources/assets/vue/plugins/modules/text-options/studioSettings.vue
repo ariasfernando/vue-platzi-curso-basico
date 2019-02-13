@@ -108,7 +108,7 @@
                 :min="0"
                 :name="key"
                 @change="(value)=>changeSetting(value, tinySetting.key)" />
-              <ElSelect
+              <StuiSelect
                 v-else-if="tinySetting.type === 'select'"
                 :value="plugin.config.settings[tinySetting.key].content"
                 :list="tinySetting.options"

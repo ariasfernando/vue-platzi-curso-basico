@@ -7,7 +7,7 @@
       :class="{'is-muted' : isMuted}"
       :value="_value"
       size="mini"
-      :disabled="isMuted"
+      :disabled="isMuted || inputDisabled"
       @blur="$emit('blur')"
       @change="(value)=>change(value)" />
   </div>
@@ -33,6 +33,7 @@ export default {
       default: false,
     },
     expanded: Boolean,
+    inputDisabled: Boolean,
   },
   computed: {
     _value() {

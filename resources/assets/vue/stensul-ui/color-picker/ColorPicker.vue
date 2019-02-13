@@ -12,13 +12,13 @@
       @input="(value)=>change(value)" />
     <template v-else>
       <div class="input-text-hex" @click="openColorPicker()">
-        <el-input
+        <StuiInputText
           :placeholder="placeholder"
-          disabled="disabled"
+          input-disabled
           :value="inputValue"
           size="mini" />
       </div>
-      <el-color-picker
+      <ElColorPicker
         :ref="`color-picker-${instance}`"
         :value="pickerValue"
         color-format="hex"
@@ -116,27 +116,32 @@ export default {
   float: left;
 }
 .stui-color-picker /deep/ {
+  .el-color-picker {
+    .el-color-picker__trigger {
+      padding: 0px;
+      height: 28px;
+      width: 34px;
+      border-left: 0;
+      border-top-right-radius: 2px;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 2px;
+      border-color: $stui-input-border-color;
+      .el-color-picker__color{
+        border: none;
+      }
+      .el-color-picker__color-inner {
+        border-radius: 1px;
+      }
+    }
+    &.is-disabled {
+      .el-color-picker__trigger {
+        border-color: $stui-disabled-border-color;
+      }
+    }
+  }
   .el-input {
     padding: 0;
-  }
-  .el-color-picker__trigger {
-    padding: 0px;
-    height: 28px;
-    width: 34px;
-    border-left: 0;
-    border-top-right-radius: 2px;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 2px;
-    border-color: $stui-input-border-color;
-    .el-color-picker__color{
-      border: none;
-    }
-    .el-color-picker__color-inner {
-      border-radius: 1px;
-    }
-  }
-  .el-input{
     .el-input__inner {
       border-color: $stui-input-border-color;
       border-top-left-radius: 2px;
@@ -144,18 +149,19 @@ export default {
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 2px;
     }
-    &.is-disabled .el-input__inner {
-      background-color: #fff;
-      color: $stui-label-color;
-      cursor: auto;
-      padding: 0;
-      font-size: 12px;
-      text-align: center;
-      height: 28px;
+    &.is-disabled {
+      .el-input__inner {
+        background-color: #fff;
+        color: $stui-label-color;
+        cursor: auto;
+        padding: 0;
+        font-size: 12px;
+        text-align: center;
+        height: 28px;
+      }
     }
   }
 }
-
 .el-color-dropdown .el-button--text{
   color: #666666;
 }

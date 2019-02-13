@@ -3,7 +3,7 @@
     class="settings-container"
     :class="rootClasses">
     <template v-if="hasSettingRight">
-      <stui-field>
+      <StuiField>
         <div
           v-if="!noLabel && checkbox === undefined"
           class="control">
@@ -21,7 +21,7 @@
             </span>
           </label>
         </div>
-        <stui-checkbox
+        <StuiCheckbox
           v-if="checkbox !== undefined"
           :label="label"
           :value="checkbox"
@@ -29,11 +29,11 @@
           :disabled="disabled"
           @change="(value)=>{$emit('checkboxChange', value)}" />
         <slot name="setting-right" />
-      </stui-field>
+      </StuiField>
     </template>
 
     <template v-if="hasSettingSideBySide">
-      <stui-field>
+      <StuiField>
         <div
           class="control half-setting--left">
           <label
@@ -54,13 +54,12 @@
           </label>
           <slot name="setting-half-right" />
         </div>
-      </stui-field>
+      </StuiField>
     </template>
 
     <template v-if="hasSettingBottom">
-      <div class="control">
+      <div v-if="!noLabel" class="control">
         <label
-          v-if="!noLabel"
           :class="{[`is-level-${level}`] : level}"
           :title="title">
           {{ label }}
@@ -79,9 +78,8 @@
     </template>
 
     <template v-if="hasSettingHalf">
-      <div class="control">
+      <div v-if="!noLabel" class="control">
         <label
-          v-if="!noLabel"
           :class="{[`is-level-${level}`] : level}"
           :title="title">
           {{ label }}
@@ -146,15 +144,11 @@ export default {
 @import '../../../../stensul-ui/scss/stui.scss';
 
 .settings-container {
-  margin-bottom: 10px;
   margin-left: 0;
   margin-right: 0;
   position: relative;
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-  &:last-of-type:not(.keep-margin),
-  &.has-no-margin-bottom:not(.keep-margin) {
-    margin-bottom: 0px;
-  }
+  clear:both;
 
   label {
     text-align: left;
@@ -194,9 +188,14 @@ export default {
   &.is-setting-half {
     float: left;
     width: calc(50% - 2px);
+    clear: none;
     &:nth-of-type(2n + 1) {
       margin-right: 4px;
       clear: both;
+    }
+    &:nth-of-type(1),
+    &:nth-of-type(2), {
+      padding-top: 0px!important;
     }
     label {
       display: block;

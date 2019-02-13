@@ -30,6 +30,7 @@ export default {
     'input-padding-group': elementSettings.PaddingGroup,
     'input-text-align': elementSettings.TextAlign,
     'input-vertical-align': elementSettings.VerticalAlign,
+    'input-width': elementSettings.Width,
   },
   mixins: [AclMixing],
   props: ['currentComponent'],

@@ -14,19 +14,22 @@
     <template v-if="showColumnStyles">
       <LabelItemContainer label="COLUMN STYLES" icon="glyphicon-pause" :collapsable="false" />
       <div class="column-plugins">
-        <BCard no-block>
-          <BTabs card :no-fade="true">
-            <BTab v-for="(column, columnKey) in columns(module.structure.columns)"
-                  :key="columnKey" :title="`${columnKey+1}`" :button-id="`column-${columnKey}`">
+        <b-card no-block>
+          <b-tabs card :no-fade="true">
+            <b-tab
+              v-for="(column, columnKey) in columns(module.structure.columns)"
+              :key="columnKey"
+              :title="`${columnKey+1}`"
+              :button-id="`column-${columnKey}`">
               <GroupContainer>
                 <Component :is="'campaign-' + plugin.name" v-for="(plugin, pluginKey) in columnPlugins(column, $_app)"
                            :key="columnKey + pluginKey" :name="pluginKey"
                            :plugin="plugin" :column-id="columnKey" :module-id="currentModule" :plugin-key="pluginKey"
                            :module="module" :element="column" />
               </GroupContainer>
-            </BTab>
-          </BTabs>
-        </BCard>
+            </b-tab>
+          </b-tabs>
+        </b-card>
       </div>
     </template>
     <!--
@@ -129,7 +132,7 @@ export default {
       return out;
     },
     columns(columns) {
-      const out = {};
+      const out = [];
       _.each(columns, (column, index) => {
         if (this.hasEnabledPlugins(column)) {
           out[index] = column;
