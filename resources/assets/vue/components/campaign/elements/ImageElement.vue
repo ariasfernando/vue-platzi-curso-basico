@@ -76,15 +76,29 @@
     data() {
       return {
         imageUrl(imagePath) {
-          if (imagePath === '' || imagePath.includes('default/')) {
-            let width = this.component.image.attribute.width;
-            if (width === '100%') {
-              width = this.columnWidth(this.columnId);
+        if (imagePath === "" || imagePath.includes("default/")) {
+          const width =
+            this.component.image.attribute.width === "100%"
+              ? this.columnWidth(this.columnId)
+              : this.component.image.attribute.width;
+          let ratio = 9 / 16;
+          switch (this.component.image.attribute.ratio) {
+            case "1:1":
+              ratio = 1;
+              break;
+            case "4:3":
+              ratio = 3 / 4;
+              break;
             }
-            return this.createPlaceholder(width, this.component.image.attribute.height);
+
+          return this.createPlaceholder(
+            width,
+            this.component.image.attribute.height,
+            ratio
+          );
           }
           return this.$_app.config.imageUrl + imagePath;
-        },
+      }
       };
     },
     computed: {
