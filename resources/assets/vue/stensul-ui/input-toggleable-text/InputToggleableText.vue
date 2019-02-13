@@ -1,28 +1,20 @@
 <template>
   <div>
-    <el-button
-      v-if="disabled"
-      class="custom-col toggleable-number-disabled"
-      size="mini"
-      disabled>
-      {{ value }}
-    </el-button>
-
-    <el-button
-      v-else-if="!value"
+    <ElButton
+      v-if="!value"
       class="custom-col"
       size="mini"
       disabled>
       {{ falseText }}
-    </el-button>
+    </ElButton>
 
-    <el-input-number
+    <ElInput
       v-else
-      v-model="numberValue"
+      v-model="textValue"
       :controls="false"
-      class="custom-col toggleable-number"
+      class="custom-col toggleable-text"
       size="mini" />
-    <el-button
+    <ElButton
       size="mini"
       class="el-icon-setting"
       @click="toggle()" />
@@ -32,12 +24,32 @@
 <script>
 
 export default {
-  name: 'InputToggleableNumber',
-  props: ['value', 'falseText', 'disabled'],
+  name: 'InputToggleableText',
+
+  props: {
+    value: {
+      type: [String, Number, Object, Boolean],
+      default: false,
+    },
+    falseText: {
+      type: String,
+      default: 'Disabled',
+    },
+    defaultValue: {
+      type: String,
+      default: '',
+    },
+  },
   computed: {
-    numberValue: {
+    textValue: {
       get() {
-        return this.value;
+        if (typeof this.value === 'object') {
+          return JSON.stringify(this.value);
+        } else {
+          return Application.utils.isJsonString(this.value)
+            ? JSON.stringify(this.value)
+            : String(this.value);
+        }
       },
       set(value) {
         this.$emit('input', value);
@@ -47,7 +59,7 @@ export default {
   },
   methods: {
     toggle() {
-      this.numberValue = this.value ? false : 1;
+      this.textValue = this.value ? false : this.defaultValue;
     },
   },
 };
@@ -90,6 +102,7 @@ export default {
     &.is-disabled:focus,
     &.is-disabled:hover {
       color: #666666;
+      background-color: #f0f0f0;
       cursor: auto;
     }
   }
@@ -97,7 +110,6 @@ export default {
   .el-icon-setting{
     background: #f8f8f8;
     color: #666666;
-    cursor: inherit;
     border: 1px solid #dcdfe6;
     font-size: 11px;
     font-weight: 300;
@@ -110,25 +122,10 @@ export default {
     }
   }
 
-  .toggleable-number-disabled /deep/ {
-    span {
-      display: block;
-      overflow: hidden;
-    }
-  }
-
-  .toggleable-number /deep/ {
+  .toggleable-text /deep/ {
     input.el-input__inner[type="text"] {
       padding-left: 0;
       padding-right: 0;
-    }
-    .el-input-number__decrease{
-      border-radius: 2px 0px 0px 2px;
-      background: #f8f8f8;
-    }
-    .el-input-number__increase{
-      border-radius: 0px;
-      background: #f8f8f8;
     }
     .el-input__inner{
       text-align: center;
@@ -137,10 +134,6 @@ export default {
       &:focus{
         border: 1px solid #78dcd6;
       }
-    }
-    .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled), 
-    .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){
-      border: 1px solid #78dcd6;
     }
   }
 </style>

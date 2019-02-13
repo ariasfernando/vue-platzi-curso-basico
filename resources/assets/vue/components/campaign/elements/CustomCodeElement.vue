@@ -1,18 +1,18 @@
 <template>
-  <module-container :component="component" @select-component="selectComponentHandler">
+  <element-container :component="component" @select-component="selectComponentHandler">
     <div class="stx-wraper" v-html="this.component.code.data"></div>
-  </module-container>
+  </element-container>
 </template>
 
 <script>
 import _ from 'lodash';
 import ElementMixin from '../../common/mixins/ElementMixin.js';
-import ModuleContainer from '../../common/containers/ModuleContainer';
+import ElementContainer from '../../common/containers/ElementContainer';
 
 export default {
   name: 'CustomCodeElement',
   components: {
-    ModuleContainer
+    ElementContainer
   },
   mixins: [ElementMixin],
 };

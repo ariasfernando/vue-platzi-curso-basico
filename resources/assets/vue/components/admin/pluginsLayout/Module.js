@@ -18,26 +18,25 @@ function moduleDefault() {
         ],
       },
       {
-        groupLabel: '',
-        showLabel: false,
-        plugins: [{
-          name: 'module-equal-height-for-column',
-          title: 'Equal Height',
-          aclName: 'module-equal-height-for-column',
-        }],
+        plugins: [
+          {
+            name: 'module-equal-height-for-column',
+            title: 'Equal Height',
+            aclName: 'module-equal-height-for-column',
+          },
+        ],
       },
       {
-        groupLabel: '',
-        showLabel: false,
-        plugins: [{
-          name: 'text-color-by-background-for-module',
-          title: 'Text Color by Background',
-          aclName: 'text-color-by-background-for-module',
-        }],
+        plugins: [
+          {
+            name: 'text-color-by-background-for-module',
+            title: 'Text Color by Background',
+            aclName: 'text-color-by-background-for-module',
+          },
+        ],
       },
     ],
   };
 }
-
 
 module.exports = moduleDefault;

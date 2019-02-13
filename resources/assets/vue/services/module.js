@@ -43,8 +43,12 @@ export default {
     return deferred.promise;
   },
 
-  getAllModules() {
-    const endpoint = endpoints.module.getAllModules;
+  getAllModules(type) {
+    let endpoint = endpoints.module.getAllModules;
+    if (type) {
+      endpoint = type === 'studio' ? endpoints.module.getAllStudioModules : endpoints.module.getAllCustomModules;
+    }
+
     const deferred = Q.defer();
     const params = {
       endpoint,

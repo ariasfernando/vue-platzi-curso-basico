@@ -1,49 +1,44 @@
 <template>
-  <settings-container custom-class="field-padding" :label="label">
+  <SettingsContainer custom-class="field-padding" :label="label">
     <template slot="setting-bottom">
-      <padding
-      :element="element"
-      @setting-updated="settingUpdatedHandler"
-      :side="'Top'"
-      ></padding>
-      <padding
-      :element="element"
-      :side="'Right'"
-      @setting-updated="settingUpdatedHandler"
-      ></padding>
-      <padding
-      :element="element"
-      :side="'Bottom'"
-      @setting-updated="settingUpdatedHandler"
-      ></padding>
-      <padding
-      :element="element"
-      :side="'Left'"
-      @setting-updated="settingUpdatedHandler"
-      ></padding>
+      <Padding
+        :element="element"
+        @setting-updated="settingUpdatedHandler"
+        :side="'Top'" />
+      <Padding
+        :element="element"
+        :side="'Right'"
+        @setting-updated="settingUpdatedHandler" />
+      <Padding
+        :element="element"
+        :side="'Bottom'"
+        @setting-updated="settingUpdatedHandler" />
+      <Padding
+        :element="element"
+        :side="'Left'"
+        @setting-updated="settingUpdatedHandler" />
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 
 <script>
-import _ from "lodash";
-import Padding from "./Padding.vue";
-import SettingMixin from "../mixins/SettingMixin.js";
-import SettingsContainer from "../../common/settings/containers/SettingsContainer.vue";
+import Padding from './Padding.vue';
+import SettingMixin from '../mixins/SettingMixin';
+import SettingsContainer from '../../common/settings/containers/SettingsContainer.vue';
 
 export default {
-  name: "PaddingGroup",
-  mixins: [ SettingMixin ],
+  name: 'PaddingGroup',
   components: { Padding, SettingsContainer },
+  mixins: [SettingMixin],
   methods: {
     settingUpdatedHandler(eventData) {
-      this.$emit("setting-updated", {
+      this.$emit('setting-updated', {
         subComponent: this.subComponent,
         link: 'style',
         name: eventData.name,
-        value: eventData.value
+        value: eventData.value,
       });
-    }
-  }
+    },
+  },
 };
 </script>
