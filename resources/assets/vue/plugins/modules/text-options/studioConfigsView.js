@@ -108,11 +108,20 @@ function configsView() {
           config: 'options',
           name: 'link',
         },
-        options: {
-          disabled: 'No Validation',
-          url: 'Validate Format',
-          urlAndDestination: 'Format and Destination',
-        },
+        options: [
+          {
+            value:'disabled',
+            label: 'No Validation',
+          },
+          {
+            value:'url',
+            label: 'Validate Format',
+          },
+          {
+            value:'urlAndDestination',
+            label: 'Format and Destination',
+          }
+        ],
       },
       link_fixed_color: {
         key: 'link_fixed_color',
