@@ -9,6 +9,12 @@ import LineComment from './comments/LineComment.vue';
 export default {
   components: { LineComment },
   mixins: [ElementMixin],
+  props: {
+    editorId: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       height: 0,
@@ -93,14 +99,6 @@ export default {
             </tr>
           </table>
         <![endif]-->`;
-    },
-    editorId() {
-      return [
-        'editor',
-        this.module.idInstance,
-        this.columnId,
-        this.componentId,
-      ].join('-');
     },
     href() {
       return this.component.button.attribute.href;

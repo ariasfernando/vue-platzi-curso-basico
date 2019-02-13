@@ -46,39 +46,45 @@ class ModuleServiceProvider extends ServiceProvider
     * Get all modules config.
     *
     * @param string $status Module status
+    * @param string $type Module type, null, "custom", "studio"
     * @return array
     */
-    public static function getModuleList($status = null)
+    public static function getModuleList($status = null, $type = null)
     {
          $modules = [];
 
-         // Load from module folder
-        $files = \File::allFiles(self::$module_dir);
+        if (is_null($type) || $type === 'custom') {
+            // Load from module folder
+            $files = \File::allFiles(self::$module_dir);
 
-        foreach ($files as $file) {
-            if ($file->isFile() && $file->getFilename() === 'config.json') {
-                $config = json_decode(file_get_contents($file->getPathName()));
-                $module_key = $config->key;
-                if (isset($config->enabled) && $config->enabled === true) {
-                    $modules[$module_key] = $config;
+            foreach ($files as $file) {
+                if ($file->isFile() && $file->getFilename() === 'config.json') {
+                    $config = json_decode(file_get_contents($file->getPathName()));
+                    $module_key = $config->key;
+                    if (isset($config->enabled) && $config->enabled === true) {
+                        $modules[$module_key] = $config;
+                        $modules[$module_key] = (object) $modules[$module_key];
+                    }
                 }
             }
         }
 
-        // Load modules form Db.
-        switch ($status) {
-            case 'publish':
-                $modules_db = Module::published()->get();
-                break;
-            case 'draft':
-                $modules_db = Module::draft()->get();
-                break;
-            default:
-                $modules_db = Module::all();
-        }
+        if (is_null($type) || $type === 'studio') {
+            // Load modules form Db.
+            switch ($status) {
+                case 'publish':
+                    $modules_db = Module::published()->get();
+                    break;
+                case 'draft':
+                    $modules_db = Module::draft()->get();
+                    break;
+                default:
+                    $modules_db = Module::all();
+            }
 
-        foreach ($modules_db as $module) {
-            $modules[$module->key] = $module;
+            foreach ($modules_db as $module) {
+                $modules[$module->key] = $module;
+            }
         }
 
         ksort($modules);
@@ -94,7 +100,7 @@ class ModuleServiceProvider extends ServiceProvider
     public static function getModule($module_id)
     {
         $module = [];
-        
+
         // Try custom module
         if (file_exists(self::$module_dir . DS . $module_id . DS . 'config.json')) {
             try {

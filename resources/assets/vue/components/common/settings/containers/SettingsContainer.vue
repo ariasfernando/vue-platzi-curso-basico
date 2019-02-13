@@ -70,7 +70,7 @@ export default {
   margin-left: 0;
   margin-right: 0;
   position: relative;
-
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   .half-setting /deep/ .el-switch {
     margin-top: 4px;
   }
@@ -122,8 +122,16 @@ span.is-danger {
   float: left;
   width: 50%;
   margin-bottom: 0;
+  &:nth-child(2n+1) {
+    padding-right: 8px;
+  }
+  &:nth-child(2n+2) {
+    padding-left: 8px;
+  }
 }
-
+.clearfix{
+  clear: both;
+}
 .is-danger /deep/ input {
   border-color: #ce5f5f;
 }

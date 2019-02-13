@@ -40,3 +40,9 @@ const app = new Vue({
   router,
   store,
 }).$mount('#studio');
+
+$.ajaxSetup({
+  headers: {
+    'X-CSRF-token': Application.globals.csrfToken,
+  },
+});

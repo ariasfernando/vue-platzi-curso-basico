@@ -1,7 +1,7 @@
 <template>
   <div>
-    <label-item-container v-b-toggle.column-settings-styles :label="`Column ${currentComponent.columnId + 1} Styles`" icon="glyphicon-pause" />
-    <b-collapse id="column-settings-styles" visible accordion="general-settings">
+    <label-item-container v-b-toggle.column-settings-styles :label="columnLabel" icon="glyphicon-pause" />
+    <b-collapse id="column-settings-styles" visible accordion="column-settings">
       <b-card class="control" no-block>
         <group-container v-for="(settingGroup, groupKey) in settings" v-if="hasPermissionsInGroup(settingGroup, 'std-column_')" :key="groupKey">
           <component
@@ -9,6 +9,7 @@
             v-for="setting in settingGroup.settings"
             v-if="$can('std-column_'+setting.aclName)"
             :key="setting.name"
+            :module="module"
             :setting="setting.type"
             :name="setting.name"
             :type="setting.type"
@@ -84,18 +85,29 @@ export default {
     settings() {
       return settingsDefault['column-element']().componentSettings;
     },
+    isInvertedStacking() {
+      return this.module.structure.columnsStacking === 'invertedStacking';
+    },
     pluginsGroups() {
       return pluginsLayout['column-element']().componentPlugins;
     },
-    _() {
-      return _;
+    columnLabel() {
+      let columnindex = this.currentComponent.columnId;
+      if (this.isInvertedStacking) {
+        columnindex = this.module.structure.columns.length - columnindex;
+      } else {
+        ++columnindex;
+      }
+      return `Column ${columnindex} Styles`;
     },
   },
   methods: {
     pluginFilter(plugins) {
-      return plugins.filter(plugin => {
-        return this.$can(`std-column-plugin-${plugin.aclName}`) && this.column.plugins[_.camelCase(plugin.name)];
-      });
+      return plugins.filter(
+        plugin =>
+          this.$can(`std-column-plugin-${plugin.aclName}`) &&
+          this.column.plugins[_.camelCase(plugin.name)],
+      );
     },
     settingUpdatedHandler(eventData) {
       this.saveColumnProperty(

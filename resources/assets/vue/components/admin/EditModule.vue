@@ -1,8 +1,8 @@
 <template>
   <div class="col-xs-12 module">
     <module-header />
-    <div class="row">
-      <section v-if="ready" id="edit-container" class="col-xs-12 section-container">
+    <div v-if="ready" class="row">
+      <section id="edit-container" class="col-xs-12 section-container">
         <column-bar-container side="left">
           <general-settings v-if="ready" />
           <elements-settings v-if="ready" />
@@ -13,9 +13,9 @@
             <div v-if="showRaw" class="module-wrapper">
               <code-editor v-model="moduleRow" type="javascript" height="calc(100vh - 126px)" />
             </div>
-            <div v-else class="module-wrapper" :class="`stx-${buildingMode}-mode`">
-              <module />
-            </div>
+            <module-container v-else :building-mode="buildingMode" :width-desktop="640" :width-mobile="480">
+              <module :module="module" />
+            </module-container>
           </scrollbar-container>
         </div>
         <!-- END: Module Container -->
@@ -26,7 +26,9 @@
         </column-bar-container>
       </section>
     </div>
-    <spinner />
+    <div v-else class="container-spinner">
+      <stui-spinner />
+    </div>
   </div>
 </template>
 
@@ -38,10 +40,10 @@ import ComponentSettings from './ComponentSettings.vue';
 import ElementsSettings from './partials/ElementsSettings.vue';
 import GeneralSettings from './partials/GeneralSettings.vue';
 import Module from './Module.vue';
+import ModuleContainer from '../common/containers/ModuleContainer.vue';
 import ModuleHeader from './partials/ModuleHeader.vue';
 import ModuleSettings from './partials/ModuleSettings.vue';
 import ScrollbarContainer from '../common/containers/ScrollbarContainer.vue';
-import Spinner from '../common/Spinner.vue';
 
 export default {
   name: 'EditModule',
@@ -53,10 +55,10 @@ export default {
     ElementsSettings,
     GeneralSettings,
     Module,
+    ModuleContainer,
     ModuleHeader,
     ModuleSettings,
     ScrollbarContainer,
-    Spinner,
   },
   data() {
     return {
@@ -111,7 +113,6 @@ export default {
     ready(value) {
       if (value === true) {
         setTimeout(() => {
-          this.toggleSidebar();
           this.loadColumn();
         }, 100);
       }
@@ -119,6 +120,7 @@ export default {
   },
   created() {
     this.loadModule();
+    this.toggleSidebar();
   },
   methods: {
     loadColumn() {
@@ -149,16 +151,15 @@ export default {
 
           if (this.module.inUse) {
             this.$root.$toast(
-              "This module is already in use. Any changes will not affect or update the module instance in "
-                + "the existing campaigns. To create a new version you can clone the module in the module list.",
+              'This module is already in use. Any changes will not affect or update the module instance in ' +
+                'the existing campaigns. To create a new version you can clone the module in the module list.',
               {
                 className: 'et-info',
                 closeable: true,
-                duration: 10000
+                duration: 10000,
               },
             );
           }
-
         })
         .catch(() => {
           this.$root.$toast(
@@ -168,20 +169,17 @@ export default {
         });
     },
     toggleSidebar() {
-      const modOpen = document.getElementById('admin-module-container');
-      modOpen.className -= 'col-xs-12';
-
       const sidebar = document.getElementById('admin-sidebar');
       sidebar.style.display = 'none';
 
       const container = document.getElementsByClassName('base-admin')[0];
       container.style.paddingLeft = 0;
-
-      const sideToggled = document.getElementById('edit-container');
-      sideToggled.classList.toggle('sidebar-closed');
     },
     clickModuleContainer(e) {
-      if ($(e.target).hasClass('scrollbar-container-inner') || $(e.target).hasClass('mCustomScrollBox')) {
+      if (
+        $(e.target).hasClass('scrollbar-container-inner') ||
+        $(e.target).hasClass('mCustomScrollBox')
+      ) {
         this.$store.commit('module/setCurrentComponent', {
           columnId: undefined,
           componentId: undefined,
@@ -192,6 +190,22 @@ export default {
 };
 </script>
 
+<style lang="scss" scope>
+.module /deep/ {
+  .mCSB_outside {
+    overflow: unset;
+    .mCSB_container {
+      overflow: unset;
+    }
+  }
+}
+.container-spinner {
+  height: calc(100vh - 102px);
+  /deep/ .spinner-wrapper {
+    top: 50%;
+  }
+}
+</style>
 <style lang="less">
 @stensul-purple: #514960;
 @stensul-white: #ffffff;
@@ -239,7 +253,7 @@ export default {
 
 #edit-container {
   padding: 0px;
-  height: calc(~'100vh -102px');
+  height: calc(~'100vh - 102px');
   overflow: hidden;
   min-width: 1200px;
   padding-top: 46px;
@@ -251,24 +265,6 @@ export default {
 
 .module {
   margin-top: -15px;
-
-  .module-wrapper {
-    margin: 0 auto;
-
-    &.stx-desktop-mode {
-      width: 640px;
-
-      .st-hide-desktop {
-        display: none;
-      }
-    }
-    &.stx-mobile-mode {
-      width: 480px;
-      // Mobile Classes
-      @import '../../../less/base/commons/mobile/mobile_core_styles';
-      @import '../../../less/base/commons/mobile/mobile_client_styles';
-    }
-  }
 
   .m-l-button {
     margin-left: 7px !important;
@@ -331,7 +327,6 @@ export default {
     height: calc(~'100vh - 102px');
     width: calc(~'100% - 540px');
     min-width: 640px;
-    overflow-x: hidden;
     overflow-y: visible;
     table {
       border-collapse: initial;
@@ -373,13 +368,6 @@ export default {
 
 // New and refacted
 
-p,
-ul,
-ol {
-  margin: 0;
-  padding: 0;
-}
-
 #edit-container {
   .mce-content-body {
     line-height: inherit;
@@ -390,20 +378,6 @@ ol {
   height: calc(~'100vh - 102px');
 }
 #studio .module-container .scrollbar-container-inner {
-  padding: 20px 20px 100px;
-}
-#studio .st-component.is-active > td:before {
-  content: '';
-  pointer-events: none;
-  position: absolute;
-  background: none;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  display: block;
-  outline: 2px solid #69dac8;
-  outline-offset: -1px;
-  z-index: 298;
+  padding: 40px 20px 100px;
 }
 </style>

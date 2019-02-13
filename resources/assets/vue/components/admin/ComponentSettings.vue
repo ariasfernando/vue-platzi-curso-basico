@@ -5,7 +5,7 @@
       v-b-toggle.style
       :label="`${_.startCase(component.type.replace('-element', ''))} Styles`"
       icon="glyphicon-pencil" />
-    <b-collapse id="style" visible accordion="module-right">
+    <b-collapse id="style" visible accordion="component-setting">
       <b-card class="default-settings">
         <group-container v-for="(settingGroup, groupKey) in settings" v-if="hasPermissionsInGroup(settingGroup, 'std-'+component.type+'_')" :label="settingGroup.showLabel ? settingGroup.groupLabel : null" :key="groupKey">
           <component
@@ -13,12 +13,16 @@
             v-for="(setting,i) in settingGroup.settings"
             v-if="$can('std-'+component.type+'_'+setting.aclName)"
             :key="i+setting.type"
+            :component="component"
+            :module="module"
+            :column-id="currentComponent.columnId"
             :show-setting="showSetting(setting)"
             :setting="setting.type"
             :name="setting.name"
             :type="setting.type"
             :setting-slot="setting.settingSlot"
             :max-percentage="setting.maxPercentage"
+            :is-inverted="setting.isInverted"
             :link="setting.link"
             :label="setting.label"
             :placeholder="setting.placeholder"
@@ -45,7 +49,7 @@
       label="Editor Settings"
       icon="glyphicon-tasks"
       title="Settings available in the Email Editor" />
-    <b-collapse id="functionalities" accordion="module-settings-accordion-right">
+    <b-collapse id="functionalities" accordion="component-setting">
       <b-card class="plugins">
         <group-container
           v-for="(pluginGroup, groupKey) in pluginsGroups"
@@ -112,9 +116,6 @@ export default {
     component() {
       return this.module.structure.columns[this.currentComponent.columnId]
         .components[this.currentComponent.componentId];
-    },
-    _() {
-      return _;
     },
   },
   methods: {

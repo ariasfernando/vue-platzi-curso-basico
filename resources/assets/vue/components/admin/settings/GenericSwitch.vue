@@ -1,22 +1,37 @@
 <template>
-  <settings-container :label="label" v-if="showSetting">
+  <SettingsContainer v-if="showSetting" :label="label">
     <template slot="setting-right">
-
-        <el-switch
-          v-model="mainSetting"
-          activeColor="#78dcd6"
-          :width="40">
-        </el-switch>
+      <ElSwitch
+        v-model="mainSettingSwitch"
+        active-color="#78dcd6"
+        :width="40" />
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 <script>
-import SettingMixin from "../mixins/SettingMixin.js";
-import SettingsContainer from "../../common/settings/containers/SettingsContainer.vue";
+import SettingMixin from '../mixins/SettingMixin';
+import SettingsContainer from '../../common/settings/containers/SettingsContainer.vue';
 
 export default {
-  name: "generic-text",
-  mixins: [SettingMixin],
+  name: 'GenericText',
   components: { SettingsContainer },
+  mixins: [SettingMixin],
+  computed: {
+    mainSettingSwitch: {
+      get() {
+        if (this.isInverted) {
+          return !this.mainSetting;
+        }
+        return this.mainSetting;
+      },
+      set(newValue) {
+        if (this.isInverted) {
+          this.mainSetting = !newValue;
+        } else {
+          this.mainSetting = newValue;
+        }
+      },
+    },
+  },
 };
 </script>

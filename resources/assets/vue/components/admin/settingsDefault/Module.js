@@ -2,8 +2,6 @@ function moduleDefault() {
   return {
     componentSettings: [
       {
-        groupLabel: 'Background color',
-        showLabel: false,
         settings: [{
           name: 'bgcolor',
           aclName: 'background_bgcolor',
@@ -13,8 +11,6 @@ function moduleDefault() {
         }],
       },
       {
-        groupLabel: 'Padding',
-        showLabel: false,
         settings: [{
           name: 'padding',
           aclName: 'padding_padding',
@@ -23,8 +19,6 @@ function moduleDefault() {
         }],
       },
       {
-        groupLabel: 'Border',
-        showLabel: false,
         settings: [{
           name: 'border-group',
           aclName: 'border_border-group',
@@ -32,8 +26,6 @@ function moduleDefault() {
         }],
       },
       {
-        groupLabel: 'Class and stacking group',
-        showLabel: false,
         settings: [{
           name: 'classes',
           aclName: 'style_classes',
