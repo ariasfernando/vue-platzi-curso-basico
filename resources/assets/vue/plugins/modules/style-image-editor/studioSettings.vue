@@ -155,17 +155,6 @@ export default {
                 columnId: payload.columnId,
                 componentId: payload.componentId
             });
-            // Update component view in the third column
-            this.$store.commit('module/setChangeSettingComponent', {
-                style:
-                    this.module.structure.columns[payload.columnId].components[
-                        payload.componentId
-                    ].style || {},
-                attribute:
-                    this.module.structure.columns[payload.columnId].components[
-                        payload.componentId
-                    ].attribute || {}
-            });
         },
         updateField(value, option) {
             const config = {};
@@ -231,12 +220,19 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .config-inner {
-    padding-left: 10px;
+  padding-left: 10px;
 }
 
 .config-inner > * {
-    padding-bottom: 5px;
+  padding-bottom: 5px;
+}
+
+.el-input-number /deep/ {
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    width: 17px;
+  }
 }
 </style>

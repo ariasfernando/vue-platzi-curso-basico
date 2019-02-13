@@ -10,17 +10,7 @@
 
     <div class="col-xs-6 header-col">
       <div class="section-title vertical-center">
-        <div class="switch">
-          <input type="radio" class="switch-input" name="view" value="desktop" id="desktop" checked>
-          <label for="desktop" class="switch-label switch-label-off campaign-switch-view" @click="changeBuildingMode('desktop')">
-            <i class="fa fa-desktop"></i>
-          </label>
-          <input type="radio" class="switch-input" name="view" value="mobile" id="mobile">
-          <label for="mobile" class="switch-label switch-label-on campaign-switch-view" @click="changeBuildingMode('mobile')">
-            <i class="glyphicon glyphicon-phone"></i>
-          </label>
-          <span class="switch-selection"></span>
-        </div>
+        <stui-switch-desktop-mobile v-model="buildingMode" />
       </div>
     </div>
 
@@ -38,66 +28,68 @@
 export default {
   computed: {
     module() {
-      return this.$store.getters["module/module"];
+      return this.$store.getters['module/module'];
     },
-    buildingMode() {
-      return this.$store.getters["module/buildingMode"];
-    }
+    buildingMode: {
+      get() {
+        return this.$store.getters['module/buildingMode'];
+      },
+      set(value) {
+        this.$store.commit('module/setBuildingMode', value);
+      },
+    },
   },
   data() {
     return {
-      showRaw: false
+      showRaw: false,
     };
   },
   methods: {
     toggleRaw() {
-      this.$store.commit("module/toggleRaw");
-    },
-    changeBuildingMode(mode) {
-      this.$store.commit("module/setBuildingMode", mode);
+      this.$store.commit('module/toggleRaw');
     },
     setModuleField(data) {
-      this.$store.commit("module/setModuleFields", data);
+      this.$store.commit('module/setModuleFields', data);
     },
     saveModule(status) {
-      this.$store.commit("global/setLoader", true);
+      this.$store.commit('global/setLoader', true);
       this.setModuleField({ status });
 
-      const data = this.module;
+      let data = this.module;
 
       this.$store
-        .dispatch("module/saveModuleData", data)
+        .dispatch('module/saveModuleData', data)
         .then(response => {
-          this.$store.commit("global/setLoader", false);
-          if (this.module.status === "publish") {
-            this.$router.push("/");
-          } else if (this.module.status === "draft" && data.moduleId) {
-            this.$router.push("/edit/" + data.moduleId);
+          this.$store.commit('global/setLoader', false);
+          if (this.module.status === 'publish') {
+            this.$router.push('/');
+          } else if (this.module.status === 'draft' && data.moduleId) {
+            this.$router.push('/edit/' + data.moduleId);
           }
-          this.$root.$toast("Module Saved", { className: "et-success" });
+          this.$root.$toast('Module Saved', { className: 'et-success' });
         })
         .catch(error => {
-          this.$store.commit("global/setLoader", false);
+          this.$store.commit('global/setLoader', false);
           if (error.status === 422) {
             this.$root.$toast(
               this.$options.filters.parseValidationErrors(error),
               {
-                className: "et-error",
+                className: 'et-error',
                 closeable: true,
-                duration: 10000
-              }
+                duration: 10000,
+              },
             );
           } else {
             this.$root.$toast(
               "Oops! Something went wrong! Please try again. If it doesn't work, please contact our support team.",
               {
-                className: "et-error"
-              }
+                className: 'et-error',
+              },
             );
           }
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -116,106 +108,17 @@ export default {
   box-shadow: 0px 0px 4px #999999;
   margin-top: -3px;
   min-width: 1200px;
-
   .header-col {
     height: 100%;
   }
-
   .vertical-center {
     min-height: 100%;
     display: flex;
     align-items: center;
   }
-
-  .switch {
-    position: relative;
-    height: 29px;
-    width: 100px;
-    background: @stensul-white;
-    border-radius: 3px;
-    margin: 0 auto;
-    border: 1px solid #dfdfdf;
-    margin-top: -3px;
-  }
-
-  .switch-label {
-    position: relative;
-    z-index: 2;
-    float: left;
-    width: 49px;
-    line-height: 21px;
-    font-size: 16px;
-    color: @stensul-purple;
-    text-align: center;
-    cursor: pointer;
-    margin: 0 !important;
-
-    i {
-      display: inline-block;
-      vertical-align: sub;
-    }
-  }
-
-  .switch-label:active {
-    font-weight: bold;
-  }
-
-  .switch-label-off {
-    padding-left: 2px;
-  }
-
-  .switch-label-on {
-    padding-right: 2px;
-  }
-
-  .switch-input {
-    display: none;
-  }
-
-  .switch-input:checked + .switch-label {
-    font-weight: bold;
-    color: #fff;
-    -webkit-transition: 0.15s ease-out;
-    -moz-transition: 0.15s ease-out;
-    -o-transition: 0.15s ease-out;
-    transition: 0.15s ease-out;
-  }
-
-  .switch-input:checked + .switch-label-on ~ .switch-selection {
-    left: 50px;
-  }
-
-  .switch-selection {
-    display: block;
-    position: absolute;
-    z-index: 1;
-    top: 2px;
-    left: 2px;
-    width: 46px;
-    height: 23px;
-    border-radius: 2px;
-    background: @stensul-purple;
-    -webkit-transition: left 0.15s ease-out;
-    -moz-transition: left 0.15s ease-out;
-    -o-transition: left 0.15s ease-out;
-    transition: left 0.15s ease-out;
-  }
-  .back {
-    border-right: 1px solid #ffffff;
-
-    i {
-      font-size: 24px;
-      margin-right: 5px;
-    }
-
-    a {
-      color: #ffffff;
-    }
-  }
-
   .section-title {
     font-size: 18px;
-    font-family: "Open Sans", Arial, sans-serif;
+    font-family: 'Open Sans', Arial, sans-serif;
     font-weight: 300;
     margin-top: -1px;
   }

@@ -1,8 +1,5 @@
 <template>
-  <ModuleContainer
-    :component="component"
-    :is-active="isActive"
-    @select-component="selectComponentHandler">
+  <ElementContainer :component="component" :is-active="isActive" @select-component="selectComponentHandler">
     <table
       :width="component.container.attribute.width || '100%'"
       :style="{width:widthStyle(component.container.attribute.width || '100%')}"
@@ -37,10 +34,9 @@
               :height="component.image.attribute.height === 'auto' ? undefined : component.image.attribute.height"
               :alt="component.image.attribute.alt"
               :title="component.image.attribute.title">
-            <template v-if="component.image.attribute.placeholderMobile">
-              <div
-                class="show-img-mobile"
-                style="display:none;width:0;overflow:hidden;max-height:0!important;">
+            <template
+              v-if="component.image.attribute.placeholderMobile">
+              <div class="show-img-mobile" style="display:none;width:0;overflow:hidden;max-height:0!important;">
                 <img
                   :src="imageUrl(component.image.attribute.placeholderMobile)"
                   border="0"
@@ -55,26 +51,23 @@
               </div>
             </template>
           </a>
-          <ComponentToolbar :component-id="componentId" :column-id="columnId" />
         </td>
       </tr>
     </table>
-  </ModuleContainer>
+  </ElementContainer>
   <!-- IMAGE ELEMENT ENDS -->
 </template>
 
 <script>
-import ComponentToolbar from './ComponentToolbar.vue';
-import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
+import ElementContainer from '../../common/containers/ElementContainer.vue';
 import ElementMixin from '../../common/mixins/ElementMixin';
+import MobileStylesMixin from '../../common/mixins/MobileStylesMixin';
 import PlaceholderMixin from '../../common/mixins/PlaceholderMixin';
-import ModuleContainer from '../../common/containers/ModuleContainer.vue';
 
 export default {
   name: 'ImageElement',
   components: {
-    ComponentToolbar,
-    ModuleContainer,
+    ElementContainer,
   },
   mixins: [MobileStylesMixin, ElementMixin, PlaceholderMixin],
   computed: {

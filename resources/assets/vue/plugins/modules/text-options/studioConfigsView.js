@@ -17,6 +17,14 @@ function configsView() {
         label: 'Strikethrough',
         icon: 'fa fa-strikethrough',
       },
+      superscript: {
+        label: 'Superscript',
+        icon: 'fa fa-superscript',
+      },
+      fontsizeselect: {
+        label: 'Font size',
+        icon: 'fa-adapter glyphicon glyphicon-text-size',
+      },
       alignleft: {
         label: 'Align left',
         icon: 'fa fa-align-left',
@@ -32,14 +40,6 @@ function configsView() {
       alignjustify: {
         label: 'Align justify',
         icon: 'fa fa-align-justify',
-      },
-      superscript: {
-        label: 'Superscript',
-        icon: 'fa fa-superscript',
-      },
-      fontsizeselect: {
-        label: 'Font size',
-        icon: 'fa-adapter glyphicon glyphicon-text-size',
       },
       bullist: {
         label: 'Bullet list',

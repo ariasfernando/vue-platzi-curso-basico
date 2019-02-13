@@ -6,10 +6,12 @@
     <b-collapse id="element" visible accordion="module-left">
       <b-card class="control">
         <draggable
+          class="components-list"
           :element="'ul'"
           :options="options"
           width="100%"
-          class="components-list">
+          @start="setDraggable(true)"
+          @end="setDraggable(false)">
           <li class="component-item" data-type="text-element">
             <i class="fa fa-align-justify" />
             <p>Text</p>
@@ -61,6 +63,14 @@
           dragClass: 'drag-component-menu',  // Class name for the dragging item
         },
       };
+    },
+    methods: {
+      setDraggable(value) {
+        this.$store.commit('module/setDraggable', {
+          property: 'dragging',
+          value,
+        });
+      },
     },
   };
 </script>

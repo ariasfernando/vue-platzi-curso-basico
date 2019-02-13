@@ -3,6 +3,7 @@ module.exports = {
   type: 'studio',
   key: 'text_458798',
   name: 'text',
+  description: 'text',
   structure: {
     columnsStacking: 'normal',
     attribute: {
@@ -383,6 +384,8 @@ module.exports = {
     },
   },
   status: 'draft',
-  updated_at: '2018-07-06 09:10:16',
-  created_at: '2018-07-04 11:09:59',
+  updated_by: 'test@stensul.com',
+  created_by: 'test@stensul.com',
+  updated_at: '2018-07-02 16:22:15',
+  created_at: '2018-07-02 16:22:15',
 };

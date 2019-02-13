@@ -2,8 +2,6 @@ function dividerDefault() {
   return {
     componentSettings: [
       {
-        groupLabel: 'Classes',
-        showLabel: false,
         settings: [{
           name: 'classes',
           aclName: 'classes_classes',
@@ -13,8 +11,6 @@ function dividerDefault() {
         }],
       },
       {
-        groupLabel: 'Style settings',
-        showLabel: false,
         settings: [{
           name: 'bgcolor',
           aclName: 'style_bgcolor',
@@ -66,8 +62,6 @@ function dividerDefault() {
         }],
       },
       {
-        groupLabel: 'Padding',
-        showLabel: false,
         settings: [{
           name: 'padding',
           aclName: 'padding_padding',
@@ -77,8 +71,6 @@ function dividerDefault() {
         }],
       },
       {
-        groupLabel: 'Border',
-        showLabel: false,
         settings: [{
           name: 'border-group',
           aclName: 'border_border-group',
