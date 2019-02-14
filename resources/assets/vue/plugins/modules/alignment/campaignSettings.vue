@@ -10,7 +10,7 @@
           :data-tooltip="option"
           highlight
           expanded
-          @click="changeAlignment(option)">
+          @click="value = option">
           <i :class="`fa fa-align-${option}`" />
         </stui-button>
       </stui-field>
@@ -42,11 +42,6 @@ export default {
           this.saveAttributeInThisElement({ subComponent: 'button', property: 'align', value });
         }
       },
-    },
-  },
-  methods: {
-    changeAlignment(option) {
-      this.value = option;
     },
   },
 };

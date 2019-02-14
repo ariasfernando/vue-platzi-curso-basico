@@ -8,33 +8,20 @@
 
 <script>
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {
   components: {
     SettingsContainer,
   },
-  props: ['name', 'plugin', 'moduleId'],
+  mixins: [pluginCampaignMixin],
   computed: {
-    libraryConfig() {
-      return this.$store.state.campaign.campaign.library_config;
-    },
-    currentModule() {
-      return this.$store.getters['campaign/currentModule'];
-    },
-    module() {
-      return this.$store.getters['campaign/modules'][this.currentModule];
-    },
     colors: {
       get() {
         return { hex: this.module.structure.attribute.bgcolor };
       },
       set(value) {
-        const payload = {
-          moduleId: this.currentModule,
-          attribute: 'bgcolor',
-          attributeValue: value.hex,
-        };
-        this.$store.commit('campaign/saveModuleAttribute', payload);
+        this.saveAttributeInThisElement({property:'bgcolor', value: value.hex}) 
       },
     },
   },

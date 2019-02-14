@@ -21,7 +21,7 @@ export default {
       if (this.buildingMode === 'desktop') {
         $itemsToEqualize = $(selector);
       } else {
-        $itemsToEqualize = $('#shadowRender').contents().find(selector);
+        $itemsToEqualize = $(this.iframe).contents().find(selector);
       }
       let higherHeight = 0;
       $itemsToEqualize.each((index, item) => {
@@ -104,7 +104,7 @@ export default {
         }
 
         if (this.buildingMode === 'mobile') {
-          $('#shadowRender')[0].dispatchEvent(new Event("update-iframe"))
+          this.iframe.dispatchEvent(new Event("update-iframe"))
         }
       },
       deep: true,

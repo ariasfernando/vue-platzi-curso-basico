@@ -74,7 +74,7 @@ export default {
   mixins: [validatorMixin, pluginCampaignMixin],
   computed: {
     target() {
-      return this.element[this.plugin.subComponent].attribute ? this.element[this.plugin.subComponent].attribute.target : '_blank';
+      return this.element[this.plugin.subComponent].attribute.target || '_blank';
     },
     href: {
       get() {
