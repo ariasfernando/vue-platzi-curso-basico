@@ -22,10 +22,17 @@
               :title="`${columnKey+1}`"
               :button-id="`column-${columnKey}`">
               <GroupContainer>
-                <Component :is="'campaign-' + plugin.name" v-for="(plugin, pluginKey) in columnPlugins(column, $_app)"
-                           :key="columnKey + pluginKey" :name="pluginKey"
-                           :plugin="plugin" :column-id="columnKey" :module-id="currentModule" :plugin-key="pluginKey"
-                           :module="module" :element="column" />
+                <Component
+                  :is="'campaign-' + plugin.name"
+                  v-for="(plugin, pluginKey) in columnPlugins(column, $_app)"
+                  :key="columnKey + pluginKey"
+                  :name="pluginKey"
+                  :plugin="plugin"
+                  :column-id="columnKey"
+                  :module-id="currentModule"
+                  :plugin-key="pluginKey"
+                  :module="module"
+                  :element="column" />
               </GroupContainer>
             </b-tab>
           </b-tabs>

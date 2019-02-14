@@ -1,6 +1,19 @@
 export default {
-  props: ['name', 'plugin', 'pluginKey', 'element-location', 'moduleId', 'element', 'current-element-Key', 'element-key', 'module'],
+  props: [
+    'name',
+    'plugin',
+    'pluginKey',
+    'element-location',
+    'moduleId',
+    'element',
+    'current-element-Key',
+    'element-key',
+    'module',
+  ],
   computed: {
+    campaign() {
+      return this.$store.getters['campaign/campaign'];
+    },
     buildingMode() {
       return this.$store.getters['campaign/buildingMode'];
     },
@@ -19,13 +32,23 @@ export default {
     isCurrentElement() {
       return this.elementKey === this.currentElementKey;
     },
+    iframe() {
+      return document.getElementById('shadowRender');
+    },
+    tinyId() {
+      return this.getTinyId(this.module.idInstance, this.element.id);
+    },
   },
   methods: {
+    getTinyId(idInstance, elementId) {
+      return `idInstance-${idInstance}-componentId-${elementId}`;
+    },
     saveElementProperty({ elementId, subComponent, link, property, value }) {
       const payload = {
         moduleIdInstance: this.moduleIdInstance,
         elementId,
-        subComponent: subComponent || this.plugin.subComponent || this.subComponent,
+        subComponent:
+          subComponent || this.plugin.subComponent || this.subComponent,
         link,
         property,
         value,
@@ -42,6 +65,16 @@ export default {
         value,
       };
       this.$store.commit('campaign/saveElementPluginData', payload);
+    },
+    saveElementInThisPluginData({ type, path, value }) {
+      const payload = {
+        elementId: this.element.id,
+        plugin: this.name,
+        type,
+        path,
+        value,
+      };
+      this.saveElementPluginData(payload);
     },
     getElement(elementId) {
       if (!this.isCustom) {
@@ -66,15 +99,18 @@ export default {
     getColumnIndexByComponentId(elementId) {
       if (!this.isCustom) {
         let columnIndex = false;
-        _.forEach(this.module.structure.columns, (column, currentColumnIndex) => {
-          _.forEach(column.components, (currentComponent) => {
-            if (currentComponent.id === elementId) {
-              columnIndex = currentColumnIndex;
-              return false;
-            }
-          });
-          return columnIndex === false;
-        });
+        _.forEach(
+          this.module.structure.columns,
+          (column, currentColumnIndex) => {
+            _.forEach(column.components, (currentComponent) => {
+              if (currentComponent.id === elementId) {
+                columnIndex = currentColumnIndex;
+                return false;
+              }
+            });
+            return columnIndex === false;
+          },
+        );
         return columnIndex;
       }
       return undefined;
@@ -83,12 +119,15 @@ export default {
       if (!this.isCustom) {
         let componentIndex = false;
         _.forEach(this.module.structure.columns, (column) => {
-          _.forEach(column.components, (currentComponent, currentComponentIndex) => {
-            if (currentComponent.id === elementId) {
-              componentIndex = currentComponentIndex;
-              return false;
-            }
-          });
+          _.forEach(
+            column.components,
+            (currentComponent, currentComponentIndex) => {
+              if (currentComponent.id === elementId) {
+                componentIndex = currentComponentIndex;
+                return false;
+              }
+            },
+          );
           return componentIndex === false;
         });
         return componentIndex;
@@ -96,7 +135,10 @@ export default {
       return undefined;
     },
     addClassToElement({ elementId, value }) {
-      let classes = this.getElement(elementId).container.attribute.classes;
+      const element = elementId
+        ? this.getElement(elementId)
+        : this.module.structure;
+      let classes = element.container.attribute.classes;
       const classesArr = classes ? classes.split(' ') : [];
       const index = classesArr.indexOf(value);
       if (index === -1) {
@@ -125,7 +167,8 @@ export default {
     saveInThisElement({ subComponent, link, property, value }) {
       this.saveElementProperty({
         elementId: this.element.id,
-        subComponent: subComponent || this.plugin.subComponent || this.subComponent,
+        subComponent:
+          subComponent || this.plugin.subComponent || this.subComponent,
         link,
         property,
         value,

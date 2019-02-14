@@ -358,6 +358,7 @@ function campaignStore() {
         this.commit('campaign/setDirty', true);
       },
       saveModuleProperty(state, data) {
+        // DEPRECATE
         const module = state.modules[data.moduleId].structure;
         const properties = data.link ? module[data.link] : module;
         Vue.set(properties, data.property, data.value);

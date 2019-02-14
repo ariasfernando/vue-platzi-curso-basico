@@ -13,11 +13,6 @@ import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 export default {
   components: { SettingsContainer },
   mixins: [pluginCampaignMixin],
-  data() {
-    return {
-      instance: Math.floor(100000 + (Math.random() * 900000)),
-    };
-  },
   computed: {
     colors: {
       get() {
