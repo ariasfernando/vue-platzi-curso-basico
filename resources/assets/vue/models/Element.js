@@ -1,4 +1,4 @@
-import defaultElements from '../resources/elements';
+import elements from '../resources/elements';
 
 class Element {
   constructor(properties) {
@@ -10,7 +10,7 @@ class Element {
     }
 
     // Call function here to avoid override issues
-    const defaultProperties = defaultElements[properties.type]();
+    const defaultProperties = elements[properties.type];
 
     this.properties = {
       ...defaultProperties,
