@@ -79,13 +79,13 @@ class Create extends Command
         $params = [
             'name' => trim($name),
             'last_name' => trim($last_name),
-            'email' => strtolower(trim($email)),
+            'email' => mb_strtolower(trim($email)),
             'password' => bcrypt($password),
             'roles' => $selected_array
         ];
 
         if ($email != "") {
-            if (!User::where('email', '=', strtolower($email))->exists()) {
+            if (!User::where('email', '=', mb_strtolower($email))->exists()) {
                 $user = User::create($params);
 
                 Activity::log('User created', array('properties' => ['user_id' => new ObjectID($user->_id)]));
@@ -95,7 +95,7 @@ class Create extends Command
                 );
             } else {
                 $this->error('The email is already registered.');
-                if (User::where('email', '=', strtolower($email))->first()->status === 'deleted') {
+                if (User::where('email', '=', mb_strtolower($email))->first()->status === 'deleted') {
                     return 5;
                 }
                 return 3;
