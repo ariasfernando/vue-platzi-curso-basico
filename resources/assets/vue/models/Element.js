@@ -10,8 +10,8 @@ class Element {
     }
 
     // Call function here to avoid override issues
-    const defaultProperties = elements[properties.type];
-
+    const defaultProperties = _.cloneDeep(elements[properties.type]);
+    defaultProperties.id= Math.floor(100000 + (Math.random() * 900000));
     this.properties = {
       ...defaultProperties,
       ...properties,

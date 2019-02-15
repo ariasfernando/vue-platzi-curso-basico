@@ -1,5 +1,4 @@
 export default {
-  id: Math.floor(100000 + (Math.random() * 900000)),
   type: 'text-element',
   data: {
     text: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.',

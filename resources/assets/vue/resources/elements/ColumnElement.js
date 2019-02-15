@@ -1,5 +1,4 @@
 export default {
-  id: Math.floor(100000 + (Math.random() * 900000)),
   type: 'column-element',
   container: {
     style: {},
