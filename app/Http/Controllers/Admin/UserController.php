@@ -221,6 +221,7 @@ class UserController extends Controller
             ], 422);
         }
 
+        $email = mb_strtolower(trim($request->input('email')));
         $roles = !is_null($request->input("roles")) ? $request->input("roles") : [];
         $code = \Artisan::call('user:create', [
             '--name' => $request->input("name"),
@@ -246,7 +247,7 @@ class UserController extends Controller
         }
 
         if (env('USER_LOGIN', 'default') === 'default') {
-            $user_auth = User::where('email', '=', $request->input('email'))->first();
+            $user_auth = User::where('email', '=', $email)->first();
             if (is_null($user_auth['status']) || $user_auth['status'] != "deleted") {
                 $pass_token = $this->passwords->getRepository()->create($user_auth);
                 $user_auth->notify(new WelcomePasswordNotification($pass_token, $user_auth['name'], $user_auth['roles']));
