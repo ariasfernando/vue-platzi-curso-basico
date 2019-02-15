@@ -1,5 +1,5 @@
 <template>
-    <div class="group-container" :class="[customClass, {'clickeable': clickeable}]" @click="e => $emit('click', e)">
+    <div class="group-container" :class="[customClass, {'clickeable': clickeable}]" @click="e => $emit('click', e)" id="moduleButton">
       <label v-if="label">{{label}}</label>
       <slot></slot>
     </div>
