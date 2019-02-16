@@ -70,7 +70,7 @@ function Module(data = {}) {
       backgroundPosition: style.backgroundPosition || '',
     },
 
-    columns: data.structure && data.structure.columns ? data.structure.columns : [],
+    rows: data.structure && data.structure.rows ? data.structure.rows : [],
   };
 
   _.extend(this.structure.settings, settings);

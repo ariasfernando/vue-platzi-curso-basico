@@ -21,9 +21,10 @@
             resize="none"
             @setting-updated="descriptionUpdatedHandler" />
           <input-generic-number
+            v-if="!module.structure.rows"
             label="Columns"
             name="length"
-            :element="module.structure.columns"
+            :element="module.structure.rows[0].columns"
             :min-value="1"
             :max-value="8"
             @setting-updated="settingColumnsHandler" />
@@ -73,10 +74,7 @@ export default {
           number: numCols - cols,
         });
         // unSet current component
-        this.$store.commit('module/setCurrentComponent', {
-          columnId: undefined,
-          componentId: undefined,
-        });
+        this.$store.commit('module/setCurrentElementId', false);
       }
       if (numCols < cols) {
         for (let i = numCols; i < cols; i++) {

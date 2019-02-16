@@ -17,7 +17,7 @@
           </ScrollbarContainer>
         </div>
         <!-- END: Module Container -->
-        <ColumnBarContainer side="right">
+        <ColumnBarContainer v-if="!module.structure.rows" side="right">
           <ModuleSettings v-if="showGeneralSettings" :current-component="currentComponent" />
           <ColumnSettings v-if="showColumnSettings" :current-component="currentComponent" />
           <ComponentSettings v-if="showElementSettings" :current-component="currentComponent" />
@@ -167,11 +167,12 @@ export default {
   },
   methods: {
     loadColumn() {
-      const numCols = this.module.structure.columns.length;
-
-      if (numCols === 0) {
-        this.$store.dispatch('module/addColumn');
-      }
+      _.forEach(this.module.structure.rows, (row)=>{
+        const numCols = row.columns.length
+        if (numCols === 0) {
+          this.$store.dispatch('module/addColumn',{row: this.row.id});
+        }
+      });
     },
     loadModule() {
       this.$store.commit('global/setLoader', true);
@@ -222,10 +223,7 @@ export default {
         $(e.target).hasClass('scrollbar-container-inner') ||
         $(e.target).hasClass('mCustomScrollBox')
       ) {
-        this.$store.commit('module/setCurrentComponent', {
-          columnId: undefined,
-          componentId: undefined,
-        });
+        this.$store.commit('module/setCurrentElementId', false);
       }
     },
   },

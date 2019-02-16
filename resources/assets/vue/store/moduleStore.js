@@ -14,27 +14,30 @@ const state = {
   module: {},
   currentElementId: false,
   buildingMode: 'desktop',
-  moduleHeight: 0,
   draggable: { dragging: false, changed: 0 },
   showRaw: false,
   loading: false,
   secondaryLoading: false,
+  moduleHeight: {},
   slideToggles: {},
 };
 
 const getColumnIndexByElementId = (module, elementId) => {
   let columnIndex = false;
-  _.forEach(module.structure.columns, (column, currentColumnIndex) => {
-    if (column.id === elementId) {
-      columnIndex = currentColumnIndex;
-      return false;
-    }
-    _.forEach(column.components, (currentComponent) => {
-      if (currentComponent.id === elementId) {
+  _.forEach(module.structure.rows, (row, currentColumnIndex) => {
+    _.forEach(row.columns, (column, currentColumnIndex) => {
+      if (column.id === elementId) {
         columnIndex = currentColumnIndex;
         return false;
       }
-      return true;
+      _.forEach(column.components, (currentComponent) => {
+        if (currentComponent.id === elementId) {
+          columnIndex = currentColumnIndex;
+          return false;
+        }
+        return true;
+      });
+      return columnIndex === false;
     });
     return columnIndex === false;
   });
@@ -42,31 +45,62 @@ const getColumnIndexByElementId = (module, elementId) => {
 };
 const getComponentIndexByComponentId = (module, elementId) => {
   let componentIndex = false;
-  _.forEach(module.structure.columns, (column) => {
-    _.forEach(column.components, (currentComponent, currentComponentIndex) => {
-      if (currentComponent.id === elementId) {
-        componentIndex = currentComponentIndex;
-        return false;
-      }
-      return true;
+  _.forEach(module.structure.rows, (row) => {
+    _.forEach(row.columns, (column) => {
+      _.forEach(column.components, (currentComponent, currentComponentIndex) => {
+        if (currentComponent.id === elementId) {
+          componentIndex = currentComponentIndex;
+          return false;
+        }
+        return true;
+      });
+      return componentIndex === false;
     });
     return componentIndex === false;
   });
   return componentIndex;
 };
-const getElement = (module, elementId) => {
-  let element = false;
-  _.forEach(module.structure.columns, (column) => {
-    if (column.id === elementId) {
-      element = column;
-      return false;
-    }
-    _.forEach(column.components, (CurrentComponent) => {
-      if (CurrentComponent.id === elementId) {
-        element = CurrentComponent;
+const getRowIndexByElementId = (module, elementId) => {
+  let rowIndex = false;
+  _.forEach(module.structure.rows, (row, currentRowIndex) => {
+    _.forEach(row.columns, (currentColumn) => {
+      if (currentColumn.id === elementId) {
+        rowIndex = currentRowIndex;
         return false;
       }
-      return true;
+      _.forEach(currentColumn.components, (currentComponent) => {
+        if (currentComponent.id === elementId) {
+          rowIndex = currentRowIndex;
+          return false;
+        }
+        return true;
+      });
+      return rowIndex === false;
+    });
+    return rowIndex === false;
+  });
+  return rowIndex;
+};
+const getElement = (module, elementId) => {
+  let element = false;
+  _.forEach(module.structure.rows, (row) => {
+    if (row.id === elementId) {
+      element = row;
+      return false;
+    }
+    _.forEach(row.columns, (column) => {
+      if (column.id === elementId) {
+        element = column;
+        return false;
+      }
+      _.forEach(column.components, (CurrentComponent) => {
+        if (CurrentComponent.id === elementId) {
+          element = CurrentComponent;
+          return false;
+        }
+        return true;
+      });
+      return !element;
     });
     return !element;
   });
@@ -108,13 +142,13 @@ const getters = {
   },
   currentComponent(state) {
     if (state.currentElementId) {
-      let columnId = getColumnIndexByElementId(state.module, state.currentElementId);
-      let componentId = getComponentIndexByComponentId(state.module, state.currentElementId);
-      columnId = columnId === false ? undefined : columnId;
-      componentId = componentId === false ? undefined : componentId;
+      let columnIndex = getColumnIndexByElementId(state.module, state.currentElementId);
+      let componentIndex = getComponentIndexByComponentId(state.module, state.currentElementId);
+      columnIndex = columnIndex === false ? undefined : columnIndex;
+      componentIndex = componentIndex === false ? undefined : componentIndex;
       return {
-        columnId,
-        componentId,
+        columnIndex,
+        componentIndex,
       };
     }
     return {};
@@ -181,8 +215,11 @@ const mutations = {
       state.currentElementId = false;
     }
   },
-  setModuleHeight(state, height) {
-    state.moduleHeight = height;
+  setCurrentElementId(state, id) {
+    state.currentElementId =id;
+  },
+  setModuleHeight(state, { key, value }) {
+    Vue.set(state.moduleHeight, key, value);
   },
   setDraggable(state, { property, value }) {
     Vue.set(state.draggable, property, value);
@@ -213,8 +250,8 @@ const mutations = {
   saveModule(state, moduleId) {
     state.module.moduleId = moduleId;
   },
-  addColumn(state, column) {
-    state.module.structure.columns.push(column);
+  addColumn(state, {column, rowId}) {
+    getElement(state.module, rowId).columns.push(column);
   },
   removeColumns(state, data) {
     state.module.structure.columns.splice(data.index, data.number);
@@ -244,11 +281,11 @@ const mutations = {
     }
     Vue.set(properties, data.property, data.value);
   },
-  addComponent(state, data) {
-    state.module.structure.columns[data.colId].components.splice(
-      data.index,
+  addComponent(state, {element, index, rowIndex, columnIndex}) {
+    state.module.structure.rows[rowIndex].columns[columnIndex].components.splice(
+      index,
       0,
-      data.el,
+      element,
     );
   },
   attachPlugins(state, data) {
@@ -257,15 +294,16 @@ const mutations = {
     ].plugins = data.plugins;
   },
   removeElement(state, { elementId }) {
-    const columnId = getColumnIndexByElementId(state.module, elementId);
-    state.module.structure.columns[
-      columnId
+    const columnIndex = getColumnIndexByElementId(state.module, elementId);
+    const rowIndex = getRowIndexByElementId(state.module, elementId);
+    state.module.structure.rows[rowIndex].columns[
+      columnIndex
     ].components.splice(
       getComponentIndexByComponentId(state.module, elementId),
       1,
     );
     // Set active the column that that contained the element.
-    state.currentElementId = state.module.structure.columns[columnId].id;
+    state.currentElementId = state.module.structure.rows[rowIndex].columns[columnIndex].id;
   },
   savePlugin(state, payload) {
     let pluginData = state.module;
@@ -383,7 +421,7 @@ const mutations = {
 };
 
 const actions = {
-  addColumn(context) {
+  addColumn(context, rowId) {
     // Get column plugins
     const plugins = {};
     const modulePlugins = Vue.prototype.$_app.modulePlugins;
@@ -400,7 +438,7 @@ const actions = {
     // Create new instance of Element width default column data
     const element = new Element({ type: 'column-element', plugins });
 
-    context.commit('addColumn', element.getProperties());
+    context.commit('addColumn', {column :element.getProperties(), rowId});
   },
   normalizeColumns(context, columns) {
     const width = 100 / columns.length;

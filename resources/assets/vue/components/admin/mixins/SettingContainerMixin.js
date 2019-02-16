@@ -61,28 +61,35 @@ export default {
       return this.$store.getters['module/currentElementId'];
     },
     currentElement() {
-      if (!this.currentElementId) {
-        return this.module;
-      }
+      getElement(this.currentElementId);
+    },
+  },
+  methods: {
+    getElement(elementId) {
       let element = false;
-      _.forEach(this.module.structure.columns, (column) => {
-        if (column.id === this.currentElementId) {
-          element = column;
+      _.forEach(this.module.structure.rows, (row) => {
+        if (row.id === elementId) {
+          element = row;
           return false;
         }
-        _.forEach(column.components, (CurrentComponent) => {
-          if (CurrentComponent.id === this.currentElementId) {
-            element = CurrentComponent;
+        _.forEach(row.columns, (column) => {
+          if (column.id === elementId) {
+            element = column;
             return false;
           }
-          return true;
+          _.forEach(column.components, (CurrentComponent) => {
+            if (CurrentComponent.id === elementId) {
+              element = CurrentComponent;
+              return false;
+            }
+            return true;
+          });
+          return !element;
         });
         return !element;
       });
       return element;
     },
-  },
-  methods: {
     settingProps(setting) {
       return {
         'column-id': this.currentComponent.columnId,

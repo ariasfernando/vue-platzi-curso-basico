@@ -30,6 +30,7 @@ export default {
   padding: 2px 7px 3px 7px;
   position: absolute;
   transform: translateX(-50%);
+  z-index: 2;
 
   &:hover {
     background: #aaaaaa;
