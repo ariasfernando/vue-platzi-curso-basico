@@ -5,17 +5,16 @@
       :data-type="element.type"
       :data-row-id="element.id"
        @mouseover="isHover = true"
-       @mouseleave="isHover = false"
-      :class="[element.container.attribute.classes,{'hide-element-selector' : !isHover && isStudio}]">
+       @mouseleave="isHover = false">
       <td
-        width="15%"
+        width="100%"
         :height="element.container.attribute.height"
         :style="elementBorderPaddingAndHeight(element.container)"
         :valign="element.container.attribute.valign || 'top'"
         :align="element.container.attribute.align || 'left'"
         class="stx-position-relative"
         :bgcolor="element.container.attribute.bgcolor"
-        :class="element.container.attribute.classes">
+        :class="[element.container.attribute.classes, {'hide-element-selector' : !isHover && isStudio}]">
         <table
           v-if="element.content"
           cellpadding="0"
@@ -37,7 +36,17 @@
             </td>
           </tr>
         </table>
-        <slot v-else />
+        <slot v-else/>
+        <ElementSelector
+          v-if="isStudio"
+          class="row"
+          :left-position="templateWidth + 40"
+          :bottom="elementSelectorTop/2"
+          :width="50"
+          label="Row"
+          :active="currentElementId === element.id"
+          selector-icon="fa fa-cog"
+          @element-selected="$emit('select-component', element.id)" />
       </td>
     </tr>
     <slot v-else />
@@ -47,6 +56,7 @@
 <script>
 import ElementMixin from '../../common/mixins/ElementMixin';
 import Wrapper from '../Wrapper';
+import ElementSelector from '../ElementSelector';
 
 export default {
   name: 'RowContainer',
@@ -57,6 +67,7 @@ export default {
     };
   },
   components: {
+    ElementSelector,
     Wrapper,
   },
 };

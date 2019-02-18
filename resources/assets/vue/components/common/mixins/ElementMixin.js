@@ -76,6 +76,16 @@ export default {
     draggableChanged() {
       return this.$store.getters['module/draggable'].changed;
     },
+    elementSelectorTop() {
+      const top = this.moduleHeight[`row-${this.row.id}`] ? this.moduleHeight[`row-${this.row.id}`] : 150;
+      const paddingBottom = _.parseInt(
+        this.module.structure.style.paddingBottom || 0,
+      );
+      const borderBottom = _.parseInt(
+        this.module.structure.style.borderBottomWidth || 0,
+      );
+      return top + paddingBottom + borderBottom;
+    },
   },
   methods: {
     getElement(elementId) {

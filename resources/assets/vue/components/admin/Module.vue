@@ -22,7 +22,14 @@
           cellspacing="0"
           border="0"
           style="width: 100%;">
-          <RowContainer v-for="(row, rowIndex) in module.structure.rows" :key="rowIndex" :element="row" :with-row="true">
+          <RowContainer
+            v-for="(row, rowIndex) in module.structure.rows"
+            :key="rowIndex"
+            :module="module"
+            :element="row"
+            :row="row"
+            :with-row="true"
+            @select-component="selectComponent">
               <ColumnManager :row="row">
                 <template slot-scope="{columnData}">
                   <ColumnDraggable
@@ -59,7 +66,7 @@
       v-if="isStudio"
       :left-position="templateWidth/2"
       :bottom="-70"
-      label="Row"
+      label="Module"
       :active="isActiveGeneralSettings"
       selector-icon="fa fa-cog"
       @element-selected="moduleSelect" />
