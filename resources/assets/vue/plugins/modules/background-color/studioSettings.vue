@@ -1,58 +1,41 @@
 <template>
-  <settings-container :label="plugin.title">
+  <SettingsContainer :label="plugin.title">
     <template slot="setting-right">
-        <toggle-button :value="enabled" @change="toggle"></toggle-button>
+      <StuiToggleButton :value="plugin.enabled" @change="toggle" />
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 <script>
-  import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
-  import pluginMixin from '../mixins/pluginMixin';
-  export default {
-    props: ['name'],
-    components: { SettingsContainer },
-    mixins: [pluginMixin],
-    watch: {
-      component: {
-        handler: function() {
-          if(this.plugin.subComponent === undefined) {
-            switch (this.component.type) {
-              case 'button-element':
-                this.plugin.subComponent ='button';
-                break;
-              case 'image-element':
-                this.plugin.subComponent ='container';
-                break;
-              case 'text-element':
-                this.plugin.subComponent ='container';
-                break;
-              case 'divider-element':
-                this.plugin.subComponent ='container';
-                break;
-              default:
-                break;
-            }
-          }
-        },
-        deep: true,
-      },
-    },
-    data() {
-      return {
-        enabled: false,
-      }
-    },
-    methods: {
-      toggle(value) {
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          enabled: value,
-        };
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
+import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
 
-        this.$store.commit('module/togglePlugin', payload);
-      }
-    }
-  }
+export default {
+  components: { SettingsContainer },
+  mixins: [pluginMixinAdmin],
+  watch: {
+    element: {
+      handler() {
+        if (this.plugin.subComponent === undefined) {
+          switch (this.component.type) {
+            case 'button-element':
+              this.plugin.subComponent = 'button';
+              break;
+            case 'image-element':
+              this.plugin.subComponent = 'container';
+              break;
+            case 'text-element':
+              this.plugin.subComponent = 'container';
+              break;
+            case 'divider-element':
+              this.plugin.subComponent = 'container';
+              break;
+            default:
+              break;
+          }
+        }
+      },
+      deep: true,
+    },
+  },
+};
 </script>

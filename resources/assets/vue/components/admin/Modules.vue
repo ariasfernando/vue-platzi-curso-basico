@@ -1,6 +1,5 @@
 <template>
   <section class="col-xs-12 section-container list-layout">
-
     <div class="row list-header">
       <div class="col-xs-12">
         <div class="level">
@@ -33,7 +32,6 @@
             <div class="level-item">
               <div class="search-container">
                 <search-input
-                  :dirty="resetSearch"
                   :collection="modules[activeTab]"
                   :columns-to-filter="['name', 'status', 'libraries']"
                   @filtered="refreshData" />
@@ -54,6 +52,22 @@
             :class="{'is-empty': filteredModules[activeTab].length === 0}">
             <thead>
               <tr>
+                <th class="sortable created">
+                  <a
+                    id="created" href="#" class="sortable-option sort-order-desc"
+                    data-order-field="created">
+                      Created
+                    <i class="glyphicon glyphicon-menu-down" />
+                  </a>
+                </th>
+                <th class="sortable updated">
+                  <a
+                    id="lastModified" href="#" class="sortable-option sort-order-desc"
+                    data-order-field="lastModified">
+                      Last Modified
+                    <i class="glyphicon glyphicon-menu-down" />
+                  </a>
+                </th>
                 <th class="sortable name">
                   <a
                     id="name" href="#" class="sortable-option sort-order-desc"
@@ -82,7 +96,9 @@
               </tr>
             </thead>
             <tbody v-if="ready">
-              <tr v-for="(module, id) in filteredModules[activeTab]" :key="id" :data-module="id">
+              <tr v-for="(module, id) in paginatedFilteredModules" :key="id" :data-module="id">
+                <td :title="module.created_at" class="created">{{ module.created_at }} by {{ module.created_by }}</td>
+                <td :title="module.updated_at" class="updated">{{ module.updated_at }} by {{ module.updated_by }}</td>
                 <td :title="module.title" class="name">{{ module.title }}</td>
                 <td :title="module.libraries" class="libraries">
                   <span v-for="(library) in module.libraries" :key="library" class="st-rounded-tag">{{ library }}</span>
@@ -113,18 +129,25 @@
         <div v-if="ready && filteredModules[activeTab].length === 0" class="no-results">
           No results were found.
         </div>
+        <ElPagination
+          v-if="ready && filteredModules[activeTab].length !== 0"
+          style="text-align: center;"
+          layout="prev, pager, next"
+          :page-size="pageSize"
+          :total="filteredModules[activeTab].length"
+          @current-change="(value)=>{currentPagination = value}" />
         <div v-if="ready === false" class="no-results">
           <stui-spinner />
         </div>
       </div>
     </div>
-    <modal-container
+    <ModalContainer
       v-if="modulePreview === true"
       button-close-text="Close"
       :title="moduleSelected.name"
       @close-modal="modulePreview = false">
-      <module-preview :module="moduleSelected" />
-    </modal-container>
+      <ModulePreview :module="moduleSelected" />
+    </ModalContainer>
   </section>
 </template>
 
@@ -147,6 +170,8 @@ export default {
         studio: {},
         custom: {},
       },
+      currentPagination: 1,
+      pageSize: 10,
       ready: false,
       modulePreview: false,
       moduleSelected: false,
@@ -155,8 +180,14 @@ export default {
         custom: [],
       },
       activeTab: 'studio',
-      resetSearch: 0,
     };
+  },
+  computed: {
+    paginatedFilteredModules() {
+      const startItems = this.pageSize * (this.currentPagination - 1);
+      const endItems = this.pageSize * this.currentPagination;
+      return this.filteredModules[this.activeTab].slice(startItems, endItems);
+    },
   },
   created() {
     this.loadModules();
@@ -210,8 +241,6 @@ export default {
     },
     setTab(type) {
       this.activeTab = type;
-      this.filteredModules[type] = this.modules[type];
-      this.resetSearch++;
     },
   },
 };
@@ -246,22 +275,29 @@ $stensul-purple: #514960;
   }
   .list-body {
     .table {
+      tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+      }
       &.is-empty {
         margin-bottom: 0px;
       }
       th,
       td {
+        &.created {
+          width: 160px;
+        }
+        &.updated {
+          width: 160px;
+        }
         &.name {
-          width:30%;
         }
         &.libraries {
-          width: 40%;
         }
         &.status {
-          width:15%;
+          width: 72px;
         }
-        &.actions{
-          width: 15%;
+        &.actions {
+          width: 122px;
         }
       }
       th {
@@ -374,7 +410,7 @@ $stensul-purple: #514960;
   font-family: 'Open Sans', Arial, serif;
   font-weight: 300;
   &.is-2 {
-    font-size: 28px;
+    font-size: 20px;
   }
 }
 
@@ -393,6 +429,5 @@ $stensul-purple: #514960;
   vertical-align: baseline;
   white-space: nowrap;
 }
-
 </style>
 

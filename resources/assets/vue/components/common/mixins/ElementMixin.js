@@ -155,9 +155,8 @@ export default {
       }
       this.timer = setTimeout(() => {
         this.$store.dispatch(`${this.isCampaign ? 'campaign' : 'module'}/updateText`, {
-          moduleId: this.moduleId,
-          columnId: this.columnId,
-          componentId: this.componentId,
+          moduleIdInstance: this.module.idInstance,
+          elementId: this.component.id,
           link: 'data',
           property: 'text',
           sync: false,

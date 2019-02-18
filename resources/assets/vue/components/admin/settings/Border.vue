@@ -1,32 +1,30 @@
 <template>
-  <settings-container :label="`Border ${side}`" custom-class="field-border">
+  <settings-container :label="`${side} (px)`">
     <template slot="setting-bottom">
-      <div class="clearfixalign-element">
-        <el-color-picker
-          v-model="color"
-          color-format="hex"
-          class="float-left margin-right" />
-        <el-select
-          v-model="style"
-          :placeholder="`Border ${side} style`"
-          size="mini"
-          class="float-left margin-right">
-          <el-option
-            v-for="item in optionsBorderStyle"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value" />
-        </el-select>
-        <stui-input-number
-          v-model="width"
-          v-validate="'required'"
-          :min="min"
-          class="float-left" />
-        <el-button
-          class="button float-left"
-          disabled="disabled">
-          px</el-button>
-      </div>
+      <stui-field grouped>
+        <div class="control border-number">
+          <stui-input-number
+            v-model="width"
+            v-validate="'required'"
+            :min="min" />
+        </div>
+        <div class="control is-expanded">
+          <div class="border-style-preview">
+            <div
+              class="preview"
+              :class="`is-${style}`"
+              :style="`border-style: ${style}`" />
+          </div>
+          <stui-select
+            v-model="style"
+            size="mini"
+            class="control-item hide-input"
+            :list="optionsBorderStyle" />
+        </div>
+        <div class="control is-half">
+          <stui-color-picker v-model="color" />
+        </div>
+      </stui-field>
     </template>
   </settings-container>
 </template>
@@ -44,14 +42,14 @@ export default {
       optionsBorderStyle: [
         { value: 'none', label: 'none' },
         { value: 'solid', label: 'solid' },
+        { value: 'dashed', label: 'dashed' },
+        { value: 'dotted', label: 'dotted' },
+        { value: 'double', label: 'double' },
+        { value: 'hidden', label: 'hidden' },
         { value: 'inherit', label: 'inherit' },
         { value: 'initial', label: 'initial' },
         { value: 'outset', label: 'outset' },
         { value: 'inset', label: 'inset' },
-        { value: 'double', label: 'double' },
-        { value: 'dashed', label: 'dashed' },
-        { value: 'dotted', label: 'dotted' },
-        { value: 'hidden', label: 'hidden' }
       ],
     };
   },
@@ -91,7 +89,9 @@ export default {
     },
     color: {
       get() {
-        return this.element.style[`border${this.side}Color`] ? this.element.style[`border${this.side}Color`] : '';
+        return this.element.style[`border${this.side}Color`]
+          ? this.element.style[`border${this.side}Color`]
+          : '';
       },
       set(color) {
         let value = color;
@@ -109,100 +109,51 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
-.button input {
-  text-align: center;
+@import '../../../stensul-ui/scss/stui.scss';
+.control.is-half {
+  width: calc(50% - 4px);
 }
-.el-button.is-disabled,
-.el-button.is-disabled:focus,
-.el-button.is-disabled:hover {
-  background: #f8f8f8;
-  color: #666666;
-  cursor: inherit;
-  border: 1px solid #dcdfe6;
-  font-size: 11px;
-  font-weight: 300;
-  line-height: 14px;
-  border-radius: 0px 2px 2px 0px;
+.border-number {
+  width:50px;
 }
-.input-number-size {
-  padding-left: 0;
-  padding-right: 21px;
-}
-.el-button.is-active .el-input__inner,
-.el-input__inner:focus {
-  border: 1px solid #dcdfe6;
-}
-button.el-button {
-  padding: 6px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.el-color-picker {
-  height: 30px;
-}
-
-.float-left {
-  float: left;
-}
-.el-select {
-  width: 100px;
-}
-.margin-right {
-  margin-right: 5px;
-}
-.el-input-number {
-  width: 67px;
-}
-
-.el-input-number /deep/ {
-  .el-input-number__decrease, .el-input-number__increase {
-    width: 17px;
-  }
-}
-
-.el-input-number.is-controls-right /deep/ .el-input__inner {
-  border-radius: 2px 0px 0px 2px;
-  padding-left: 8px;
-  padding-right: 25px;
-}
-
-#edit-container .right-bar .form-group,
-#edit-container .left-bar .form-group {
-  margin-bottom: 0;
-  &:last-of-type {
-    margin-bottom: 6px;
-  }
-}
-</style>
-<style lang="less" >
-
-
-.field-border {
-  input[type='text'] {
-    text-align: center;
-  }
-  .el-input-number.is-without-controls .el-input__inner {
-    border-radius: 2px 0px 0px 2px;
-    border-right: none;
-  }
-  .el-color-picker__trigger {
-    padding: 0px;
-    height: 28px;
-    width: 34px;
-    border-radius: 2px;
-
-    .el-color-picker__color {
-      border: none;
+.border-style-preview {
+  position: absolute;
+  left: 3px;
+  z-index: 1;
+  top: 2px;
+  bottom: 2px;
+  right: 26px;
+  background: #fff;
+  pointer-events: none;
+  .preview {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    right: 5px;
+    transform: translateY(-50%);
+    border-width: 3px 0 0 0;
+    border-color: $stui-label-color;
+    font-size: 11px;
+    &.is-none:after {
+      content: "none";
+      display: block;
+    }
+    &.is-inherit:after {
+      content: "inherit";
+      display: block;
+    }
+    &.is-hidden:after {
+      content: "hidden";
+      display: block;
+    }
+    &.is-initial:after {
+      content: "initial";
+      display: block;
     }
   }
-  .el-select {
-    .el-input__inner {
-      border-radius: 2px;
-
-      &:focus {
-        border: 1px solid #78dcd6;
-      }
-    }
-  }
+}
+.hide-input /deep/ .el_input .el-input__inner {
+  background-color: transparent;
+  text-indent: 999px;
 }
 </style>

@@ -439,6 +439,48 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                         });
                     }, 0);
                 }
+                function formatLinkContent(content) {
+                    var formattedContent = content;
+                    // Apply Link Format
+                    if (editor.settings.link_format) {
+                        var relations = {
+                            bold: 'strong',
+                            underline: 'u',
+                        };
+
+                        _.forOwn(editor.settings.link_format, function(value, key){
+                            if (value) {
+                                formattedContent = dom.createHTML(relations[key], false, formattedContent);
+                            }
+                        });
+                    }
+
+                    // Apply link fixed color
+                    if (editor.settings.link_force_color && editor.settings.link_fixed_color && /^#[0-9A-F]{6}$/i.test(editor.settings.link_fixed_color)) {
+                        var wrapper = document.createElement('span');
+                        wrapper.innerHTML = (typeof formattedContent === 'object') ? formattedContent.outerHTML : formattedContent;
+
+                        // if has html tags and has only one html element and if span, add style
+                        if (wrapper.childElementCount === 1 && wrapper.childNodes[0].nodeName === "SPAN") {
+                            wrapper.firstChild.style.color = editor.settings.link_fixed_color;
+                            // return inner span to avoid span duplication
+                            formattedContent = wrapper.innerHTML;
+                        }
+
+                        // else, add color to wrapper and return
+                        wrapper.style.color = editor.settings.link_fixed_color;
+                        // force color in inner spans that have a color
+                        var spans = wrapper.getElementsByTagName('span');
+                        _.each(spans, function(span){
+                            if (span.style.color) {
+                                span.style.color = editor.settings.link_fixed_color;
+                            }
+                        });
+                        formattedContent = wrapper.outerHTML;
+                    }
+
+                    return formattedContent;
+                }
 
                 function insertLink() {
                     var linkAttrs = {
@@ -479,12 +521,12 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                                     return tag.value == win.find('#href').value();
                                 });
                                 // Encode only urls
-                                editor.insertContent(dom.createHTML('a', linkAttrs, (!matches.length) ? dom.encode(data.text) : data.text));
+                                editor.insertContent(dom.createHTML('a', linkAttrs, (!matches.length) ? formatLinkContent(dom.encode(data.text)) : formatLinkContent(data.text)));
                             } else {
-                                editor.insertContent(dom.createHTML('a', linkAttrs, data.text));
+                                editor.insertContent(dom.createHTML('a', linkAttrs, formatLinkContent(data.text)));
                             }
                         } else {
-                            editor.execCommand('mceInsertLink', false, linkAttrs);
+                            editor.insertContent(dom.createHTML('a', linkAttrs, formatLinkContent(data.text)));
                         }
                     }
                 }
@@ -506,7 +548,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
 
                     // Validate only urls
                     if ((editor.settings.link_validate_url === 'url' || editor.settings.link_validate_url === 'urlAndDestination')
-                        && !matches.length 
+                        && !matches.length
                         && !validateUrl(href)) {
                         $('.mce-link-input #errorMessage').remove();
 

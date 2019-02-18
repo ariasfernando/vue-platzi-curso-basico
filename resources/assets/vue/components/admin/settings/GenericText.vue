@@ -1,13 +1,11 @@
 <template>
   <settings-container :label="label">
     <template :slot="selectedSettingPosition">
-      <el-input
+      <stui-input-text
         v-model="mainSetting"
         v-validate="'required'"
         size="mini"
-        :value="mainSetting"
         :placeholder="placeholder || ''"
-        class="clearfix"
         :type="type"
         :autosize="autosize"
         :resize="resize" />
@@ -29,15 +27,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.el-input /deep/ .el-input__inner {
-  border-radius: 2px;
-  text-align: left;
-  padding-left: 8px;
-
-  &:focus {
-    border: 1px solid #78dcd6;
-  }
-}
-</style>

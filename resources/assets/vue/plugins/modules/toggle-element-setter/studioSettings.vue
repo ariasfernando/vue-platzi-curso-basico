@@ -1,17 +1,25 @@
 <template>
-  <settings-container :label="plugin.title">
-    <template slot="setting-right">
-      <input-toggleable-text v-model="value" false-text="Disabled" default-value="label" />
-    </template>
-  </settings-container>
+  <div>
+    <SettingsContainer :label="plugin.title">
+      <template slot="setting-right">
+        <StuiToggleButton :value="isSet" @change="setActive" />
+      </template>
+    </SettingsContainer>
+    <SettingsContainer v-if="isSet" label="Label">
+      <template slot="setting-right">
+        <StuiInputText
+          v-model="value" />
+      </template>
+    </SettingsContainer>
+  </div>
 </template>
 <script>
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
-import pluginMixin from '../mixins/pluginMixin';
+import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
 
 export default {
   components: { SettingsContainer },
-  mixins: [pluginMixin],
+  mixins: [pluginMixinAdmin],
   props: ['name', 'element'],
   computed: {
     value: {
@@ -57,6 +65,14 @@ export default {
         const enabled = elements.length !== 0;
         this.$store.commit('module/togglePlugin', { plugin: 'toggleElement', enabled });
       },
+    },
+    isSet() {
+      return this.value !== false;
+    },
+  },
+  methods: {
+    setActive(value) {
+      this.value = value !== false ? _.startCase(this.element.type.replace('-element', '')) : false;
     },
   },
 };

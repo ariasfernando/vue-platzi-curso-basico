@@ -19,6 +19,7 @@ const state = {
   showRaw: false,
   loading: false,
   secondaryLoading: false,
+  slideToggles: {},
 };
 
 const getColumnIndexByElementId = (module, elementId) => {
@@ -71,12 +72,10 @@ const getElement = (module, elementId) => {
   });
   return element;
 };
-
 const getProperties = (element, data) => {
   const subComponent = data.subComponent ? element[data.subComponent] : element;
   return data.link ? subComponent[data.link] : subComponent;
 };
-
 const convertArrayToObject = (element, data) => {
   const valueToConvert =
     data.subComponent !== undefined && data.link !== undefined
@@ -86,19 +85,18 @@ const convertArrayToObject = (element, data) => {
   Vue.set(valueToConvert, lastPosition, {});
   return valueToConvert[lastPosition];
 };
-
 const searchOrCreateLevel = (data, keys) => {
   let subData = data;
-  for (let i = 0; i < keys.length - 1; i++) {
-    if (!_.has(subData, [keys[i]])) {
+  for (let i = 0; i < keys.length; i++) {
+    if (!_.has(subData, [keys[i]]) || (Array.isArray(subData[keys[i]]) && isNaN(keys[i]))) {
+      // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
       Vue.set(subData, [keys[i]], {});
     }
-    subData = subData[keys[i]];
+    if (i < keys.length - 1) {
+      subData = subData[keys[i]];
+    }
   }
-  return {
-    data: subData,
-    property: keys[keys.length - 1],
-  };
+  return subData;
 };
 
 const getters = {
@@ -121,6 +119,9 @@ const getters = {
     }
     return {};
   },
+  currentElementId(state) {
+    return state.currentElementId;
+  },
   buildingMode(state) {
     return state.buildingMode;
   },
@@ -129,6 +130,9 @@ const getters = {
   },
   draggable(state) {
     return state.draggable;
+  },
+  slideToggles(state) {
+    return state.slideToggles;
   },
 };
 
@@ -142,10 +146,28 @@ const mutations = {
   setModuleData(state, data) {
     state.module = data;
   },
+  setElementData(state, { componentId, columnId, value }) {
+    let containerElement = {};
+    let property = false;
+    if (componentId >= 0) {
+      containerElement = state.module.structure.columns[columnId].components;
+      property = componentId;
+    } else if (columnId >= 0) {
+      containerElement = state.module.structure.columns;
+      property = columnId;
+    } else {
+      containerElement = state;
+      property = 'module';
+    }
+    Vue.set(containerElement, property, value);
+  },
   setModuleFields(state, data) {
     _.each(data, (value, field) => {
       state.module[field] = value;
     });
+  },
+  slideToggles(state, { key, value }) {
+    Vue.set(state.slideToggles, key, value);
   },
   setCurrentComponent(state, data) {
     if (data.componentId >= 0) {
@@ -202,9 +224,9 @@ const mutations = {
     // Set attribute
     column.container.attribute.width = `${data.width}%`;
   },
-  saveElementProperty(state, { moduleIdInstance, elementId, property, value, ...scope }) {
-    const element = elementId === undefined ? state.module : getElement(state.module, elementId);
-    if (element.structure) scope.subComponent = 'structure';
+  saveElementProperty(state, { elementId, property, value, ...scope }) {
+    let element = elementId ? getElement(state.module, elementId) : state.module;
+    element = scope.outStructure || elementId ?  element : element.structure;
     let properties = getProperties(element, scope);
     if (Array.isArray(properties) && isNaN(property)) {
       // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
@@ -266,17 +288,12 @@ const mutations = {
     _.merge(pluginData, payload.config);
   },
 
-  setPluginElementConfig(state, { componentId, type, plugin, path, value }) {
-    let component = {};
-    if (componentId === undefined) {
-      component = state.module;
-    } else {
-      component = getElement(state.module, componentId);
-    }
-    const pluginData = component.plugins[plugin];
+  setPluginElementConfig(state, { elementId, type, plugin, path, value }) {
+    let element = elementId ? getElement(state.module, elementId) : state.module;
+    const pluginData = element.plugins[plugin];
     const pathArray = _.concat([type || 'config'], path ? path.split('.') : []);
     const pluginOption = searchOrCreateLevel(pluginData, pathArray);
-    Vue.set(pluginOption.data, pluginOption.property, value);
+    Vue.set(pluginOption, pathArray[pathArray.length - 1], value);
   },
   setPluginComponentConfig(state, data) {
     // DEPRECATE
@@ -285,7 +302,7 @@ const mutations = {
         .plugins[data.plugin];
     const path = _.concat(['config'], data.path ? data.path.split('.') : []);
     const pluginOption = searchOrCreateLevel(plugin, path);
-    Vue.set(pluginOption.data, pluginOption.property, data.value);
+    Vue.set(pluginOption, path[path.length - 1], data.value);
   },
   savePluginSuboption(state, payload) {
     let pluginOptions = state.module;
@@ -436,11 +453,11 @@ const actions = {
     return deferred.promise;
   },
   updateText(context, payload) {
-    context.commit('saveComponentProperty', payload);
+    context.commit('saveElementProperty', payload);
     if (payload.sync !== false) {
       payload.property = 'textDirty';
       payload.value = Math.floor(100000 + (Math.random() * 900000));
-      context.commit('saveComponentProperty', payload);
+      context.commit('saveElementProperty', payload);
     }
   },
   getLibraries(context, data) {

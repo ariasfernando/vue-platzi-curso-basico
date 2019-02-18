@@ -1,5 +1,5 @@
 <template>
-  <element-container :component="component" @select-component="selectComponentHandler">
+  <element-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
     <div class="stx-wraper" v-html="component.code.data || emptyMessage" />
   </element-container>
 </template>

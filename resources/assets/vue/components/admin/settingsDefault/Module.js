@@ -1,42 +1,41 @@
+import {
+  bgcolor,
+  borderGroup,
+  classes,
+  columnsStacking,
+  padding,
+} from './settings';
+
 function moduleDefault() {
   return {
     componentSettings: [
       {
-        settings: [{
-          name: 'bgcolor',
-          aclName: 'background_bgcolor',
-          type: 'generic-color',
-          link: 'attribute',
-          label: 'Background Color',
-        }],
+        groupLabel: 'Design',
+        settings: [
+          bgcolor(),
+        ],
       },
       {
-        settings: [{
-          name: 'padding',
-          aclName: 'padding_padding',
-          type: 'padding-group',
-          label: 'Padding',
-        }],
+        groupLabel: 'Padding (px)',
+        settings: [
+          padding({
+            aclName: 'padding_padding',
+            noLabel: true,
+          }),
+        ],
       },
       {
-        settings: [{
-          name: 'border-group',
-          aclName: 'border_border-group',
-          type: 'border-group',
-        }],
+        groupLabel: 'Border',
+        settings: [
+          borderGroup(),
+        ],
       },
       {
-        settings: [{
-          name: 'classes',
-          aclName: 'style_classes',
-          type: 'class-input',
-          link: 'attribute',
-        },
-        {
-          name: 'columnsStacking',
-          aclName: 'stacking_column-stacking',
-          type: 'columns-stacking',
-        }],
+        groupLabel: 'Behavior',
+        settings: [
+          classes(),
+          columnsStacking(),
+        ],
       },
     ],
   };

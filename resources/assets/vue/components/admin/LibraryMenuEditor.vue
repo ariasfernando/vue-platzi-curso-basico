@@ -2,14 +2,16 @@
   <div class="simple-text-config library-menu-container">
     <div class="row library-menu-buttons-container">
       <div class="library-menu-buttons">
-        <stui-button type="secondary" @click="addEmptyItem">
-          <i class="glyphicon glyphicon-plus-sign" />
-          Add Module
-        </stui-button>
-        <stui-button type="secondary" @click="addGroup">
-          <i class="glyphicon glyphicon-folder-close" />
-          Add Group
-        </stui-button>
+        <stui-field>
+          <stui-button type="secondary" @click="addEmptyItem">
+            <i class="glyphicon glyphicon-plus-sign" />
+            Add Module
+          </stui-button>
+          <stui-button type="secondary" @click="addGroup">
+            <i class="glyphicon glyphicon-folder-close" />
+            Add Group
+          </stui-button>
+        </stui-field>
       </div>
     </div>
     <div class="row">
@@ -90,9 +92,11 @@
     <div class="row">
       <div v-if="library.config" class="col-md-12">
         <label for="fixedModules">Fixed modules config:</label>
-        <p class="control">
-          <textarea v-model="library.config.fixedModules" rows="10" name="fixedModules" type="text" placeholder="" />
-        </p>
+        <stui-input-text
+          v-model="library.config.fixedModules"
+          rows="10"
+          name="fixedModules"
+          type="textarea" placeholder="" />
       </div>
     </div>
     <!-- Input submit  -->
@@ -213,7 +217,7 @@ export default {
 
   .library-menu-buttons-container {
     margin-bottom: 10px;
-  
+
     .library-menu-buttons {
       float: right;
       margin-right: 15px;

@@ -1,33 +1,109 @@
 .et-wrapper {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 300;
-  font-family: 'Open Sans', Arial, sans-serif;
-  padding: 10px;
+  font-family: "Open Sans", Arial, sans-serif;
+  padding-left: 10px!important;
+  padding-right: 35px!important;
   border-radius: 2px;
   border: none;
-  box-shadow: 0px 0px 3px #aaaaaa;
+  box-shadow: 0 2px 4px rgba(0,0,0, .5);
+
+  &.et-top {
+    animation: slide-bottom 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
 
   &.et-success-old {
     background-color: #F1E8BD;
     color: #666666;
   }
+
   &.et-success {
-    background: #F1E8BD;
-    color: #666666;
+    background: #7BAF73;
+    color: rgba(255, 255, 255, .9);
   }
+
   &.et-error {
     background-color: #CE5F5F;
-    color: #FFFFFF;
+    color: rgba(255, 255, 255, .9);
   }
+
   &.et-info {
     background-color: #F1E8BD!important;
-    color: #666666;
+    color: rgba(102, 102, 102, .9);
   }
+
   &.et-bottom {
     top: auto;
     bottom: 10px;
   }
+
+  &.et-right {
+    right: 3px;
+  }
+
   .et-close {
     cursor: pointer;
+    top: 50%!important;
+    right: 10px!important;
+    transform: translateY(-50%);
+    height: 16px;
+    width: 16px;
+    background-color: rgba(255,255,255, .6);
+    border-radius: 100%;
+    font-size: 0;
+
+    &:before,
+    &:after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) rotate(45deg);
+      width: 8px;
+      height: 2px;
+    }
+
+    &:after {
+      width: 2px;
+      height: 8px;
+    }
+  }
+
+  &.et-info .et-close {
+    background-color: rgba(102,102,102, .6);
+  }
+
+  &.et-error .et-close {
+
+    &:before,
+    &:after {
+      background-color: #CE5F5F;
+    }
+  }
+
+  &.et-info .et-close {
+
+    &:before,
+    &:after {
+      background-color: #F1E8BD;
+    }
+  }
+
+  &.et-success .et-close {
+
+    &:before,
+    &:after {
+      background-color: #7BAF73;
+    }
+  }
+  @keyframes slide-bottom {
+
+    0% {
+      top: -50px;
+    }
+
+    100% {
+      top: 3px;
+    }
   }
 }

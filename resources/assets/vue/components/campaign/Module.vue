@@ -10,7 +10,7 @@
         :module-id-instance="module.idInstance"
         :class="{ 'stx-show-error': hasErrors }"
         @click.prevent="config"
-        :width="_.get(this.module,'structure.attribute.width','10%')"
+        :width="_.get(this.module,'structure.attribute.width','100%')"
         :style="_.get(this.module,'structure.style')"
         :valign="_.get(this.module,'structure.attribute.valign','top')"
         :bgcolor="_.get(this.module,'structure.attribute.bgcolor')">

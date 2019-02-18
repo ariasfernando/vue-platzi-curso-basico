@@ -155,12 +155,12 @@ module.exports = {
   bottom: -50px;
   right: -40px;
   outline-style: solid;
-  outline-color: $color-grey;
+  outline-color: $stui-color-grey;
   outline-width: 2px;
+  z-index:1 !important;
 }
 .st-content-component /deep/ {
-  outline: 1px dashed $color-secondary;
-  border: none !important;
+  outline: 1px dashed $stui-color-secondary;
   [data-column-id] {
     position: relative;
   }

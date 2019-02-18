@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="col-xs-2 header-col">
-        <stui-switch-desktop-mobile v-model="buildingMode" />
+        <StuiSwitchDesktopMobile v-model="buildingMode" />
       </div>
       <div class="col-xs-5 header-col">
         <div class="vertical-center pull-right">
@@ -58,7 +58,7 @@
       v-if="editPropietaryStyles"
       button-close-text="Cancel"
       button-submit-text="Save"
-      title="Add Propietary Styles "
+      title="Add Proprietary Styles "
       @close-modal="closePropietaryStyles"
       @submit-modal="savePropietaryStyles">
       <code-editor v-model="propietaryStyles" type="css" height="calc(100vh - 126px)" />

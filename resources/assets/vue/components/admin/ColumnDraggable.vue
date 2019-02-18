@@ -90,7 +90,7 @@ module.exports = {
       return this.$store.getters['module/draggable'].changed;
     },
     elementSelectorTop() {
-      const top = this.moduleHeight ? this.moduleHeight + 10 : 160;
+      const top = this.moduleHeight ? this.moduleHeight : 150;
       const paddingBottom = _.parseInt(
         this.module.structure.style.paddingBottom || 0,
       );
@@ -195,7 +195,7 @@ module.exports = {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '../../stensul-ui/scss/stui.scss';
 .column-draggable /deep/ {
   .ghost-component,
@@ -204,8 +204,8 @@ module.exports = {
     display: table-row;
     list-style-type: none;
     font-size: 13px;
-    color: $color-secondary;
-    background-color: lighten($color-secondary, 30%);
+    color: $stui-color-secondary;
+    background-color: lighten($stui-color-secondary, 30%);
     text-align: center;
     height: 20px;
     line-height: 20px;
@@ -214,13 +214,13 @@ module.exports = {
       display: flex;
       justify-content: center;
       border: none;
-      color: $color-secondary;
-      background-color: lighten($color-secondary, 30%);
+      color: $stui-color-secondary;
+      background-color: lighten($stui-color-secondary, 30%);
       height: 80px;
       line-height: 80px;
       font-family: 'Open Sans', Arial, serif;
       opacity: 1;
-      outline: 2px dashed $color-secondary;
+      outline: 2px dashed $stui-color-secondary;
       outline-offset: -10px;
     }
     td {
