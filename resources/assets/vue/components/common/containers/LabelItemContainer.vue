@@ -44,19 +44,19 @@ export default {
   i {
     color: #666;
     vertical-align: baseline !important;
-    -webkit-transform: rotate(180deg);
-    transform: rotate(180deg);
     margin-right: 6px;
     line-height: 12px !important;
     float: left;
   }
+    i.glyphicon-menu-down {
+      transform: rotate(180deg);
+    }
   &.collapsed {
     p,
     i {
       color: #969595;
     }
     i.glyphicon-menu-down {
-      -webkit-transform: rotate(0deg);
       transform: rotate(0deg);
     }
   }

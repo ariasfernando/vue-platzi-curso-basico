@@ -1,48 +1,38 @@
 <template>
-  <div>
-    <SettingsContainer label="Image Size" class="is-normal-setting">
+  <div class="image-size">
+    <SettingsContainer
+      label="Image Size"
+      :checkbox="isPxWidth === undefined ? false : isPxWidth"
+      @checkboxChange="(value)=>onTogglePxWidth()">
       <template slot="setting-right">
-        <ElButton class="cog-left" size="mini" disabled>
-          {{ !isPxWidth ? 'Full Width' : 'Custom' }}
-        </ElButton>
-        <ElButton
-          size="mini"
-          class="el-icon-setting cog-right"
-          :class="{'is-active': isPxWidth}"
-          @click="onTogglePxWidth" />
+        <StuiInputDisabled v-if="!isPxWidth" :false-text="isPxWidth ? 'Custom Size' : 'Full Width'" />
       </template>
     </SettingsContainer>
-
     <SettingsContainer
       v-if="isPxWidth"
-      label-right="Height (px)"
-      label-left="Width (px)"
-      class="is-advanced-setting">
-      <template slot="setting-half-left">
-        <stui-input-number
-          v-model="width"
-          controls-position="right"
-          class="generic-number"
-          :min="min"
-          :max="maxValueWidth" />
-        <span class="height-icon-auto" @click="onToggleBlockheight">
-          <i v-if="isBlockHeight" class="fa fa-lock" />
-          <i v-else class="fa fa-unlock" />
-        </span>
-      </template>
-      <template slot="setting-half-right">
-        <stui-input-number
-          v-if="!isBlockHeight"
-          v-model="height"
-          controls-position="right"
-          class="generic-number"
-          :min="min" />
-        <ElInput
-          v-else
-          v-model="height"
-          size="mini"
-          class="clearfix"
-          disabled="disabled" />
+      :no-label="true">
+      <template slot="setting-bottom">
+        <StuiField addons>
+          <StuiInputNumber
+            v-model="width"
+            controls-position="right"
+            class="generic-number"
+            :min="min"
+            :max="maxValueWidth" />
+          <div class="control is-center">
+            <span class="height-icon-auto" @click="onToggleBlockheight">
+              <i v-if="isBlockHeight" class="fa fa-lock" />
+              <i v-else class="fa fa-unlock" />
+            </span>
+          </div>
+          <StuiInputNumber
+            v-model="height"
+            controls-position="right"
+            class="generic-number"
+            false-text="auto"
+            :disabled="isBlockHeight"
+            :min="min" />
+        </StuiField>
       </template>
     </SettingsContainer>
   </div>
@@ -129,14 +119,6 @@ export default {
       return this.isPxWidth ? undefined : 100;
     },
   },
-  watch: {
-    element: {
-      handler() {
-        this.defineStyleOption();
-      },
-      deep: true,
-    },
-  },
   mounted() {
     this.defineStyleOption();
   },
@@ -186,159 +168,24 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.el-button {
-  &.is-disabled,
-  &.is-disabled:focus,
-  &.is-disabled:hover {
-    color: #666666;
-    cursor: auto;
-  }
-}
-
-.el-input-number /deep/ {
-  .el-input-number__decrease,
-  .el-input-number__increase {
-    width: 17px;
-  }
-  &.is-controls-right .el-input__inner {
-    padding-left: 0px;
-    padding-right: 16px;
-  }
-}
-.height-icon-auto {
-  position: absolute;
-  left: 100%;
-  margin-top: 0;
-  padding: 0;
-  height: 26px;
-  width: 30px;
-  text-align: center;
-  padding-top: 4px;
-  z-index: 2;
-  bottom: 0;
-  cursor: pointer;
-  i {
-    color: #666666;
-  }
-}
-
-// normal settings
-.cog-left {
-  width: calc(100% - 28px);
-  float: left;
-  display: block;
-  border-right: 0;
-}
-
-.cog-right {
-  background: #f8f8f8;
-  color: #666666;
-  cursor: inherit;
-  border: 1px solid #dcdfe6;
-  font-size: 11px;
-  font-weight: 300;
-  line-height: 14px;
-  border-radius: 0px 2px 2px 0px;
-  height: 28px !important;
-
-  &:hover {
-    color: #78dcd6;
-  }
-}
-
-.is-normal-setting {
-  .el-button {
-    transition: unset;
-    border-radius: 2px;
-    &.is-active {
-      background-color: #78dcd6;
-      padding: 7px 4px;
-      font-weight: 300;
-      color: #ffffff;
-      border: 1px solid #78dcd6;
-      border-radius: 0px 2px 2px 0px;
-      height: 28px !important;
-    }
-    &--mini,
-    &--mini.is-round {
-      padding: 7px;
-    }
-    & + .el-button {
-      margin-left: 0;
-    }
-    &.cog-right {
-      width: 28px;
-      padding: 4px 0;
-      height: 26px;
-      display: block;
-      float: left;
-    }
-  }
-}
-
-// advanced settings
-.is-advanced-setting {
-  .button input {
+@import '../../../stensul-ui/scss/stui.scss';
+.image-size {
+  margin-bottom: 10px;
+  .height-icon-auto {
+    margin-top: 0;
+    padding: 0;
+    height: 28px;
+    line-height: 28px;
+    width: 40px;
     text-align: center;
-  }
-  .el-button {
-    position: absolute;
-    right: 0;
-    padding: 6px;
-    font-size: 11px;
-    font-weight: 300;
-    line-height: 14px;
-    background: #f8f8f8;
-    color: #666666;
-    border-radius: 0px 2px 2px 0px;
-    height: 28px !important;
-    width: 28px !important;
-    &.is-disabled,
-    &.is-disabled:focus,
-    &.is-disabled:hover .el-button--default {
-      background: #f8f8f8;
-      border: 1px solid #dcdfe6;
-      font-size: 11px;
-      font-weight: 300;
-      line-height: 14px;
-      border-radius: 0px 2px 2px 0px;
+    display: block;
+    cursor: pointer;
+    i {
+      color: $stui-label-color;
     }
   }
-  & /deep/ .half-setting {
-    text-align: left;
-    position: relative;
-    width: calc(50% - 15px);
-    &--right {
-      float: right;
-      padding-left: 0px;
-    }
-  }
-  & /deep/ .el-input {
-    &-number {
-      width: 100%;
-      .el-input_inner {
-        &:focus {
-          border: 1px solid #78dcd6;
-        }
-      }
-      .el-input-number__decrease {
-        border-radius: 2px 0px 0px 2px;
-      }
-      .el-input-number__increase {
-        border-radius: 0px 2px 2px 0px;
-      }
-      .el-input-number__decrease,
-      .el-input-number__increase {
-        background: #f8f8f8;
-        &:hover {
-          color: #78dcd6;
-          &:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled),
-          &:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled) {
-            border: 1px solid #78dcd6;
-          }
-        }
-      }
-    }
+  .control:not(.is-center) {
+    width: 50%;
   }
 }
 </style>

@@ -9,7 +9,7 @@
             <template v-for="(item, key) in trackingConfig">
               <settings-container v-if="item.input_type !== 'hidden'" :key="key" :label="item.label" custom-class="field-Tags">
                 <template v-if="item.input_type === 'select'" slot="setting-bottom">
-                  <el-select
+                  <stui-select
                     v-validate="'required'"
                     class="float-left width-full"
                     :class="{'is-danger': errors.has(`trk-${item.name}`)}"
@@ -18,13 +18,8 @@
                     placeholder=""
                     :data-vv-as="item.label"
                     size="mini"
-                    @input="onInputChange(`trk-${item.name}`, $event)">
-                    <el-option
-                      v-for="value in item.options"
-                      :key="value"
-                      :label="value"
-                      :value="value" />
-                  </el-select>
+                    :list="item.options"
+                    @input="onInputChange(`trk-${item.name}`, $event)" />
                   <span
                     v-show="errors.has(`trk-${item.name}`)"
                     class="help is-danger">{{ errors.first(`trk-${item.name}`) }}
@@ -38,7 +33,7 @@
                     :value="trackingData[`trk-${key}`]" />
                 </template>
                 <template v-else slot="setting-bottom">
-                  <el-input
+                  <stui-input-text
                     v-validate="'required'"
                     :name="`trk-${item.name}`"
                     :value="trackingData[`trk-${key}`]"

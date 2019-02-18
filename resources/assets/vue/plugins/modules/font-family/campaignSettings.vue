@@ -1,16 +1,11 @@
 <template>
   <settings-container class="field-font-family" label="Font Family">
-    <template slot="setting-bottom">
-      <el-select
+    <template slot="setting-right">
+      <stui-select
         v-model="fontFamily"
         class="width-full"
-        size="mini">
-        <el-option
-          v-for="item in plugin.config"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value" />
-      </el-select>
+        size="mini"
+        :list="plugin.config" />
     </template>
   </settings-container>
 </template>

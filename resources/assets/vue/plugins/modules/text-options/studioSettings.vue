@@ -1,148 +1,135 @@
 <template>
   <div>
-    <settings-container :label="plugin.title">
+    <SettingsContainer :label="plugin.title" :arrow="arrowState" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
-        <toggle-button v-model="pluginEnabled" />
+        <StuiToggleButton :value="plugin.enabled" @change="toggle" />
       </template>
-    </settings-container>
-    <template v-if="pluginEnabled">
+    </SettingsContainer>
+    <b-collapse :id="pluginKey" :visible="arrowState">
       <div class="btn-group">
-        <el-button
+        <ElButton
           v-for="(option, optionName) in options"
           :key="optionName"
           v-b-tooltip.hover
           :class="[option.icon , {'active': plugin.config.options[optionName]
-          ? plugin.config.options[optionName].value : undefined}]"
+            ? plugin.config.options[optionName].value : undefined}]"
           :title="option.label"
           :data-tooltip="option.label"
           size="mini"
-          @click.prevent="toggleOption(optionName, plugin.config.options[optionName]
-          ? plugin.config.options[optionName].value : undefined)" />
+          @click.prevent="toggleOption(`options.${optionName}.value`, plugin.config.options[optionName]
+            ? plugin.config.options[optionName].value : undefined)" />
       </div>
-      <group-container label="Advanced Settings">
+      <GroupContainer label="Advanced Settings">
         <!-- forecolor -->
         <template v-if="plugin.config.options.forecolor.value && $can('tiny-plugin-forecolor-palette-library')">
-          <settings-container label="Color List By Library">
+          <SettingsContainer label="Color List By Library">
             <template slot="setting-right">
-              <toggle-button
+              <StuiToggleButton
                 :value="plugin.config.options.forecolor.textcolor_from_library"
                 @change="newValue => changeOption(newValue, 'forecolor', 'textcolor_from_library')" />
             </template>
-          </settings-container>
+          </SettingsContainer>
         </template>
         <template v-if="plugin.config.options.forecolor.value">
-          <settings-container
+          <SettingsContainer
             v-if="!plugin.config.options.forecolor.textcolor_from_library && $can('tiny-plugin-forecolor-palette')"
             label="Color List">
             <template slot="setting-right">
-              <el-input
+              <StuiInputText
                 v-model="textColorMap"
                 v-validate="'required'"
-                size="mini"
                 placeholder="[{ label: 'Black', value: '#000000' },{ label: 'Gray', value: '#474646' },
                 { label: 'Blue', value: '#79A8C9' },{ label: 'Red', value: '#CD202C' }]" />
             </template>
-          </settings-container>
+          </SettingsContainer>
         </template>
         <template v-if="plugin.config.options.forecolor.value && $can('tiny-plugin-forecolor-palette-library')">
-          <settings-container
+          <SettingsContainer
             v-if="plugin.config.options.forecolor.textcolor_from_library"
             key="forecolor_palette_name"
             label="Palette Name">
             <template slot="setting-right">
-              <el-input
+              <StuiInputText
                 v-model="palette_name"
                 v-validate="'required'"
-                size="mini"
                 placeholder="name" />
             </template>
-          </settings-container>
+          </SettingsContainer>
         </template>
         <!-- backcolor -->
         <template v-if="plugin.config.options.backcolor.value && $can('tiny-plugin-forecolor-palette-library')">
-          <settings-container label="Highlight Color List By Library">
+          <SettingsContainer label="Highlight Color List By Library">
             <template slot="setting-right">
-              <toggle-button
+              <StuiToggleButton
                 :value="plugin.config.options.backcolor.backcolor_from_library"
                 @change="newValue => changeOption(newValue, 'backcolor', 'backcolor_from_library')" />
             </template>
-          </settings-container>
+          </SettingsContainer>
         </template>
         <template v-if="plugin.config.options.backcolor.value">
-          <settings-container
+          <SettingsContainer
             v-if="!plugin.config.options.backcolor.backcolor_from_library && $can('tiny-plugin-forecolor-palette')"
             label="Highlight Color List">
             <template slot="setting-right">
-              <el-input
+              <StuiInputText
                 v-model="backColorMap"
                 v-validate="'required'"
-                size="mini"
                 placeholder="[{ label: 'Yellow', value: '#E3EB05' },{ label: 'Orange', value: '#FC9264' },
                 { label: 'Pink', value: '#FC6487' },{ label: 'Blue', value: '#64EAFC' }]" />
             </template>
-          </settings-container>
+          </SettingsContainer>
         </template>
         <template v-if="plugin.config.options.backcolor.value && $can('tiny-plugin-forecolor-palette-library')">
-          <settings-container v-if="plugin.config.options.backcolor.backcolor_from_library" label="Palette Name">
+          <SettingsContainer v-if="plugin.config.options.backcolor.backcolor_from_library" label="Palette Name">
             <template slot="setting-right">
-              <el-input
+              <StuiInputText
                 v-model="back_palette_name"
                 v-validate="'required'"
-                size="mini"
                 placeholder="name" />
             </template>
-          </settings-container>
+          </SettingsContainer>
         </template>
         <!--settings-->
-        <template>
-          <div v-for="(tinySetting, key) in settings" :key="key" class="clearfix">
-            <!-- Input if config needs it -->
-            <settings-container
-              v-if="showSetting(tinySetting.dependsOn) && $can('tiny-plugin-' + key)"
-              :label="tinySetting.title">
-              <template slot="setting-right">
-                <el-input-number
-                  v-if="tinySetting.type === 'number'"
-                  v-b-tooltip.hover
-                  :value="plugin.config.settings[tinySetting.key].content || 0"
-                  size="mini"
-                  :title="key"
-                  :min="0"
-                  :name="key"
-                  @change="(value)=>changeSetting(value, tinySetting.key)" />
-                <el-select
-                  v-else-if="tinySetting.type === 'select'"
-                  size="mini"
-                  :value="plugin.config.settings[tinySetting.key].content"
-                  @change="(value) => changeSetting(value, tinySetting.key)">
-                  <el-option
-                    v-for="(opt, optKey) in tinySetting.options"
-                    :key="optKey"
-                    :value="optKey"
-                    :label="opt" />
-                </el-select>
-                <el-input
-                  v-else-if="tinySetting.type === 'text'"
-                  v-b-tooltip.hover
-                  size="mini"
-                  :title="key"
-                  :name="key"
-                  :value="tinySettingContent(plugin.config.settings[tinySetting.key].content)"
-                  @change="(value)=>changeSetting(value, tinySetting.key)" />
-                <component
-                  :is="tinySetting.type"
-                  v-else
-                  :value="plugin.config.settings[tinySetting.key].content"
-                  :default-value="tinySetting.defaultValue"
-                  :disabled="isDisabled(tinySetting.isDisabled, tinySettingContent(plugin.config.settings[tinySetting.key].content))"
-                  :false-text="tinySetting.falseText"
-                  @change="(value)=>changeSetting(value, tinySetting.key)" />
-              </template>
-            </settings-container>
-          </div>
+        <template v-for="(tinySetting, key) in settings">
+          <!-- Input if config needs it -->
+          <SettingsContainer
+            v-if="showSetting(tinySetting.dependsOn) && $can(`tiny-plugin-${tinySetting.aclName || key}`)"
+            :key="key"
+            :label="tinySetting.title"
+            :checkbox="checkboxValue(tinySetting.checkbox, plugin.config.settings[tinySetting.key].content)"
+            :disabled="isDisabled(tinySetting.isDisabled, tinySettingContent(plugin.config.settings[tinySetting.key].content))"
+            @checkboxChange="(value)=>checkboxChange(value, tinySetting)">
+            <template slot="setting-right">
+              <ElInputNumber
+                v-if="tinySetting.type === 'number'"
+                v-b-tooltip.hover
+                :value="plugin.config.settings[tinySetting.key].content || 0"
+                :title="key"
+                :min="0"
+                :name="key"
+                @change="(value)=>changeSetting(value, tinySetting.key)" />
+              <StuiSelect
+                v-else-if="tinySetting.type === 'select'"
+                :value="plugin.config.settings[tinySetting.key].content"
+                :list="tinySetting.options"
+                @change="(value) => changeSetting(value, tinySetting.key)" />
+              <StuiInputText
+                v-else-if="tinySetting.type === 'text'"
+                v-b-tooltip.hover
+                :title="key"
+                :name="key"
+                :value="tinySettingContent(plugin.config.settings[tinySetting.key].content)"
+                @change="(value)=>changeSetting(value, tinySetting.key)" />
+              <Component
+                :is="tinySetting.type"
+                v-else
+                v-bind="props(tinySetting, key)"
+                @change="(value)=>changeSetting(value, tinySetting.key)" />
+            </template>
+          </SettingsContainer>
         </template>
-      </group-container>
-    </template>
+      </GroupContainer>
+    </b-collapse>
   </div>
 </template>
 
@@ -150,12 +137,14 @@
 import GroupContainer from '../../../components/common/containers/GroupContainer.vue';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 import configsView from './studioConfigsView';
+import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
 
 export default {
   components: {
     GroupContainer,
     SettingsContainer,
   },
+  mixins: [pluginMixinAdmin],
   props: ['name', 'element', 'plugin'],
   computed: {
     currentComponent() {
@@ -228,42 +217,44 @@ export default {
     },
   },
   methods: {
+    props(tinySetting) {
+      return {
+        defaulValue: tinySetting.defaultValue,
+        disabled: this.isDisabled(tinySetting.isDisabled, this.tinySettingContent(this.plugin.config.settings[tinySetting.key].content)),
+        falseText: tinySetting.falseText,
+        list: tinySetting.list,
+        min: tinySetting.min,
+        multiselect: tinySetting.multiselect,
+        muteOn: tinySetting.muteOn,
+        option: tinySetting.option,
+        value: this.plugin.config.settings[tinySetting.key].content,
+      };
+    },
     showSetting(dependsOn) {
       if (dependsOn) {
-        return _.get(this.plugin, `config.${dependsOn.config}.${dependsOn.name}.value`, false);
+        return _.get(
+          this.plugin,
+          `config.${dependsOn.config}.${dependsOn.name}.value`,
+          false,
+        );
       }
       return true;
     },
-
-    toggleOption(optionName, oldValue) {
+    toggleOption(path, oldValue) {
       const value = !oldValue;
-      const payload = {
-        plugin: this.name,
-        componentId: this.element.id,
-        path: `options.${optionName}.value`,
-        value,
-      };
-      this.$store.commit('module/setPluginElementConfig', payload);
+      this.updatePluginConfig({value, path})
     },
     changeOption(value, subOption, settingName) {
-      const payload = {
-        plugin: this.name,
-        componentId: this.element.id,
-        path: `options.${subOption}.${settingName}`,
-        value,
-      };
-      this.$store.commit('module/setPluginElementConfig', payload);
+      const path = `options.${subOption}.${settingName}`;
+
+      this.updatePluginConfig({value, path})
     },
-    changeSetting(value, settingName) {
-      const payload = {
-        plugin: this.name,
-        componentId: this.element.id,
-        path: `settings.${settingName}.content`,
-        value: Application.utils.isJsonString(value)
-          ? JSON.parse(value)
-          : value,
-      };
-      this.$store.commit('module/setPluginElementConfig', payload);
+    changeSetting(newValue, settingName) {
+      const path = `settings.${settingName}.content`;
+      const value = Application.utils.isJsonString(newValue)
+        ? JSON.parse(newValue)
+        : newValue;
+      this.updatePluginConfig({value, path})
     },
     tinySettingContent(content) {
       if (content) {
@@ -272,7 +263,16 @@ export default {
       return 0;
     },
     isDisabled(isDisabled, content) {
-      return (isDisabled && content) ? isDisabled(this.tinySettingContent(content)) : false;
+      return isDisabled && content
+        ? isDisabled(this.tinySettingContent(content))
+        : false;
+    },
+    checkboxValue(checkbox, val) {
+      return checkbox ? val !== undefined && val !== 0 && val !== '0' && val !== false : undefined;
+    },
+    checkboxChange(value, tinySetting) {
+      const val = value ? tinySetting.defaultValue : false;
+      this.changeSetting(val, tinySetting.key);
     },
   },
 };

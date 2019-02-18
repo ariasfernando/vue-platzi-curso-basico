@@ -10,7 +10,7 @@
 
     <div class="col-xs-6 header-col">
       <div class="section-title vertical-center">
-        <stui-switch-desktop-mobile v-model="buildingMode" />
+        <StuiSwitchDesktopMobile v-model="buildingMode" />
       </div>
     </div>
 

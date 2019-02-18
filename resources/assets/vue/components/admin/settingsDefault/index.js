@@ -13,6 +13,5 @@ module.exports = {
   'button-element': ButtonElement,
   'divider-element': DividerElement,
   'custom-code-element': CustomCodeElement,
-
-  Module,
+  module: Module,
 };

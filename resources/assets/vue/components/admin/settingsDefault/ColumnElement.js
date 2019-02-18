@@ -1,49 +1,42 @@
+import {
+  bgcolor,
+  borderGroup,
+  classes,
+  padding,
+  width,
+} from './settings';
+
 function columnDefault() {
   return {
     componentSettings: [
       {
-        settings: [{
-          name: 'bgcolor',
-          aclName: 'background_bgcolor',
-          type: 'generic-color',
-          link: 'attribute',
-          label: 'Background Color',
-          subComponent: 'container',
-        }],
+        groupLabel: 'Design',
+        settings: [
+          width({ subComponent: 'container', type: 'width' }),
+          bgcolor({ subComponent: 'container' }),
+        ],
       },
       {
-        settings: [{
-          name: 'padding',
-          aclName: 'padding_padding',
-          type: 'padding-group',
-          subComponent: 'container',
-          label: 'Padding',
-        }],
+        groupLabel: 'Padding (px)',
+        settings: [
+          padding({
+            subComponent: 'container',
+            aclName: 'padding_padding',
+            noLabel: true,
+          }),
+        ],
       },
       {
-        settings: [{
-          name: 'border-group',
-          aclName: 'border_border-group',
-          type: 'border-group',
-          subComponent: 'container',
-        }],
+        groupLabel: 'Border',
+        settings: [
+          borderGroup({ subComponent: 'container' }),
+        ],
       },
       {
-        settings: [{
-          link: 'attribute',
-          label: 'Width',
-          name: 'width',
-          aclName: 'style_width',
-          type: 'width',
-          subComponent: 'container',
-        },
-        {
-          name: 'classes',
-          aclName: 'style_classes',
-          type: 'class-input',
-          link: 'attribute',
-          subComponent: 'container',
-        }],
+        groupLabel: 'Behavior',
+        settings: [
+          classes({ subComponent: 'container' }),
+        ],
       },
     ],
   };

@@ -1,16 +1,20 @@
 <template>
-  <el-select
-    v-model="localValue"
-    :class="isNumbered ? 'is-numbered' : ''"
-    size="mini"
-    :multiple="multiple"
-    :placeholder="placeholder">
-    <el-option
-      v-for="(item) in list"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value" />
-  </el-select>
+  <div class="control" :class="{'is-expanded': expanded}">
+    <el-select
+      v-model="localValue"
+      class="stui-select"
+      v-bind="$attrs"
+      :class="isNumbered ? 'is-numbered' : ''"
+      size="mini"
+      :multiple="multiple"
+      :placeholder="placeholder">
+      <el-option
+        v-for="(item, index) in list"
+        :key="item.value || index"
+        :label="item.label || item"
+        :value="item.value || item" />
+    </el-select>
+  </div>
 </template>
 
 <script>
@@ -18,12 +22,12 @@ export default {
   name: 'StuiSelect',
   props: {
     value: {
-      type: [String, Boolean],
+      type: [String, Array, Boolean],
       default: '',
     },
     placeholder: {
       type: [String],
-      default: '',
+      default: 'Select',
     },
     list: {
       type: [Array, Object],
@@ -47,6 +51,7 @@ export default {
       type: [Boolean],
       default: false,
     },
+    expanded: Boolean,
   },
   computed: {
     localValue: {
@@ -70,15 +75,30 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
-.stui-input-text /deep/ {
-  .el-select .el-input__inner:focus,
-  .el-select .el-input.is-focus .el-input__inner,
-  .el-input__inner:focus {
-    border-color: rgb(120, 220, 214);
+@import '../scss/stui.scss';
+.stui-select {
+  width: 100%;
+  /deep/ {
+    .el-input__inner {
+      border-radius: 2px;
+      border-color: $stui-input-border-color;
+    }
+    .el-input__inner:focus,
+    .el-input.is-focus .el-input__inner,
+    .el-input__inner:focus {
+      border-color: $stui-color-secondary;
+    }
+    .el-input .el-select__caret {
+      color: $stui-label-color;
+    }
+    .el-input .el-input__suffix {
+      right: 0px;
+      color: $stui-input-border-color;
+    }
   }
 }
 .el-select-dropdown__item.selected{
-  color: #78dcd6!important;
+  color: $stui-color-secondary !important;
 }
 .is-numbered /deep/ span > span.el-tag.el-tag--info {
   counter-increment: step-counter;
@@ -86,8 +106,5 @@ export default {
     content: counter(step-counter);
     margin-right: 5px;
   }
-}
-.el-select {
-    width: 100%;
 }
 </style>

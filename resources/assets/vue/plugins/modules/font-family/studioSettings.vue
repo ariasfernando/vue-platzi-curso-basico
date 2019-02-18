@@ -1,28 +1,28 @@
 <template>
   <div>
-    <settings-container :label="plugin.title">
+    <SettingsContainer :label="plugin.title" :arrow="arrowState" @toggleArrow="setSlideToggles">
       <template slot="setting-right">
-          <toggle-button :value="enabled" @change="toggle"></toggle-button>
+        <StuiToggleButton :value="plugin.enabled" @change="toggle" />
       </template>
-    </settings-container>
-
-    <settings-container label="Fonts options" v-if="enabled">
-      <template slot="setting-right">
-          <el-input
-            size="mini" 
+    </SettingsContainer>
+    <b-collapse :id="pluginKey" :visible="arrowState">
+      <SettingsContainer v-if="plugin.enabled" label="Fonts options">
+        <template slot="setting-right">
+          <StuiInputText
             v-model="fontsOptions"
-          ></el-input>
-      </template>
-    </settings-container>
-    </div>
+            size="mini" />
+        </template>
+      </SettingsContainer>
+    </b-collapse>
+  </div>
 </template>
 <script>
-import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
-import pluginMixin from "../mixins/pluginMixin";
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
+import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
+
 export default {
-  props: ["name"],
   components: { SettingsContainer },
-  mixins: [pluginMixin],
+  mixins: [pluginMixinAdmin],
   computed: {
     fontsOptions: {
       get() {
@@ -30,50 +30,27 @@ export default {
       },
       set(value) {
         if (Application.utils.isJsonString(value)) {
-          const payload = {
-            plugin: this.name,
-            columnId: this.currentComponent.columnId,
-            componentId: this.currentComponent.componentId,
-            value: JSON.parse(value)
-          };
-          this.$store.commit("module/setPluginComponentConfig", payload);
+          this.updatePluginConfig({ value: JSON.parse(value)});
         }
-      }
-    }
+      },
+    },
   },
   watch: {
     component: {
-      handler: function() {
+      handler() {
         switch (this.component.type) {
-          case "button-element":
-            this.plugin.subComponent = "button";
+          case 'button-element':
+            this.plugin.subComponent = 'button';
             break;
-          case "text-element":
-            this.plugin.subComponent = "text";
+          case 'text-element':
+            this.plugin.subComponent = 'text';
             break;
           default:
             break;
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
-  data() {
-    return {
-      enabled: false
-    };
-  },
-  methods: {
-    toggle(value) {
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        enabled: value
-      };
-
-      this.$store.commit("module/togglePlugin", payload);
-    }
-  }
 };
 </script>

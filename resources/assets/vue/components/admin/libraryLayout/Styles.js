@@ -1,6 +1,5 @@
 export default [
   {
-    // groupLabel: 'groupLabel',
     settings: [
       {
         name: 'templateWidth',
@@ -43,7 +42,7 @@ export default [
         type: 'stui-input-text',
         placeholder:
           '{"palette_name":["000000","Black","474646","Gray","79a8c9","Blue","cd202c","Red"]}',
-        label: 'color palettes',
+        label: 'Color palettes',
       },
       {
         name: 'templateBackgroundPalettes',
@@ -74,7 +73,7 @@ export default [
         type: 'stui-button',
         width: 'full',
         propType: 'secondary',
-        text: 'Add Propietary Styles',
+        text: 'Add Proprietary Styles',
       },
     ],
   },

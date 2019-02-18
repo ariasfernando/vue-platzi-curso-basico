@@ -1,21 +1,43 @@
 <template>
-  <settings-container :label="label" v-if="showSetting">
-    <template slot="setting-right">
-      <input class="input" :name="name" type="file" @change="onFileChange">
+  <settings-container v-if="showSetting" :no-label="true">
+    <template slot="setting-bottom">
+      <stui-button
+        type="gray"
+        width="full"
+        @click="trigger">
+        {{ label }}
+      </stui-button>
+      <div v-if="fileName" class="file-name">
+        Uploaded file: {{ fileName }}
+      </div>
+      <input
+        ref="fileInput"
+        class="is-hidden"
+        :name="name"
+        type="file"
+        @change="onFileChange">
     </template>
   </settings-container>
 </template>
 <script>
-import SettingMixin from "../mixins/SettingMixin.js";
-import SettingsContainer from "../../common/settings/containers/SettingsContainer.vue";
+import SettingMixin from '../mixins/SettingMixin';
+import SettingsContainer from '../../common/settings/containers/SettingsContainer.vue';
 
 export default {
-  name: "generic-file",
-  mixins: [SettingMixin],
+  name: 'GenericFile',
   components: { SettingsContainer },
+  mixins: [SettingMixin],
+  data() {
+    return {
+      fileName: '',
+    };
+  },
   methods: {
     resetImage() {
-      this.$emit("setting-updated", { link: this.link, name: this.name, value: "" });
+      this.$emit('setting-updated', {
+        link: this.link,
+        name: this.name,
+        value: '' });
     },
     onFileChange(e) {
       const files = e.target.files || e.dataTransfer.files;
@@ -23,22 +45,23 @@ export default {
       if (!files.length) return;
 
       this.createImage(files[0]);
+      this.fileName = files[0].name;
     },
     createImage(file) {
       const reader = new FileReader();
       const vm = this;
 
-      reader.onload = e => {
+      reader.onload = (e) => {
         vm.image = e.target.result;
 
         // Upload Image
         this.$store
-          .dispatch("module/uploadImages", {
-            images: [vm.image]
+          .dispatch('module/uploadImages', {
+            images: [vm.image],
           })
-          .then(res => {
-            this.updateAttributePlaceholder(this.$_app.config.imagePathStudio + res[0]);
-          });
+          .then(res =>
+            this.updateAttributePlaceholder(this.$_app.config.imagePathStudio + res[0]),
+          );
       };
 
       reader.readAsDataURL(file);
@@ -56,13 +79,23 @@ export default {
         // Retry to load image
         this.updateAttributePlaceholder(e);
       };
-    }
-  }
+    },
+    trigger() {
+      this.$refs.fileInput.click();
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
-input.input {
-  margin-top: 8px;
-  width: 100%;
+.is-hidden {
+  display: none;
+}
+.file-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-top: 4px;
+  font-size: 10px;
+  max-width: 240px;
+  white-space: nowrap;
 }
 </style>

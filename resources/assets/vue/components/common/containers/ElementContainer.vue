@@ -38,7 +38,7 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .is-studio.is-active > td:before {
   content: '';
   pointer-events: none;

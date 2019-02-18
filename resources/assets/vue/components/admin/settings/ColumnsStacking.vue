@@ -1,17 +1,9 @@
 <template>
   <settings-container v-if="element.columns.length > 1" label="Column Stacking">
     <template slot="setting-bottom">
-      <el-select
+      <stui-select
         v-model="mainSetting"
-        class="width-full"
-        :placeholder="label"
-        size="mini">
-        <el-option
-          v-for="item in columnsOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value" />
-      </el-select>
+        :list="columnsOptions" />
     </template>
   </settings-container>
 </template>

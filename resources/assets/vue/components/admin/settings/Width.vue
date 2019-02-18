@@ -1,45 +1,36 @@
 <template>
-    <settings-container :label="label" custom-class="width-setting">
-      <template slot="setting-right">
-          <stui-input-number
-            v-validate="'required'"
-            v-model="mainSettingNumeric"
-            :min="minValueCalculated"
-            :max="maxValueCalculated"
-            class="padding-custom align-element"
-            :controls="false"
-          />
-        <el-button
-          slot="append"
-          class="button icon-disable"
-          @click="onTogglePxWidth"
-        >{{this.isPxWidth ? "px": "%"}}</el-button>
-      </template>
-    </settings-container>
+  <settings-container :label="label" custom-class="width-setting">
+    <template slot="setting-right">
+      <stui-input-number
+        v-model="mainSettingNumeric"
+        v-validate="'required'"
+        :min="minValueCalculated"
+        :max="maxValueCalculated"
+        class="padding-custom"
+        :controls="false" />
+    </template>
+  </settings-container>
 </template>
 
 <script>
-import SettingMixin from '../mixins/SettingMixin.js';
+import SettingMixin from '../mixins/SettingMixin';
 import SettingsContainer from '../../common/settings/containers/SettingsContainer.vue';
 
 export default {
-  name: 'width',
-  mixins: [SettingMixin],
+  name: 'Width',
   components: { SettingsContainer },
-  mounted() {
-    this.defineStyleOption();
-  },
+  mixins: [SettingMixin],
   computed: {
     isPxWidth: {
       get() {
-        return this.element.styleOption['isPxWidth'];
+        return this.element.styleOption.isPxWidth;
       },
       set(value) {
         this.$emit('setting-updated', {
           subComponent: this.subComponent,
           link: 'styleOption',
           name: 'isPxWidth',
-          value: value,
+          value,
         });
       },
     },
@@ -48,12 +39,12 @@ export default {
         return parseFloat(this.mainSetting);
       },
       set(value) {
-        value =
+        let newValue =
           isNaN(value) || value < this.minValueCalculated
             ? this.minValueCalculated
             : value;
-        value = this.isPxWidth ? `${value}` : `${value}%`;
-        this.mainSetting = value;
+        newValue = this.isPxWidth ? `${newValue}` : `${newValue}%`;
+        this.mainSetting = newValue;
       },
     },
     minValueCalculated() {
@@ -63,115 +54,24 @@ export default {
       return this.isPxWidth ? undefined : 100;
     },
   },
-  methods: {
-    onTogglePxWidth() {
-      let isPxWidth = !this.isPxWidth;
-      let width = this.mainSettingNumeric;
-      if (!isPxWidth) {
-        width = Math.min(100, parseFloat(this.mainSettingNumeric));
-      }
-      width =
-        isNaN(width) || width < this.minValueCalculated
-          ? this.minValueCalculated
-          : width;
-      width = isPxWidth ? `${width}` : `${width}%`;
-      this.isPxWidth = isPxWidth;
-      this.mainSetting = width;
-    },
-    defineStyleOption() {
-      // set styleOption to default if is undefined
-      if (this.element.styleOption['isPxWidth'] === undefined) {
-        this.isPxWidth = false;
-      }
-    },
-  },
   watch: {
     element: {
-      handler: function() {
+      handler() {
         this.defineStyleOption();
       },
       deep: true,
     },
   },
+  mounted() {
+    this.defineStyleOption();
+  },
+  methods: {
+    defineStyleOption() {
+      // set styleOption to default if is undefined
+      if (this.element.styleOption.isPxWidth === undefined) {
+        this.isPxWidth = false;
+      }
+    },
+  },
 };
 </script>
-<style lang="scss" scoped>
-.button input {
-  text-align: center;
-}
-.input-number-size {
-  padding-left: 0;
-  padding-right: 21px;
-}
-.el-button.is-active .el-input__inner,
-.el-input__inner:focus {
-  border: 1px solid #dcdfe6;
-}
-.el-button {
-  position: absolute;
-  right: 0;
-  padding: 6px;
-  &:active {
-    background-color: #fff;
-    border: 1px solid #dcdfe6;
-    color: #606266;
-  }
-}
-.el-input-number /deep/ {
-  width: 80px;
-  float: right;
-  right: 23px;
-  .el-input-number__decrease,
-  .el-input-number__increase {
-    width: 17px;
-  }
-}
-.el-button {
-  background: #f8f8f8;
-  color: #666666;
-  cursor: inherit;
-  border: 1px solid #dcdfe6;
-  font-size: 11px;
-  font-weight: 300;
-  line-height: 14px;
-  border-radius: 0px 2px 2px 0px;
-  height: 28px !important;
-
-  &:hover {
-    color: #78dcd6;
-  }
-}
-.el-button.active {
-  background-color: #78dcd6;
-  border: 1px solid #78dcd6;
-  color: #ffffff;
-
-  &:hover {
-    color: #ffffff;
-  }
-}
-</style>
-<style  lang="less">
-.width-setting {
-  input[type='text'] {
-    text-align: center;
-  }
-  .el-input-number .el-input__inner {
-    text-align: center;
-    border-right: 0;
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-  }
-
-  .el-input-number .el-button {
-    background: #f8f8f8;
-    color: #666666;
-    cursor: inherit;
-    border: 1px solid #dcdfe6;
-    font-size: 11px;
-    font-weight: 300;
-    line-height: 14px;
-    border-radius: 0px 2px 2px 0px;
-  }
-}
-</style>

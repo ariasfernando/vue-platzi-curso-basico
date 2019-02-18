@@ -2,10 +2,10 @@
   <div>
     <settings-container :no-label="true">
       <template slot="setting-bottom">
-        <el-button type="primary" @click="getModal">
+        <stui-button type="gray" width="full" @click="getModal">
           <i class="fa fa-code" />
           Edit Code
-        </el-button>
+        </stui-button>
       </template>
     </settings-container>
     <modal-container v-if="showModal === true" button-submit-text="End Editing Code" @submit-modal="saveChange" @close-modal="showModal = false">

@@ -15,11 +15,12 @@ export default {
 .highlight {
   position: absolute;
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
   outline-offset: -1px;
+  outline-color: transparent;
+  transition: outline-color 150ms linear;
   &.active {
-    background: transparentize($color-secondary, 0.8);
-    outline-color: $color-secondary;
+    outline-color: $stui-color-secondary;
     outline-width: 2px;
     outline-style: solid;
   }
