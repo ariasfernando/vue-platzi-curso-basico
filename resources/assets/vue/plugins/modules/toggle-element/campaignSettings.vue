@@ -1,29 +1,29 @@
 <template>
-  <settings-container
+  <SettingsContainer
     v-if="module"
     :label="plugin.title"
     level="first"
     label-expanded="true">
     <template slot="setting-bottom">
       <div class="clearfix">
-        <settings-container v-for="element in plugin.data.elements" :key="element.id" :label="element.label">
+        <SettingsContainer v-for="element in plugin.data.elements" :key="element.id" :label="element.label">
           <template slot="setting-half">
-            <stui-toggle-button
+            <StuiToggleButton
               :value="getValue(element.id)"
               expanded
-              @change="value => toggleChange(value, element.id)" />
+              @change="value => toggleChange(value, element.id, element.preventDefault)" />
           </template>
-        </settings-container>
+        </SettingsContainer>
       </div>
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 
 <script>
 import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 import validatorMixin from '../mixins/validatorMixin';
-import logicMixin from './logic.js';
+import logicMixin from './logic';
 
 export default {
   components: { SettingsContainer },
@@ -38,9 +38,10 @@ export default {
       if (this.isCustom) {
         return this.getElement(elementId).enableElement;
       }
-      return this.getElement(elementId).container.styleOption.enableElement;
+      const element = this.getElement(elementId);
+      return element.container.styleOption.forceVisible || element.container.styleOption.enableElement;
     },
-    toggleElement(value, elementId) {
+    toggleElement(value, elementId, preventDefault) {
       if (this.isCustom) {
         this.$store.dispatch('campaign/updateCustomElementProperty', {
           moduleId: this.currentCustomModule,
@@ -56,7 +57,9 @@ export default {
           property: 'enableElement',
           value,
         };
-        this.saveElementProperty(payload);
+        if (!preventDefault) {
+          this.saveElementProperty(payload);
+        }
         this.resetErrors(value, this.moduleId);
       }
 
@@ -69,12 +72,14 @@ export default {
     },
     toggleChange(value, elementId) {
       if (this.plugin.data.preventEmpty && !value) {
-        for (const i in this.plugin.data.elements) {
-          if (this.plugin.data.elements[i].id !== elementId && this.getValue(this.plugin.data.elements[i].id)) {
+        _.forEach(this.plugin.data.elements, (element) => {
+          if (element.id !== elementId && this.getValue(element.id)) {
             this.toggleElement(value, elementId);
-            return;
+            return false;
           }
-        }
+          return true;
+        });
+
         this.$root.$toast("You've to leave at least one element", {
           className: 'et-error',
           horizontalPosition: 'right',
