@@ -6,7 +6,7 @@
     "created_by": "f@f.com",
     "updated_by": "f@f.com",
     "created_at": "2019-02-14 21:30:31",
-    "updated_at": "2019-02-16 10:06:26",
+    "updated_at": "2019-02-18 16:46:07",
     "title": "row",
     "type": "studio",
     "status": "draft",
@@ -614,9 +614,16 @@
             "config": {
                 "defaultValue": false
             },
-            "data": [],
+            "data": {
+                "elements": [
+                    {
+                        "id": 734827,
+                        "label": "Text"
+                    }
+                ]
+            },
             "render": true,
-            "enabled": false,
+            "enabled": true,
             "hasCampaignSettings": true
         }
     },
@@ -654,21 +661,27 @@
             {
                 "id": 42398,
                 "columnsStacking": "normal",
+                "type": "row-element",
                 "content": {
                     "attribute": {
                         "bgcolor": "",
                         "classes": "",
                         "height": ""
                     },
-                    "style": []
+                    "style": [],
+                    "styleOption": []
                 },
                 "container": {
                     "attribute": {
                         "bgcolor": "",
                         "classes": "",
-                        "height": ""
+                        "height": "",
+                        "width": ""
                     },
-                    "style": []
+                    "style": [],
+                    "styleOption": {
+                        "isPxWidth": false
+                    }
                 },
                 "mobileClasses": [],
                 "columns": [
@@ -1901,7 +1914,7 @@
                                         "hasStudioSettings": true
                                     }
                                 },
-                                "id": 3013620
+                                "id": 301360
                             },
                             {
                                 "type": "text-element",
@@ -2373,6 +2386,7 @@
             },
             {
                 "id": 423928,
+                "type": "row-element",
                 "columnsStacking": "normal",
                 "content": {
                     "attribute": {
@@ -2380,15 +2394,20 @@
                         "classes": "",
                         "height": ""
                     },
-                    "style": []
+                    "style": [],
+                    "styleOption": []
                 },
                 "container": {
                     "attribute": {
                         "bgcolor": "",
                         "classes": "",
-                        "height": ""
+                        "height": "",
+                        "width": ""
                     },
-                    "style": []
+                    "style": [],
+                    "styleOption": {
+                        "isPxWidth": false
+                    }
                 },
                 "mobileClasses": [],
                 "columns": [
@@ -3192,7 +3211,8 @@
                         "container": {
                             "style": [],
                             "attribute": {
-                                "width": "25%"
+                                "width": "25%",
+                                "bgcolor": "#B42525"
                             },
                             "styleOption": {
                                 "isPxWidth": false
@@ -3621,7 +3641,7 @@
                                         "hasStudioSettings": true
                                     }
                                 },
-                                "id": 3015360
+                                "id": 301360
                             },
                             {
                                 "type": "text-element",
@@ -4401,7 +4421,7 @@
                                 },
                                 "data": [],
                                 "render": true,
-                                "enabled": false,
+                                "enabled": true,
                                 "hasStudioSettings": true,
                                 "hasCampaignSettings": true
                             },
@@ -4420,7 +4440,7 @@
                                 },
                                 "data": [],
                                 "render": true,
-                                "enabled": false,
+                                "enabled": true,
                                 "hasStudioSettings": true,
                                 "hasCampaignSettings": true
                             },
@@ -4438,7 +4458,7 @@
                                 },
                                 "data": [],
                                 "render": true,
-                                "enabled": false,
+                                "enabled": true,
                                 "hasStudioSettings": true,
                                 "hasCampaignSettings": true
                             },
@@ -4460,7 +4480,7 @@
                                 },
                                 "data": [],
                                 "render": true,
-                                "enabled": false,
+                                "enabled": true,
                                 "hasStudioSettings": true,
                                 "hasCampaignSettings": true
                             }
@@ -5696,7 +5716,7 @@
                                         "hasStudioSettings": true
                                     }
                                 },
-                                "id": 3012360
+                                "id": 301360
                             },
                             {
                                 "type": "text-element",
@@ -5717,14 +5737,16 @@
                                 },
                                 "text": {
                                     "style": {
-                                        "fontFamily": "Helvetica, Arial, Sans-serif",
+                                        "fontFamily": "Helvetica, Sans-serif",
                                         "fontSize": "12px",
                                         "color": "#000000",
                                         "fontWeight": "normal",
                                         "lineHeight": "20%",
                                         "align": "left"
                                     },
-                                    "styleOption": [],
+                                    "styleOption": {
+                                        "isNormalLetterSpacing": false
+                                    },
                                     "attribute": {
                                         "href": ""
                                     }
@@ -5750,9 +5772,10 @@
                                         },
                                         "data": [],
                                         "render": true,
-                                        "enabled": false,
+                                        "enabled": true,
                                         "hasStudioSettings": true,
-                                        "hasCampaignSettings": true
+                                        "hasCampaignSettings": true,
+                                        "subComponent": "text"
                                     },
                                     "backgroundColor": {
                                         "name": "background-color",
@@ -5770,9 +5793,10 @@
                                         },
                                         "data": [],
                                         "render": true,
-                                        "enabled": false,
+                                        "enabled": true,
                                         "hasStudioSettings": true,
-                                        "hasCampaignSettings": true
+                                        "hasCampaignSettings": true,
+                                        "subComponent": "container"
                                     },
                                     "destinationUrl": {
                                         "name": "destination-url",
@@ -5802,11 +5826,12 @@
                                         },
                                         "data": [],
                                         "render": true,
-                                        "enabled": false,
+                                        "enabled": true,
                                         "validated": false,
                                         "runBackground": true,
                                         "hasStudioSettings": true,
-                                        "hasCampaignSettings": true
+                                        "hasCampaignSettings": true,
+                                        "subComponent": "text"
                                     },
                                     "fontFamily": {
                                         "name": "font-family",
@@ -5829,9 +5854,10 @@
                                         ],
                                         "data": [],
                                         "render": true,
-                                        "enabled": false,
+                                        "enabled": true,
                                         "hasStudioSettings": true,
-                                        "hasCampaignSettings": true
+                                        "hasCampaignSettings": true,
+                                        "subComponent": "text"
                                     },
                                     "mobileStyles": {
                                         "name": "mobile-styles",
@@ -5896,9 +5922,10 @@
                                         },
                                         "data": [],
                                         "render": true,
-                                        "enabled": false,
+                                        "enabled": true,
                                         "hasStudioSettings": true,
-                                        "hasCampaignSettings": true
+                                        "hasCampaignSettings": true,
+                                        "subComponent": "container"
                                     },
                                     "textOptions": {
                                         "name": "text-options",
@@ -5925,7 +5952,7 @@
                                                 },
                                                 "strikethrough": {
                                                     "key": "strikethrough",
-                                                    "value": false
+                                                    "value": true
                                                 },
                                                 "alignleft": {
                                                     "key": "alignleft",
@@ -5941,19 +5968,19 @@
                                                 },
                                                 "alignjustify": {
                                                     "key": "alignjustify",
-                                                    "value": false
+                                                    "value": true
                                                 },
                                                 "superscript": {
                                                     "key": "superscript",
-                                                    "value": false
+                                                    "value": true
                                                 },
                                                 "fontsizeselect": {
                                                     "key": "fontsizeselect",
-                                                    "value": false
+                                                    "value": true
                                                 },
                                                 "bullist": {
                                                     "key": "bullist",
-                                                    "value": false
+                                                    "value": true
                                                 },
                                                 "numlist": {
                                                     "key": "numlist",
@@ -6014,10 +6041,10 @@
                                             },
                                             "settings": {
                                                 "truncate": {
-                                                    "content": false
+                                                    "content": 53
                                                 },
                                                 "lines_limit": {
-                                                    "content": false
+                                                    "content": 4
                                                 },
                                                 "fontsize_formats": {
                                                     "content": [
@@ -6053,7 +6080,7 @@
                                             }
                                         },
                                         "render": false,
-                                        "enabled": false,
+                                        "enabled": true,
                                         "hasStudioSettings": true
                                     },
                                     "toggleElementSetter": {

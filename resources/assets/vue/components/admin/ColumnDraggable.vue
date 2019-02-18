@@ -157,7 +157,7 @@ module.exports = {
         cloneItem.parentNode.removeChild(cloneItem);
         e.clone.style.opacity = '1';
         // Set dropped element as selected
-        this.$store.commit('module/setCurrentElementId', element.id);
+        this.$store.commit('module/setCurrentElementId', element.properties.id);
       }
       this.emitChange();
     },

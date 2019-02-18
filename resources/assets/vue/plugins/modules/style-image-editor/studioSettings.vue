@@ -124,8 +124,7 @@ export default {
     mounted() {
         this.$store.dispatch('module/getLibraries', {
             plugin: this.name,
-            columnId: this.currentComponent.columnId,
-            componentId: this.currentComponent.componentId
+            elementId: this.elementId,
         });
     }
 };

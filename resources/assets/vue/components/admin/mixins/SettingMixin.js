@@ -32,9 +32,6 @@ export default {
     this.setDefaultValue();
   },
   computed: {
-    currentComponent() {
-      return this.$store.getters['module/currentComponent'];
-    },
     mainSetting: {
       get() {
         if (this.link) {

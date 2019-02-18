@@ -47,7 +47,7 @@
             :name="_.camelCase(plugin.name)"
             :plugin-key="`element-${currentElement.id}-plugin-${plugin.name}`"
             :plugin="currentElement.plugins[_.camelCase(plugin.name)]"
-            :column-id="currentComponent.columnId" />
+            :column-id="getColumnIndexByElementId(currentElementId)" />
         </GroupContainer>
       </b-card>
     </b-collapse>
@@ -60,13 +60,36 @@ export default {
   mixins: [SettingContainerMixin],
   computed: {
     columnLabel() {
-      let columnindex = this.currentComponent.columnId;
+      let columnindex = this.getColumnIndexByElementId(this.currentElementId);
       if (this.isInvertedStacking) {
         columnindex = this.module.structure.columns.length - columnindex;
       } else {
         ++columnindex;
       }
       return `Column ${columnindex} Styles`;
+    },
+  },
+  methods: {
+    getColumnIndexByElementId(elementId) {
+      let columnIndex = false;
+      _.forEach(this.module.structure.rows, (row, currentColumnIndex) => {
+        _.forEach(row.columns, (column, currentColumnIndex) => {
+          if (column.id === elementId) {
+            columnIndex = currentColumnIndex;
+            return false;
+          }
+          _.forEach(column.components, (currentComponent) => {
+            if (currentComponent.id === elementId) {
+              columnIndex = currentColumnIndex;
+              return false;
+            }
+            return true;
+          });
+          return columnIndex === false;
+        });
+        return columnIndex === false;
+      });
+      return columnIndex;
     },
   },
 };

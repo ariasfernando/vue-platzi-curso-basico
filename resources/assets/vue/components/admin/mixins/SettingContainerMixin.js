@@ -33,14 +33,15 @@ export default {
     'input-width': elementSettings.Width,
   },
   mixins: [AclMixing],
-  props: ['currentComponent'],
+  props: ['columnId'],
   computed: {
     settings() {
       return settingsDefault[this.type]().componentSettings;
     },
     filteredSettings() {
       return this.settings.filter(setting =>
-        this.hasPermissionsInGroup(setting, `std-${this.typeAcl}_`),
+        //this.hasPermissionsInGroup(setting, `std-${this.typeAcl}_`),
+        true
       );
     },
     pluginsGroups() {
@@ -61,7 +62,7 @@ export default {
       return this.$store.getters['module/currentElementId'];
     },
     currentElement() {
-      getElement(this.currentElementId);
+      return this.currentElementId ? this.getElement(this.currentElementId) : this.module;
     },
   },
   methods: {
@@ -92,7 +93,7 @@ export default {
     },
     settingProps(setting) {
       return {
-        'column-id': this.currentComponent.columnId,
+        'column-id': this.currentElementId.type === 'column-element' ? this.getColumnIndexByElementId(this.currentElementId) : undefined,
         'default-value': setting.value,
         'false-text': setting.falseText,
         'is-disable-percentage': setting.isDisablePercentage,
@@ -133,8 +134,8 @@ export default {
       _.forEach(group.plugins, (item) => {
         const typeAcl = this.typeAcl === 'module' ? '' : `-${this.typeAcl}`;
         if (
-          (this.$can(`std${typeAcl}-plugin-${item.aclName}`)
-          && this.currentElement.plugins[_.camelCase(item.name)])
+          // (this.$can(`std${typeAcl}-plugin-${item.aclName}`) &&
+          this.currentElement.plugins[_.camelCase(item.name)]
         ) {
           show = true;
           pluginsToShow.push(item);
@@ -149,8 +150,8 @@ export default {
       const settingsToShow = [];
       _.forEach(group.settings, (item) => {
         if (
-          (item.dependOn === undefined || _.get(this, item.dependOn)) &&
-          this.$can(`std-${this.typeAcl}_${item.aclName}`)
+          (item.dependOn === undefined || _.get(this, item.dependOn))
+          //&& this.$can(`std-${this.typeAcl}_${item.aclName}`)
         ) {
           show = true;
           settingsToShow.push(item);
@@ -163,8 +164,8 @@ export default {
     pluginFilter(plugins) {
       const typeAcl = this.typeAcl === 'module' ? '' : `-${this.typeAcl}`;
       return plugins.filter(plugin =>
-        this.$can(`std${typeAcl}-plugin-${plugin.aclName}`)
-        && this.currentElement.plugins[_.camelCase(plugin.name)],
+        // this.$can(`std${typeAcl}-plugin-${plugin.aclName}`) &&
+        this.currentElement.plugins[_.camelCase(plugin.name)],
       );
     },
     saveElementProperty({ link, subComponent, name, value }) {

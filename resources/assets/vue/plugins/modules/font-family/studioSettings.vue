@@ -36,9 +36,9 @@ export default {
     },
   },
   watch: {
-    component: {
+    element: {
       handler() {
-        switch (this.component.type) {
+        switch (this.element.type) {
           case 'button-element':
             this.plugin.subComponent = 'button';
             break;

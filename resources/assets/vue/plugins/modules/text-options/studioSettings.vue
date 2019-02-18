@@ -159,20 +159,6 @@ export default {
     options() {
       return configsView().options;
     },
-    pluginEnabled: {
-      get() {
-        return this.plugin.enabled;
-      },
-      set(value) {
-        const payload = {
-          plugin: this.name,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          enabled: value,
-        };
-        this.$store.commit('module/togglePlugin', payload);
-      },
-    },
     textColorMap: {
       get() {
         const value = this.plugin.config.options.forecolor.textcolor_map;

@@ -2,23 +2,25 @@ import {
   bgcolor,
   borderGroup,
   classes,
-  columnsStacking,
   padding,
+  width,
 } from './settings';
 
-function moduleDefault() {
+function rowDefault() {
   return {
     componentSettings: [
       {
         groupLabel: 'Design',
         settings: [
-          bgcolor(),
+          width({ subComponent: 'container', type: 'width' }),
+          bgcolor({ subComponent: 'container' }),
         ],
       },
       {
         groupLabel: 'Padding (px)',
         settings: [
           padding({
+            subComponent: 'container',
             aclName: 'padding_padding',
             noLabel: true,
           }),
@@ -27,18 +29,17 @@ function moduleDefault() {
       {
         groupLabel: 'Border',
         settings: [
-          borderGroup(),
+          borderGroup({ subComponent: 'container' }),
         ],
       },
       {
         groupLabel: 'Behavior',
         settings: [
-          classes(),
+          classes({ subComponent: 'container' }),
         ],
       },
     ],
   };
 }
 
-
-module.exports = moduleDefault;
+module.exports = rowDefault;

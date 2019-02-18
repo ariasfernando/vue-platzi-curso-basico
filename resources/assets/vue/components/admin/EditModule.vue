@@ -17,10 +17,11 @@
           </ScrollbarContainer>
         </div>
         <!-- END: Module Container -->
-        <ColumnBarContainer v-if="!module.structure.rows" side="right">
-          <ModuleSettings v-if="showGeneralSettings" :current-component="currentComponent" />
-          <ColumnSettings v-if="showColumnSettings" :current-component="currentComponent" />
-          <ComponentSettings v-if="showElementSettings" :current-component="currentComponent" />
+        <ColumnBarContainer side="right">
+          <ModuleSettings v-if="!currentElementId" />
+          <ColumnSettings v-if="currentElement.type === 'column-element'" />
+          <RowSettings v-if="currentElement.type === 'row-element'" />
+          <ComponentSettings v-if="currentElementId && currentElement.type !== 'row-element' && currentElement.type !== 'column-element'" />
         </ColumnBarContainer>
       </section>
     </div>
@@ -41,6 +42,7 @@ import Module from './Module.vue';
 import ModuleContainer from '../common/containers/ModuleContainer.vue';
 import ModuleHeader from './partials/ModuleHeader.vue';
 import ModuleSettings from './partials/ModuleSettings.vue';
+import RowSettings from './partials/RowSettings.vue';
 import ScrollbarContainer from '../common/containers/ScrollbarContainer.vue';
 
 export default {
@@ -56,6 +58,7 @@ export default {
     ModuleContainer,
     ModuleHeader,
     ModuleSettings,
+    RowSettings,
     ScrollbarContainer,
   },
   data() {
@@ -83,8 +86,7 @@ export default {
           const validJson = Application.utils.isJsonString(value);
           if (validJson) {
             const data = {
-              columnId: this.currentComponent.columnId,
-              componentId: this.currentComponent.componentId,
+              elementId: this.currentElementId,
               value: JSON.parse(value),
             };
             this.$store.commit('module/setElementData', data);
@@ -99,57 +101,14 @@ export default {
         }, 500);
       },
     },
-    currentComponent() {
-      return this.$store.getters['module/currentComponent'];
-    },
     buildingMode() {
       return this.$store.getters['module/buildingMode'];
     },
     showRaw() {
       return this.$store.getters['module/showRaw'];
     },
-    showGeneralSettings() {
-      return (
-        this.ready &&
-        this.currentComponent.columnId === undefined &&
-        this.currentComponent.componentId === undefined
-      );
-    },
-    showColumnSettings() {
-      return (
-        this.ready &&
-        this.module.structure.columns.length > 1 &&
-        this.currentComponent.columnId !== undefined &&
-        this.currentComponent.componentId === undefined
-      );
-    },
-    showElementSettings() {
-      return (
-        this.ready &&
-        this.currentComponent.columnId >= 0 &&
-        this.currentComponent.componentId >= 0
-      );
-    },
     currentElement() {
-      if (!this.currentElementId) {
-        return this.module;
-      }
-      let element = false;
-      _.forEach(this.module.structure.columns, (column) => {
-        if (column.id === this.currentElementId) {
-          element = column;
-          return false;
-        }
-        _.forEach(column.components, (CurrentComponent) => {
-          if (CurrentComponent.id === this.currentElementId) {
-            element = CurrentComponent;
-            return false;
-          }
-          return true;
-        });
-        return !element;
-      });
-      return element;
+      return this.getElement(this.currentElementId);
     },
   },
   watch: {
@@ -225,6 +184,34 @@ export default {
       ) {
         this.$store.commit('module/setCurrentElementId', false);
       }
+    },
+    getElement(elementId) {
+      if(!elementId){
+        return this.module;
+      }
+      let element = false;
+      _.forEach(this.module.structure.rows, (row) => {
+        if (row.id === elementId) {
+          element = row;
+          return false;
+        }
+        _.forEach(row.columns, (column) => {
+          if (column.id === elementId) {
+            element = column;
+            return false;
+          }
+          _.forEach(column.components, (CurrentComponent) => {
+            if (CurrentComponent.id === elementId) {
+              element = CurrentComponent;
+              return false;
+            }
+            return true;
+          });
+          return !element;
+        });
+        return !element;
+      });
+      return element;
     },
   },
 };

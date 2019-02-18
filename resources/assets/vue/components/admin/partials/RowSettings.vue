@@ -1,11 +1,8 @@
 <template>
   <div>
-    <LabelItemContainer
-      v-b-toggle.module-settings-styles
-      label="Module Styles"
-      icon="glyphicon-cog" />
-    <b-collapse id="module-settings-styles" visible accordion="module-settings">
-      <b-card class="control">
+    <LabelItemContainer v-b-toggle.row-settings-styles :label="`Row [number] Styles`" icon="glyphicon-pause" />
+    <b-collapse id="row-settings-styles" visible accordion="row-settings">
+      <b-card class="control" no-block>
         <GroupContainer
           v-for="(settingGroup, groupKey) in filteredSettings"
           :key="groupKey">
@@ -31,11 +28,11 @@
     </b-collapse>
     <LabelItemContainer
       v-b-tooltip.hover
-      v-b-toggle.module-settings-functionalities
+      v-b-toggle.row-settings-functionalities
       label="Editor Settings"
       icon="glyphicon-tasks"
       title="Settings available in the Email Editor" />
-    <b-collapse id="module-settings-functionalities" accordion="module-settings">
+    <b-collapse id="row-settings-functionalities" accordion="row-settings">
       <b-card class="control">
         <GroupContainer
           v-for="(pluginGroup, groupKey) in pluginsGroups"
@@ -44,28 +41,21 @@
           <Component
             :is="'studio-' + plugin.name"
             v-for="(plugin) in pluginGroup.plugins"
-            :key="plugin.name"
+            :key="plugin.name + currentElement.id"
+            :class="'plugin-' + plugin.name"
+            :element="currentElement"
             :name="_.camelCase(plugin.name)"
-            :element="module"
-            :plugin-key="`module-plugin-${plugin.name}`"
-            :plugin="module.plugins[_.camelCase(plugin.name)]"
-            :class="'plugin-' + plugin.name" />
+            :plugin-key="`element-${currentElement.id}-plugin-${plugin.name}`"
+            :plugin="currentElement.plugins[_.camelCase(plugin.name)]"/>
         </GroupContainer>
       </b-card>
     </b-collapse>
   </div>
 </template>
-
 <script>
 import SettingContainerMixin from '../mixins/SettingContainerMixin';
 
 export default {
   mixins: [SettingContainerMixin],
-  computed: {
-    hasMoreThanOneColumn() {
-      // This is used in a dependOn in a module setting.
-      return this.module.structure.columns.length > 1;
-    },
-  },
 };
 </script>

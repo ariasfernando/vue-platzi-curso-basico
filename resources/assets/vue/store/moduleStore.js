@@ -171,24 +171,41 @@ const getters = {
 };
 
 const mutations = {
-  setLoader(state, data) {
-    state.loading = data;
-  },
   setSecondaryLoader(state, data) {
     state.secondaryLoading = data;
   },
   setModuleData(state, data) {
     state.module = data;
   },
-  setElementData(state, { componentId, columnId, value }) {
+  setElementData(state, { elementId, value }) {
     let containerElement = {};
     let property = false;
-    if (componentId >= 0) {
-      containerElement = state.module.structure.columns[columnId].components;
-      property = componentId;
-    } else if (columnId >= 0) {
-      containerElement = state.module.structure.columns;
-      property = columnId;
+    if(elementId) {
+    let element = false;
+    _.forEach(state.module.structure.rows, (row, rowIndex) => {
+      if (row.id === elementId) {
+        containerElement = state.module.structure.rows;
+        property = rowIndex;
+        return false;
+      }
+      _.forEach(row.columns, (column) => {
+        if (column.id === elementId) {
+          containerElement = row.columns;
+          property = columnIndex;
+          return false;
+        }
+        _.forEach(column.components, (CurrentComponent) => {
+          if (CurrentComponent.id === elementId) {
+            containerElement = column.components;
+            property = componentIndex;
+            return false;
+          }
+          return true;
+        });
+        return !element;
+      });
+      return !element;
+    });
     } else {
       containerElement = state;
       property = 'module';
@@ -408,13 +425,9 @@ const mutations = {
     console.error(err);
   },
   setListLibraries(state, data) {
-    state.module.structure.columns[data.columnId].components[
-      data.componentId
-    ].plugins[data.plugin].config.library.config.set_images.options =
+    getElement(state.module, data.elementId).plugins[data.plugin].config.library.config.set_images.options =
       data.response;
-    state.module.structure.columns[data.columnId].components[
-      data.componentId
-    ].plugins[data.plugin].config[
+    getElement(state.module, data.elementId).plugins[data.plugin].config[
       'sie-plugin-image-overlay_image'
     ].config.overlay_gallery.config.set_images.options = data.response;
   },
