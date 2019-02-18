@@ -26,17 +26,24 @@ export default {
   font-weight: normal;
   color: #ffffff;
   outline: none;
-  transition: background 150ms linear;
+  transition: opacity .5 linear, background 150ms linear;
   padding: 2px 7px 3px 7px;
   position: absolute;
   transform: translateX(-50%);
   z-index: 2;
-
+  opacity: 1;
   &:hover {
     background: #aaaaaa;
   }
   &.active {
     background: #78dcd6;
   }
+}
+</style>
+
+<style lang="scss">
+.hide-element-selector .element-selector {
+  display: none;
+  opacity: 0;
 }
 </style>

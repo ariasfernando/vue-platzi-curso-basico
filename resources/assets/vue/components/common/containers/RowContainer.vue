@@ -4,7 +4,9 @@
       v-if="withRow"
       :data-type="element.type"
       :data-row-id="element.id"
-      :class="element.container.attribute.classes">
+       @mouseover="isHover = true"
+       @mouseleave="isHover = false"
+      :class="[element.container.attribute.classes,{'hide-element-selector' : !isHover && isStudio}]">
       <td
         width="15%"
         :height="element.container.attribute.height"
@@ -49,6 +51,11 @@ import Wrapper from '../Wrapper';
 export default {
   name: 'RowContainer',
   mixins: [ElementMixin],
+  data() {
+    return {
+      isHover: false,
+    };
+  },
   components: {
     Wrapper,
   },
