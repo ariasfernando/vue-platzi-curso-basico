@@ -86,10 +86,12 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
             {{-- PREHEADER NOT ENABLED, USE DE FACTO FROM MODULES --}}
         @endif
 <?= $params['body_html']; ?>
-		@if ($params['library_config']['insertBody'] && isset($params['campaign_data']['append_html']))
-			<?php echo $params['campaign_data']['append_html']; ?>				
-		@elseif ($params['library_config']['insertBody'] && isset($params['library_config']['appendHtml']))
-			<?php echo $params['library_config']['appendHtml']; ?>
+		@if (isset($params['library_config']['insertBody']))
+			@if ($params['library_config']['insertBody'] && isset($params['campaign_data']['append_html']))
+				<?php echo $params['campaign_data']['append_html']; ?>				
+			@elseif ($params['library_config']['insertBody'] && isset($params['library_config']['appendHtml']))
+				<?php echo $params['library_config']['appendHtml']; ?>
+			@endif
 		@endif
 	</body>
 </html>
