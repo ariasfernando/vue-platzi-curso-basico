@@ -9,11 +9,9 @@ use Stensul\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use MongoDB\BSON\ObjectID as ObjectID;
 use MongoDB\Driver\Exception\BulkWriteException;
-use Stensul\Http\Middleware\AdminAuthenticate;
 use ModuleModel as Module;
 use LibraryModel as Library;
 use ModelKeyManager;
-use Validator;
 use Illuminate\Validation\Rule;
 
 class ModuleController extends Controller
@@ -64,25 +62,12 @@ class ModuleController extends Controller
     /**
      * Get modules.
      *
-     * @param Request $request
      * @param string $type Module type, null, "custom", "studio"
      * @return array Modules data
      */
-    public function getModules(Request $request, $type = null)
+    public function getModules($type = null)
     {
-        $modules = \StensulModule::getModuleList(null, $type);
-
-        foreach ($modules as $module) {
-            $modules[$module->key] = $module->toArray();
-            $libraries = $module->getLibraries();
-            $modules[$module->key]['libraries'] = [];
-            foreach ($libraries as $library) {
-                $modules[$module->key]['libraries'][] = $library->name;
-            }
-            $modules[$module->key] = (object) $modules[$module->key];
-        }
-
-        return $modules;
+        return \StensulModule::getModuleList(null, $type);
     }
 
     /**
