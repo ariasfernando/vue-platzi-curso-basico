@@ -123,6 +123,15 @@ class CampaignManager
             }
         }
 
+        if (isset($inputs['prepend_html'])) {
+            $campaign->prepend_html = $inputs['prepend_html'];
+        }
+
+        if (isset($inputs['append_html'])) {
+            $campaign->append_html = $inputs['append_html'];
+        }
+
+        $campaign->modules_data = $inputs['modules_data'];
         $campaign->save();
 
         Activity::log('Campaign updated', array('properties' => ['campaign_id' => new ObjectID($campaign_id)]));

@@ -44,10 +44,15 @@
     <modal-proof v-if="campaignReady" />
     <modal-enable-templating v-if="campaignReady" />
     <modal-proof-track v-if="campaignReady" />
-    <modal-insert-body v-if="campaignReady && campaign.library_config.insertBody" title="append" @submitBodyInsert="submitBodyInsert" :value="campaign.library_config.appendHtml" />
-    <modal-insert-body v-if="campaignReady && campaign.library_config.insertBody" title="prepend" @submitBodyInsert="submitBodyInsert" :value="campaign.library_config.prependHtml" />
-
-    <spinner></spinner>
+    <modal-insert-body
+      v-if="campaignReady && campaign.library_config.insertBody"
+      title="append"
+      @saveCampaign="$store.dispatch('campaign/saveCampaign', campaign)" />
+    <modal-insert-body
+      v-if="campaignReady && campaign.library_config.insertBody"
+      title="prepend"
+      @saveCampaign="$store.dispatch('campaign/saveCampaign', campaign)" />
+    <spinner />
 
   </div>
 </template>

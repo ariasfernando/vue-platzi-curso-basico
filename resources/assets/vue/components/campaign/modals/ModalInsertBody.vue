@@ -12,7 +12,7 @@
             Add {{ title }}ed body html
           </h4>
           <div class="modal-container-inner">
-            <textarea-with-lines id="append-body" name="append-body" @input="onInput" :value="value" />
+            <textarea-with-lines id="append-body" name="append-body" :value="html" @input="onInput" />
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default beta-btn-secondary" @click="close">
@@ -36,26 +36,46 @@ export default {
   components: {
     TextareaWithLines,
   },
-  props: ['title', 'value'],
+  props: ['title'],
   data() {
     return {
       html: '',
     };
   },
   computed: {
+    campaign() {
+      return this.$store.getters['campaign/campaign'];
+    },
     modalPrependBody() {
-      return this.$store.state.campaign[`modal${_.capitalize(this.title)}Body`];
+      return this.campaign && this.$store.state.campaign[`modal${_.capitalize(this.title)}Body`];
+    },
+  },
+  watch: {
+    campaign: {
+      handler: 'watchCampaign',
+      immediate: true,
+      deep: true,
     },
   },
   methods: {
+    watchCampaign(c) {
+      this.html = c.campaign_data[`${this.title}_html`] ?
+        c.campaign_data[`${this.title}_html`] :
+        c.library_config[`${this.title}_html`];
+    },
     onInput(data) {
       this.html = data.content;
     },
-    close() {
+    toggleModal() {
       this.$store.commit('campaign/toggleModal', `modal${_.capitalize(this.title)}Body`);
     },
+    close() {
+      this.toggleModal();
+    },
     send() {
-      this.$emit('submitBodyinsert', { type: this.title, html: this.html });
+      this.$store.commit('campaign/saveCampaignData', { name: `${this.title}_html`, value: this.html });
+      this.$emit('saveCampaign');
+      this.toggleModal();
     },
   },
 };
