@@ -175,7 +175,7 @@
     },
     computed: {
       canAccessInsertBody() {
-        return this.$can('access_insert_body');
+        return this.$can('access_prepend_body', 'access_append_body');
       },
       editedSettings() {
         return this.$store.getters['campaign/editedSettings'];
