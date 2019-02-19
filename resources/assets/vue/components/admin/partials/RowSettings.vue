@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LabelItemContainer v-b-toggle.row-settings-styles :label="`Row [number] Styles`" icon="glyphicon-pause" />
+    <LabelItemContainer v-b-toggle.row-settings-styles :label="`Row ${currentRowIndex+1} Styles`" icon="glyphicon-pause" />
     <b-collapse id="row-settings-styles" visible accordion="row-settings">
       <b-card class="control" no-block>
         <GroupContainer

@@ -89,7 +89,7 @@ export default {
       });
       return element;
     },
-    currentColumnIndex(elementId) {
+    currentColumnIndex() {
       let columnIndex = false;
       _.forEach(this.module.structure.rows, (row, currentColumnIndex) => {
         _.forEach(row.columns, (column, currentColumnIndex) => {
@@ -109,6 +109,31 @@ export default {
         return columnIndex === false;
       });
       return columnIndex;
+    },
+    currentRowIndex() {
+      let elementIndex = false;
+      _.forEach(this.module.structure.rows, (row, currentRowIndex) => {
+        if (row.id === this.currentElementId) {
+          elementIndex = currentRowIndex;
+          return false;
+        }
+        _.forEach(row.columns, (column, currentColumnIndex) => {
+          if (column.id === this.currentElementId) {
+            elementIndex = currentRowIndex;
+            return false;
+          }
+          _.forEach(column.components, (currentComponent) => {
+            if (currentComponent.id === this.currentElementId) {
+              elementIndex = currentRowIndex;
+              return false;
+            }
+            return true;
+          });
+          return elementIndex === false;
+        });
+        return elementIndex === false;
+      });
+      return elementIndex;
     },
   },
   methods: {
