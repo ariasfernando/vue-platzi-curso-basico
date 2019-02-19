@@ -117,8 +117,8 @@
             </template>
           </settings-container>
         </group-container>
-        <group-container>
-          <settings-container v-if="campaign.library_config.insertBody && canAccessInsertBody" label="Advanced Settings">
+        <group-container v-if="campaign.library_config.insertBody && canAccessInsertBody">
+          <settings-container label="Advanced Settings">
             <template slot="setting-bottom">
               <AdvancedSettings />
             </template>
@@ -174,6 +174,9 @@
       }
     },
     computed: {
+      canAccessInsertBody() {
+        return this.$can('access_insert_body');
+      },
       editedSettings() {
         return this.$store.getters['campaign/editedSettings'];
       },
