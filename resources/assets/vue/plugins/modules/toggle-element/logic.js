@@ -114,13 +114,13 @@ export default {
       // check target id matches an id un rule.id
       // check if target id matches an id in rule.ignore
       if (rule.id) {
-        matches = typeof rule.id === 'object'
+        matches = Array.isArray(rule.id)
           ? _.indexOf(rule.id, rule.target.elementId) !== -1
           : Number(rule.id) === Number(rule.target.elementId);
       }
       if (rule.ignore) {
-        ignore = typeof rule.ignore === 'object'
-          ? _.indexOf(rule.id, rule.target.elementId) !== -1
+        ignore = Array.isArray(rule.ignore)
+          ? _.indexOf(rule.ignore, rule.target.elementId) !== -1
           : Number(rule.ignore) === Number(rule.target.elementId);
       }
 
