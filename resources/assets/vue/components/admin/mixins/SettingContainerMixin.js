@@ -64,6 +64,52 @@ export default {
     currentElement() {
       return this.currentElementId ? this.getElement(this.currentElementId) : this.module;
     },
+    currentRow() {
+      let element = false;
+      _.forEach(this.module.structure.rows, (row) => {
+        if (row.id === this.currentElementId) {
+          element = row;
+          return false;
+        }
+        _.forEach(row.columns, (column) => {
+          if (column.id === this.currentElementId) {
+            element = row;
+            return false;
+          }
+          _.forEach(column.components, (CurrentComponent) => {
+            if (CurrentComponent.id === this.currentElementId) {
+              element = row;
+              return false;
+            }
+            return true;
+          });
+          return !element;
+        });
+        return !element;
+      });
+      return element;
+    },
+    currentColumnIndex(elementId) {
+      let columnIndex = false;
+      _.forEach(this.module.structure.rows, (row, currentColumnIndex) => {
+        _.forEach(row.columns, (column, currentColumnIndex) => {
+          if (column.id === this.currentElementId) {
+            columnIndex = currentColumnIndex;
+            return false;
+          }
+          _.forEach(column.components, (currentComponent) => {
+            if (currentComponent.id === this.currentElementId) {
+              columnIndex = currentColumnIndex;
+              return false;
+            }
+            return true;
+          });
+          return columnIndex === false;
+        });
+        return columnIndex === false;
+      });
+      return columnIndex;
+    },
   },
   methods: {
     getElement(elementId) {
@@ -93,7 +139,7 @@ export default {
     },
     settingProps(setting) {
       return {
-        'column-id': this.currentElementId.type === 'column-element' ? this.getColumnIndexByElementId(this.currentElementId) : undefined,
+        'column-id': this.currentColumnIndex,
         'default-value': setting.value,
         'false-text': setting.falseText,
         'is-disable-percentage': setting.isDisablePercentage,
@@ -112,6 +158,7 @@ export default {
         link: setting.link,
         module: this.module,
         name: setting.name,
+        row: this.currentRow,
         'no-label': setting.noLabel,
         options: setting.options,
         placeholder: setting.placeholder,

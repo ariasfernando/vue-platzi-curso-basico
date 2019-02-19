@@ -188,13 +188,13 @@ const mutations = {
         property = rowIndex;
         return false;
       }
-      _.forEach(row.columns, (column) => {
+      _.forEach(row.columns, (column, columnIndex) => {
         if (column.id === elementId) {
           containerElement = row.columns;
           property = columnIndex;
           return false;
         }
-        _.forEach(column.components, (CurrentComponent) => {
+        _.forEach(column.components, (CurrentComponent, componentIndex) => {
           if (CurrentComponent.id === elementId) {
             containerElement = column.components;
             property = componentIndex;
