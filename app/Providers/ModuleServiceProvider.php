@@ -3,8 +3,8 @@
 namespace Stensul\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use ModelKeyManager;
 use ModuleModel as Module;
+use LibraryModel as Library;
 
 class ModuleServiceProvider extends ServiceProvider
 {
@@ -62,8 +62,8 @@ class ModuleServiceProvider extends ServiceProvider
                     $config = json_decode(file_get_contents($file->getPathName()));
                     $module_key = $config->key;
                     if (isset($config->enabled) && $config->enabled === true) {
-                        $modules[$module_key] = $config;
-                        $modules[$module_key] = (object) $modules[$module_key];
+                        $config = array_merge((array) $config, ['libraries' => self::getCustomModuleLibrariesName($module_key)]);
+                        $modules[$module_key] = (object) $config;
                     }
                 }
             }
@@ -83,12 +83,38 @@ class ModuleServiceProvider extends ServiceProvider
             }
 
             foreach ($modules_db as $module) {
-                $modules[$module->key] = $module;
+                $libraries = $module->getLibraries();
+                $libraries_names = [];
+                foreach ($libraries as $library) {
+                    $libraries_names[] = $library->name;
+                }
+
+                $modules[$module->key] = (object) array_merge($module->toArray(), ['libraries' => $libraries_names]);
             }
         }
 
         ksort($modules);
         return $modules;
+    }
+
+    /**
+     * Get custom modules libraries.
+     *
+     * @param $key
+     * @return array
+     */
+    private static function getCustomModuleLibrariesName($key) : array
+    {
+        $result = [];
+        $libraries = Library::all();
+
+        foreach ($libraries as $library) {
+            if (\Helper::recursive_array_search($key, \Helper::array_column_recursive($library['modules'], 'moduleId'))) {
+                $result[] = $library->name;
+            }
+        }
+
+        return $result;
     }
 
     /**
