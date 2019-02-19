@@ -24,7 +24,7 @@ const state = {
 
 const getColumnIndexByElementId = (module, elementId) => {
   let columnIndex = false;
-  _.forEach(module.structure.rows, (row, currentColumnIndex) => {
+  _.forEach(module.structure.rows, (row) => {
     _.forEach(row.columns, (column, currentColumnIndex) => {
       if (column.id === elementId) {
         columnIndex = currentColumnIndex;
@@ -270,8 +270,11 @@ const mutations = {
   addColumn(state, {column, rowId}) {
     getElement(state.module, rowId).columns.push(column);
   },
-  removeColumns(state, data) {
-    state.module.structure.columns.splice(data.index, data.number);
+  addRow(state, {row}) {
+    state.module.structure.rows.push(row);
+  },
+  removeRows(state, {index, number}) {
+    state.module.structure.rows.splice(index, number);
   },
   setColumnWidth(state, data) {
     const column = state.module.structure.columns[data.colId];
@@ -434,13 +437,13 @@ const mutations = {
 };
 
 const actions = {
-  addColumn(context, rowId) {
+  addRow(context) {
     // Get column plugins
     const plugins = {};
     const modulePlugins = Vue.prototype.$_app.modulePlugins;
 
     _.each(modulePlugins, (plugin, name) => {
-      switch (plugin.target.indexOf('column') !== -1) {
+      switch (plugin.target.indexOf('row') !== -1) {
         case true:
           plugins[name] = clone(plugin);
           break;
@@ -449,9 +452,9 @@ const actions = {
     });
 
     // Create new instance of Element width default column data
-    const element = new Element({ type: 'column-element', plugins });
+    const element = new Element({ type: 'row-element', plugins });
 
-    context.commit('addColumn', {column :element.getProperties(), rowId});
+    context.commit('addRow', {row :element.getProperties()});
   },
   normalizeColumns(context, columns) {
     const width = 100 / columns.length;
