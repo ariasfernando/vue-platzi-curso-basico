@@ -1,6 +1,4 @@
-<template>
-  <div />
-</template>
+<template />
 
 <script>
 import contrast from 'contrast';
@@ -29,7 +27,7 @@ export default {
             value,
           });
           // reset tinymce to refresh changes on text
-            const editorId = this.getTinyId(this.moduleIdInstance, comp.id);
+          const editorId = this.getTinyId(this.moduleIdInstance, comp.id);
           setTimeout(() => {
             document.getElementById(editorId).dispatchEvent(new Event('tiny-style-reset'));
           }, 10);

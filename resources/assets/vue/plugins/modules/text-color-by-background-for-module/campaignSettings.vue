@@ -1,6 +1,5 @@
-<template>
-  <div />
-</template>
+
+<template />
 
 <script>
 import contrast from 'contrast';
