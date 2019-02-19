@@ -61,7 +61,7 @@ export default {
     watchCampaign(c) {
       this.html = c.campaign_data[`${this.title}_html`] ?
         c.campaign_data[`${this.title}_html`] :
-        c.library_config[`${this.title}_html`];
+        c.library_config[`${this.title}Html`];
     },
     onInput(data) {
       this.html = data.content;

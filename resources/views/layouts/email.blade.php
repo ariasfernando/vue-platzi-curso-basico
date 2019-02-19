@@ -49,7 +49,9 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 	 echo "</he"; ?><?php echo "ad>"; ?>
 
 	<body class="st-email-body">
-		@if (isset($params['library_config']['prependHtml']))
+		@if (isset($params['campaign_data']['prepend_html']) && $params['library_config']['insertBody'])
+			<?php echo $params['campaign_data']['prepend_html']; ?>
+		@elseif (isset($params['library_config']['prependHtml']) && $params['library_config']['insertBody'])
 			<?php echo $params['library_config']['prependHtml']; ?>
 		@endif
 		
@@ -84,7 +86,9 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
             {{-- PREHEADER NOT ENABLED, USE DE FACTO FROM MODULES --}}
         @endif
 <?= $params['body_html']; ?>
-		@if (isset($params['library_config']['appendHtml']))
+		@if ($params['library_config']['insertBody'] && isset($params['campaign_data']['append_html']))
+			<?php echo $params['campaign_data']['append_html']; ?>				
+		@elseif ($params['library_config']['insertBody'] && isset($params['library_config']['appendHtml']))
 			<?php echo $params['library_config']['appendHtml']; ?>
 		@endif
 	</body>
