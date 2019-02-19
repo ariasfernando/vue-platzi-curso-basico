@@ -117,6 +117,13 @@
             </template>
           </settings-container>
         </group-container>
+        <group-container>
+          <settings-container label="Advanced Settings" v-if="true || canAccessAppendBody">
+            <template slot="setting-bottom">
+              <AdvancedSettings />
+            </template>
+          </settings-container>
+        </group-container>
       </div>
     </b-collapse>
   </div>
