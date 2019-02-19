@@ -12,7 +12,7 @@
             Add {{ title }}ed body html
           </h4>
           <div class="modal-container-inner">
-            <textarea-with-lines id="append-body" name="append-body" />
+            <textarea-with-lines id="append-body" name="append-body" @input="onInput" :value="value" />
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default beta-btn-secondary" @click="close">
@@ -36,10 +36,10 @@ export default {
   components: {
     TextareaWithLines,
   },
-  props: ['title'],
+  props: ['title', 'value'],
   data() {
     return {
-      body_html: '',
+      html: '',
     };
   },
   computed: {
@@ -48,11 +48,14 @@ export default {
     },
   },
   methods: {
+    onInput(data) {
+      this.html = data.content;
+    },
     close() {
       this.$store.commit('campaign/toggleModal', `modal${_.capitalize(this.title)}Body`);
     },
     send() {
-      this.$emit('submitBodyinsert', this.title);
+      this.$emit('submitBodyinsert', { type: this.title, html: this.html });
     },
   },
 };

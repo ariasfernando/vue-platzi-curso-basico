@@ -118,7 +118,7 @@
           </settings-container>
         </group-container>
         <group-container>
-          <settings-container label="Advanced Settings" v-if="true || canAccessAppendBody">
+          <settings-container v-if="campaign.library_config.insertBody && canAccessInsertBody" label="Advanced Settings">
             <template slot="setting-bottom">
               <AdvancedSettings />
             </template>

@@ -38,14 +38,14 @@
     </div>
 
     <!-- Modals -->
-    <modal-complete v-if="campaignReady"></modal-complete>
-    <modal-preview v-if="campaignReady"></modal-preview>
-    <modal-esp v-if="campaignReady"></modal-esp>
-    <modal-proof v-if="campaignReady"></modal-proof>
-    <modal-enable-templating v-if="campaignReady"></modal-enable-templating>
-    <modal-proof-track v-if="campaignReady"></modal-proof-track>
-    <modal-insert-body title="append" />
-    <modal-insert-body title="prepend" />
+    <modal-complete v-if="campaignReady" />
+    <modal-preview v-if="campaignReady" />
+    <modal-esp v-if="campaignReady" />
+    <modal-proof v-if="campaignReady" />
+    <modal-enable-templating v-if="campaignReady" />
+    <modal-proof-track v-if="campaignReady" />
+    <modal-insert-body v-if="campaignReady && campaign.library_config.insertBody" title="append" @submitBodyInsert="submitBodyInsert" :value="campaign.library_config.appendHtml" />
+    <modal-insert-body v-if="campaignReady && campaign.library_config.insertBody" title="prepend" @submitBodyInsert="submitBodyInsert" :value="campaign.library_config.prependHtml" />
 
     <spinner></spinner>
 
@@ -206,7 +206,10 @@
           });
 
         }, this.pingLockInterval);
-      }
+      },
+      submitBodyInsert() {
+
+      },
     },
     created: function () {
       this.$store.commit("global/setLoader", true);

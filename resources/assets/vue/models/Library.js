@@ -24,6 +24,7 @@ function Library(data = {}) {
     linkDecoration: config.linkDecoration || 'underline',
     externalCssLink: config.externalCssLink || '',
     propietaryCss: config.propietaryCss || '',
+    insertBody: config.insertBody || false,
     prependHtml: config.prependHtml || '',
     appendHtml: config.appendHtml || '',
     fixedModules: config.fixedModules || '',

@@ -181,7 +181,7 @@ export default {
       document.addEventListener('mouseup', stop);
     },
     onInput() {
-      this.$emit('input', this.content);
+      this.$emit('input', { content: this.content });
       this.recalculate();
     },
     recalculate() {
