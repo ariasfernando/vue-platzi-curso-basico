@@ -349,7 +349,7 @@ const actions = {
     moduleService.saveModule(data)
       .then((response) => {
         if (response.message && response.message === 'SUCCESS') {
-          context.commit('saveModule', response.id);
+          context.commit('setModuleFields', {moduleId: response.id});
           deferred.resolve(response.id);
         }
       })
