@@ -1,38 +1,44 @@
 <template>
   <div>
-    <a v-if="canAccessPrependBody" @click="prependBodyModal">Add preppended body code</a>
-    <a v-if="canAccessAppendBody" @click="appendBodyModal">Add appended body code</a>
+    <StuiButton
+      v-if="canAccessPrependBody"
+      width="full"
+      class="mb-10"
+      @click="prependBodyModal">
+      Add preppended body code
+    </StuiButton>
+    <StuiButton
+      v-if="canAccessAppendBody"
+      width="full"
+      @click="appendBodyModal">
+      Add appended body code
+    </StuiButton>
   </div>
 </template>
 
 <script>
-  export default {
-    computed: {
-      canAccessPrependBody() {
-        return this.$can('access_prepend_body');
-      },
-      canAccessAppendBody() {
-        return this.$can('access_append_body');
-      },
+export default {
+  computed: {
+    canAccessPrependBody() {
+      return this.$can('access_prepend_body');
     },
-    methods: {
-      prependBodyModal() {
-        this.$store.commit('campaign/toggleModal', 'modalPrependBody');
-      },
-      appendBodyModal() {
-        this.$store.commit('campaign/toggleModal', 'modalAppendBody');
-      },
+    canAccessAppendBody() {
+      return this.$can('access_append_body');
     },
-  };
+  },
+  methods: {
+    prependBodyModal() {
+      this.$store.commit('campaign/toggleModal', 'modalPrependBody');
+    },
+    appendBodyModal() {
+      this.$store.commit('campaign/toggleModal', 'modalAppendBody');
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  a {
-    display: block;
-    color: gray;
-    text-decoration: underline;
-  }
-  a:hover {
-    cursor: pointer;
-  }
+.mb-10 {
+  margin-bottom: 10px;
+}
 </style>
