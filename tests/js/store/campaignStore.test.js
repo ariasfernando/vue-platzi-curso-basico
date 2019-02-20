@@ -7,7 +7,7 @@
 
 /* vendor import */
 import { createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex/dist/vuex';
+import Vuex from 'vuex';
 import { cloneDeep } from 'lodash';
 import nock from 'nock';
 import 'expect-more-jest';

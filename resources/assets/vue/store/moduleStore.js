@@ -178,7 +178,6 @@ const mutations = {
     Vue.set(state, 'module', data);
   },
   setElementData(state, { elementId, value }) {
-    // este recibe un id de columna o elemento o row  y el value  es el json data de ese elemento
     let containerElement = {};
     let property = false;
     if (elementId) {
@@ -210,13 +209,9 @@ const mutations = {
       containerElement = state;
       property = 'module';
     }
-    console.log(containerElement);
-    console.log(property);
-    console.log(value);
     Vue.set(containerElement, property, value);
   },
   setModuleFields(state, data) {
-    // aca recibo por ejemplo el mane y la descripcion del modulo, yb desp. verificp qie se cambio
     _.each(data, (value, field) => {
       Vue.set(state.module, field, value);
     });
