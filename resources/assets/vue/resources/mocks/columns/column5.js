@@ -1,4 +1,4 @@
-import { column0 } from './column0';
+import column0 from './column0';
 
 export default {
   ...column0,

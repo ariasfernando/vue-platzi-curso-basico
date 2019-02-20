@@ -49,7 +49,19 @@
           @element-selected="$emit('select-component', element.id)" />
       </td>
     </tr>
-    <slot v-else />
+    <template v-else>
+      <slot/>
+      <ElementSelector
+        v-if="isStudio"
+        class="row"
+        :left-position="templateWidth + 40"
+        :bottom="elementSelectorTop/2"
+        :width="50"
+        label="Row"
+        :active="currentElementId === element.id"
+        selector-icon="fa fa-cog"
+        @element-selected="$emit('select-component', element.id)" />
+    </template>
   </Wrapper>
 </template>
 

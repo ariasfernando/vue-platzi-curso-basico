@@ -1,4 +1,4 @@
-import defaultElements from '../resources/elements';
+import elements from '../resources/elements';
 
 class Element {
   constructor(properties) {
@@ -9,9 +9,10 @@ class Element {
       throw new Error('Type not defined');
     }
 
-    // Call function here to avoid override issues
-    const defaultProperties = defaultElements[properties.type]();
-
+    const defaultProperties = {
+      id: Math.floor(100000 + (Math.random() * 900000)),
+      ..._.cloneDeep(elements[properties.type])
+    }
     this.properties = {
       ...defaultProperties,
       ...properties,

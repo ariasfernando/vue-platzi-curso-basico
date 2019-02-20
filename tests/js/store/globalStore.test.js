@@ -5,7 +5,7 @@
 /* global Application */
 
 import { createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex/dist/vuex';
+import Vuex from 'vuex';
 import { cloneDeep } from 'lodash';
 import 'expect-more-jest';
 /* local import */

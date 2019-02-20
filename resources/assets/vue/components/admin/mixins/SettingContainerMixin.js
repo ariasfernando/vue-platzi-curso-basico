@@ -31,6 +31,7 @@ export default {
     'input-text-align': elementSettings.TextAlign,
     'input-vertical-align': elementSettings.VerticalAlign,
     'input-width': elementSettings.Width,
+    'input-columns-counter': elementSettings.ColumnsCounter,
   },
   mixins: [AclMixing],
   props: ['columnId'],
