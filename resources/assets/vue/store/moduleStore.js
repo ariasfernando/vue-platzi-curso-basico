@@ -262,11 +262,6 @@ const mutations = {
       element,
     );
   },
-  attachPlugins(state, data) {
-    state.module.structure.columns[data.colId].components[
-      data.componentId
-    ].plugins = data.plugins;
-  },
   removeElement(state, { elementId }) {
     const columnIndex = getColumnIndexByElementId(state.module, elementId);
     const rowIndex = getRowIndexByElementId(state.module, elementId);
@@ -289,19 +284,10 @@ const mutations = {
   setBuildingMode(state, mode) {
     state.buildingMode = mode;
   },
-  setColumnsFixed(state, data) {
-    state.module.structure.columnsFixed = data;
-  },
-  setInvertedStacking(state, data) {
-    state.module.structure.invertedStacking = data;
-  },
   toggleRaw(state) {
     state.showRaw = !state.showRaw;
   },
-  error(state, err) {
-    console.error(err);
-  },
-  setListLibraries(state, {elementId, plugin, response}) {
+  setListLibraries(state, { elementId, plugin, response }) {
     getElement(state.module, elementId).plugins[plugin].config.library.config.set_images.options =
       response;
     getElement(state.module, elementId).plugins[plugin].config[
