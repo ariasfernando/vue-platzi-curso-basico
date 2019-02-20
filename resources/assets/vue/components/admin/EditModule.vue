@@ -135,7 +135,7 @@ export default {
     },
     loadModule() {
       this.$store.commit('global/setLoader', true);
-      this.$store.commit('module/clearCurrentComponent');
+      this.$store.commit('module/setCurrentElementId', false);
       const moduleId = this.$route.params.id || undefined;
 
       // TODO: Trigger event editModule.onInit
