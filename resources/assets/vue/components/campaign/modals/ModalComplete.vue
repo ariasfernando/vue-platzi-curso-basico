@@ -35,6 +35,9 @@
 
           <div class="modal-footer">
             <slot name="footer">
+              <a type="button" class="btn btn-download-html beta-btn-secondary"
+                @click="downloadHTML"
+                :href="$_app.config.baseUrl + '/campaign/download-html/' + campaign.campaign_id">Download HTML</a>
               <button v-if="campaign.process_plaintext" type="button" class="btn btn-plain-text">Plaintext</button>
 
               <div v-if="campaign.library_config.esp && campaign.library_config.espProvider"
@@ -161,7 +164,10 @@
         if(this.minified[key].toggle){
           this.minified[key].output = this.minified[key].minified_html;
         }
-      }
+      },
+      downloadHTML() {
+        $(window).unbind('beforeunload');
+      },
     },
     filters: {
       capitalize: function (value) {
