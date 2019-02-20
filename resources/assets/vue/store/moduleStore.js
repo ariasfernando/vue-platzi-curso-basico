@@ -175,37 +175,36 @@ const mutations = {
     state.secondaryLoading = data;
   },
   setModuleData(state, data) {
-    state.module = data;
+    Vue.set(state, 'module', data);
   },
   setElementData(state, { elementId, value }) {
     let containerElement = {};
     let property = false;
-    if(elementId) {
-    let element = false;
-    _.forEach(state.module.structure.rows, (row, rowIndex) => {
-      if (row.id === elementId) {
-        containerElement = state.module.structure.rows;
-        property = rowIndex;
-        return false;
-      }
-      _.forEach(row.columns, (column, columnIndex) => {
-        if (column.id === elementId) {
-          containerElement = row.columns;
-          property = columnIndex;
+    if (elementId) {
+      _.forEach(state.module.structure.rows, (row, rowIndex) => {
+        if (row.id === elementId) {
+          containerElement = state.module.structure.rows;
+          property = rowIndex;
           return false;
         }
-        _.forEach(column.components, (CurrentComponent, componentIndex) => {
-          if (CurrentComponent.id === elementId) {
-            containerElement = column.components;
-            property = componentIndex;
+        _.forEach(row.columns, (column, columnIndex) => {
+          if (column.id === elementId) {
+            containerElement = row.columns;
+            property = columnIndex;
             return false;
           }
-          return true;
+          _.forEach(column.components, (CurrentComponent, componentIndex) => {
+            if (CurrentComponent.id === elementId) {
+              containerElement = column.components;
+              property = componentIndex;
+              return false;
+            }
+            return true;
+          });
+          return !property;
         });
-        return !element;
+        return !property;
       });
-      return !element;
-    });
     } else {
       containerElement = state;
       property = 'module';
@@ -214,14 +213,14 @@ const mutations = {
   },
   setModuleFields(state, data) {
     _.each(data, (value, field) => {
-      state.module[field] = value;
+      Vue.set(state.module, field, value);
     });
   },
   slideToggles(state, { key, value }) {
     Vue.set(state.slideToggles, key, value);
   },
   setCurrentElementId(state, id) {
-    state.currentElementId =id;
+    state.currentElementId = id;
   },
   setModuleHeight(state, { key, value }) {
     Vue.set(state.moduleHeight, key, value);
@@ -229,16 +228,13 @@ const mutations = {
   setDraggable(state, { property, value }) {
     Vue.set(state.draggable, property, value);
   },
-  clearCurrentComponent(state) {
-    state.currentElementId = false;
-  },
   addColumn(state, {column, rowId}) {
     getElement(state.module, rowId).columns.push(column);
   },
   addRow(state, {row}) {
     state.module.structure.rows.push(row);
   },
-  removeRows(state, {index, number}) {
+  removeRows(state, { index, number }) {
     state.module.structure.rows.splice(index, number);
   },
   removeColumn(state, {rowId, index, number }) {
@@ -246,7 +242,7 @@ const mutations = {
   },
   saveElementProperty(state, { elementId, property, value, ...scope }) {
     let element = elementId ? getElement(state.module, elementId) : state.module;
-    element = scope.outStructure || elementId ?  element : element.structure;
+    element = scope.outStructure || elementId ? element : element.structure;
     let properties = getProperties(element, scope);
     if (Array.isArray(properties) && isNaN(property)) {
       // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
@@ -255,7 +251,7 @@ const mutations = {
     Vue.set(properties, property, value);
     state.dirty = true;
   },
-  addComponent(state, {element, index, rowIndex, columnIndex}) {
+  addComponent(state, { element, index, rowIndex, columnIndex }) {
     state.module.structure.rows[rowIndex].columns[columnIndex].components.splice(
       index,
       0,
@@ -275,7 +271,7 @@ const mutations = {
     state.currentElementId = state.module.structure.rows[rowIndex].columns[columnIndex].id;
   },
   setPluginElementConfig(state, { elementId, type, plugin, path, value }) {
-    let element = elementId ? getElement(state.module, elementId) : state.module;
+    const element = elementId ? getElement(state.module, elementId) : state.module;
     const pluginData = element.plugins[plugin];
     const pathArray = _.concat([type || 'config'], path ? path.split('.') : []);
     const pluginOption = searchOrCreateLevel(pluginData, pathArray);
@@ -322,9 +318,9 @@ const actions = {
       }
     });
     const column = new Element({ type: 'column-element', plugins }).getProperties();
-    context.commit('addColumn', {column, rowId});
+    context.commit('addColumn', { column, rowId });
   },
-  normalizeColumns(context, {rowId}) {
+  normalizeColumns(context, { rowId }) {
     const columns = getElement(context.state.module, rowId).columns
     const value = `${100 / columns.length}%`;
     _.each(columns, (column) => {
