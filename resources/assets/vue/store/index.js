@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Vuex from 'vuex/dist/vuex';
+import Vuex from 'vuex';
 
 // Modules
 import globalStore from './globalStore';
