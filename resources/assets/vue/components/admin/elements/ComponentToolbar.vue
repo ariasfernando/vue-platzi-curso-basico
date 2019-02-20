@@ -15,7 +15,7 @@ export default {
   props: ['elementId'],
   methods: {
     removeComponent() {
-      this.$store.commit('module/clearCurrentComponent');
+      this.$store.commit('module/setCurrentElementId', false);
       this.$store.commit('module/removeElement', {
         elementId: this.elementId,
       });

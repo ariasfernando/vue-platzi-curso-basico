@@ -175,14 +175,13 @@ const mutations = {
     state.secondaryLoading = data;
   },
   setModuleData(state, data) {
-    state.module = data;
+    Vue.set(state, 'module', data);
   },
   setElementData(state, { elementId, value }) {
     // este recibe un id de columna o elemento o row  y el value  es el json data de ese elemento
     let containerElement = {};
     let property = false;
     if (elementId) {
-      const element = false;
       _.forEach(state.module.structure.rows, (row, rowIndex) => {
         if (row.id === elementId) {
           containerElement = state.module.structure.rows;
@@ -203,9 +202,9 @@ const mutations = {
             }
             return true;
           });
-          return !element;
+          return !property;
         });
-        return !element;
+        return !property;
       });
     } else {
       containerElement = state;
@@ -219,7 +218,7 @@ const mutations = {
   setModuleFields(state, data) {
     // aca recibo por ejemplo el mane y la descripcion del modulo, yb desp. verificp qie se cambio
     _.each(data, (value, field) => {
-      state.module[field] = value;
+      Vue.set(state.module, field, value);
     });
   },
   slideToggles(state, { key, value }) {
@@ -233,9 +232,6 @@ const mutations = {
   },
   setDraggable(state, { property, value }) {
     Vue.set(state.draggable, property, value);
-  },
-  clearCurrentComponent(state) {
-    state.currentElementId = false;
   },
   addColumn(state, {column, rowId}) {
     getElement(state.module, rowId).columns.push(column);
