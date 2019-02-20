@@ -53,7 +53,7 @@ class ModuleServiceProvider extends ServiceProvider
     {
          $modules = [];
 
-        if (is_null($type) && $type === 'custom') {
+        if (is_null($type) || $type === 'custom') {
             // Load from module folder
             $files = \File::allFiles(self::$module_dir);
 
