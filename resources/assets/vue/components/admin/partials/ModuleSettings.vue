@@ -2,7 +2,7 @@
   <div>
     <LabelItemContainer
       v-b-toggle.module-settings-styles
-      label="Row Styles"
+      label="Module Styles"
       icon="glyphicon-cog" />
     <b-collapse id="module-settings-styles" visible accordion="module-settings">
       <b-card class="control">

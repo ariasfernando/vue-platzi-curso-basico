@@ -34,7 +34,6 @@ function moduleDefault() {
         groupLabel: 'Behavior',
         settings: [
           classes(),
-          columnsStacking(),
         ],
       },
     ],

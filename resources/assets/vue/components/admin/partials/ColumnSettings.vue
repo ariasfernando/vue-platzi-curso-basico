@@ -47,7 +47,7 @@
             :name="_.camelCase(plugin.name)"
             :plugin-key="`element-${currentElement.id}-plugin-${plugin.name}`"
             :plugin="currentElement.plugins[_.camelCase(plugin.name)]"
-            :column-id="currentComponent.columnId" />
+            :column-id="currentColumnIndex" />
         </GroupContainer>
       </b-card>
     </b-collapse>
@@ -60,7 +60,7 @@ export default {
   mixins: [SettingContainerMixin],
   computed: {
     columnLabel() {
-      let columnindex = this.currentComponent.columnId;
+      let columnindex = this.currentColumnIndex;
       if (this.isInvertedStacking) {
         columnindex = this.module.structure.columns.length - columnindex;
       } else {

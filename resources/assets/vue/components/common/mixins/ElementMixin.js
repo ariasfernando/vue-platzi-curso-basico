@@ -2,13 +2,17 @@ import textOptions from '../../admin/settingsDefault/TextOptions';
 
 export default {
   props: [
-    'module',
-    'module-id',
     'column-id',
+    'column',
     'component-id',
     'component',
+    'element',
     'is-active',
-    'column',
+    'module-id',
+    'module',
+    'row',
+    'rowIndex',
+    'withRow',
   ],
   data() {
     return {
@@ -19,17 +23,14 @@ export default {
     currentComponent() {
       return this.$store.getters['module/currentComponent'];
     },
+    currentElementId() {
+      return this.$store.getters['module/currentElementId'];
+    },
     currentElement() {
-      if (this.currentComponent.componentId !== undefined) {
-        return this.module.structure.columns[this.currentComponent.columnId]
-          .components[this.currentComponent.componentId];
-      } else if (this.currentComponent.columnId !== undefined) {
-        return this.module.structure.columns[this.currentComponent.columnId];
-      }
-      return this.module;
+      return this.getElement(this.currentElementId);
     },
     templateInnerWidth() {
-      return this.templateWidth - this.elementBorderAndPaddingHorizontalSpace(this.module.structure);
+      return this.templateWidth - this.elementBorderAndPaddingHorizontalSpace(this.row.container);
     },
     templateWidth() {
       return this.isCampaign ? this.$store.getters['campaign/campaign'].library_config.templateWidth : 640;
@@ -38,8 +39,8 @@ export default {
       const width = this.component.image.attribute.width;
       if (_.endsWith(width, '%')) {
         const imageContainerWidth = this.columnWidth(this.columnId) -
-          this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].container) -
-          this.elementBorderAndPaddingHorizontalSpace(this.module.structure.columns[this.columnId].content) -
+          this.elementBorderAndPaddingHorizontalSpace(this.row.columns[this.columnId].container) -
+          this.elementBorderAndPaddingHorizontalSpace(this.row.columns[this.columnId].content) -
           this.elementBorderAndPaddingHorizontalSpace(this.component.container);
         return ((imageContainerWidth / 100) * _.parseInt(width));
       }
@@ -58,7 +59,7 @@ export default {
       return this.$router ? this.$router.currentRoute.matched[0].components.default.name === 'Modules' : false;
     },
     isInvertedStacking() {
-      return this.module.structure.columnsStacking === 'invertedStacking';
+      return this.row.columnsStacking === 'invertedStacking';
     },
     buildingMode() {
       return this.isCampaign ? this.$store.getters['campaign/buildingMode'] : this.$store.getters['module/buildingMode'];
@@ -75,8 +76,43 @@ export default {
     draggableChanged() {
       return this.$store.getters['module/draggable'].changed;
     },
+    elementSelectorTop() {
+      const top = this.moduleHeight[`row-${this.row.id}`] ? this.moduleHeight[`row-${this.row.id}`] : 150;
+      const paddingBottom = _.parseInt(
+        this.module.structure.style.paddingBottom || 0,
+      );
+      const borderBottom = _.parseInt(
+        this.module.structure.style.borderBottomWidth || 0,
+      );
+      return top + paddingBottom + borderBottom;
+    },
   },
   methods: {
+    getElement(elementId) {
+      let element = false;
+      _.forEach(this.module.structure.rows, (row) => {
+        if (row.id === elementId) {
+          element = row;
+          return false;
+        }
+        _.forEach(row.columns, (column) => {
+          if (column.id === elementId) {
+            element = column;
+            return false;
+          }
+          _.forEach(column.components, (CurrentComponent) => {
+            if (CurrentComponent.id === elementId) {
+              element = CurrentComponent;
+              return false;
+            }
+            return true;
+          });
+          return !element;
+        });
+        return !element;
+      });
+      return element;
+    },
     // Get an string of classes
     getAttributeClasses(component) {
       if (_.has(component, 'container')) {
@@ -136,18 +172,9 @@ export default {
             });
           }, 50);
         } else {
-          this.$emit('select-component', {
-            columnId: this.columnId,
-            componentId: this.componentId,
-          });
+          this.$emit('select-component', this.element.id);
         }
       }
-    },
-    columnSelect(columnId) {
-      this.$emit('select-component', {
-        columnId,
-        componentId: undefined,
-      });
     },
     changeText(value) {
       if (this.timer) {
@@ -155,7 +182,7 @@ export default {
       }
       this.timer = setTimeout(() => {
         this.$store.dispatch(`${this.isCampaign ? 'campaign' : 'module'}/updateText`, {
-          moduleIdInstance: this.module.idInstance,
+          moduleIdInstance: this.isCampaign ? this.module.idInstance : undefined,
           elementId: this.component.id,
           link: 'data',
           property: 'text',
@@ -163,9 +190,6 @@ export default {
           value,
         });
       }, 100);
-    },
-    isColumnSelect(columnId) {
-      return this.currentComponent.columnId === columnId && this.currentComponent.componentId === undefined;
     },
     elementBackground(element) {
       const elementBackground = {};
@@ -198,14 +222,14 @@ export default {
       };
     },
     columnWidth(columnId) {
-      const width = this.module.structure.columns[columnId].container.attribute.width;
+      const width = this.row.columns[columnId].container.attribute.width;
       if (_.endsWith(width, '%')) {
         return (this.templateInnerWidth / 100) * parseFloat(width);
       }
       return parseFloat(width);
     },
     columnBgcolor(column) {
-      return this.module.structure.columns[column].container.attribute.bgcolor;
+      return this.row.columns[column].container.attribute.bgcolor;
     },
   },
 };

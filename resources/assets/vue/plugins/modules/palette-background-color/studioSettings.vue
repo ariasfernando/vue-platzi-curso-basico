@@ -60,10 +60,10 @@ export default {
     },
   },
   watch: {
-    component: {
+    element: {
       handler() {
         if (this.plugin.subComponent === undefined) {
-          switch (this.component.type) {
+          switch (this.element.type) {
             case 'button-element':
               this.plugin.subComponent = 'button';
               break;

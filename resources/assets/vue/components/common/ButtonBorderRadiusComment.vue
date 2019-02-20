@@ -117,7 +117,7 @@ export default {
     },
   },
   watch: {
-    component: {
+    element: {
       handler() {
         this.setAll();
       },

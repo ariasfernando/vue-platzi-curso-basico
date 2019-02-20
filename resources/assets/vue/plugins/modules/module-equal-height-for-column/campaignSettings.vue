@@ -21,12 +21,12 @@ export default {
       if (this.buildingMode === 'desktop') {
         $itemsToEqualize = $(selector);
       } else {
-        $itemsToEqualize = $('#shadowRender').contents().find(selector);
+        $itemsToEqualize = $(this.iframe).contents().find(selector);
       }
       let higherHeight = 0;
       $itemsToEqualize.each((index, item) => {
         const columnId = $(item).closest('[data-column-id]').attr('data-column-id');
-        const columnHeight = $(item).height() + this.getPaddingTopAndBottom(columnId);
+        const columnHeight = $(item).height() + this.getVerticalBorderAndPadding(columnId);
         higherHeight = Math.max(higherHeight, columnHeight);
       });
       return higherHeight;
@@ -36,7 +36,7 @@ export default {
         const higherHeight = this.getHigherHeight();
         if (higherHeight !== this.previousHeight) {
           _.each(this.module.structure.columns, (column, columnIndex) => {
-            const height = higherHeight - this.getPaddingTopAndBottom(columnIndex);
+            const height = higherHeight - this.getVerticalBorderAndPadding(columnIndex);
             this.saveElementProperty({
               elementId: column.id,
               link: 'attribute',
@@ -75,10 +75,11 @@ export default {
     setImagesUrls() {
       this.previousImagesUrls = _.cloneDeep(this.getImagesUrls(this.module));
     },
-    getPaddingTopAndBottom(columnIndex) {
+    getVerticalBorderAndPadding(columnIndex) {
       const column = this.module.structure.columns[columnIndex];
-      const padding = parseInt(column.container.style.paddingTop || 0) + parseInt(column.container.style.paddingBottom || 0);
-      return padding;
+      const verticalPadding = parseInt(column.container.style.paddingTop || 0) + parseInt(column.container.style.paddingBottom || 0);
+      const verticalBorder = parseInt(column.container.style.borderTopWidth || 0) + parseInt(column.container.style.borderBottomWidth || 0);
+      return verticalPadding + verticalBorder;
     },
   },
   mounted() {
@@ -104,7 +105,7 @@ export default {
         }
 
         if (this.buildingMode === 'mobile') {
-          $('#shadowRender')[0].dispatchEvent(new Event("update-iframe"))
+          this.iframe.dispatchEvent(new Event("update-iframe"))
         }
       },
       deep: true,

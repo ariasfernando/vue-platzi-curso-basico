@@ -13,7 +13,7 @@
       :class="hasComponents ? 'has-component': 'no-component'"
       @start="setDragging(true)"
       @end="setDragging(false)"
-      @add="onAdd">
+      @add="(e)=>onAdd(e, rowIndex, columnId)">
       <slot />
     </Draggable>
     <EmptyColumn
@@ -22,17 +22,17 @@
       :styles="getStyles('EmptyColumn')" />
     <HighlightOfElement
       v-if="buildingMode === 'desktop' && !dragging"
-      :active="isColumnSelect(columnId)"
+      :active="currentElementId === column.id"
       :style="getStyles('HighlightOfElement')" />
     <ElementSelector
-      v-if="buildingMode === 'desktop' && !dragging && module.structure.columns.length !== 1"
+      v-if="buildingMode === 'desktop' && !dragging && row.columns.length !== 1"
       :key="'selector' + columnId"
       :left-position="columnWidth(columnId) / 2"
       :top="elementSelectorTop"
       :label="columnLabel(columnId)"
-      :active="isColumnSelect(columnId)"
+      :active="currentElementId === column.id"
       selector-icon="fa fa-pencil"
-      @element-selected="columnSelect(columnId)" />
+      @element-selected="$emit('select-component', column.id)" />
   </div>
   <div v-else>
     <slot />
@@ -56,7 +56,6 @@ module.exports = {
     HighlightOfElement,
   },
   mixins: [ElementMixin],
-  props: ['columnId', 'column', 'columnAreaStyles', 'module'],
   data() {
     return {
       hasComponents: this.column.components.length !== 0,
@@ -89,16 +88,6 @@ module.exports = {
     ischanged() {
       return this.$store.getters['module/draggable'].changed;
     },
-    elementSelectorTop() {
-      const top = this.moduleHeight ? this.moduleHeight : 150;
-      const paddingBottom = _.parseInt(
-        this.module.structure.style.paddingBottom || 0,
-      );
-      const borderBottom = _.parseInt(
-        this.module.structure.style.borderBottomWidth || 0,
-      );
-      return top + paddingBottom + borderBottom;
-    },
   },
   methods: {
     setDragging(value) {
@@ -122,13 +111,13 @@ module.exports = {
       styles.top = 0;
       if (!this.hasComponents) {
         styles.minHeight = '150px';
-        styles.height = `${this.moduleHeight}px`;
+        styles.height = `${this.moduleHeight[`row-${this.row.id}`] }px`;
       }
       if (type === 'EmptyColumn') {
         styles.opacity = type && this.hasComponents ? 0 : 1;
       }
       if (type === 'HighlightOfElement') {
-        styles.height = `${this.moduleHeight}px`;
+        styles.height = `${this.moduleHeight[`row-${this.row.id}`] }px`;
       }
       return styles;
     },
@@ -139,10 +128,9 @@ module.exports = {
         (this.$refs.draggable.$el.children.length > 1 ||
           this.$refs.draggable.$el.children[0].style.display !== 'none');
     },
-    onAdd(e) {
+    onAdd(e, rowIndex, columnIndex){
       if (e.from.getAttribute('class') === 'components-list') {
         const componentId = e.newIndex;
-        const colId = e.to.getAttribute('data-col');
         const type = e.clone.getAttribute('data-type');
 
         // Get element compatible plugins
@@ -158,9 +146,10 @@ module.exports = {
 
         // Add it to the list
         this.$store.commit('module/addComponent', {
-          el: element.getProperties(),
+          element: element.getProperties(),
           index: componentId,
-          colId,
+          columnIndex,
+          rowIndex,
         });
 
         // Remove ghost element
@@ -168,10 +157,7 @@ module.exports = {
         cloneItem.parentNode.removeChild(cloneItem);
         e.clone.style.opacity = '1';
         // Set dropped element as selected
-        this.$store.commit('module/setCurrentComponent', {
-          columnId: +colId,
-          componentId,
-        });
+        this.$store.commit('module/setCurrentElementId', element.properties.id);
       }
       this.emitChange();
     },

@@ -22,29 +22,39 @@
           cellspacing="0"
           border="0"
           style="width: 100%;">
-          <ColumnManager :module="module">
-            <template slot-scope="{columnData}">
-              <ColumnDraggable
-                :module="module"
-                :column-id="columnData.columnId"
-                :column="columnData.column"
-                :column-area-styles="columnData.columnAreaStyles"
-                @select-component="selectComponent">
-                <Component
-                  :is="component.type"
-                  v-for="(component, componentId) in columnData.column.components"
-                  :key="component.id"
-                  :module="module"
-                  class="st-component"
-                  :component="component"
-                  :module-id="moduleId"
-                  :column-id="columnData.columnId"
-                  :is-active="currentElement.id === component.id"
-                  :component-id="componentId"
-                  @select-component="selectComponent" />
-              </ColumnDraggable>
-            </template>
-          </ColumnManager>
+          <RowContainer
+            v-for="(row, rowIndex) in module.structure.rows"
+            :key="rowIndex"
+            :module="module"
+            :element="row"
+            :row="row"
+            :with-row="true"
+            @select-component="selectComponent">
+              <ColumnManager :row="row">
+                <template slot-scope="{columnData}">
+                  <ColumnDraggable
+                    :row="row"
+                    :row-index="rowIndex"
+                    :module="module"
+                    :column-id="columnData.columnId"
+                    :column="columnData.column"
+                    @select-component="selectComponent">
+                    <Component
+                      :is="component.type"
+                      v-for="(component, componentId) in columnData.column.components"
+                      :key="component.id"
+                      :row="row"
+                      class="st-component"
+                      :component="component"
+                      :element="component"
+                      :column-id="columnData.columnId"
+                      :is-active="currentElementId === component.id"
+                      :component-id="componentId"
+                      @select-component="selectComponent" />
+                  </ColumnDraggable>
+                </template>
+              </ColumnManager>
+          </RowContainer>
         </table>
       </td>
     </tr>
@@ -56,7 +66,7 @@
       v-if="isStudio"
       :left-position="templateWidth/2"
       :bottom="-70"
-      label="Row"
+      label="Module"
       :active="isActiveGeneralSettings"
       selector-icon="fa fa-cog"
       @element-selected="moduleSelect" />
@@ -67,6 +77,7 @@
 import BackgroundImage from '../common/BackgroundImage.vue';
 import ButtonElement from './elements/ButtonElement.vue';
 import ColumnManager from '../common/containers/ColumnManager.vue';
+import RowContainer from '../common/containers/RowContainer.vue';
 import CustomCodeElement from './elements/CustomCodeElement.vue';
 import DividerElement from './elements/DividerElement.vue';
 import ElementMixin from '../common/mixins/ElementMixin';
@@ -82,21 +93,19 @@ module.exports = {
   components: {
     BackgroundImage,
     ButtonElement,
+    ColumnDraggable,
     ColumnManager,
     CustomCodeElement,
     DividerElement,
     ElementSelector,
     HighlightOfElement,
     ImageElement,
-    ColumnDraggable,
+    RowContainer,
     TextElement,
   },
   computed: {
     isActiveGeneralSettings() {
-      return (
-        this.currentComponent.columnId === undefined &&
-        this.currentComponent.componentId === undefined
-      );
+      return this.currentElementId === false;
     },
     modulebackgroundImage() {
       return this.module.structure.style.backgroundImage
@@ -107,23 +116,27 @@ module.exports = {
   },
   methods: {
     selectComponent(ref) {
-      this.$store.commit('module/setCurrentComponent', ref);
+      this.$store.commit('module/setCurrentElementId', ref);
     },
     moduleSelect() {
-      this.selectComponent({
-        columnId: undefined,
-        componentId: undefined,
-      });
+      this.selectComponent(false);
     },
     setModuleHeight() {
-      let higherHeight = 0;
-      $('.column-draggable.has-component').parents('[column-id]').each((index, item) => {
-        higherHeight = Math.max(higherHeight, $(item).height());
+      _.forEach(this.module.structure.rows, this.setModuleHeightByRow)
+    },
+
+    setModuleHeightByRow(row) {
+      let value = 0;
+      $(`[data-row-id='${row.id}'] .column-draggable.has-component`).parents('[column-id]').each((index, item) => {
+        value = Math.max(value, $(item).height());
       });
-      if (this.module.structure.columns.filter(column => column.components.length === 0).length > 0) {
-        higherHeight = Math.max(higherHeight, 150);
+      if (row.columns.filter(column => column.components.length === 0).length > 0) {
+        value = Math.max(value, 150);
       }
-      this.$store.commit('module/setModuleHeight', higherHeight);
+      this.$store.commit('module/setModuleHeight', {
+        key:`row-${row.id}`,
+        value,
+      });
     },
   },
   mounted() {
