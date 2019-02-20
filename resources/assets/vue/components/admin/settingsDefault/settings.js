@@ -253,3 +253,10 @@ export function width(props) {
     value: value || '',
   };
 }
+
+export function columnsCounter(props) {
+  return {
+    type: 'columns-counter',
+    label: 'ColumnsCounter',
+  };
+}

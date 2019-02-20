@@ -21,14 +21,15 @@
           cellpadding="0"
           cellspacing="0"
           border="0"
-          style="width: 100%;">
+          style="width: 100%;"
+          class="stx-position-relative">
           <RowContainer
             v-for="(row, rowIndex) in module.structure.rows"
             :key="rowIndex"
             :module="module"
             :element="row"
             :row="row"
-            :with-row="true"
+            :with-row="module.structure.rows.length > 1"
             @select-component="selectComponent">
               <ColumnManager :row="row">
                 <template slot-scope="{columnData}">
@@ -86,10 +87,11 @@ import HighlightOfElement from '../common/HighlightOfElement.vue';
 import ImageElement from './elements/ImageElement.vue';
 import ColumnDraggable from './ColumnDraggable.vue';
 import TextElement from './elements/TextElement.vue';
+import ModuleHeight from './mixins/ModuleHeight';
 
 module.exports = {
   name: 'Module',
-  mixins: [ElementMixin],
+  mixins: [ElementMixin, ModuleHeight],
   components: {
     BackgroundImage,
     ButtonElement,
@@ -120,23 +122,6 @@ module.exports = {
     },
     moduleSelect() {
       this.selectComponent(false);
-    },
-    setModuleHeight() {
-      _.forEach(this.module.structure.rows, this.setModuleHeightByRow)
-    },
-
-    setModuleHeightByRow(row) {
-      let value = 0;
-      $(`[data-row-id='${row.id}'] .column-draggable.has-component`).parents('[column-id]').each((index, item) => {
-        value = Math.max(value, $(item).height());
-      });
-      if (row.columns.filter(column => column.components.length === 0).length > 0) {
-        value = Math.max(value, 150);
-      }
-      this.$store.commit('module/setModuleHeight', {
-        key:`row-${row.id}`,
-        value,
-      });
     },
   },
   mounted() {

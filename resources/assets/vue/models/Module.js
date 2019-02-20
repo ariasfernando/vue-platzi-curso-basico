@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import Element from './Element';
 
 function getPlugins() {
   const plugins = {};
@@ -9,7 +10,36 @@ function getPlugins() {
   });
   return plugins;
 }
+function getNewColumn() {
+  const plugins = {};
+  const modulePlugins = Vue.prototype.$_app.modulePlugins;
 
+  _.each(modulePlugins, (plugin, name) => {
+    switch (plugin.target.indexOf('column') !== -1) {
+      case true:
+        plugins[name] = _.cloneDeep(plugin);
+        break;
+      default:
+    }
+  });
+  return new Element({ type: 'column-element', plugins }).getProperties();
+}
+function getNewRow() {
+  const plugins = {};
+  const modulePlugins = Vue.prototype.$_app.modulePlugins;
+
+  _.each(modulePlugins, (plugin, name) => {
+    switch (plugin.target.indexOf('row') !== -1) {
+      case true:
+        plugins[name] = clone(plugin);
+        break;
+      default:
+    }
+  });
+  const row = new Element({ type: 'row-element', plugins }).getProperties();
+  row.columns[0] = getNewColumn();
+  return row;
+}
 function Module(data = {}) {
   this.libraries = data.libraries || [];
   this.moduleId = data._id;
@@ -32,7 +62,7 @@ function Module(data = {}) {
     attribute: data.structure ? data.structure.attribute : {},
     mobileClasses: data.mobileClasses || [],
     style: data.structure ? data.structure.style : {},
-    rows: data.structure && data.structure.rows ? data.structure.rows : [],
+    rows: data.structure && data.structure.rows ? data.structure.rows : [ getNewRow() ],
   };
   return this;
 }

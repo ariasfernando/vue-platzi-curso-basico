@@ -1,27 +1,25 @@
 import ColumnElement from './ColumnElement';
-function rowDefault() {
-  return {
-    id: Math.floor(100000 + (Math.random() * 900000)),
-    type: 'row-element',
-    columnsStacking: 'normal',
-    mobileClasses: [],
-    container: {
-      style: {},
-      attribute: {
-        width: '100%',
-      },
-      styleOption: {},
+export default {
+  type: 'row-element',
+  columnsStacking: 'normal',
+  mobileClasses: [],
+  container: {
+    style: {},
+    attribute: {
+      width: '100%',
     },
-    content: {
-      style: {},
-      attribute: {},
-      styleOption: {},
-    },
-    columns: [
-      {...ColumnElement()}
-    ],
-    plugins: {},
-  };
-}
-
-module.exports = rowDefault;
+    styleOption: {},
+  },
+  content: {
+    style: {},
+    attribute: {},
+    styleOption: {},
+  },
+  columns: [
+    {
+      ...ColumnElement,
+      id: Math.floor(100000 + (Math.random() * 900000)),
+   }
+  ],
+  plugins: {},
+};
