@@ -246,10 +246,8 @@ const mutations = {
   removeRows(state, { index, number }) {
     state.module.structure.rows.splice(index, number);
   },
-  setColumnWidth(state, data) {
-    const column = state.module.structure.columns[data.colId];
-    // Set attribute
-    column.container.attribute.width = `${data.width}%`;
+  removeColumn(state, { rowId, index, number }) {
+    getElement(state.module, rowId).columns.splice(index, number);
   },
   saveElementProperty(state, { elementId, property, value, ...scope }) {
     let element = elementId ? getElement(state.module, elementId) : state.module;
@@ -319,7 +317,6 @@ const mutations = {
 
 const actions = {
   addRow(context) {
-    // Get column plugins
     const plugins = {};
     const modulePlugins = Vue.prototype.$_app.modulePlugins;
 
@@ -331,18 +328,31 @@ const actions = {
         default:
       }
     });
-
-    // Create new instance of Element width default column data
     const element = new Element({ type: 'row-element', plugins });
-
     context.commit('addRow', { row: element.getProperties() });
   },
-  normalizeColumns(context, columns) {
-    const width = 100 / columns.length;
-    _.each(columns, (column, colId) => {
-      context.commit('setColumnWidth', {
-        colId,
-        width,
+  addColumn(context, { rowId }) {
+    // Get column plugins
+    const plugins = {};
+    const modulePlugins = Vue.prototype.$_app.modulePlugins;
+    _.each(modulePlugins, (plugin, name) => {
+      if (plugin.target.indexOf('column') !== -1) {
+        plugins[name] = clone(plugin);
+      }
+    });
+    const column = new Element({ type: 'column-element', plugins }).getProperties();
+    context.commit('addColumn', { column, rowId });
+  },
+  normalizeColumns(context, { rowId }) {
+    const columns = getElement(context.state.module, rowId).columns;
+    const value = `${100 / columns.length}%`;
+    _.each(columns, (column) => {
+      context.commit('saveElementProperty', {
+        elementId: column.id,
+        subComponent: 'container',
+        link: 'attribute',
+        property: 'width',
+        value,
       });
     });
   },

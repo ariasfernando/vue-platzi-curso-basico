@@ -4,6 +4,7 @@ import {
   classes,
   padding,
   width,
+  columnsCounter,
 } from './settings';
 
 function rowDefault() {
@@ -12,6 +13,7 @@ function rowDefault() {
       {
         groupLabel: 'Design',
         settings: [
+          columnsCounter(),
           width({ subComponent: 'container', type: 'width' }),
           bgcolor({ subComponent: 'container' }),
         ],
