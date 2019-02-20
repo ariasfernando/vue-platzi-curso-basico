@@ -178,41 +178,46 @@ const mutations = {
     state.module = data;
   },
   setElementData(state, { elementId, value }) {
+    // este recibe un id de columna o elemento o row  y el value  es el json data de ese elemento
     let containerElement = {};
     let property = false;
-    if(elementId) {
-    let element = false;
-    _.forEach(state.module.structure.rows, (row, rowIndex) => {
-      if (row.id === elementId) {
-        containerElement = state.module.structure.rows;
-        property = rowIndex;
-        return false;
-      }
-      _.forEach(row.columns, (column, columnIndex) => {
-        if (column.id === elementId) {
-          containerElement = row.columns;
-          property = columnIndex;
+    if (elementId) {
+      const element = false;
+      _.forEach(state.module.structure.rows, (row, rowIndex) => {
+        if (row.id === elementId) {
+          containerElement = state.module.structure.rows;
+          property = rowIndex;
           return false;
         }
-        _.forEach(column.components, (CurrentComponent, componentIndex) => {
-          if (CurrentComponent.id === elementId) {
-            containerElement = column.components;
-            property = componentIndex;
+        _.forEach(row.columns, (column, columnIndex) => {
+          if (column.id === elementId) {
+            containerElement = row.columns;
+            property = columnIndex;
             return false;
           }
-          return true;
+          _.forEach(column.components, (CurrentComponent, componentIndex) => {
+            if (CurrentComponent.id === elementId) {
+              containerElement = column.components;
+              property = componentIndex;
+              return false;
+            }
+            return true;
+          });
+          return !element;
         });
         return !element;
       });
-      return !element;
-    });
     } else {
       containerElement = state;
       property = 'module';
     }
+    console.log(containerElement);
+    console.log(property);
+    console.log(value);
     Vue.set(containerElement, property, value);
   },
   setModuleFields(state, data) {
+    // aca recibo por ejemplo el mane y la descripcion del modulo, yb desp. verificp qie se cambio
     _.each(data, (value, field) => {
       state.module[field] = value;
     });
@@ -221,7 +226,7 @@ const mutations = {
     Vue.set(state.slideToggles, key, value);
   },
   setCurrentElementId(state, id) {
-    state.currentElementId =id;
+    state.currentElementId = id;
   },
   setModuleHeight(state, { key, value }) {
     Vue.set(state.moduleHeight, key, value);
@@ -238,7 +243,7 @@ const mutations = {
   addRow(state, {row}) {
     state.module.structure.rows.push(row);
   },
-  removeRows(state, {index, number}) {
+  removeRows(state, { index, number }) {
     state.module.structure.rows.splice(index, number);
   },
   removeColumn(state, {rowId, index, number }) {
@@ -246,7 +251,7 @@ const mutations = {
   },
   saveElementProperty(state, { elementId, property, value, ...scope }) {
     let element = elementId ? getElement(state.module, elementId) : state.module;
-    element = scope.outStructure || elementId ?  element : element.structure;
+    element = scope.outStructure || elementId ? element : element.structure;
     let properties = getProperties(element, scope);
     if (Array.isArray(properties) && isNaN(property)) {
       // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
@@ -255,7 +260,7 @@ const mutations = {
     Vue.set(properties, property, value);
     state.dirty = true;
   },
-  addComponent(state, {element, index, rowIndex, columnIndex}) {
+  addComponent(state, { element, index, rowIndex, columnIndex }) {
     state.module.structure.rows[rowIndex].columns[columnIndex].components.splice(
       index,
       0,
@@ -280,7 +285,7 @@ const mutations = {
     state.currentElementId = state.module.structure.rows[rowIndex].columns[columnIndex].id;
   },
   setPluginElementConfig(state, { elementId, type, plugin, path, value }) {
-    let element = elementId ? getElement(state.module, elementId) : state.module;
+    const element = elementId ? getElement(state.module, elementId) : state.module;
     const pluginData = element.plugins[plugin];
     const pathArray = _.concat([type || 'config'], path ? path.split('.') : []);
     const pluginOption = searchOrCreateLevel(pluginData, pathArray);
@@ -301,7 +306,7 @@ const mutations = {
   error(state, err) {
     console.error(err);
   },
-  setListLibraries(state, {elementId, plugin, response}) {
+  setListLibraries(state, { elementId, plugin, response }) {
     getElement(state.module, elementId).plugins[plugin].config.library.config.set_images.options =
       response;
     getElement(state.module, elementId).plugins[plugin].config[
@@ -336,9 +341,9 @@ const actions = {
       }
     });
     const column = new Element({ type: 'column-element', plugins }).getProperties();
-    context.commit('addColumn', {column, rowId});
+    context.commit('addColumn', { column, rowId });
   },
-  normalizeColumns(context, {rowId}) {
+  normalizeColumns(context, { rowId }) {
     const columns = getElement(context.state.module, rowId).columns
     const value = `${100 / columns.length}%`;
     _.each(columns, (column) => {
