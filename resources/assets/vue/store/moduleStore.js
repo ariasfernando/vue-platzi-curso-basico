@@ -251,8 +251,8 @@ const mutations = {
     Vue.set(properties, property, value);
     state.dirty = true;
   },
-  addComponent(state, { element, index, rowIndex, columnIndex }) {
-    state.module.structure.rows[rowIndex].columns[columnIndex].components.splice(
+  addComponent(state, { element, index, columnId }) {
+    getElement(state.module, columnId).components.splice(
       index,
       0,
       element,

@@ -145,11 +145,11 @@ module.exports = {
         const element = new Element({ type, plugins });
 
         // Add it to the list
+
         this.$store.commit('module/addComponent', {
           element: element.getProperties(),
           index: componentId,
-          columnIndex,
-          rowIndex,
+          columnId: this.column.id,
         });
 
         // Remove ghost element
