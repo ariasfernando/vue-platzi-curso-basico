@@ -225,8 +225,8 @@ const mutations = {
   setModuleHeight(state, { key, value }) {
     Vue.set(state.moduleHeight, key, value);
   },
-  setDraggable(state, { property, value }) {
-    Vue.set(state.draggable, property, value);
+  setDraggable(state, { key, value }) {
+    Vue.set(state.draggable, key, value);
   },
   addColumn(state, {column, rowId}) {
     getElement(state.module, rowId).columns.push(column);

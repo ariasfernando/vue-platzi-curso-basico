@@ -92,14 +92,14 @@ module.exports = {
   methods: {
     setDragging(value) {
       this.$store.commit('module/setDraggable', {
-        property: 'dragging',
+        key: 'dragging',
         value,
       });
       this.emitChange();
     },
     emitChange() {
       this.$store.commit('module/setDraggable', {
-        property: 'changed',
+        key: 'changed',
         value: Math.random(),
       });
     },
