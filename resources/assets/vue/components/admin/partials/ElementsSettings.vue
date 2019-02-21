@@ -67,7 +67,7 @@
     methods: {
       setDraggable(value) {
         this.$store.commit('module/setDraggable', {
-          property: 'dragging',
+          key: 'dragging',
           value,
         });
       },

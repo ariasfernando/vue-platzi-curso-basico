@@ -225,8 +225,8 @@ const mutations = {
   setModuleHeight(state, { key, value }) {
     Vue.set(state.moduleHeight, key, value);
   },
-  setDraggable(state, { property, value }) {
-    Vue.set(state.draggable, property, value);
+  setDraggable(state, { key, value }) {
+    Vue.set(state.draggable, key, value);
   },
   addColumn(state, { column, rowId }) {
     getElement(state.module, rowId).columns.push(column);
@@ -251,8 +251,8 @@ const mutations = {
     Vue.set(properties, property, value);
     state.dirty = true;
   },
-  addComponent(state, { element, index, rowIndex, columnIndex }) {
-    state.module.structure.rows[rowIndex].columns[columnIndex].components.splice(
+  addComponent(state, { element, index, columnId }) {
+    getElement(state.module, columnId).components.splice(
       index,
       0,
       element,
@@ -349,7 +349,7 @@ const actions = {
     moduleService.saveModule(data)
       .then((response) => {
         if (response.message && response.message === 'SUCCESS') {
-          context.commit('saveModule', response.id);
+          context.commit('setModuleFields', {moduleId: response.id});
           deferred.resolve(response.id);
         }
       })

@@ -36,8 +36,6 @@ export default {
             index: column,
             number: numColumn - column,
           });
-          // unSet current component
-          this.$store.commit('module/setCurrentElementId', false);
         }
         if (numColumn < column) {
           for (let i = numColumn; i < column; i++) {
