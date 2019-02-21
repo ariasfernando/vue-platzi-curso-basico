@@ -28,7 +28,7 @@
     @mouseover="setModulesMouseOver"
     @mouseleave="setModulesMouseLeave">
     <td
-      class="stx-toolbar-content stx-position-relative"
+      class="stx-toolbar-content stx-position-relative st-wrapper-content"
       :data-module-id="moduleId"
       :module-id-instance="module.idInstance"
       :background="modulebackgroundImage"
@@ -37,23 +37,33 @@
       :style="styleModule"
       :valign="module.structure.attribute.valign || 'top'"
       :bgcolor="module.structure.attribute.bgcolor"
-      :class=" { 'stx-show-error': hasErrors, 'st-wrapper-content': module.structure.columns.length > 1 ,[module.structure.attribute.classes]:module.structure.attribute.classes}">
+      :class=" { 'stx-show-error': hasErrors, [module.structure.attribute.classes]:module.structure.attribute.classes}">
       <background-image :element="module.structure" :key='modulebackgroundImage' :width="templateInnerWidth">
         <template :slot="modulebackgroundImage ? 'with-background-image': 'without-background-image' ">
-          <column-manager :module-id="moduleId" :module="module">
-            <template slot-scope="{columnData}">
-              <component
-                :is="component.type"
-                v-for="(component, componentId) in columnData.column.components"
-                :key="component.id"
-                :component="component"
-                :module-id="moduleId"
-                :module="module"
-                :column-id="columnData.columnId"
-                :component-id="componentId"
-                @select-component="selectComponent" />
-            </template>
-          </column-manager>
+          <RowContainer
+            v-for="(row, rowIndex) in module.structure.rows"
+            :key="rowIndex"
+            :module="module"
+            :element="row"
+            :row="row"
+            :with-row="module.structure.rows.length > 1"
+            @select-component="selectComponent">
+            <column-manager :module-id="moduleId" :module="module" :row="row">
+              <template slot-scope="{columnData}">
+                <component
+                  :is="component.type"
+                  v-for="(component, componentId) in columnData.column.components"
+                  :key="component.id"
+                  :component="component"
+                  :module-id="moduleId"
+                  :module="module"
+                  :column-id="columnData.columnId"
+                  :component-id="componentId"
+                  :row="row"
+                  @select-component="selectComponent" />
+              </template>
+            </column-manager>
+          </RowContainer>
         </template>
       </background-image>
       <module-toolbar :module-id="moduleId" />
@@ -73,21 +83,23 @@
   import ElementMixin from '../common/mixins/ElementMixin.js';
   import ImageElement from './elements/ImageElement.vue';
   import ModuleToolbar from './partials/ModuleToolbar.vue';
+  import RowContainer from '../common/containers/RowContainer.vue';
   import TextElement from './elements/TextElement.vue';
-  import validatorMixin from '../../plugins/modules/mixins/validator.js';
+  import validatorMixin from '../../plugins/modules/mixins/validatorMixin.js';
 
   module.exports = {
     name: 'Module',
     props: ['moduleId'],
     mixins: [ ElementMixin, validatorMixin ],
     components: {
-      CustomCodeElement,
       BackgroundImage,
       ButtonElement,
       ColumnManager,
+      CustomCodeElement,
       DividerElement,
       ImageElement,
       ModuleToolbar,
+      RowContainer,
       TextElement,
     },
     created() {
@@ -123,7 +135,7 @@
     methods: {
       config() {
         this.$store.commit("campaign/setCustomModule", this.moduleId);
-        this.$store.commit("campaign/unsetCurrentModule");
+        this.$store.commit("campaign/unsetCurrentElement");
       },
       selectComponent(moduleId, columnId, componentId) {
         setTimeout(() => {

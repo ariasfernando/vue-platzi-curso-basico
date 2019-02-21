@@ -30,7 +30,7 @@ export default {
       return this.getElement(this.currentElementId);
     },
     templateInnerWidth() {
-      return this.templateWidth - this.elementBorderAndPaddingHorizontalSpace(this.row.container);
+      return this.templateWidth - this.elementBorderAndPaddingHorizontalSpace(this.module.structure);
     },
     templateWidth() {
       return this.isCampaign ? this.$store.getters['campaign/campaign'].library_config.templateWidth : 640;
@@ -166,9 +166,8 @@ export default {
           setTimeout(() => {
             // TODO: find better way to do this
             this.$store.commit('campaign/setCurrentComponent', {
-              moduleId: this.moduleId,
-              columnId: this.columnId,
-              componentId: this.componentId,
+              idInstance: this.module.idInstance,
+              elementId: this.element.id,
             });
           }, 50);
         } else {

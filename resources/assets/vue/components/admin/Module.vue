@@ -31,7 +31,7 @@
             :row="row"
             :with-row="module.structure.rows.length > 1"
             @select-component="selectComponent">
-              <ColumnManager :row="row">
+              <ColumnManager :row="row" :module="module">
                 <template slot-scope="{columnData}">
                   <ColumnDraggable
                     :row="row"
@@ -45,6 +45,7 @@
                       v-for="(component, componentId) in columnData.column.components"
                       :key="component.id"
                       :row="row"
+                      :module="module"
                       class="st-component"
                       :component="component"
                       :element="component"
