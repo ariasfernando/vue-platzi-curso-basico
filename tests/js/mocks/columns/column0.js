@@ -4,7 +4,7 @@ import {
   textColorByBackground,
   verticalAlignment,
 } from '../plugins/modules';
-import image0 from '../elements';
+import { image0 } from '../elements';
 
 export default {
   id: 987650,
@@ -24,7 +24,7 @@ export default {
     styleOption: [],
   },
   components: [
-    ...image0,
+    image0,
   ],
   plugins: {
     columnBackgroundColor,

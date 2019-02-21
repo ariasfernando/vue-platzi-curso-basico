@@ -10,7 +10,7 @@ import {
 } from '../plugins/modules';
 
 export default {
-  id: 4762132,
+  id: 476213,
   type: 'image-element',
   container: {
     style: [],

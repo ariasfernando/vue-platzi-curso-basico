@@ -3,6 +3,7 @@ import {
   backgroundColor,
   destinationUrl,
   fontFamily,
+  maskLink,
   mobileStyles,
   paletteBackgroundColor,
   textOptions,
@@ -10,44 +11,60 @@ import {
 } from '../plugins/modules';
 
 export default {
-  id: 8447572,
-  type: 'text-element',
+  id: 301362,
+  type: 'button-element',
   data: {
-    text: '<p style="margin: 0px;">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>',
+    text: '<p style="color: rgb(255, 255, 255); margin: 0px;">Lorem ipsum</p>',
   },
   container: {
-    style: {
-      paddingTop: '5px',
-      paddingBottom: '5px',
-      paddingRight: '5px',
-      paddingLeft: '5px',
-    },
+    style: [],
     styleOption: {
       enableElement: true,
     },
-    attribute: [],
+    attribute: {
+      align: 'center',
+    },
   },
-  text: {
+  button: {
     style: {
+      color: '#FFFFFF',
       fontFamily: 'Helvetica, Arial, Sans-serif',
       fontSize: '12px',
-      color: '#000000',
-      fontWeight: 'normal',
       lineHeight: '20%',
-      align: 'left',
+      textAlign: 'center',
+      fontWeight: 'normal',
+      letterSpacing: 'normal',
+      paddingLeft: '15px',
+      paddingRight: '15px',
     },
     styleOption: {
       isNormalLetterSpacing: false,
     },
     attribute: {
+      width: '150',
+      height: '40',
+      align: 'center',
+      bgcolor: '#514960',
       href: '',
+      title: '',
+      valign: 'middle',
     },
+  },
+  caret: {
+    attribute: {
+      width: '10',
+      height: '10',
+      valign: 'middle',
+    },
+    style: [],
+    styleOption: [],
   },
   plugins: {
     alignment,
     backgroundColor,
     destinationUrl,
     fontFamily,
+    maskLink,
     mobileStyles,
     paletteBackgroundColor,
     textOptions,
