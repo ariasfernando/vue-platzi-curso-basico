@@ -116,6 +116,7 @@ export default {
       return {
         library: this.library,
         campaignConfig: this.campaignConfig,
+        espList: this.espList,
       };
     },
     stylesProps() {
