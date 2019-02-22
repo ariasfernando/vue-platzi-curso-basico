@@ -202,6 +202,7 @@ export default {
   margin-right: 6px !important;
 }
 .stui-color-palette /deep/ .vc-compact {
+  box-shadow: none!important;
   padding-top: 5px;
   padding-left: 6px;
   border: 1px solid $stui-input-border-color !important;
