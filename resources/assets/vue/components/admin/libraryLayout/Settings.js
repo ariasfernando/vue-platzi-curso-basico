@@ -20,14 +20,6 @@ export default [
         label: 'Description',
       },
       {
-        name: 'esp',
-        aclName: 'library-basic-settings',
-        path: 'library.config',
-        type: 'stui-toggle-button',
-        settingSlot: 'setting-right',
-        label: 'ESP',
-      },
-      {
         name: 'espProvider',
         aclName: 'library-basic-settings',
         path: 'library.config',
@@ -35,7 +27,6 @@ export default [
         type: 'stui-select',
         settingSlot: 'setting-right',
         label: 'ESP name',
-        dependsOn: [{ path: 'library.config.esp' }],
       },
       {
         name: 'preheader',

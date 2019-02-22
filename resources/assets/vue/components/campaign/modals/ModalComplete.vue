@@ -37,7 +37,7 @@
             <slot name="footer">
               <button v-if="campaign.process_plaintext" type="button" class="btn btn-plain-text">Plaintext</button>
 
-              <div v-if="campaign.library_config.esp && campaign.library_config.espProvider"
+              <div v-if="campaign.library_config.espProvider && campaign.library_config.espProvider !== 'none'"
                    type="button" class="btn btn-default btn-upload-api beta-btn-secondary" :data-campaign-id="campaign.campaign_id"
                    :data-api-driver="campaign.library_config.espProvider" @click="uploadModal">
                    Upload to {{campaign.library_config.espProvider | capitalize}}
