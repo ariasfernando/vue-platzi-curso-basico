@@ -3,7 +3,6 @@
     class="group-container"
     :class="[customClass, {'clickeable': clickeable}]"
     @click="e => $emit('click', e)"
-    id="moduleButton">
     <slot />
   </div>
 </template>
