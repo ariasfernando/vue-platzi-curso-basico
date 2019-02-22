@@ -136,7 +136,7 @@
                 ><i class="glyphicon glyphicon-pencil"></i></a>
               <a href="#" :data-tooltip="`Upload to ${$options.filters.capitalize(api.driver)}`" class="btn-upload-api"
                 v-for="api in campaign.api"
-                v-if="!campaign.locked && campaign.library_config.esp && campaign.library_config.espProvider"
+                v-if="!campaign.locked && campaign.library_config.espProvider && campaign.library_config.espProvider !== 'none'"
                 :data-campaign-id="campaign._id"
                 :data-api-driver="api.driver"
                 @click="upload(campaign._id)"><i class="glyphicon glyphicon-cloud-upload"></i></a>
