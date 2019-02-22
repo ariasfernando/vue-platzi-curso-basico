@@ -2,7 +2,7 @@
   <div
     class="group-container"
     :class="[customClass, {'clickeable': clickeable}]"
-    @click="e => $emit('click', e)"
+    @click="e => $emit('click', e)">
     <slot />
   </div>
 </template>
