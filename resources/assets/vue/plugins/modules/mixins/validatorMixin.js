@@ -21,11 +21,12 @@ export default {
         };
 
         // Save plugin data
-        this.$store.commit('campaign/savePlugin', payload);
+        this.$store.commit('campaign/savePluginDeprecate', payload);
       },
     },
     moduleErrors() {
       return this.module.data.errors ? this.module.data.errors.filter(err => (_.isEqual(err.scope.name, this.plugin.name) &&
+                                                      _.isEqual(err.scope.rowId||0, this.elementLocation.rowId||0) &&
                                                       _.isEqual(err.scope.columnId, this.elementLocation.columnId) &&
                                                       _.isEqual(err.scope.componentId, this.elementLocation.componentId))) : [];
     },

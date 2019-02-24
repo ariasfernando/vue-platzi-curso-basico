@@ -1,19 +1,20 @@
 <template>
   <tr v-if="module.type === 'custom'"
       class="stx-module-wrapper"
-      :class="[`stx-${module.name}`, { 'stx-fixed': module.isFixed, 'stx-module-wrapper-active': activeModule === moduleId }]"
+      :class="[`stx-${module.name}`, { 'stx-fixed': module.isFixed, 'stx-module-wrapper-active': currentModuleInstanceId === module.idInstance }]"
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
   >
-    <td class="stx-toolbar-content stx-position-relative"
-        :data-module-id="moduleId"
-        :module-id-instance="module.idInstance"
-        :class="{ 'stx-show-error': hasErrors }"
-        @click.prevent="config"
-        :width="_.get(this.module,'structure.attribute.width','100%')"
-        :style="_.get(this.module,'structure.style')"
-        :valign="_.get(this.module,'structure.attribute.valign','top')"
-        :bgcolor="_.get(this.module,'structure.attribute.bgcolor')">
+    <td
+      class="stx-toolbar-content stx-position-relative"
+      :data-module-id="moduleId"
+      :module-id-instance="module.idInstance"
+      :class="{ 'stx-show-error': hasErrors }"
+      :width="_.get(this.module,'structure.attribute.width','100%')"
+      :style="_.get(this.module,'structure.style')"
+      :valign="_.get(this.module,'structure.attribute.valign','top')"
+      :bgcolor="_.get(this.module,'structure.attribute.bgcolor')"
+      @mousedown="onClickModule">
       <component :is="'custom-' + module.key" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId" v-if="!module.data.hideToolbar"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
@@ -24,7 +25,7 @@
   <tr
     v-else
     class="stx-module-wrapper"
-    :class="[`stx-${module.key}`, { 'stx-fixed': module.isFixed, 'stx-module-wrapper-active': activeModule === moduleId }]"
+    :class="[`stx-${module.key}`, { 'stx-fixed': module.isFixed, 'stx-module-wrapper-active': currentModuleInstanceId === module.idInstance }]"
     @mouseover="setModulesMouseOver"
     @mouseleave="setModulesMouseLeave">
     <td
@@ -37,7 +38,8 @@
       :style="styleModule"
       :valign="module.structure.attribute.valign || 'top'"
       :bgcolor="module.structure.attribute.bgcolor"
-      :class=" { 'stx-show-error': hasErrors, [module.structure.attribute.classes]:module.structure.attribute.classes}">
+      :class=" { 'stx-show-error': hasErrors, [module.structure.attribute.classes]:module.structure.attribute.classes}"
+      @mousedown="onClickModule">
       <background-image :element="module.structure" :key='modulebackgroundImage' :width="templateInnerWidth">
         <template :slot="modulebackgroundImage ? 'with-background-image': 'without-background-image' ">
           <RowContainer
@@ -46,19 +48,19 @@
             :module="module"
             :element="row"
             :row="row"
-            :with-row="module.structure.rows.length > 1"
-            @select-component="selectComponent">
+            :with-row="module.structure.rows.length > 1">
             <column-manager :module-id="moduleId" :module="module" :row="row">
               <template slot-scope="{columnData}">
                 <component
                   :is="component.type"
-                  v-for="(component, componentId) in columnData.column.components"
+                  v-for="(component, componentIndex) in columnData.column.components"
                   :key="component.id"
                   :component="component"
                   :module-id="moduleId"
                   :module="module"
+                  :element="component"
                   :column-id="columnData.columnId"
-                  :component-id="componentId"
+                  :component-id="componentIndex"
                   :row="row"
                   @select-component="selectComponent" />
               </template>
@@ -112,8 +114,8 @@
       moduleErrors() {
         return this.module.data.errors || [];
       },
-      activeModule() {
-        return this.$store.getters["campaign/activeModule"];
+      currentModuleInstanceId() {
+        return this.$store.getters["campaign/currentModuleInstanceId"];
       },
       hasErrors() {
         return this.module.data && this.module.data.errors && this.module.data.errors.length;
@@ -133,19 +135,14 @@
       }
     },
     methods: {
-      config() {
-        this.$store.commit("campaign/setCustomModule", this.moduleId);
+      onClickModule() {
         this.$store.commit("campaign/unsetCurrentElement");
+        this.$store.commit('campaign/setCurrentModuleInstanceId', this.module.idInstance);
+        this.$store.commit('campaign/setShowModuleSettings', true);
       },
-      selectComponent(moduleId, columnId, componentId) {
-        setTimeout(() => {
-          // TODO: find better way to do this
-          this.$store.commit("campaign/setCurrentComponent", {
-            moduleId,
-            columnId,
-            componentId,
-          });
-        }, 50);
+      selectComponent(elementId) {
+        this.$store.commit("campaign/setCurrentElementId", elementId);
+        this.$store.commit('campaign/setCurrentModuleInstanceId', this.module.idInstance);
       },
       getModuleRow( event ){
         let $row = null;

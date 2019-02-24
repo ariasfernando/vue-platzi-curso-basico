@@ -93,9 +93,9 @@ const getElement = (module, elementId) => {
         element = column;
         return false;
       }
-      _.forEach(column.components, (CurrentComponent) => {
-        if (CurrentComponent.id === elementId) {
-          element = CurrentComponent;
+      _.forEach(column.components, (currentComponent) => {
+        if (currentComponent.id === elementId) {
+          element = currentComponent;
           return false;
         }
         return true;
@@ -193,8 +193,8 @@ const mutations = {
             property = columnIndex;
             return false;
           }
-          _.forEach(column.components, (CurrentComponent, componentIndex) => {
-            if (CurrentComponent.id === elementId) {
+          _.forEach(column.components, (currentComponent, componentIndex) => {
+            if (currentComponent.id === elementId) {
               containerElement = column.components;
               property = componentIndex;
               return false;

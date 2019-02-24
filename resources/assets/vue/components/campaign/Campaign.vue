@@ -51,7 +51,6 @@
 </template>
 
 <script>
-  import _ from 'lodash'
   import CampaignConfiguration from './CampaignConfiguration.vue'
   import CampaignMenu from './CampaignMenu.vue'
   import CampaignService from '../../services/campaign'

@@ -3,10 +3,10 @@
     <div v-if="!campaign.locked && !module.mandatory" class="icon-remove" @click.stop="remove">
       <i class="fa fa-trash-o" />
     </div>
-    <div v-if="hasConfig" class="icon-config" @click="config">
+    <div v-if="hasConfig" class="icon-config" @click.stop="config">
       <i class="fa fa-cogs" />
     </div>
-    <div v-if="!campaign.locked && !module.isFixed" class="icon-clone" @click="clone">
+    <div v-if="!campaign.locked && !module.isFixed" class="icon-clone" @click.stop="clone">
       <i class="fa fa-clone" />
     </div>
     <div v-if="!campaign.locked && !module.isFixed" class="icon-move">
@@ -53,12 +53,13 @@ export default {
   },
   methods: {
     config() {
+      this.$store.commit('campaign/unsetCurrentElement');
       if (this.module.type === 'custom') {
         this.$store.commit('campaign/setCustomModule', this.moduleId);
-        this.$store.commit('campaign/unsetCurrentModule');
       } else {
-        this.$store.commit('campaign/setCurrentModule', this.moduleId);
         this.$store.commit('campaign/unsetCustomModule');
+        this.$store.commit('campaign/setShowModuleSettings', true);
+        this.$store.commit('campaign/setCurrentModuleInstanceId', this.module.idInstance);
       }
       this.$store.commit('campaign/unsetCurrentCustomComponent');
     },
@@ -67,10 +68,8 @@ export default {
     },
     remove() {
       this.$store.dispatch('campaign/removeModule', this.moduleId);
-      this.$store.commit('campaign/unsetActiveModule');
-      this.$store.commit('campaign/unsetCurrentComponent');
+      this.$store.commit('campaign/unsetCurrentElement');
       this.$store.commit('campaign/unsetCustomModule');
-      this.$store.commit('campaign/unsetCurrentModule');
     },
   },
 };

@@ -20,11 +20,8 @@ export default {
     };
   },
   computed: {
-    currentComponent() {
-      return this.$store.getters['module/currentComponent'];
-    },
     currentElementId() {
-      return this.$store.getters['module/currentElementId'];
+      return this.$store.getters[`${this.isCampaign ? 'campaign' : 'module'}/currentElementId`];
     },
     currentElement() {
       return this.getElement(this.currentElementId);
@@ -88,6 +85,11 @@ export default {
     },
   },
   methods: {
+    getTinyId(elementId, idInstance) {
+      return idInstance
+      ? `idInstance-${idInstance}-componentId-${elementId}`
+      :`componentId-${elementId}`;
+    },
     getElement(elementId) {
       let element = false;
       _.forEach(this.module.structure.rows, (row) => {
@@ -100,9 +102,9 @@ export default {
             element = column;
             return false;
           }
-          _.forEach(column.components, (CurrentComponent) => {
-            if (CurrentComponent.id === elementId) {
-              element = CurrentComponent;
+          _.forEach(column.components, (currentComponent) => {
+            if (currentComponent.id === elementId) {
+              element = currentComponent;
               return false;
             }
             return true;
@@ -160,20 +162,8 @@ export default {
       const borderRight = _.parseInt(element.style.borderRightWidth || 0);
       return paddingLeft + paddingRight + borderLeft + borderRight;
     },
-    selectComponentHandler(e) {
-      if (!$(e.target).hasClass('st-remove')) {
-        if (this.isCampaign) {
-          setTimeout(() => {
-            // TODO: find better way to do this
-            this.$store.commit('campaign/setCurrentComponent', {
-              idInstance: this.module.idInstance,
-              elementId: this.element.id,
-            });
-          }, 50);
-        } else {
-          this.$emit('select-component', this.element.id);
-        }
-      }
+    selectComponentHandler() {
+      this.$emit('select-component', this.element.id);
     },
     changeText(value) {
       if (this.timer) {

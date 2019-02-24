@@ -118,8 +118,8 @@ module.exports = {
     },
   },
   methods: {
-    selectComponent(ref) {
-      this.$store.commit('module/setCurrentElementId', ref);
+    selectComponent(elementId) {
+      this.$store.commit('module/setCurrentElementId', elementId);
     },
     moduleSelect() {
       this.selectComponent(false);

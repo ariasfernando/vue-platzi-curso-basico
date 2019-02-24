@@ -4,10 +4,15 @@
       <LabelItemContainer label="MODULE STYLES" icon="glyphicon-pause" :collapsable="false" />
       <div class="card">
         <GroupContainer>
-          <Component :is="'campaign-' + plugin.name" v-for="(plugin, pluginKey) in visiblePlugins(module, $_app)"
-                     :key="plugin.name + pluginKey"
-                     :name="pluginKey" :plugin="plugin" :module="module"
-                     :element="module" :module-id="currentModule" :plugin-key="pluginKey" />
+          <Component
+            :is="'campaign-' + plugin.name" v-for="(plugin, pluginKey) in visiblePlugins(module, $_app)"
+            :key="plugin.name + pluginKey"
+            :name="pluginKey"
+            :plugin="plugin"
+            :module="module"
+            :element="module"
+            :module-id="moduleIndex"
+            :plugin-key="pluginKey" />
         </GroupContainer>
       </div>
     </template>
@@ -17,7 +22,7 @@
         <b-card no-block>
           <b-tabs card :no-fade="true">
             <b-tab
-              v-for="(column, columnKey) in columns(module.structure.columns)"
+              v-for="(column, columnKey) in columns(module.structure.rows[0].columns)"
               :key="columnKey"
               :title="`${columnKey+1}`"
               :button-id="`column-${columnKey}`">
@@ -29,7 +34,7 @@
                   :name="pluginKey"
                   :plugin="plugin"
                   :column-id="columnKey"
-                  :module-id="currentModule"
+                  :module-id="module"
                   :plugin-key="pluginKey"
                   :module="module"
                   :element="column" />
@@ -73,15 +78,40 @@ export default {
     };
   },
   computed: {
-    currentModule() {
-      return this.$store.getters['campaign/currentModule'];
+    modules() {
+      return this.$store.getters['campaign/modules'];
+    },
+    modulesFiltered() {
+      return this.modules.filter(module => module.type === 'studio');
+    },
+    currentModuleInstanceId() {
+      return this.$store.getters["campaign/currentModuleInstanceId"];
     },
     module() {
-      return this.$store.getters['campaign/modules'][this.currentModule];
+      let module = false;
+      _.forEach(this.modulesFiltered, (currentModule) => {
+        if (currentModule.idInstance === this.currentModuleInstanceId) {
+          module = currentModule;
+          return false;
+        }
+        return true;
+      });
+      return module;
+    },
+    moduleIndex() {
+      let moduleIndex = false;
+      _.forEach(this.modules, (currentModule, currentModuleIndex) => {
+        if (currentModule.idInstance === this.currentModuleInstanceId) {
+          moduleIndex = currentModuleIndex;
+          return false;
+        }
+        return true;
+      });
+      return moduleIndex;
     },
     showColumnStyles() {
       let enabled = false;
-      _.each(this.module.structure.columns, (column) => {
+      _.each(this.module.structure.rows[0].columns, (column) => {
         if (this.hasEnabledPlugins(column)) {
           enabled = true;
         }
@@ -93,8 +123,8 @@ export default {
     currentColumn: {
       handler: () => {
         const modules = this.$store.getters['campaign/modules'];
-        if (this.currentModule && this.currentColumn) {
-          this.column = modules[this.currentModule].structure.columns[this.currentColumn];
+        if (this.currentModuleInstanceId && this.currentColumn) {
+          this.column = module.structure.columns[this.currentColumn];
           this.ready = true;
         }
       },

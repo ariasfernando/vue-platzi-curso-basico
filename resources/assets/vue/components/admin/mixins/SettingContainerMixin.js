@@ -77,8 +77,8 @@ export default {
             element = row;
             return false;
           }
-          _.forEach(column.components, (CurrentComponent) => {
-            if (CurrentComponent.id === this.currentElementId) {
+          _.forEach(column.components, (currentComponent) => {
+            if (currentComponent.id === this.currentElementId) {
               element = row;
               return false;
             }
@@ -150,9 +150,9 @@ export default {
             element = column;
             return false;
           }
-          _.forEach(column.components, (CurrentComponent) => {
-            if (CurrentComponent.id === elementId) {
-              element = CurrentComponent;
+          _.forEach(column.components, (currentComponent) => {
+            if (currentComponent.id === elementId) {
+              element = currentComponent;
               return false;
             }
             return true;

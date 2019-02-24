@@ -1,28 +1,30 @@
 <template>
-  <div>
+  <div v-show="showCurrentSettings && !showModuleSettings">
     <LabelItemContainer
       v-if="showCurrentSettings"
       :label="toCamel(currentElement.type.replace('-element', ''))"
       icon="glyphicon-tasks"
       :collapsable="false" />
-    <div class="card card-custom" :class="{hidden: !showCurrentSettings}">
+    <div class="card card-custom">
       <GroupContainer ref="component-settings-group" class="group-container-custom">
         <template v-for="(module, moduleId) in modulesFiltered">
-          <template v-for="(column, columnId) in module.structure.columns">
-            <template v-for="(component, componentId) in column.components">
-              <Component
-                :is="'campaign-' + plugin.name"
-                v-for="(plugin, pluginKey) in componentPluginsFiltered(module, component)"
-                :key="`${getElementKey(module ,component)}-plugin-${plugin.name}`"
-                :class="'plugin-' + plugin.name"
-                :element-key="getElementKey(module ,component)"
-                :element-location="{columnId, componentId ,moduleId}"
-                :element="component"
-                :module="module"
-                :current-element-key="currentElementKey"
-                :name="plugin.name"
-                :plugin-key="pluginKey"
-                :plugin="plugin" />
+          <template v-for="(row, rowId) in module.structure.rows">
+            <template v-for="(column, columnId) in row.columns">
+              <template v-for="(component, componentId) in column.components">
+                <Component
+                  :is="'campaign-' + plugin.name"
+                  v-for="(plugin, pluginKey) in componentPluginsFiltered(module, component)"
+                  :key="`${getElementKey(module.idInstance, component.id)}-plugin-${plugin.name}`"
+                  :class="'plugin-' + plugin.name"
+                  :element-key="getElementKey(module.idInstance, component.id)"
+                  :element-location="{rowId, columnId, componentId ,moduleId}"
+                  :element="component"
+                  :module="module"
+                  :current-element-key="currentElementKey"
+                  :name="plugin.name"
+                  :plugin-key="pluginKey"
+                  :plugin="plugin" />
+              </template>
             </template>
           </template>
         </template>
@@ -52,24 +54,56 @@ export default {
     modulesFiltered() {
       return this.modules.filter(module => module.type === 'studio');
     },
-    currentComponent() {
-      return this.$store.getters['campaign/currentComponent'];
+    currentModule() {
+      let module = false;
+      _.forEach(this.modulesFiltered, (currentModule) => {
+        if (currentModule.idInstance === this.currentModuleInstanceId) {
+          module = currentModule;
+          return false;
+        }
+        return true;
+      });
+      return module;
+    },
+    currentModuleInstanceId() {
+      return this.$store.getters["campaign/currentModuleInstanceId"];
+    },
+    currentElementId() {
+      return this.$store.getters["campaign/currentElementId"];
     },
     currentElement() {
-      if (Object.keys(this.currentComponent).length !== 0) {
-        const moduleId = this.currentComponent.moduleId;
-        const columnId = this.currentComponent.columnId;
-        const componentId = this.currentComponent.componentId;
-        return this.$store.getters['campaign/modules'][moduleId].structure
-          .columns[columnId].components[componentId];
+      if(this.currentModuleInstanceId && this.currentElementId){
+        let element = false;
+        _.forEach(this.currentModule.structure.rows, (row) => {
+          if (row.id === this.currentElementId) {
+            element = row;
+            return false;
+          }
+          _.forEach(row.columns, (column) => {
+            if (column.id === this.currentElementId) {
+              element = column;
+              return false;
+            }
+            _.forEach(column.components, (currentComponent) => {
+              if (currentComponent.id === this.currentElementId) {
+                element = currentComponent;
+                return false;
+              }
+              return true;
+            });
+            return !element;
+          });
+          return !element;
+        });
+        return element;
       }
       return undefined;
     },
     currentElementKey() {
-      return this.currentElement
+      return this.currentElementId
         ? this.getElementKey(
-          this.modules[this.currentComponent.moduleId],
-          this.currentElement,
+          this.currentModuleInstanceId,
+          this.currentElementId,
         )
         : undefined;
     },
@@ -86,7 +120,9 @@ export default {
             this.hasCampaignSettings(pluginKey)
           ) {
             show = true;
+            return false;
           }
+          return true;
         });
       }
       return show;
@@ -130,8 +166,8 @@ export default {
         (this.currentElementKey === elementKey || plugin.runBackground)
       );
     },
-    getElementKey(module, element) {
-      return `${module.idInstance}-${element.id}`;
+    getElementKey(idInstance, elementId) {
+      return `${idInstance}-${elementId}`;
     },
     hasCampaignSettings(key) {
       return (
@@ -144,7 +180,7 @@ export default {
       _.forOwn(component.plugins, (plugin, pluginKey) => {
         if (this.isEnableOrRunBackground(
           plugin, pluginKey,
-          this.getElementKey(module, component))) {
+          this.getElementKey(module.idInstance, component.id))) {
           plugins[pluginKey] = plugin;
         }
       });
