@@ -40,10 +40,7 @@ export default {
       return settingsDefault[this.type]().componentSettings;
     },
     filteredSettings() {
-      return this.settings.filter(setting =>
-        //this.hasPermissionsInGroup(setting, `std-${this.typeAcl}_`),
-        true
-      );
+      return this.settingGroupFilter(this.settings);
     },
     pluginsGroups() {
       const pluginsGroups = pluginsLayout[this.type] ? pluginsLayout[this.type]().componentPlugins : [];
@@ -233,13 +230,6 @@ export default {
       });
       group.settings = settingsToShow;
       return show;
-    },
-    pluginFilter(plugins) {
-      const typeAcl = this.typeAcl === 'module' ? '' : `-${this.typeAcl}`;
-      return plugins.filter(plugin =>
-        // this.$can(`std${typeAcl}-plugin-${plugin.aclName}`) &&
-        this.currentElement.plugins[_.camelCase(plugin.name)],
-      );
     },
     saveElementProperty({ link, subComponent, name, value }) {
       const data = {

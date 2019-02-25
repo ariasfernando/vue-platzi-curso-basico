@@ -4,8 +4,6 @@
 
 import Vue from 'vue';
 import Q from 'q';
-import _ from 'lodash';
-import clone from 'clone';
 import Element from '../models/Element';
 import moduleService from '../services/module';
 import imageService from '../services/image';
@@ -300,7 +298,7 @@ const actions = {
     _.each(modulePlugins, (plugin, name) => {
       switch (plugin.target.indexOf('row') !== -1) {
         case true:
-          plugins[name] = clone(plugin);
+          plugins[name] = _.cloneDeep(plugin);
           break;
         default:
       }
@@ -314,7 +312,7 @@ const actions = {
     const modulePlugins = Vue.prototype.$_app.modulePlugins;
     _.each(modulePlugins, (plugin, name) => {
       if (plugin.target.indexOf('column') !== -1) {
-        plugins[name] = clone(plugin);
+        plugins[name] = _.cloneDeep(plugin);
       }
     });
     const column = new Element({ type: 'column-element', plugins }).getProperties();

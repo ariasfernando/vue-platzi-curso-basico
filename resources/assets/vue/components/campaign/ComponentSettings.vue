@@ -129,33 +129,36 @@ export default {
     },
   },
   updated() {
-    const groupContainer = this.$refs['component-settings-group'].$el;
-    const childElements = groupContainer.children;
-    // add class to first visible setting-container
-    if (childElements) {
-      for (let i = 0; i < childElements.length; i++) {
-        if (
-          childElements[i].classList &&
-          (childElements[i].classList.contains('settings-container') ||
-          childElements[i].classList.contains('settings-wrapper')) &&
-          childElements[i].style.display !== 'none'
-        ) {
-          const prevElement = childElements[i].previousElementSibling;
+    this.addClassToFirstSettingContainer()
+  },
+  methods: {
+    addClassToFirstSettingContainer() {
+      const groupContainer = this.$refs['component-settings-group'].$el;
+      const childElements = groupContainer.children;
+      // add class to first visible setting-container
+      if (childElements) {
+        for (let i = 0; i < childElements.length; i++) {
           if (
-            prevElement &&
-            prevElement.classList &&
-            (prevElement.classList.contains('settings-container') ||
-            prevElement.classList.contains('settings-wrapper')) &&
-            prevElement.style.display === 'none'
+            childElements[i].classList &&
+            (childElements[i].classList.contains('settings-container') ||
+            childElements[i].classList.contains('settings-wrapper')) &&
+            childElements[i].style.display !== 'none'
           ) {
-            childElements[i].classList.add('is-first');
-            break;
+            const prevElement = childElements[i].previousElementSibling;
+            if (
+              prevElement &&
+              prevElement.classList &&
+              (prevElement.classList.contains('settings-container') ||
+              prevElement.classList.contains('settings-wrapper')) &&
+              prevElement.style.display === 'none'
+            ) {
+              childElements[i].classList.add('is-first');
+              break;
+            }
           }
         }
       }
-    }
-  },
-  methods: {
+    },
     toCamel(str) {
       return _.startCase(str);
     },

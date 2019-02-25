@@ -5,13 +5,14 @@ import columnBackgroundColor from './column-background-color';
 import columnPaletteBackgroundColor from './column-palette-background-color';
 import destinationUrl from './destination-url';
 import fontFamily from './font-family';
+import maskLink from './mask-link';
 import mobileStyles from './mobile-styles';
 import moduleBackgroundColor from './module-background-color';
-import moduleEqualHeightForColumn from './module-equal-height-for-column';
 import moduleEqualHeightForElements from './module-equal-height-for-elements';
 import moduleHeightSync from './module-height-sync';
 import modulePaletteBackgroundColor from './module-palette-background-color';
 import paletteBackgroundColor from './palette-background-color';
+import rowEqualHeightForColumn from './row-equal-height-for-column';
 import styleImageEditor from './style-image-editor';
 import textColorByBackground from './text-color-by-background';
 import textColorByBackgroundForModule from './text-color-by-background-for-module';
@@ -20,7 +21,6 @@ import toggleElement from './toggle-element';
 import toggleElementSetter from './toggle-element-setter';
 import variableHeight from './variable-height';
 import verticalAlignment from './vertical-alignment';
-import maskLink from './mask-link';
 
 export default {
   alignment,
@@ -33,11 +33,11 @@ export default {
   maskLink,
   mobileStyles,
   moduleBackgroundColor,
-  moduleEqualHeightForColumn,
   moduleEqualHeightForElements,
   moduleHeightSync,
   modulePaletteBackgroundColor,
   paletteBackgroundColor,
+  rowEqualHeightForColumn,
   styleImageEditor,
   textColorByBackground,
   textColorByBackgroundForModule,
