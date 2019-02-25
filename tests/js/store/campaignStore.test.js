@@ -18,7 +18,7 @@ import campaignService from '@/services/campaign';
 import imageService from '@/services/image';
 import realStore from '@/store';
 import campaignStore from '@/store/campaignStore';
-import mocks from '@/resources/mocks';
+import mocks from '../mocks';
 
 const localVue = createLocalVue();
 
