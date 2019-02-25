@@ -5,7 +5,7 @@ module.exports = {
     let errorFound = false;
 
     // Check if all images are uploaded.
-    const nonEditedImages = $(selector).find("img[src*='/default/']:visible, img[src*='base64,']");
+    const nonEditedImages = $(selector).find("img[src*='/default/']:visible, img[src*='base64,'], img[src*='/placeholders/']:visible");
 
     if (nonEditedImages.length) {
       $.each(nonEditedImages, (index, img) => {

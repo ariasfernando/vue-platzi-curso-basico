@@ -56,6 +56,8 @@ class Campaign extends Eloquent
         'mask_link_html',
         'mask_link_text',
         'email_title',
+        'prepend_html',
+        'append_html',
         'archive'
     ];
 
