@@ -226,16 +226,16 @@ const mutations = {
   setDraggable(state, { key, value }) {
     Vue.set(state.draggable, key, value);
   },
-  addColumn(state, {column, rowId}) {
+  addColumn(state, { column, rowId }) {
     getElement(state.module, rowId).columns.push(column);
   },
-  addRow(state, {row}) {
+  addRow(state, { row }) {
     state.module.structure.rows.push(row);
   },
   removeRows(state, { index, number }) {
     state.module.structure.rows.splice(index, number);
   },
-  removeColumn(state, {rowId, index, number }) {
+  removeColumn(state, { rowId, index, number }) {
     getElement(state.module, rowId).columns.splice(index, number);
   },
   saveElementProperty(state, { elementId, property, value, ...scope }) {
@@ -304,9 +304,9 @@ const actions = {
       }
     });
     const element = new Element({ type: 'row-element', plugins });
-    context.commit('addRow', {row :element.getProperties()});
+    context.commit('addRow', { row: element.getProperties() });
   },
-  addColumn(context, {rowId}) {
+  addColumn(context, { rowId }) {
     // Get column plugins
     const plugins = {};
     const modulePlugins = Vue.prototype.$_app.modulePlugins;
@@ -319,7 +319,7 @@ const actions = {
     context.commit('addColumn', { column, rowId });
   },
   normalizeColumns(context, { rowId }) {
-    const columns = getElement(context.state.module, rowId).columns
+    const columns = getElement(context.state.module, rowId).columns;
     const value = `${100 / columns.length}%`;
     _.each(columns, (column) => {
       context.commit('saveElementProperty', {
