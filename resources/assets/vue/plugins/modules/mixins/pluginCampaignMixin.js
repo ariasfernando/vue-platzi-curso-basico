@@ -78,22 +78,33 @@ export default {
     },
     getElement(elementId) {
       if (!this.isCustom) {
-        let element = false;
-        _.forEach(this.module.structure.columns, (column) => {
-          if (column.id === elementId) {
-            element = column;
-            return false;
+          if (!elementId) {
+            return this.module;
           }
-          _.forEach(column.components, (currentComponent) => {
-            if (currentComponent.id === elementId) {
-              element = currentComponent;
+          let element = false;
+          _.forEach(this.module.structure.rows, (row) => {
+            if (row.id === elementId) {
+              element = row;
               return false;
             }
+            _.forEach(row.columns, (column) => {
+              if (column.id === elementId) {
+                element = column;
+                return false;
+              }
+              _.forEach(column.components, (currentComponent) => {
+                if (currentComponent.id === elementId) {
+                  element = currentComponent;
+                  return false;
+                }
+                return true;
+              });
+              return !element;
+            });
+            return !element;
           });
-          return !element;
-        });
         return element;
-      }
+      };
       return this.module.data[elementId];
     },
     getColumnIndexByComponentId(elementId) {

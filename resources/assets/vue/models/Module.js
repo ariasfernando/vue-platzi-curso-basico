@@ -31,7 +31,7 @@ function getNewRow() {
   _.each(modulePlugins, (plugin, name) => {
     switch (plugin.target.indexOf('row') !== -1) {
       case true:
-        plugins[name] = clone(plugin);
+        plugins[name] = _.cloneDeep(plugin);
         break;
       default:
     }

@@ -17,7 +17,7 @@
             class="stx-draggable-wrapper st-email-wrapper"
             :class="{ 'stx-campaign-validated': campaignValidated }"
             :bgcolor="templateBackgroundColor || defaultTemplateBackgroundColor"
-            @mousedown.stop="handleActive"
+            @mousedown.self="$store.commit('campaign/unsetCurrentElement')"
             @mouseover="onMouseOver"
             @mouseleave="onMouseLeave">
             <draggable
@@ -34,9 +34,7 @@
               :options="options"
               :element="'table'"
               :move="onMove"
-              @add="onAdd"
-              @sort="onSort"
-              @choose="onChoose">
+              @add="onAdd">
               <module
                 v-for="(module, moduleId) in dragList"
                 :key="module.idInstance"
@@ -56,8 +54,7 @@
               :style="`width:${templateWidth}px`"
               :options="options"
               :element="'table'"
-              @add="onAdd"
-              @sort="onSort">
+              @add="onAdd">
               <div class="empty-message">{{ placeholder }}</div>
             </draggable>
           </td>
@@ -144,9 +141,6 @@ export default {
     campaignValidated() {
       return this.$store.state.campaign.campaignValidated;
     },
-    currentComponent() {
-      return this.$store.getters['campaign/currentComponent'];
-    },
     dragList: {
       get() {
         return this.$store.getters['campaign/modules'];
@@ -182,10 +176,6 @@ export default {
     },
     baseUrl() {
       return this.$_app.config.baseUrl;
-    },
-    activeModule() {
-      const activeModuleId = this.$store.getters['campaign/activeModule'];
-      return this.modules[activeModuleId] || undefined;
     },
     defaultTemplateBackgroundColor() {
       let defaultColor = this.campaign.campaign_data.library_config.templateBackgroundColor;
@@ -232,6 +222,11 @@ export default {
       const mod = clone(found);
       this.addModule(mod, e.newIndex);
 
+      this.$store.commit('campaign/setCurrentModuleInstanceId', moduleData.idInstance);
+      this.$store.commit(
+        'campaign/setCurrentElementId',
+        mod.structure.rows[0].columns[0].components[0].id
+      );
       // Remove ghost element
       const cloneItem = e.item;
       cloneItem.parentNode.removeChild(cloneItem);
@@ -258,31 +253,7 @@ export default {
       }
       return true;
     },
-    onSort(e) {
-      this.$store.commit('campaign/unsetCustomModule');
-      this.$store.commit('campaign/unsetCurrentComponent');
-      this.$store.commit('campaign/unsetCurrentCustomComponent');
 
-      this.$store.commit('campaign/setActiveModule', e.newIndex);
-      this.$store.commit('campaign/setDirty', true);
-
-      if (_.has(this.activeModule, 'type') && this.activeModule.type === 'studio') {
-        // Save current component if module type is studio
-        this.$store.commit('campaign/setCurrentComponent', {
-          moduleId: e.newIndex,
-          columnId: 0,
-          componentId: 0,
-        });
-      } else {
-        // Save customModule if module type is custom
-        this.$store.commit('campaign/setCustomModule', e.newIndex);
-      }
-    },
-    onChoose() {
-      this.$store.commit('campaign/unsetCustomModule');
-      this.$store.commit('campaign/unsetCurrentComponent');
-      this.$store.commit('campaign/unsetCurrentCustomComponent');
-    },
     onMouseOver() {
       $('#emailCanvas').addClass('hovered');
       this.handleEmptyMessage();
@@ -340,41 +311,6 @@ export default {
             className: 'et-error',
           });
       });
-    },
-    handleActive(e) {
-      const $target = $(e.target);
-      // If it's the email-canvas wrapper
-      if ($target.is('td.stx-draggable-wrapper')) {
-        // Clear Current module state
-        this.$store.commit('campaign/unsetActiveModule');
-        this.$store.commit('campaign/unsetCurrentModule');
-        this.$store.commit('campaign/unsetCustomModule');
-        this.$store.commit('campaign/unsetCurrentComponent');
-        this.$store.commit('campaign/unsetCurrentCustomComponent');
-        this.$store.commit('campaign/setToggleModuleSettings', false);
-      } else {
-        // Get module ID
-        const moduleId = _.parseInt($target.closest('.stx-module-wrapper').find('td').attr('data-module-id'));
-        // If it's the config gear icon
-        if ($target.hasClass('icon-config') || $target.hasClass('fa-cogs')) {
-          // Show module settings
-          this.$store.commit('campaign/setToggleModuleSettings', true);
-          // Set current Module
-          this.$store.commit('campaign/setCurrentModule', moduleId);
-        } else {
-          // Hide module settings
-          this.$store.commit('campaign/setToggleModuleSettings', false);
-          // Set active Module
-          this.$store.commit('campaign/setActiveModule', moduleId);
-          // Clear 3rd column
-          this.$store.commit('campaign/unsetCurrentComponent');
-          this.$store.commit('campaign/unsetCurrentCustomComponent');
-
-          if (this.activeModule && this.activeModule.type === 'studio') {
-            this.$store.commit('campaign/unsetCustomModule');
-          }
-        }
-      }
     },
   },
 };

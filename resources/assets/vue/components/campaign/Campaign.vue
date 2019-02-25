@@ -30,6 +30,7 @@
             <module-settings v-if="showModuleSettings" />
             <module-background-settings />
             <component-settings />
+            <row-settings />
             <custom-module-settings v-if="currentCustomModule" />
             <shadow-render />
           </div>
@@ -51,7 +52,6 @@
 </template>
 
 <script>
-  import _ from 'lodash'
   import CampaignConfiguration from './CampaignConfiguration.vue'
   import CampaignMenu from './CampaignMenu.vue'
   import CampaignService from '../../services/campaign'
@@ -68,6 +68,7 @@
   import ModalProofTrack from './modals/ModalProofTrack.vue';
   import ModuleBackgroundSettings from './ModuleBackgroundSettings.vue'
   import ModuleSettings from './ModuleSettings.vue'
+  import RowSettings from './RowSettings.vue'
   import ScrollbarContainer from '../common/containers/ScrollbarContainer.vue';
   import ShadowRender from './ShadowRender.vue'
   import Spinner from '../common/Spinner.vue'
@@ -93,6 +94,7 @@
       ModalProofTrack,
       ModuleBackgroundSettings,
       ModuleSettings,
+      RowSettings,
       ScrollbarContainer,
       ShadowRender,
       Spinner,

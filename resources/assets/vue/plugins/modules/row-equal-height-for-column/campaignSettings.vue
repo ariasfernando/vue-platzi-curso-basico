@@ -16,7 +16,8 @@ export default {
   methods: {
     getHigherHeight() {
       const moduleIdInstance = this.moduleIdInstance;
-      const selector = `[module-id-instance="${moduleIdInstance}"] .st-equal-height > table`;
+      const rowSelector = this.module.structure.rows.length > 1 ? `[data-row-id="${this.element.id}"]` : '';
+      const selector = `[module-id-instance="${moduleIdInstance}"] ${rowSelector} [data-column-id] >tr>td>table`;
       let $itemsToEqualize = false;
       if (this.buildingMode === 'desktop') {
         $itemsToEqualize = $(selector);
@@ -35,7 +36,7 @@ export default {
       setTimeout(() => {
         const higherHeight = this.getHigherHeight();
         if (higherHeight !== this.previousHeight) {
-          _.each(this.module.structure.columns, (column, columnIndex) => {
+          _.each(this.getElement(this.element.id).columns, (column, columnIndex) => {
             const height = higherHeight - this.getVerticalBorderAndPadding(columnIndex);
             this.saveElementProperty({
               elementId: column.id,
@@ -76,7 +77,7 @@ export default {
       this.previousImagesUrls = _.cloneDeep(this.getImagesUrls(this.module));
     },
     getVerticalBorderAndPadding(columnIndex) {
-      const column = this.module.structure.columns[columnIndex];
+      const column = this.getElement(this.element.id).columns[columnIndex];
       const verticalPadding = parseInt(column.container.style.paddingTop || 0) + parseInt(column.container.style.paddingBottom || 0);
       const verticalBorder = parseInt(column.container.style.borderTopWidth || 0) + parseInt(column.container.style.borderBottomWidth || 0);
       return verticalPadding + verticalBorder;

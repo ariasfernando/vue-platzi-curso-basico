@@ -105,12 +105,6 @@ export default {
       width: 100%;
     }
 
-    .vue-js-switch {
-      float: right;
-      padding-top: 0px;
-      margin: 0px;
-    }
-
     .content-colorpicker {
       .sketch-picker {
         display: none;

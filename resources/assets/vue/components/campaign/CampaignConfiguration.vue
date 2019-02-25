@@ -481,9 +481,6 @@
       margin-left: 3px;
       font-size: 10px;
     }
-    .vue-js-switch {
-      float: right;
-    }
     .v-switch-core {
       background: #dddddd;
       border: 1px solid #dddddd;

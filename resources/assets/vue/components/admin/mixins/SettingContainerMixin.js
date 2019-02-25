@@ -40,10 +40,7 @@ export default {
       return settingsDefault[this.type]().componentSettings;
     },
     filteredSettings() {
-      return this.settings.filter(setting =>
-        //this.hasPermissionsInGroup(setting, `std-${this.typeAcl}_`),
-        true
-      );
+      return this.settingGroupFilter(this.settings);
     },
     pluginsGroups() {
       const pluginsGroups = pluginsLayout[this.type] ? pluginsLayout[this.type]().componentPlugins : [];
@@ -77,8 +74,8 @@ export default {
             element = row;
             return false;
           }
-          _.forEach(column.components, (CurrentComponent) => {
-            if (CurrentComponent.id === this.currentElementId) {
+          _.forEach(column.components, (currentComponent) => {
+            if (currentComponent.id === this.currentElementId) {
               element = row;
               return false;
             }
@@ -150,9 +147,9 @@ export default {
             element = column;
             return false;
           }
-          _.forEach(column.components, (CurrentComponent) => {
-            if (CurrentComponent.id === elementId) {
-              element = CurrentComponent;
+          _.forEach(column.components, (currentComponent) => {
+            if (currentComponent.id === elementId) {
+              element = currentComponent;
               return false;
             }
             return true;
@@ -233,13 +230,6 @@ export default {
       });
       group.settings = settingsToShow;
       return show;
-    },
-    pluginFilter(plugins) {
-      const typeAcl = this.typeAcl === 'module' ? '' : `-${this.typeAcl}`;
-      return plugins.filter(plugin =>
-        // this.$can(`std${typeAcl}-plugin-${plugin.aclName}`) &&
-        this.currentElement.plugins[_.camelCase(plugin.name)],
-      );
     },
     saveElementProperty({ link, subComponent, name, value }) {
       const data = {

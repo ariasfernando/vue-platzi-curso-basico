@@ -25,7 +25,7 @@
 <script>
 import ImageModal from '../../../components/common/ImageModal/index.vue';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
-import validatorMixin from '../mixins/validator';
+import validatorMixin from '../mixins/validatorMixin';
 import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {

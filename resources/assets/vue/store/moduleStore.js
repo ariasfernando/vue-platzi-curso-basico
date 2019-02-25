@@ -4,8 +4,6 @@
 
 import Vue from 'vue';
 import Q from 'q';
-import _ from 'lodash';
-import clone from 'clone';
 import Element from '../models/Element';
 import moduleService from '../services/module';
 import imageService from '../services/image';
@@ -93,9 +91,9 @@ const getElement = (module, elementId) => {
         element = column;
         return false;
       }
-      _.forEach(column.components, (CurrentComponent) => {
-        if (CurrentComponent.id === elementId) {
-          element = CurrentComponent;
+      _.forEach(column.components, (currentComponent) => {
+        if (currentComponent.id === elementId) {
+          element = currentComponent;
           return false;
         }
         return true;
@@ -193,8 +191,8 @@ const mutations = {
             property = columnIndex;
             return false;
           }
-          _.forEach(column.components, (CurrentComponent, componentIndex) => {
-            if (CurrentComponent.id === elementId) {
+          _.forEach(column.components, (currentComponent, componentIndex) => {
+            if (currentComponent.id === elementId) {
               containerElement = column.components;
               property = componentIndex;
               return false;
@@ -300,7 +298,7 @@ const actions = {
     _.each(modulePlugins, (plugin, name) => {
       switch (plugin.target.indexOf('row') !== -1) {
         case true:
-          plugins[name] = clone(plugin);
+          plugins[name] = _.cloneDeep(plugin);
           break;
         default:
       }
@@ -314,7 +312,7 @@ const actions = {
     const modulePlugins = Vue.prototype.$_app.modulePlugins;
     _.each(modulePlugins, (plugin, name) => {
       if (plugin.target.indexOf('column') !== -1) {
-        plugins[name] = clone(plugin);
+        plugins[name] = _.cloneDeep(plugin);
       }
     });
     const column = new Element({ type: 'column-element', plugins }).getProperties();

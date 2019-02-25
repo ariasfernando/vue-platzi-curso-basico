@@ -200,9 +200,9 @@ export default {
             element = column;
             return false;
           }
-          _.forEach(column.components, (CurrentComponent) => {
-            if (CurrentComponent.id === elementId) {
-              element = CurrentComponent;
+          _.forEach(column.components, (currentComponent) => {
+            if (currentComponent.id === elementId) {
+              element = currentComponent;
               return false;
             }
             return true;
