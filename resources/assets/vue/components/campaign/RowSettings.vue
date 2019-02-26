@@ -32,7 +32,7 @@ export default {
     currentModule() {
       let module = false;
       _.forEach(this.modulesFiltered, (currentModule) => {
-        if (currentModule.idInstance === this.currentModuleInstanceId) {
+        if (currentModule.idInstance === this.currentModuleIdInstance) {
           module = currentModule;
           return false;
         }
@@ -40,14 +40,14 @@ export default {
       });
       return module;
     },
-    currentModuleInstanceId() {
-      return this.$store.getters["campaign/currentModuleInstanceId"];
+    currentModuleIdInstance() {
+      return this.$store.getters["campaign/currentModuleIdInstance"];
     },
     currentElementId() {
       return this.$store.getters["campaign/currentElementId"];
     },
     currentElement() {
-      if(this.currentModuleInstanceId && this.currentElementId){
+      if(this.currentModuleIdInstance && this.currentElementId){
         let element = false;
         _.forEach(this.currentModule.structure.rows, (row) => {
           if (row.id === this.currentElementId) {
@@ -77,7 +77,7 @@ export default {
     currentElementKey() {
       return this.currentElementId
         ? this.getElementKey(
-          this.currentModuleInstanceId,
+          this.currentModuleIdInstance,
           this.currentElementId,
         )
         : undefined;

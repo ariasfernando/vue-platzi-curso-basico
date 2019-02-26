@@ -59,7 +59,7 @@ export default {
       } else {
         this.$store.commit('campaign/unsetCustomModule');
         this.$store.commit('campaign/setShowModuleSettings', true);
-        this.$store.commit('campaign/setCurrentModuleInstanceId', this.module.idInstance);
+        this.$store.commit('campaign/setCurrentModuleIdInstance', this.module.idInstance);
       }
       this.$store.commit('campaign/unsetCurrentCustomComponent');
     },

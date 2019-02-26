@@ -84,13 +84,13 @@ export default {
     modulesFiltered() {
       return this.modules.filter(module => module.type === 'studio');
     },
-    currentModuleInstanceId() {
-      return this.$store.getters["campaign/currentModuleInstanceId"];
+    currentModuleIdInstance() {
+      return this.$store.getters["campaign/currentModuleIdInstance"];
     },
     module() {
       let module = false;
       _.forEach(this.modulesFiltered, (currentModule) => {
-        if (currentModule.idInstance === this.currentModuleInstanceId) {
+        if (currentModule.idInstance === this.currentModuleIdInstance) {
           module = currentModule;
           return false;
         }
@@ -101,7 +101,7 @@ export default {
     moduleIndex() {
       let moduleIndex = false;
       _.forEach(this.modules, (currentModule, currentModuleIndex) => {
-        if (currentModule.idInstance === this.currentModuleInstanceId) {
+        if (currentModule.idInstance === this.currentModuleIdInstance) {
           moduleIndex = currentModuleIndex;
           return false;
         }
@@ -123,7 +123,7 @@ export default {
     currentColumn: {
       handler: () => {
         const modules = this.$store.getters['campaign/modules'];
-        if (this.currentModuleInstanceId && this.currentColumn) {
+        if (this.currentModuleIdInstance && this.currentColumn) {
           this.column = module.structure.columns[this.currentColumn];
           this.ready = true;
         }

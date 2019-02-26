@@ -1,7 +1,7 @@
 <template>
   <tr v-if="module.type === 'custom'"
       class="stx-module-wrapper"
-      :class="[`stx-${module.name}`, { 'stx-fixed': module.isFixed, 'stx-module-wrapper-active': currentModuleInstanceId === module.idInstance }]"
+      :class="[`stx-${module.name}`, { 'stx-fixed': module.isFixed, 'stx-module-wrapper-active': currentModuleIdInstance === module.idInstance }]"
       @mouseover="setModulesMouseOver"
       @mouseleave="setModulesMouseLeave"
   >
@@ -25,7 +25,7 @@
   <tr
     v-else
     class="stx-module-wrapper"
-    :class="[`stx-${module.key}`, { 'stx-fixed': module.isFixed, 'stx-module-wrapper-active': currentModuleInstanceId === module.idInstance }]"
+    :class="[`stx-${module.key}`, { 'stx-fixed': module.isFixed, 'stx-module-wrapper-active': currentModuleIdInstance === module.idInstance }]"
     @mouseover="setModulesMouseOver"
     @mouseleave="setModulesMouseLeave">
     <td
@@ -114,8 +114,8 @@
       moduleErrors() {
         return this.module.data.errors || [];
       },
-      currentModuleInstanceId() {
-        return this.$store.getters["campaign/currentModuleInstanceId"];
+      currentModuleIdInstance() {
+        return this.$store.getters["campaign/currentModuleIdInstance"];
       },
       hasErrors() {
         return this.module.data && this.module.data.errors && this.module.data.errors.length;
@@ -137,12 +137,12 @@
     methods: {
       onClickModule() {
         this.$store.commit("campaign/unsetCurrentElement");
-        this.$store.commit('campaign/setCurrentModuleInstanceId', this.module.idInstance);
+        this.$store.commit('campaign/setCurrentModuleIdInstance', this.module.idInstance);
         this.$store.commit('campaign/setShowModuleSettings', true);
       },
       selectComponent(elementId) {
         this.$store.commit("campaign/setCurrentElementId", elementId);
-        this.$store.commit('campaign/setCurrentModuleInstanceId', this.module.idInstance);
+        this.$store.commit('campaign/setCurrentModuleIdInstance', this.module.idInstance);
       },
       getModuleRow( event ){
         let $row = null;

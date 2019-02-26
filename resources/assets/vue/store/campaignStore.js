@@ -82,7 +82,7 @@ function campaignStore() {
       campaignValidated: false,
       currentCustomModuleId: undefined,
       currentElementId: false,
-      currentModuleInstanceId: false,
+      currentModuleIdInstance: false,
       currentCustomComponent: {},
       modalCode: false,
       modalComplete: false,
@@ -126,8 +126,8 @@ function campaignStore() {
       currentElementId(state) {
         return state.currentElementId;
       },
-      currentModuleInstanceId(state) {
-        return state.currentModuleInstanceId;
+      currentModuleIdInstance(state) {
+        return state.currentModuleIdInstance;
       },
       currentCustomComponent(state) {
         return state.currentCustomComponent;
@@ -263,11 +263,11 @@ function campaignStore() {
         state.currentElementId = elementId;
         state.showModuleSettings = false;
       },
-      setCurrentModuleInstanceId(state, elementId) {
-        state.currentModuleInstanceId = elementId;
+      setCurrentModuleIdInstance(state, elementId) {
+        state.currentModuleIdInstance = elementId;
       },
       unsetCurrentElement(state) {
-        state.currentModuleInstanceId = false;
+        state.currentModuleIdInstance = false;
         state.currentElementId = false;
         state.showModuleSettings = false;
       },

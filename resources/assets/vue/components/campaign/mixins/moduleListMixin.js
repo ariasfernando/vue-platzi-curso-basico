@@ -1,7 +1,7 @@
 export default {
   computed: {
-    currentModuleInstanceId() {
-      return this.$store.getters["campaign/currentModuleInstanceId"];
+    currentModuleIdInstance() {
+      return this.$store.getters["campaign/currentModuleIdInstance"];
     },
     modules() {
       return this.$store.getters['campaign/modules'];
@@ -158,7 +158,7 @@ export default {
         moduleData,
       });
       // Set active inserted module
-      this.$store.commit('campaign/setCurrentModuleInstanceId', moduleData.idInstance);
+      this.$store.commit('campaign/setCurrentModuleIdInstance', moduleData.idInstance);
       this.$store.commit(
         'campaign/setCurrentElementId',
         moduleData.structure.rows[0].columns[0].components[0].id

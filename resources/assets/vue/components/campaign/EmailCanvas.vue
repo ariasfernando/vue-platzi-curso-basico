@@ -222,7 +222,7 @@ export default {
       const mod = clone(found);
       this.addModule(mod, e.newIndex);
 
-      this.$store.commit('campaign/setCurrentModuleInstanceId', moduleData.idInstance);
+      this.$store.commit('campaign/setCurrentModuleIdInstance', moduleData.idInstance);
       this.$store.commit(
         'campaign/setCurrentElementId',
         mod.structure.rows[0].columns[0].components[0].id
