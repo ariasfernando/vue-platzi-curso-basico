@@ -10,11 +10,6 @@ export default {
     },
     styleOption: {},
   },
-  content: {
-    style: {},
-    attribute: {},
-    styleOption: {},
-  },
   columns: [
     {
       ...ColumnElement,

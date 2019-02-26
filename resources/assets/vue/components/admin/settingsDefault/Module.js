@@ -2,7 +2,6 @@ import {
   bgcolor,
   borderGroup,
   classes,
-  columnsStacking,
   padding,
 } from './settings';
 

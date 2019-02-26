@@ -35,9 +35,12 @@ export default {
     imageWidth() {
       const width = this.component.image.attribute.width;
       if (_.endsWith(width, '%')) {
+        const elementBorderAndPaddingHorizontalSpace = this.row.columns[this.columnId].content
+        ? this.elementBorderAndPaddingHorizontalSpace(this.row.columns[this.columnId].content)
+        : 0;
         const imageContainerWidth = this.columnWidth(this.columnId) -
           this.elementBorderAndPaddingHorizontalSpace(this.row.columns[this.columnId].container) -
-          this.elementBorderAndPaddingHorizontalSpace(this.row.columns[this.columnId].content) -
+          elementBorderAndPaddingHorizontalSpace -
           this.elementBorderAndPaddingHorizontalSpace(this.component.container);
         return ((imageContainerWidth / 100) * _.parseInt(width));
       }
