@@ -16,13 +16,12 @@
         :bgcolor="element.container.attribute.bgcolor"
         :class="[element.container.attribute.classes, {'hide-element-selector' : !isHover && isStudio}]">
         <table
-          v-if="element.content"
           cellpadding="0"
           cellspacing="0"
           border="0"
-          width="100%"
-          style="width: 100%;">
-          <tr>
+          :width="element.container.attribute.width"
+          :style="`width: ${widthStyle(element.container.attribute.width)}`">
+          <tr v-if="element.content">
             <td
               width="100%"
               :height="element.content.attribute.height"
@@ -32,11 +31,18 @@
               class="stx-position-relative"
               :bgcolor="element.content.attribute.bgcolor"
               :class="element.content.attribute.classes">
-              <slot />
+              <table
+                cellpadding="0"
+                cellspacing="0"
+                border="0"
+                :width="element.content.attribute.width"
+                :style="`width: ${widthStyle(element.content.attribute.width)}`">
+                <slot />
+              </table>
             </td>
           </tr>
+          <slot v-else/>
         </table>
-        <slot v-else/>
         <ElementSelector
           v-if="isStudio"
           class="row"
