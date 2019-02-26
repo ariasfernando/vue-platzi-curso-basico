@@ -52,7 +52,7 @@
                 :min="subopt.min || 0"
                 :max="subopt.max || Infinity"
                 :step="parseFloat(subopt.step)" />
-              <stui-select
+              <el-select
                 v-if="subopt.type === 'select' || subopt.type === 'multi-select'"
                 @change="(value) => updateField(value, `${name}.config.${subname}.value`)"
                 :value="subopt.value"
