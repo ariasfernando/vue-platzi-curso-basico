@@ -110,6 +110,13 @@
             </template>
           </settings-container>
         </group-container>
+        <group-container v-if="campaign.library_config.insertBody && canAccessInsertBody">
+          <settings-container label="Advanced Settings">
+            <template slot="setting-bottom">
+              <AdvancedSettings />
+            </template>
+          </settings-container>
+        </group-container>
       </div>
     </b-collapse>
   </div>
@@ -121,6 +128,7 @@
   import secondarySpinner from '../common/secondarySpinner.vue';
   import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
   import GroupContainer from "../common/containers/GroupContainer.vue";
+  import AdvancedSettings from './partials/AdvancedSettings.vue';
 
   export default {
     components: {
@@ -128,7 +136,8 @@
       secondarySpinner,
       LabelItemContainer,
       GroupContainer,
-      'compact-picker': Compact
+      'compact-picker': Compact,
+      AdvancedSettings,
     },
     name: 'CampaignConfiguration',
     data () {
@@ -158,6 +167,9 @@
       }
     },
     computed: {
+      canAccessInsertBody() {
+        return this.$can('access_prepend_body', 'access_append_body');
+      },
       editedSettings() {
         return this.$store.getters['campaign/editedSettings'];
       },
@@ -298,7 +310,7 @@
         this.$store.dispatch("config/getConfig", 'global_settings').then(response => {
           this.globalConfig = this.$store.getters["config/config"].global_settings;
           this.enableAutoSave = this.globalConfig.auto_save === '1';
-          this.enablePreheader = this.globalConfig.enable_preheader === '1' && this.campaign.library_config.preheader;
+          this.enablePreheader = this.campaign.library_config.preheader;
           this.enableTitle = this.globalConfig.enable_title === '1';
         }, error => {
           this.$store.commit("global/setLoader", false);

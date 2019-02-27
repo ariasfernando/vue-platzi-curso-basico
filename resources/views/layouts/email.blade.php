@@ -49,7 +49,9 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 	 echo "</he"; ?><?php echo "ad>"; ?>
 
 	<body class="st-email-body">
-		@if (isset($params['library_config']['prependHtml']))
+		@if (isset($params['campaign_data']['prepend_html']) && $params['library_config']['insertBody'])
+			<?php echo $params['campaign_data']['prepend_html']; ?>
+		@elseif (isset($params['library_config']['prependHtml']) && $params['library_config']['insertBody'])
 			<?php echo $params['library_config']['prependHtml']; ?>
 		@endif
 		
@@ -64,7 +66,7 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 				@endif
 			@endif
         @endif
-        @if (config('global_settings.enable_preheader') && isset($params['library_config']['preheader']) && $params['library_config']['preheader'])
+        @if (isset($params['library_config']['preheader']) && $params['library_config']['preheader'])
             @if(isset($params['preheader_preview']))
                     {{-- PREVIEW PREHEADER --}}
                     <div style="font-size:0px; display:none; visibility:hidden; opacity:0; color:transparent; max-height:0px; height:0; width:0; mso-hide:all;">{{$params['preheader_preview'] or ''}}
@@ -84,8 +86,12 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
             {{-- PREHEADER NOT ENABLED, USE DE FACTO FROM MODULES --}}
         @endif
 <?= $params['body_html']; ?>
-		@if (isset($params['library_config']['appendHtml']))
-			<?php echo $params['library_config']['appendHtml']; ?>
+		@if (isset($params['library_config']['insertBody']))
+			@if ($params['library_config']['insertBody'] && isset($params['campaign_data']['append_html']))
+				<?php echo $params['campaign_data']['append_html']; ?>				
+			@elseif ($params['library_config']['insertBody'] && isset($params['library_config']['appendHtml']))
+				<?php echo $params['library_config']['appendHtml']; ?>
+			@endif
 		@endif
 	</body>
 </html>

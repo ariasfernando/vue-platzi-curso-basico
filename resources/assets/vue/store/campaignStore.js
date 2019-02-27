@@ -88,6 +88,8 @@ function campaignStore() {
       modalPreview: false,
       modalProof: false,
       modalProofTrack: false,
+      modalAppendBody: false,
+      modalPrependBody: false,
       modalEnableTemplating: false,
       modalEsp: false,
       modalLiveClicker: false,

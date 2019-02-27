@@ -170,6 +170,10 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
             e.value = href;
             data.href = href;
         }
+        function getSelectionContent() {
+          selectedElm = selection.getNode();
+          return (selectedElm.textContent === selection.getContent()) ? selectedElm.outerHTML : selection.getContent();
+        }
 
         function validateDescription(target){
             var description = target.value;
@@ -189,7 +193,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         }
 
         function isOnlyTextSelected(anchorElm) {
-            var html = selection.getContent();
+            var html = getSelectionContent();
 
             // Partial html and not a fully selected anchor element
             if (/</.test(html) && (!/^<a [^>]+>[^<]+<\/a>$/.test(html) || html.indexOf('href=') == -1)) {
@@ -216,7 +220,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         selectedElm = selection.getNode();
         anchorElm = dom.getParent(selectedElm, 'a[href]');
         onlyText = isOnlyTextSelected();
-        var content = (selectedElm.textContent === selection.getContent()) ? selectedElm.outerHTML : selection.getContent();
+        var content = getSelectionContent();
         data.text = initialText = anchorElm ? (anchorElm.innerText || anchorElm.textContent) : content;
         data.href = anchorElm ? dom.getAttrib(anchorElm, 'href') : '';
         data.dataDescription = anchorElm ? dom.getAttrib(anchorElm, 'data-description') : '';

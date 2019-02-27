@@ -7,8 +7,8 @@
       :collapsable="false" />
     <div class="card card-custom">
       <GroupContainer ref="component-settings-group" class="group-container-custom">
-        <template v-for="(module, moduleId) in modulesFiltered">
-          <template v-for="(row, rowId) in module.structure.rows">
+        <template v-for="(indexedModule) in modulesFiltered">
+          <template v-for="(row, rowId) in indexedModule.structure.rows">
             <template v-for="(column, columnId) in row.columns">
               <template v-for="(component, componentId) in column.components">
                 <Component
@@ -17,7 +17,7 @@
                   :key="`${getElementKey(module.idInstance, component.id)}-plugin-${plugin.name}`"
                   :class="'plugin-' + plugin.name"
                   :element-key="getElementKey(module.idInstance, component.id)"
-                  :element-location="{rowId, columnId, componentId ,moduleId}"
+                  :element-location="{rowId, columnId, componentId,  moduleId: indexedModule.index}"
                   :element="component"
                   :module="module"
                   :current-element-key="currentElementKey"
@@ -52,7 +52,7 @@ export default {
       return this.$store.getters['campaign/modules'];
     },
     modulesFiltered() {
-      return this.modules.filter(module => module.type === 'studio');
+      return this.modules.map((module, index) => ({index, module})).filter(indexedModule => indexedModule.module.type === 'studio');
     },
     currentModule() {
       let module = false;
