@@ -1,15 +1,24 @@
 <template>
-  <stui-input-disabled v-if="disabled" :value="value" />
+  <StuiInputDisabled v-if="disabled" :value="value" />
   <div v-else class="control" :class="{'is-expanded': expanded}">
-    <el-input
+    <ElInput
       v-bind="$attrs"
-      class="stui-input-text"
-      :class="{'is-muted' : isMuted}"
+      class="stui-input stui-input-text"
+      :class="{
+        'is-muted' : isMuted,
+        'is-danger': validationNotif.type === 'error' & validationNotif.show
+      }"
       :value="_value"
       size="mini"
       :disabled="isMuted || inputDisabled"
       @blur="$emit('blur')"
       @change="(value)=>change(value)" />
+    <div
+      v-show="validationNotif.show"
+      class="stui-validation-notif"
+      :class="{'is-danger': validationNotif.type === 'error'}">
+      {{ validationNotif.msg }}
+    </div>
   </div>
 </template>
 
@@ -19,6 +28,7 @@ import muted from '../mixins/muted';
 export default {
   name: 'InputText',
   mixins: [muted],
+  inheritAttrs: false,
   props: {
     value: {
       type: [String, Number, Object, Boolean],
@@ -34,6 +44,12 @@ export default {
     },
     expanded: Boolean,
     inputDisabled: Boolean,
+    validationNotif: {
+      type: Object,
+      default() {
+        return [];
+      },
+    },
   },
   computed: {
     _value() {
@@ -68,16 +84,26 @@ export default {
     border-color: $stui-color-secondary;
   }
 }
-.stui-input-text.is-muted {
-  /deep/ {
-    .el-input__inner,
-    .el-textarea__inner,
-    .el-input.is-disabled .el-input__inner,
-    .el-textarea.is-disabled .el-textarea__inner {
-      background-color: #f5f7fa;
-      border-color: #e4e7ed;
-      color: #c0c4cc;
-      cursor: auto;
+.stui-input-text {
+  &.is-muted {
+    /deep/ {
+      .el-input__inner,
+      .el-textarea__inner,
+      .el-input.is-disabled .el-input__inner,
+      .el-textarea.is-disabled .el-textarea__inner {
+        background-color: #f5f7fa;
+        border-color: #e4e7ed;
+        color: #c0c4cc;
+        cursor: auto;
+      }
+    }
+  }
+  &.is-danger {
+    /deep/ {
+      .el-input__inner,
+      .el-textarea__inner{
+        border-color: $stui-color-danger;
+      }
     }
   }
 }

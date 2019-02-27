@@ -1,6 +1,6 @@
 <template>
   <div class="control" :class="{'is-expanded': expanded}">
-    <el-select
+    <ElSelect
       v-model="localValue"
       class="stui-select"
       v-bind="$attrs"
@@ -8,18 +8,26 @@
       size="mini"
       :multiple="multiple"
       :placeholder="placeholder">
-      <el-option
+      <ElOption
         v-for="(item, index) in list"
         :key="item.value || index"
-        :label="item.label || item"
+        :label="item.label || item.name || item"
+        :disabled="item.disabled || false"
         :value="item.value || item" />
-    </el-select>
+    </ElSelect>
+    <div
+      v-show="validationNotif.show"
+      class="stui-validation-notif"
+      :class="{'is-danger': validationNotif.type === 'error'}">
+      {{ validationNotif.msg }}
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'StuiSelect',
+  inheritAttrs: false,
   props: {
     value: {
       type: [String, Array, Boolean],
@@ -52,6 +60,12 @@ export default {
       default: false,
     },
     expanded: Boolean,
+    validationNotif: {
+      type: Object,
+      default() {
+        return [];
+      },
+    },
   },
   computed: {
     localValue: {
