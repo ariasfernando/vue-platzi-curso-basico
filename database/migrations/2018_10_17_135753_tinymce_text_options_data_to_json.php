@@ -138,7 +138,7 @@ class TinymceTextOptionsDataToJson extends Migration
     }
 
     protected function updateTextOptionsFormat_campaigns() {
-        Campaign::withTrashed()->chunk(100, function ($campaigns) {
+        Campaign::withTrashed()->chunk(20, function ($campaigns) {
             Logging::info('-------------------------');
             Logging::info('CAMPAIGNS');
             Logging::info('-------------------------');
@@ -192,7 +192,7 @@ class TinymceTextOptionsDataToJson extends Migration
     }
 
     protected function updateTextOptionsFormat_modules() {
-        Module::withTrashed()->chunk(100, function ($modules) {
+        Module::withTrashed()->chunk(20, function ($modules) {
             Logging::info('-------------------------');
             Logging::info('STUDIO');
             Logging::info('-------------------------');
