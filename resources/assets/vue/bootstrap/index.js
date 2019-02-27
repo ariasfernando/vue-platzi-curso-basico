@@ -1,14 +1,14 @@
-import _ from 'lodash';
-import customer from 'customer';
-import plugins from '../plugins';
-import stensulUi from '../stensul-ui';
-import filters from '../filters';
-import directives from '../directives';
-import modules from '../modules';
-import fonts from './fonts';
-import utils from '../utils';
-import dictionary from '../resources/dictionary';
 import configService from '../services/config';
+import customer from 'customer';
+import dictionary from '../resources/dictionary';
+import directives from '../directives';
+import filters from '../filters';
+import fonts from './fonts';
+import modules from '../modules';
+import plugins from '../plugins';
+import settingsDefault from '../components/admin/settingsDefault';
+import stensulUi from '../stensul-ui';
+import utils from '../utils';
 
 export default {
   install(Vue) {
@@ -42,6 +42,9 @@ export default {
 
     // Register stensul Ui
     this.initStensulUi();
+
+    // Custom Elements
+    this.initCustomElements();
 
     // Register plugins for studio modules ( module, column and components plugins )
     this.initPlugins();
@@ -184,6 +187,31 @@ export default {
   initStensulUi() {
     this.Vue.prototype.$_app.globalComponents = stensulUi;
     this.initGlobalComponents();
+  },
+  initCustomElements() {
+    // Register Custom Elements
+    this.Vue.prototype.$_app.customElements = {};
+
+    _.each(customer.customElements.default, (element, name) => {
+      this.Vue.component(element.key, element.view);
+      this.Vue.component(element.studioKey, element.studio);
+      delete element.view;
+      delete element.studio;
+
+      if (Object.prototype.hasOwnProperty.call(settingsDefault, element.type)) {
+        if (!element.settings) {
+          element.settings = {};
+        }
+        element.settings = Object.assign({}, element.settings, settingsDefault[element.type]().componentSettings);
+      }
+
+      if (element.settings) {
+        this.Vue.component(`custom-settings-${element.key}`, element.settings);
+        delete element.settings;
+      }
+
+      this.Vue.prototype.$_app.customElements[name] = element;
+    });
   },
   initPlugins() {
     // Register Global Plugins

@@ -132,6 +132,7 @@ module.exports = {
       if (e.from.getAttribute('class') === 'components-list') {
         const componentId = e.newIndex;
         const type = e.clone.getAttribute('data-type');
+        const customType = e.clone.getAttribute('data-custom-type');
 
         // Get element compatible plugins
         const plugins = {};
@@ -142,7 +143,7 @@ module.exports = {
         });
 
         // Create a new Element with default properties
-        const element = new Element({ type, plugins });
+        const element = new Element({ type, plugins, customType });
 
         // Add it to the list
 

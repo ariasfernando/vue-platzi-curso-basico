@@ -52,7 +52,7 @@
             <column-manager :module-id="moduleId" :module="module" :row="row">
               <template slot-scope="{columnData}">
                 <component
-                  :is="component.type"
+                  :is="component.key || component.type"
                   v-for="(component, componentIndex) in columnData.column.components"
                   :key="component.id"
                   :component="component"

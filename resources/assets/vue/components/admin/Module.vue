@@ -41,7 +41,7 @@
                     :column="columnData.column"
                     @select-component="selectComponent">
                     <Component
-                      :is="component.type"
+                      :is="component.studioKey || component.type"
                       v-for="(component, componentId) in columnData.column.components"
                       :key="component.id"
                       :row="row"

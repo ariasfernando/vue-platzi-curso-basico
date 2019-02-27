@@ -32,6 +32,15 @@
             <i class="fa fa-code" aria-hidden="true" />
             <p>Custom Code</p>
           </li>
+          <li
+            v-for="customElement in customElementArray"
+            :key="customElement.key"
+            :data-type="customElement.type"
+            :data-custom-type="customElement.key"
+            class="component-item">
+            <i :class="`fa fa-${customElement.icon ? customElement.icon : 'gears'}`" aria-hidden="true" />
+            <p>{{ customElement.title }}</p>
+          </li>
         </draggable>
       </b-card>
     </b-collapse>
@@ -48,7 +57,6 @@
       LabelItemContainer,
       Draggable,
     },
-
     data() {
       return {
         options: {
@@ -70,6 +78,11 @@
           key: 'dragging',
           value,
         });
+      },
+    },
+    computed: {
+      customElementArray() {
+        return this.$_app.customElements;
       },
     },
   };
