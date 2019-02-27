@@ -361,9 +361,6 @@ const actions = {
   },
   getModuleData(context, moduleId) {
     if (moduleId) {
-      console.log(moduleId);
-      console.log(moduleId);
-      console.log(moduleId);
       return moduleService.getModule(moduleId)
         .then(response => context.commit('setModuleData', response))
         .catch(error => context.commit('error', error));

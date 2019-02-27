@@ -8,18 +8,18 @@
     <div class="card card-custom">
       <GroupContainer ref="component-settings-group" class="group-container-custom">
         <template v-for="(indexedModule) in modulesFiltered">
-          <template v-for="(row, rowId) in indexedModule.structure.rows">
+          <template v-for="(row, rowId) in indexedModule.module.structure.rows">
             <template v-for="(column, columnId) in row.columns">
               <template v-for="(component, componentId) in column.components">
                 <Component
                   :is="'campaign-' + plugin.name"
-                  v-for="(plugin, pluginKey) in componentPluginsFiltered(module, component)"
-                  :key="`${getElementKey(module.idInstance, component.id)}-plugin-${plugin.name}`"
+                  v-for="(plugin, pluginKey) in componentPluginsFiltered(indexedModule.module, component)"
+                  :key="`${getElementKey(indexedModule.module.idInstance, component.id)}-plugin-${plugin.name}`"
                   :class="'plugin-' + plugin.name"
-                  :element-key="getElementKey(module.idInstance, component.id)"
+                  :element-key="getElementKey(indexedModule.module.idInstance, component.id)"
                   :element-location="{rowId, columnId, componentId,  moduleId: indexedModule.index}"
                   :element="component"
-                  :module="module"
+                  :module="indexedModule.module"
                   :current-element-key="currentElementKey"
                   :name="plugin.name"
                   :plugin-key="pluginKey"
@@ -57,8 +57,8 @@ export default {
     currentModule() {
       let module = false;
       _.forEach(this.modulesFiltered, (currentModule) => {
-        if (currentModule.idInstance === this.currentModuleIdInstance) {
-          module = currentModule;
+        if (currentModule.module.idInstance === this.currentModuleIdInstance) {
+          module = currentModule.module;
           return false;
         }
         return true;
