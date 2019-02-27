@@ -281,20 +281,6 @@ describe('== Campaign Store ==', () => {
       done();
     });
     xit('"setToggleImageEditor"', () => {});
-    it('"setToggleModuleSettings" and expect of set "showModuleSettings" state to true', (done) => {
-      let toggleValue = true;
-
-      store.commit('campaign/setToggleModuleSettings', toggleValue);
-
-      let stateShowModuleSettings = store.state.campaign.showModuleSettings;
-
-      expect(stateShowModuleSettings).toBeTruthy();
-
-      toggleValue = null;
-      stateShowModuleSettings = null;
-
-      done();
-    });
     xit('"addModule"', () => {});
     it('"insertModule" expect to insert a module in "modules" state, in index 0', (done) => {
       let objModule = {
@@ -532,45 +518,6 @@ describe('== Campaign Store ==', () => {
 
       done();
     });
-    it('"setCurrentComponent" with data, expect to set the "currentComponent" state', (done) => {
-      let data = { moduleId: 0, columnId: 0, componentId: 0 };
-
-      store.commit('campaign/setCurrentComponent', data);
-
-      let stateCurrentComponent = store.state.campaign.currentComponent;
-
-      expect(stateCurrentComponent).toEqual(data);
-
-      data = null;
-      stateCurrentComponent = null;
-
-      done();
-    });
-    it('"unsetCurrentComponent" , expect to clean the "currentComponent" state', (done) => {
-      store.commit('campaign/unsetCurrentComponent');
-
-      let stateCurrentComponent = store.state.campaign.currentComponent;
-
-      expect(stateCurrentComponent).toBeEmptyObject();
-
-      stateCurrentComponent = null;
-
-      done();
-    });
-    it('"setActiveModule" with moduleId, expect to set "activeModule" state with a index of module', (done) => {
-      let data = 0;
-
-      store.commit('campaign/setActiveModule', data);
-
-      let stateActiveModule = store.state.campaign.activeModule;
-
-      expect(stateActiveModule).toEqual(0);
-
-      data = null;
-      stateActiveModule = null;
-
-      done();
-    });
     it('"unsetActiveModule", expect to remove of "activeModule" state the data', (done) => {
       store.commit('campaign/unsetActiveModule');
 
@@ -582,92 +529,7 @@ describe('== Campaign Store ==', () => {
 
       done();
     });
-    it('"setActiveLastModule", expect to set "activeModule" state with a index of last module', (done) => {
-      let modulesData = [{
-        _id: '5b3ce34792f8ef00137bb105',
-        type: 'virtual',
-        key: 'text_458798',
-        name: 'text',
-        structure: {},
-        plugins: {},
-        status: 'publish',
-        updated_at: '2018-08-03 16:09:09',
-        created_at: '2018-07-04 11:09:59',
-        isFixed: true,
-        fixedPosition: 0,
-        mandatory: true,
-      },
-      {
-        _id: '5b64bf6602a4cd00122d0353',
-        type: 'studio',
-        key: 'banner',
-        name: 'banner',
-        structure: {},
-        plugins: {},
-        status: 'publish',
-        updated_at: '2018-08-04 12:41:49',
-        created_at: '2018-08-03 16:47:34',
-        isFixed: false,
-        mandatory: false,
-        data: [],
-        idInstance: 860980,
-      },
-      {
-        _id: '5b64bb6902a4cd00153af972',
-        type: 'studio',
-        key: 'body',
-        name: 'body',
-        structure: {},
-        plugins: {},
-        status: 'publish',
-        updated_at: '2018-08-03 16:30:33',
-        created_at: '2018-08-03 16:30:33',
-        isFixed: false,
-        mandatory: false,
-        data: [],
-        idInstance: 169033,
-      },
-      {
-        _id: '5b64b74a02a4cd000d42aad2',
-        type: 'studio',
-        key: 'untitled_module',
-        name: 'text image',
-        structure: {},
-        plugins: {},
-        status: 'publish',
-        updated_at: '2018-08-04 12:42:51',
-        created_at: '2018-08-03 16:12:58',
-        data: [],
-        idInstance: 567456,
-      },
-      {
-        _id: '5b64b94002a4cd0013159bf2',
-        type: 'studio',
-        key: 'image_text',
-        name: 'image text',
-        structure: {},
-        plugins: {},
-        status: 'publish',
-        updated_at: '2018-08-04 12:42:15',
-        created_at: '2018-08-03 16:21:20',
-        data: [],
-        idInstance: 278717,
-      }];
-
-      store.commit('campaign/updateEmailCanvas', modulesData);
-      store.commit('campaign/setActiveLastModule');
-
-      let stateActiveModule = store.state.campaign.activeModule;
-
-      expect(stateActiveModule).toEqual(4);
-
-      modulesData = null;
-      stateActiveModule = null;
-
-      done();
-    });
-    xit('"saveComponent" with data, expect to save the component data', () => {});
-    it('"savePlugin" with data, expect to save or update the data of plugin', (done) => {
+    it('"savePluginDeprecate" with data, expect to save or update the data of plugin', (done) => {
       let payload = {
         plugin: 'styleImageEditor',
         moduleId: 0,
@@ -780,13 +642,15 @@ describe('== Campaign Store ==', () => {
       };
       let modulesData = [{
         structure: {
-          columns: [{
-            components: [{
-              plugins: {
-                styleImageEditor: {
-                  data: {},
+          rows: [{
+            columns: [{
+              components: [{
+                plugins: {
+                  styleImageEditor: {
+                    data: {},
+                  },
                 },
-              },
+              }],
             }],
           },
           ],
@@ -794,9 +658,9 @@ describe('== Campaign Store ==', () => {
       }];
 
       store.commit('campaign/updateEmailCanvas', modulesData);
-      store.commit('campaign/savePlugin', payload);
+      store.commit('campaign/savePluginDeprecate', payload);
 
-      let stateModulesPlugin = store.state.campaign.modules[payload.moduleId].structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data;
+      let stateModulesPlugin = store.state.campaign.modules[payload.moduleId].structure.rows[0].columns[payload.columnId].components[payload.componentId].plugins[payload.plugin].data;
       let stateDirty = store.state.campaign.dirty;
 
       expect(stateModulesPlugin).toEqual(payload.data);
@@ -879,82 +743,6 @@ describe('== Campaign Store ==', () => {
 
       done();
     });
-    xit('"saveComponentAttribute" ,', () => {});
-    it('"saveColumnAttribute" with data, to expect to update the attribute', (done) => {
-      let data = {
-        plugin: 'columnBackgroundColor',
-        moduleId: 0,
-        columnId: 0,
-        attribute: 'bgcolor',
-        attributeValue: '#000000',
-      };
-      let modulesData = [{
-        structure: {
-          columns: [{
-            container: {
-              attribute: {
-                width: '50%',
-                valign: 'middle',
-                bgcolor: '#B01F1F',
-              },
-            },
-          },
-          ],
-        },
-      }];
-
-      store.commit('campaign/updateEmailCanvas', modulesData);
-      store.commit('campaign/saveColumnAttribute', data);
-
-      let stateModulescomponent = store.state.campaign.modules[data.moduleId].structure.columns[data.columnId].container.attribute;
-
-      expect(stateModulescomponent).toHaveProperty(data.attribute, data.attributeValue);
-
-      data = null;
-
-      modulesData = null;
-      stateModulescomponent = null;
-
-      done();
-    });
-    it('"saveColumnAttribute" with data, to expect insert a new attribute', (done) => {
-      let data = {
-        plugin: 'columnBackgroundColor',
-        moduleId: 0,
-        columnId: 0,
-        attribute: 'bgcolor',
-        attributeValue: '#B01F1F',
-      };
-      let modulesData = [{
-        structure: {
-          columns: [{
-            container: {
-              attribute: {
-                width: '50%',
-                valign: 'middle',
-              },
-            },
-          },
-          ],
-        },
-      }];
-
-      store.commit('campaign/updateEmailCanvas', modulesData);
-      store.commit('campaign/saveColumnAttribute', data);
-
-      let stateModulescomponent = store.state.campaign.modules[data.moduleId].structure.columns[data.columnId].container.attribute;
-
-      expect(stateModulescomponent).toHaveProperty(data.attribute, data.attributeValue);
-
-      data = null;
-
-      modulesData = null;
-      stateModulescomponent = null;
-
-      done();
-    });
-    xit('"saveModuleAttribute" , ', () => {});
-    xit('"saveModuleData" ,', () => {});
     it('"saveCustomModuleData" with data, to expect save the data', (done) => {
       let data = {
         moduleId: 0,
@@ -991,20 +779,6 @@ describe('== Campaign Store ==', () => {
     xit('"saveCustomModuleDataField"', () => {});
     xit('"saveCustomModuleParamsField"', () => {});
     xit('"setEditorOptions"', () => {});
-    it('"setCurrentModule with moduleId, expect to set value de current module"', (done) => {
-      let moduleId = 0;
-
-      store.commit('campaign/setCurrentModule', moduleId);
-
-      let stateCurrentModuleId = store.state.campaign.currentModuleId;
-
-      expect(stateCurrentModuleId).toEqual(moduleId);
-
-      moduleId = null;
-      stateCurrentModuleId = null;
-
-      done();
-    });
     it('"unsetCurrentModule, expect to set value to undefined"', (done) => {
       let moduleId = 0;
 
@@ -5109,10 +4883,6 @@ describe('== Campaign Store ==', () => {
     });
     it('"fieldErrors" expect to get the fieldErrors values', (done) => {
       expect(campStore.getters.fieldErrors).toEqual(campStore.state.fieldErrors);
-      done();
-    });
-    it('"currentComponent" expect to get the currentComponent values', (done) => {
-      expect(campStore.getters.currentComponent).toEqual(campStore.state.currentComponent);
       done();
     });
     it('"currentCustomComponent" expect to get the currentCustomComponent values', (done) => {

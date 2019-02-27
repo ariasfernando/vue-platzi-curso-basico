@@ -1,9 +1,9 @@
-
-<template />
+<template>
+</template>
 
 <script>
-import contrast from 'contrast';
 import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
+import contrast from 'contrast';
 
 export default {
   mixins: [pluginCampaignMixin],
