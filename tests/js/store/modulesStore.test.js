@@ -3,4 +3,5 @@
 
 describe('== Module Store ==', () => {
   require('./includes/modules/mutations.js');
+  require('./includes/modules/actions.js');
 });

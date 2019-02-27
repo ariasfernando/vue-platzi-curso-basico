@@ -136,7 +136,8 @@
     },
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/resources/assets/vue/$1",
-      "customer(.*)$": "<rootDir>/stensul/customer/resources/assets/vue/$1"
+      "customer(.*)$": "<rootDir>/stensul/customer/resources/assets/vue/$1",
+      "unit(.*)$": "<rootDir>/tests/js/$1"
     },
     "modulePaths": [
       "<rootDir>/node_modules",
