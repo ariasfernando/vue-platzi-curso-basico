@@ -60,6 +60,7 @@
                   :module="module"
                   :element="component"
                   :column-id="columnData.columnId"
+                  :row-index="rowIndex"
                   :component-id="componentIndex"
                   :row="row"
                   @select-component="selectComponent" />

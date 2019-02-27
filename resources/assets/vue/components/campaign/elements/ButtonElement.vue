@@ -1,10 +1,11 @@
 <template>
   <element-container :component="component" @select-component="selectComponentHandler">
-    <button-border-radius-comment
+    <ButtonBorderRadiusComment
       v-if="hasBorderRadius"
       :component="component"
       :module="module"
       :module-id="moduleId"
+      :row-index="rowIndex"
       :column-id="columnId"
       :component-id="componentId"
       :editor-id="`idInstance-${module.idInstance}-componentId-${component.id}`" />

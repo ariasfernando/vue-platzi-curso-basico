@@ -42,9 +42,9 @@ export default {
       if (this.component.container.attribute.bgcolor) {
         return this.component.container.attribute.bgcolor;
       } else if (
-        this.module.structure.columns[this.columnId].container.attribute.bgcolor
+        this.module.structure.rows[this.rowIndex].columns[this.columnId].container.attribute.bgcolor
       ) {
-        return this.module.structure.columns[this.columnId].container.attribute
+        return this.module.structure.rows[this.rowIndex].columns[this.columnId].container.attribute
           .bgcolor;
       }
       return this.module.structure.attribute.bgcolor;
