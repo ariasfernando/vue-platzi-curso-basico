@@ -1,9 +1,13 @@
+/* develblock:start */
+/* eslint-disable import/no-unresolved */
+/* develblock:end */
 /* eslint no-param-reassign:0 */
 /* eslint no-shadow:0 */
 /* eslint no-console:0 */
 
 import Vue from 'vue';
 import Q from 'q';
+import mocks from 'unit/mocks';
 import Element from '../models/Element';
 import moduleService from '../services/module';
 import imageService from '../services/image';
@@ -169,9 +173,6 @@ const getters = {
 };
 
 const mutations = {
-  setSecondaryLoader(state, data) {
-    state.secondaryLoading = data;
-  },
   setModuleData(state, data) {
     Vue.set(state, 'module', data);
   },
@@ -294,7 +295,6 @@ const actions = {
   addRow(context) {
     const plugins = {};
     const modulePlugins = Vue.prototype.$_app.modulePlugins;
-
     _.each(modulePlugins, (plugin, name) => {
       switch (plugin.target.indexOf('row') !== -1) {
         case true:
@@ -303,7 +303,21 @@ const actions = {
         default:
       }
     });
-    const element = new Element({ type: 'row-element', plugins });
+    let element = {};
+    /* develblock:start */
+    if (process.env.NODE_ENV === 'test') {
+      /* eslint-disable-next-line global-require */
+      element = require('@/models/Element').__setMockFiles({
+        properties: {
+          ...mocks.row0,
+        },
+      });
+    } else {
+    /* develblock:end */
+      element = new Element({ type: 'row-element', plugins });
+    /* develblock:start */
+    }
+    /* develblock:end */
     context.commit('addRow', { row: element.getProperties() });
   },
   addColumn(context, { rowId }) {
@@ -315,8 +329,22 @@ const actions = {
         plugins[name] = _.cloneDeep(plugin);
       }
     });
-    const column = new Element({ type: 'column-element', plugins }).getProperties();
-    context.commit('addColumn', { column, rowId });
+    let column = {};
+    /* develblock:start */
+    if (process.env.NODE_ENV === 'test') {
+      /* eslint-disable-next-line global-require */
+      column = require('@/models/Element').__setMockFiles({
+        properties: {
+          ...mocks.column1,
+        },
+      });
+    } else {
+    /* develblock:end */
+      column = new Element({ type: 'column-element', plugins });
+    /* develblock:start */
+    }
+    /* develblock:end */
+    context.commit('addColumn', { column: column.getProperties(), rowId });
   },
   normalizeColumns(context, { rowId }) {
     const columns = getElement(context.state.module, rowId).columns;
@@ -333,13 +361,15 @@ const actions = {
   },
   getModuleData(context, moduleId) {
     if (moduleId) {
+      console.log(moduleId);
+      console.log(moduleId);
+      console.log(moduleId);
       return moduleService.getModule(moduleId)
         .then(response => context.commit('setModuleData', response))
         .catch(error => context.commit('error', error));
     }
     return moduleService.newModule()
-      .then(response => context.commit('setModuleData', response))
-      .catch(error => context.commit('error', error));
+      .then(response => context.commit('setModuleData', response));
   },
   saveModuleData(context, data) {
     const deferred = Q.defer();
@@ -347,7 +377,7 @@ const actions = {
     moduleService.saveModule(data)
       .then((response) => {
         if (response.message && response.message === 'SUCCESS') {
-          context.commit('setModuleFields', {moduleId: response.id});
+          context.commit('setModuleFields', { moduleId: response.id });
           deferred.resolve(response.id);
         }
       })

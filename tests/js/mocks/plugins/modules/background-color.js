@@ -8,6 +8,7 @@ export default {
     'divider',
     'image',
     'text',
+    'row',
   ],
   config: {
     defaultValue: '#ffffff',

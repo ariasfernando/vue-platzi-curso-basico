@@ -11,8 +11,8 @@ class Element {
 
     const defaultProperties = {
       id: Math.floor(100000 + (Math.random() * 900000)),
-      ..._.cloneDeep(elements[properties.type])
-    }
+      ..._.cloneDeep(elements[properties.type]),
+    };
     this.properties = {
       ...defaultProperties,
       ...properties,
