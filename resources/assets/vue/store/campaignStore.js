@@ -4,7 +4,6 @@ import Vue from 'vue';
 import {
   defer,
 } from 'q';
-import clone from 'clone';
 import campaignService from '../services/campaign';
 import imageService from '../services/image';
 
@@ -239,7 +238,7 @@ function campaignStore() {
       saveCampaignData(state, payload) {
         const update = {};
         update[payload.name] = payload.value;
-        const newData = _.extend(clone(state.campaign.campaign_data), update);
+        const newData = _.extend(_.cloneDeep(state.campaign.campaign_data), update);
 
         state.campaign.campaign_data = newData;
       },
@@ -304,14 +303,6 @@ function campaignStore() {
         const pluginOption = searchOrCreateLevel(pluginData, pathArray);
         Vue.set(pluginOption.data, pluginOption.property, value);
       },
-      saveComponentProperty(state, data) {
-        // DEPRECATE, use saveElementProperty
-        const component = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId];
-        const subComponent = data.subComponent ? component[data.subComponent] : component;
-        const properties = data.link ? subComponent[data.link] : subComponent;
-        Vue.set(properties, data.property, data.value);
-        this.commit('campaign/setDirty', true);
-      },
       saveModuleData(state, data) {
         // TODO: Migrate saveCustomModuleData to this method
         // Prevent empty arrays returned by php-mongo
@@ -320,7 +311,7 @@ function campaignStore() {
         }
 
         // This workaround is because Vue cannot react on changes when you set an item inside an array with its index
-        const newData = _.extend(clone(state.modules[data.moduleId].data), data.data);
+        const newData = _.extend(_.cloneDeep(state.modules[data.moduleId].data), data.data);
         state.modules[data.moduleId].data = newData;
         this.commit('campaign/setDirty', true);
       },
@@ -331,7 +322,7 @@ function campaignStore() {
         }
 
         // This workaround is because Vue cannot react on changes when you set an item inside an array with its index
-        const newData = _.extend(clone(state.modules[data.moduleId].data), data.data);
+        const newData = _.extend(_.cloneDeep(state.modules[data.moduleId].data), data.data);
         Vue.set(state.modules[data.moduleId], 'data', newData);
         this.commit('campaign/setDirty', true);
       },
@@ -364,9 +355,9 @@ function campaignStore() {
           state.modules[data.moduleId].data[data.field][data.index] = {};
         }
 
-        const newData = _.extend(clone(state.modules[data.moduleId].data[data.field][data.index]), data.value);
+        const newData = _.extend(_.cloneDeep(state.modules[data.moduleId].data[data.field][data.index]), data.value);
         state.modules[data.moduleId].data[data.field][data.index] = newData;
-        state.modules[data.moduleId].data[data.field] = clone(state.modules[data.moduleId].data[data.field]);
+        state.modules[data.moduleId].data[data.field] = _.cloneDeep(state.modules[data.moduleId].data[data.field]);
         this.commit('campaign/setDirty', true);
       },
       saveCustomModuleDataField(state, data) {
@@ -383,7 +374,7 @@ function campaignStore() {
         }
 
         if ('merge' in data && data.merge === true) {
-          const newData = _.extend(clone(state.modules[data.moduleId].data[data.field]), data.value);
+          const newData = _.extend(_.cloneDeep(state.modules[data.moduleId].data[data.field]), data.value);
           state.modules[data.moduleId].data[data.field] = newData;
         } else {
           state.modules[data.moduleId].data[data.field] = data.value;
@@ -400,7 +391,7 @@ function campaignStore() {
           Vue.set(state.modules[param.moduleId].params, param.field, {});
         }
         if ('merge' in param && param.merge === true) {
-          const newParams = _.extend(clone(state.modules[param.moduleId].params[param.field]), param.value);
+          const newParams = _.extend(_.cloneDeep(state.modules[param.moduleId].params[param.field]), param.value);
           Vue.set(state.modules[param.moduleId].params, param.field, newParams);
         } else {
           Vue.set(state.modules[param.moduleId].params, param.field, param.value);
