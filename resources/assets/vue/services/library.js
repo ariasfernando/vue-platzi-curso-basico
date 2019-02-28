@@ -164,10 +164,13 @@ export default {
   },
 
   espProviders() {
-    const endpoint = endpoints.library.espProviders;
+    const endpoint = endpoints.config.getConfig;
     const deferred = Q.defer();
     const params = {
-      path: 'library.espProviders',
+      path: 'config.getConfig',
+      search: {
+        key: 'esp',
+      },
       endpoint,
     };
 
