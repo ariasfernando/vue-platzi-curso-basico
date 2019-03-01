@@ -9,15 +9,3 @@ $stui-label-color: #333;
 $stui-disabled-color: #c0c4cc;
 $stui-disabled-border-color: #e4e7ed;
 $stui-disabled-background: #f5f7fa;
-
-
-
-// common
-.stui-validation-notif {
-  font-size: 10px;
-  font-weight: 300;
-
-  &.is-danger {
-    color: $stui-color-danger;
-  }
-}

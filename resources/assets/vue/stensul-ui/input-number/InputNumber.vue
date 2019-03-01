@@ -1,27 +1,28 @@
 <template>
   <StuiInputDisabled v-if="disabled" :value="value" :false-text="falseText" />
-  <div v-else class="control" :class="{'is-expanded': expanded}">
-    <ElInputNumber
-      v-bind="$attrs"
-      class="stui-input stui-input-number"
-      :class="{
-        'is-muted' : isMuted,
-        'is-danger': validationNotif.type === 'error' & validationNotif.show
-      }"
-      :value="Number(value)"
-      size="mini"
-      :controls="true"
-      controls-position="right"
-      :disabled="isMuted || inputDisabled"
-      @blur="$emit('blur')"
-      @change="(value)=>change(value)" />
-    <div
-      v-show="validationNotif.show"
-      class="stui-validation-notif"
-      :class="{'is-danger': validationNotif.type === 'error'}">
-      {{ validationNotif.msg }}
+  <StuiField
+    v-else
+    vertical
+    :class="{'is-expanded': expanded}">
+    <div class="control">
+      <ElInputNumber
+        v-bind="$attrs"
+        class="stui-input-number"
+        :class="{
+          'is-muted' : isMuted,
+          'is-danger': validationNotif.type === 'error' & validationNotif.show
+        }"
+        :value="Number(value)"
+        size="mini"
+        :controls="true"
+        controls-position="right"
+        :disabled="isMuted || inputDisabled"
+        @blur="handleBlur"
+        @input="handleInput"
+        @change="handleChange" />
     </div>
-  </div>
+    <StuiNotif v-if="validationNotif.show" :value="validationNotif" />
+  </StuiField>
 </template>
 
 <script>
@@ -49,13 +50,18 @@ export default {
     validationNotif: {
       type: Object,
       default() {
-        return [];
+        return {};
       },
     },
   },
   methods: {
-    change(value) {
+    handleBlur(value) {
+      this.$emit('blur', value);
+    },
+    handleInput(value) {
       this.$emit('input', value);
+    },
+    handleChange(value) {
       this.$emit('change', value);
     },
   },

@@ -1,25 +1,26 @@
 <template>
   <StuiInputDisabled v-if="disabled" :value="value" />
-  <div v-else class="control" :class="{'is-expanded': expanded}">
-    <ElInput
-      v-bind="$attrs"
-      class="stui-input stui-input-text"
-      :class="{
-        'is-muted' : isMuted,
-        'is-danger': validationNotif.type === 'error' & validationNotif.show
-      }"
-      :value="_value"
-      size="mini"
-      :disabled="isMuted || inputDisabled"
-      @blur="$emit('blur')"
-      @change="(value)=>change(value)" />
-    <div
-      v-show="validationNotif.show"
-      class="stui-validation-notif"
-      :class="{'is-danger': validationNotif.type === 'error'}">
-      {{ validationNotif.msg }}
+  <StuiField
+    v-else
+    vertical
+    :class="{'is-expanded': expanded}">
+    <div class="control">
+      <ElInput
+        :value="_value"
+        v-bind="$attrs"
+        class="stui-input-text"
+        :class="{
+          'is-muted' : isMuted,
+          'is-danger': validationNotif.type === 'error' & validationNotif.show
+        }"
+        size="mini"
+        :disabled="isMuted || inputDisabled"
+        @blur="handleBlur"
+        @input="handleInput"
+        @change="handleChange" />
     </div>
-  </div>
+    <StuiNotif v-if="validationNotif.show" :value="validationNotif" />
+  </StuiField>
 </template>
 
 <script>
@@ -47,7 +48,7 @@ export default {
     validationNotif: {
       type: Object,
       default() {
-        return [];
+        return {};
       },
     },
   },
@@ -60,8 +61,13 @@ export default {
     },
   },
   methods: {
-    change(value) {
+    handleBlur(value) {
+      this.$emit('blur', value);
+    },
+    handleInput(value) {
       this.$emit('input', value);
+    },
+    handleChange(value) {
       this.$emit('change', value);
     },
   },
@@ -101,7 +107,7 @@ export default {
   &.is-danger {
     /deep/ {
       .el-input__inner,
-      .el-textarea__inner{
+      .el-textarea__inner {
         border-color: $stui-color-danger;
       }
     }
