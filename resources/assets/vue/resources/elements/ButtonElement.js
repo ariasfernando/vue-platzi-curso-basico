@@ -28,7 +28,7 @@ function buttonDefault() {
         paddingRight: '15px',
       },
       styleOption: {
-        autoWidth: false,
+        autoWidth: true,
         isNormalLetterSpacing: false,
       },
       attribute: {
