@@ -81,7 +81,7 @@ export default {
   computed: {
     columnsFixed() {
       if (this.row.columnsStacking === 'columnsFixed') {
-        return this.module.structure.columns;
+        return this.row.columns;
       }
       return [];
     },

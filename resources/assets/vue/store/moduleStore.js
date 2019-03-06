@@ -45,7 +45,7 @@ const getColumnIndexByElementId = (module, elementId) => {
   });
   return columnIndex;
 };
-const getComponentIndexByComponentId = (module, elementId) => {
+const getComponentIndexByElementId = (module, elementId) => {
   let componentIndex = false;
   _.forEach(module.structure.rows, (row) => {
     _.forEach(row.columns, (column) => {
@@ -145,7 +145,7 @@ const getters = {
   currentComponent(state) {
     if (state.currentElementId) {
       let columnIndex = getColumnIndexByElementId(state.module, state.currentElementId);
-      let componentIndex = getComponentIndexByComponentId(state.module, state.currentElementId);
+      let componentIndex = getComponentIndexByElementId(state.module, state.currentElementId);
       columnIndex = columnIndex === false ? undefined : columnIndex;
       componentIndex = componentIndex === false ? undefined : componentIndex;
       return {
@@ -263,7 +263,7 @@ const mutations = {
     state.module.structure.rows[rowIndex].columns[
       columnIndex
     ].components.splice(
-      getComponentIndexByComponentId(state.module, elementId),
+      getComponentIndexByElementId(state.module, elementId),
       1,
     );
     // Set active the column that that contained the element.

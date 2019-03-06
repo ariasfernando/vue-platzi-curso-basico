@@ -99,14 +99,14 @@ export default {
         const data = JSON.parse(JSON.stringify(this.module.data));
         data[this.moduleDataKey][this.moduleDataIndex][property] = value;
         this.$store.commit('campaign/saveCustomModuleData', {
-          moduleId: this.currentCustomModule,
+          moduleId: this.moduleId,
           data,
         });
       } else {
         const data = {};
         data[property] = value;
         this.$store.commit('campaign/saveCustomModuleData', {
-          moduleId: this.currentCustomModule,
+          moduleId: this.moduleId,
           data,
         });
       }

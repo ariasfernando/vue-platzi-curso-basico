@@ -61,11 +61,5 @@ import SettingContainerMixin from '../mixins/SettingContainerMixin';
 
 export default {
   mixins: [SettingContainerMixin],
-  computed: {
-    hasMoreThanOneColumn() {
-      // This is used in a dependOn in a module setting.
-      return this.module.structure.columns.length > 1;
-    },
-  },
 };
 </script>

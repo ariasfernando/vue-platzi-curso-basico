@@ -14,7 +14,7 @@
       :style="_.get(this.module,'structure.style')"
       :valign="_.get(this.module,'structure.attribute.valign','top')"
       :bgcolor="_.get(this.module,'structure.attribute.bgcolor')"
-      @mousedown="onClickModule">
+      @mousedown.stop="onClickModule">
       <component :is="'custom-' + module.key" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId" v-if="!module.data.hideToolbar"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
@@ -39,7 +39,7 @@
       :valign="module.structure.attribute.valign || 'top'"
       :bgcolor="module.structure.attribute.bgcolor"
       :class=" { 'stx-show-error': hasErrors, [module.structure.attribute.classes]:module.structure.attribute.classes}"
-      @mousedown="onClickModule">
+      @mousedown.stop="onClickModule">
       <background-image :element="module.structure" :key='modulebackgroundImage' :width="templateInnerWidth">
         <template :slot="modulebackgroundImage ? 'with-background-image': 'without-background-image' ">
           <RowContainer

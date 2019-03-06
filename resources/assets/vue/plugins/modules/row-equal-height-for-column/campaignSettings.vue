@@ -57,24 +57,24 @@ export default {
       };
     },
     addClassEqualHeight() {
-      _.each(this.module.structure.columns, (column) => {
+      _.each(this.row.columns, (column) => {
           this.addClassToElement({ value: 'st-equal-height', elementId: column.id });
       });
     },
-    getImagesUrls(module) {
+    getImagesUrls() {
       const imagesUrls = [];
-      for (const columnId in module.structure.columns) {
-        const column = module.structure.columns[columnId];
+      for (const columnId in this.row.columns) {
+        const column = this.row.columns[columnId];
         for (const componentId in column.components) {
-          if (module.structure.columns[columnId].components[componentId].type === 'image-element') {
-            imagesUrls.push(module.structure.columns[columnId].components[componentId].image.attribute.placeholder);
+          if (this.row.columns[columnId].components[componentId].type === 'image-element') {
+            imagesUrls.push(this.row.columns[columnId].components[componentId].image.attribute.placeholder);
           }
         }
       }
       return imagesUrls;
     },
     setImagesUrls() {
-      this.previousImagesUrls = _.cloneDeep(this.getImagesUrls(this.module));
+      this.previousImagesUrls = _.cloneDeep(this.getImagesUrls());
     },
     getVerticalBorderAndPadding(columnIndex) {
       const column = this.getElement(this.element.id).columns[columnIndex];

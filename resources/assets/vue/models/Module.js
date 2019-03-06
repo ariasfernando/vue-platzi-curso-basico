@@ -58,7 +58,6 @@ function Module(data = {}) {
   this.plugins = _.merge(getPlugins(), data.plugins);
 
   this.structure = {
-    columnsStacking: data.structure ? data.structure.columnsStacking : 'normal',
     attribute: data.structure ? data.structure.attribute : {},
     mobileClasses: data.mobileClasses || [],
     style: data.structure ? data.structure.style : {},

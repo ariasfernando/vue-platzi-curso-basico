@@ -66,7 +66,6 @@
 
 <script>
 import clone from 'clone';
-import _ from 'lodash';
 import Draggable from 'vuedraggable';
 import BackToTop from '../common/BackToTop.vue';
 import Module from './Module.vue';
@@ -222,11 +221,6 @@ export default {
       const mod = clone(found);
       this.addModule(mod, e.newIndex);
 
-      this.$store.commit('campaign/setCurrentModuleIdInstance', moduleData.idInstance);
-      this.$store.commit(
-        'campaign/setCurrentElementId',
-        mod.structure.rows[0].columns[0].components[0].id
-      );
       // Remove ghost element
       const cloneItem = e.item;
       cloneItem.parentNode.removeChild(cloneItem);

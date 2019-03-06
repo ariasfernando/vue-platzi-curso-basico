@@ -23,9 +23,6 @@ export default {
     isCustom() {
       return this.module.type !== 'studio';
     },
-    currentCustomModule() {
-      return this.$store.getters['campaign/currentCustomModule'];
-    },
     libraryConfig() {
       return this.$store.state.campaign.campaign.library_config;
     },
@@ -66,10 +63,10 @@ export default {
       };
       this.$store.commit('campaign/saveElementPluginData', payload);
     },
-    saveElementInThisPluginData({ type, path, value }) {
+    saveElementInThisPluginData({ type, path, value, plugin }) {
       const payload = {
         elementId: this.element.id,
-        plugin: this.name,
+        plugin: _.camelCase(this.name),
         type,
         path,
         value,
@@ -107,39 +104,120 @@ export default {
       };
       return this.module.data[elementId];
     },
-    getColumnIndexByComponentId(elementId) {
+    getColumnIndexByelementId(elementId) {
       if (!this.isCustom) {
         let columnIndex = false;
-        _.forEach(
-          this.module.structure.columns,
-          (column, currentColumnIndex) => {
-            _.forEach(column.components, (currentComponent) => {
-              if (currentComponent.id === elementId) {
+        _.forEach(this.module.structure.rows, (row) => {
+          _.forEach(row.columns, (column, currentColumnIndex) => {
+              if (column.id === elementId) {
                 columnIndex = currentColumnIndex;
                 return false;
               }
+              _.forEach(column.components, (currentComponent) => {
+                if (currentComponent.id === elementId) {
+                  columnIndex = currentColumnIndex;
+                  return false;
+                }
+              });
+              return columnIndex === false;
             });
-            return columnIndex === false;
-          },
-        );
+          return columnIndex === false;
+        });
         return columnIndex;
       }
       return undefined;
     },
-    getComponentIndexByComponentId(elementId) {
+    getColumnByElementId(elementId) {
       if (!this.isCustom) {
-        let componentIndex = false;
-        _.forEach(this.module.structure.columns, (column) => {
-          _.forEach(
-            column.components,
-            (currentComponent, currentComponentIndex) => {
+        let column = false;
+        _.forEach(this.module.structure.rows, (row) => {
+          _.forEach(row.columns, (CurrentColumn) => {
+            if (CurrentColumn.id === elementId) {
+              column = CurrentColumn;
+              return false;
+            }
+            _.forEach(CurrentColumn.components, (currentComponent) => {
               if (currentComponent.id === elementId) {
-                componentIndex = currentComponentIndex;
+                column = CurrentColumn;
                 return false;
               }
-            },
-          );
-          return componentIndex === false;
+            });
+            return column === false;
+          });
+          return column === false;
+        });
+        return column;
+      }
+      return undefined;
+    },
+    getRowByElementId(elementId) {
+      if (!this.isCustom) {
+        let row = false;
+        _.forEach(this.module.structure.rows, (currentRow) => {
+          if (currentRow.id === elementId) {
+            row = currentRow;
+            return false;
+          }
+          _.forEach(currentRow.columns, (currentColumn) => {
+            if (currentColumn.id === elementId) {
+              row = currentRow;
+              return false;
+            }
+            _.forEach(currentColumn.components, (currentComponent) => {
+              if (currentComponent.id === elementId) {
+                row = currentRow;
+                return false;
+              }
+            });
+            return row === false;
+          });
+          return row === false;
+        });
+        return row;
+      }
+      return undefined;
+    },
+    getRowIndexByElementId(elementId) {
+      if (!this.isCustom) {
+        let rowIndex = false;
+        _.forEach(this.module.structure.rows, (currentRow, currentRowIndex) => {
+          if (currentRow.id === elementId) {
+            rowIndex = currentRowIndex;
+            return false;
+          }
+          _.forEach(row.columns, (currentColumn) => {
+            if (currentColumn.id === elementId) {
+              rowIndex = currentRowIndex;
+              return false;
+            }
+            _.forEach(currentColumn.components, (currentComponent) => {
+              if (currentComponent.id === elementId) {
+                rowIndex = currentRowIndex;
+                return false;
+              }
+            });
+            return rowIndex === false;
+          });
+          return rowIndex === false;
+        });
+        return rowIndex;
+      }
+      return undefined;
+    },
+    getComponentIndexByElementId(elementId) {
+      if (!this.isCustom) {
+        let componentIndex = false;
+        _.forEach(this.module.structure.rows, (row) => {
+          _.forEach(row.columns, (column) => {
+            _.forEach(column.components, (currentComponent, currentComponentIndex) => {
+                if (currentComponent.id === elementId) {
+                  componentIndex = currentComponentIndex;
+                  return false;
+                }
+              });
+              return componentIndex === false;
+            });
+            return componentIndex === false;
         });
         return componentIndex;
       }

@@ -31,7 +31,7 @@
             <module-background-settings />
             <component-settings />
             <row-settings />
-            <custom-module-settings v-if="currentCustomModule" />
+            <custom-module-settings />
             <shadow-render />
           </div>
         </scrollbar-container>
@@ -128,12 +128,6 @@
       },
       locked() {
         return this.campaign.campaign_data && this.campaign.campaign_data.locked;
-      },
-      currentComponent() {
-        return this.$store.getters["campaign/currentComponent"];
-      },
-      currentCustomModule() {
-        return !_.isUndefined(this.$store.getters["campaign/currentCustomModule"]);
       },
       dirty() {
         return this.$store.getters["campaign/dirty"];

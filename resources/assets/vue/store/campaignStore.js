@@ -79,7 +79,6 @@ function campaignStore() {
       modules: [],
       editedSettings: {},
       campaignValidated: false,
-      currentCustomModuleId: undefined,
       currentElementId: false,
       currentModuleIdInstance: false,
       currentCustomComponent: {},
@@ -132,9 +131,6 @@ function campaignStore() {
       },
       currentCustomComponent(state) {
         return state.currentCustomComponent;
-      },
-      currentCustomModule(state) {
-        return state.currentCustomModuleId;
       },
       isProcessing(state) {
         return state.processing;
@@ -402,12 +398,6 @@ function campaignStore() {
       },
       setEditorOptions(state, toolbar) {
         state.editorToolbar = toolbar;
-      },
-      setCustomModule(state, moduleId) {
-        state.currentCustomModuleId = moduleId;
-      },
-      unsetCustomModule(state) {
-        state.currentCustomModuleId = undefined;
       },
       setTemplating(state, templating) {
         state.campaign.campaign_data.template = templating;

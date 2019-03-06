@@ -37,7 +37,7 @@ export default {
         }
       });
       if (this.module.structure) {
-        _.each(this.module.structure.columns, (column) => {
+        _.each(this.module.structure.rows[0].columns, (column) => {
           _.each(column.plugins, (plugin) => {
             if (plugin.enabled === true) {
               hasConfig = true;
@@ -54,13 +54,8 @@ export default {
   methods: {
     config() {
       this.$store.commit('campaign/unsetCurrentElement');
-      if (this.module.type === 'custom') {
-        this.$store.commit('campaign/setCustomModule', this.moduleId);
-      } else {
-        this.$store.commit('campaign/unsetCustomModule');
-        this.$store.commit('campaign/setShowModuleSettings', true);
-        this.$store.commit('campaign/setCurrentModuleIdInstance', this.module.idInstance);
-      }
+      this.$store.commit('campaign/setCurrentModuleIdInstance', this.module.idInstance);
+      this.$store.commit('campaign/setShowModuleSettings', true);
       this.$store.commit('campaign/unsetCurrentCustomComponent');
     },
     clone() {
@@ -69,7 +64,6 @@ export default {
     remove() {
       this.$store.dispatch('campaign/removeModule', this.moduleId);
       this.$store.commit('campaign/unsetCurrentElement');
-      this.$store.commit('campaign/unsetCustomModule');
     },
   },
 };

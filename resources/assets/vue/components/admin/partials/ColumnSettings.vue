@@ -62,7 +62,7 @@ export default {
     columnLabel() {
       let columnindex = this.currentColumnIndex;
       if (this.isInvertedStacking) {
-        columnindex = this.module.structure.columns.length - columnindex;
+        columnindex = this.currentRow.columns.length - columnindex;
       } else {
         ++columnindex;
       }

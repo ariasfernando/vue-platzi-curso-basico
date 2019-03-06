@@ -51,17 +51,18 @@
       v-for="(plugin, pluginKey) in hiddenPlugins(module, $_app)">
       <Component :is="'campaign-' + plugin.name" :key="`${plugin.name}-${pluginKey}`" :module="module" />
     </template>
-    <template v-for="(column, columnKey) in module.structure.columns">
-      <template
-        v-for="(plugin, pluginKey) in hiddenPlugins(column, $_app)">
-        <Component :is="'campaign-' + plugin.name" :key="`${plugin.name}-${columnKey}-${pluginKey}`" />
+    <template v-for="(row, rowKey) in module.structure.rows">
+      <template v-for="(column, columnKey) in row.columns">
+        <template
+          v-for="(plugin, pluginKey) in hiddenPlugins(column, $_app)">
+          <Component :is="'campaign-' + plugin.name" :key="`${plugin.name}-${rowKey}-${columnKey}-${pluginKey}`" />
+        </template>
       </template>
     </template>
   </div>
 </template>
 
 <script>
-import _ from 'lodash';
 import LabelItemContainer from '../common/containers/LabelItemContainer.vue';
 import GroupContainer from '../common/containers/GroupContainer.vue';
 import SettingsContainer from '../common/settings/containers/SettingsContainer.vue';
@@ -117,18 +118,6 @@ export default {
         }
       });
       return enabled;
-    },
-  },
-  watch: {
-    currentColumn: {
-      handler: () => {
-        const modules = this.$store.getters['campaign/modules'];
-        if (this.currentModuleIdInstance && this.currentColumn) {
-          this.column = module.structure.columns[this.currentColumn];
-          this.ready = true;
-        }
-      },
-      deep: true,
     },
   },
   methods: {

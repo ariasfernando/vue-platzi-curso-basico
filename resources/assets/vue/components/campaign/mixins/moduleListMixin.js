@@ -157,12 +157,15 @@ export default {
         index,
         moduleData,
       });
+      this.$store.commit("campaign/unsetCurrentElement");
       // Set active inserted module
       this.$store.commit('campaign/setCurrentModuleIdInstance', moduleData.idInstance);
-      this.$store.commit(
-        'campaign/setCurrentElementId',
-        moduleData.structure.rows[0].columns[0].components[0].id
-      );
+      if (moduleData.type === 'studio') {
+        this.$store.commit(
+          'campaign/setCurrentElementId',
+          moduleData.structure.rows[0].columns[0].components[0].id,
+        );
+      }
     },
     addFixedTopModule(moduleData) {
       const index = this.getNextIndexFixedTopModule(moduleData);

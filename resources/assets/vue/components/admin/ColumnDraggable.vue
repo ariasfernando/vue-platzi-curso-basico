@@ -165,7 +165,7 @@ module.exports = {
     columnLabel(columnId) {
       let columnindex = columnId;
       if (this.isInvertedStacking) {
-        columnindex = this.module.structure.columns.length - columnindex;
+        columnindex = this.row.columns.length - columnindex;
       } else {
         ++columnindex;
       }
