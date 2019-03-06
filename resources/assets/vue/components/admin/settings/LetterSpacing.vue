@@ -35,10 +35,8 @@ export default {
   computed: {
     value: {
       get() {
-        const value = this.element.style[this.property] !== this.valueOnFalse
-          ? parseFloat(this.element.style[this.property])
-          : this.valueOnTrue;
-        return value;
+        const value = this.element.style[this.property] || this.valueOnFalse;
+        return value === this.valueOnFalse ? this.valueOnFalse : parseFloat(value);
       },
       set(value) {
         const newValue = value + this.unit;
