@@ -24,10 +24,12 @@ function textDefault() {
         fontSize: '12px',
         color: '#000000',
         fontWeight: 'normal',
+        letterSpacing: 'normal',
         lineHeight: '20%',
         align: 'left',
       },
       styleOption: {
+        isNormalLetterSpacing: false,
       },
       attribute: {
       },
