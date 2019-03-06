@@ -36,7 +36,7 @@ export default {
           hasConfig = true;
         }
       });
-      if (this.module.structure) {
+      if (this.module.type === 'studio') {
         _.each(this.module.structure.rows[0].columns, (column) => {
           _.each(column.plugins, (plugin) => {
             if (plugin.enabled === true) {

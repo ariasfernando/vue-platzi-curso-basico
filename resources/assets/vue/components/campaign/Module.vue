@@ -14,7 +14,8 @@
       :style="_.get(this.module,'structure.style')"
       :valign="_.get(this.module,'structure.attribute.valign','top')"
       :bgcolor="_.get(this.module,'structure.attribute.bgcolor')"
-      @mousedown.stop="onClickModule">
+      @click.prevent
+      @mousedown="onClickModule">
       <component :is="'custom-' + module.key" :module="module" :module-id="moduleId"></component>
       <module-toolbar :module-id="moduleId" v-if="!module.data.hideToolbar"></module-toolbar>
       <div class="st-remove-element module-overlay"></div>
