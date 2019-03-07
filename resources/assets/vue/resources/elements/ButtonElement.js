@@ -26,6 +26,8 @@ export default {
       paddingRight: '15px',
     },
     styleOption: {
+      autoWidth: true,
+      isNormalLetterSpacing: false,
     },
     attribute: {
       width: '150',
@@ -42,6 +44,7 @@ export default {
       width: '10',
       height: '10',
       valign: 'middle',
+      align: 'right',
     },
     style: {},
     styleOption: {},

@@ -17,6 +17,7 @@ export default {
     style: {},
     styleOption: {
       noMobileStretch: true,
+      isBlockHeight: true,
     },
   },
   plugins: {},
