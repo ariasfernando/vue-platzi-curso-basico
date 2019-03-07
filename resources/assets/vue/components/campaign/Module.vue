@@ -74,7 +74,7 @@
   import ImageElement from './elements/ImageElement.vue';
   import ModuleToolbar from './partials/ModuleToolbar.vue';
   import TextElement from './elements/TextElement.vue';
-  import validatorMixin from '../../plugins/modules/mixins/validator.js';
+  import validatorMixin from '../../plugins/modules/mixins/validatorMixin';
 
   module.exports = {
     name: 'Module',
@@ -91,8 +91,8 @@
       TextElement,
     },
     created() {
+      this.clearErrorsByModuleId(this.moduleId);
       if (this.module.type === 'custom') {
-        this.$store.commit('campaign/clearErrorsByModuleId', this.moduleId);
         this.registerCustomModuleDefaultValidationErrors(this.moduleId);
       }
     },

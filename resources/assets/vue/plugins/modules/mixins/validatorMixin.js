@@ -35,36 +35,59 @@ export default {
     getErrorMessage() {
       return this.moduleErrors.length > 0 ? this.moduleErrors[0].msg : '';
     },
+    enableElement() {
+      const forceVisible = _.get(this, 'element.container.styleOption.forceVisible');
+      if (typeof forceVisible !== 'undefined') {
+        return forceVisible;
+      }
+      return _.get(this, 'element.container.styleOption.enableElement');
+    },
+  },
+  watch: {
+    enableElement(enabled) {
+      if (!enabled) {
+        // clear errors on not visible elements
+        this.$store.commit('campaign/clearErrorsByScope', {
+          type: 'plugin',
+          name: this.name,
+          ...this.elementLocation,
+        });
+      }
+      this.validate();
+    },
   },
   methods: {
     validate() {
-      this.$validator.validateAll().then(() => {
-        const errorItems = _.cloneDeep(this.$validator.errors.items);
-        if (errorItems.length) {
-          _.each(errorItems, (err) => {
-            _.extend(err, {
-              scope: {
-                type: 'plugin',
-                name: this.name,
-                msg: err.msg,
-                ...this.elementLocation,
-              },
+      if (this.enableElement) {
+        // validate visible elements only
+        this.$validator.validateAll().then(() => {
+          const errorItems = _.cloneDeep(this.$validator.errors.items);
+          if (errorItems.length) {
+            _.each(errorItems, (err) => {
+              _.extend(err, {
+                scope: {
+                  type: 'plugin',
+                  name: this.name,
+                  msg: err.msg,
+                  ...this.elementLocation,
+                },
+              });
             });
-          });
 
-          this.$store.dispatch('campaign/addErrors', errorItems);
-        } else {
-          this.$store.commit('campaign/clearErrorsByScope', {
-            type: 'plugin',
-            name: this.name,
-            ...this.elementLocation,
-          });
+            this.$store.dispatch('campaign/addErrors', errorItems);
+          } else {
+            this.$store.commit('campaign/clearErrorsByScope', {
+              type: 'plugin',
+              name: this.name,
+              ...this.elementLocation,
+            });
 
-          this.$_app.utils.validator.modulesErrors('#emailCanvas');
-        }
+            this.$_app.utils.validator.modulesErrors('#emailCanvas');
+          }
 
-        this.validated = true;
-      });
+          this.validated = true;
+        });
+      }
     },
     registerCustomModuleElementDefaultValidationError(moduleId, elementName, validationOption, defaultValue) {
       if (_.indexOf(['required', 'required:true'], validationOption) >= 0 && _.isEmpty(defaultValue)) {
@@ -109,6 +132,9 @@ export default {
           }
         });
       }
+    },
+    clearErrorsByModuleId(moduleId) {
+      this.$store.commit('campaign/clearErrorsByModuleId', moduleId);
     },
   },
 };

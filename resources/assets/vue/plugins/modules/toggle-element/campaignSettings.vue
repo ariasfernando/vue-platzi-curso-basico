@@ -23,7 +23,7 @@
 import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 import validatorMixin from '../mixins/validatorMixin';
-import logicMixin from './logic.js';
+import logicMixin from './logic';
 
 export default {
   components: { SettingsContainer },
@@ -57,7 +57,6 @@ export default {
           value,
         };
         this.saveElementProperty(payload);
-        this.resetErrors(value, this.moduleId);
       }
 
       this.runLogic(value, elementId);
@@ -84,7 +83,6 @@ export default {
       }
     },
     resetErrors(value, moduleId) {
-      this.$store.commit('campaign/clearErrorsByModuleId', moduleId);
       if (this.isCustom) {
         this.registerCustomModuleDefaultValidationErrors(moduleId);
       }
