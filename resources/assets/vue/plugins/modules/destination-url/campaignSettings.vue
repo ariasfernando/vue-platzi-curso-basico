@@ -1,66 +1,60 @@
 <template>
   <div v-show="isCurrentElement" class="settings-wrapper">
-    <settings-container
+    <SettingsContainer
       key="destination-url"
       label="Destination Url">
       <template slot="setting-bottom">
-        <div v-if="validationRules">
-          <stui-input-text
-            v-model="href"
-            v-validate.initial="validationRules"
-            name="href"
-            type="text"
-            size="mini"
-            placeholder="http://examp.le"
-            :class="{'input': true, 'is-danger': hasError }" />
-          <span v-show="hasError" class="help is-danger">{{ getErrorMessage }}</span>
-        </div>
-        <div v-else>
-          <stui-input-text
-            v-model="href"
-            name="href"
-            type="text"
-            size="mini"
-            placeholder="http://examp.le" />
-        </div>
+        <StuiInputText
+          v-if="validationRules"
+          v-model="href"
+          v-validate.initial="validationRules"
+          name="href"
+          placeholder="http://examp.le"
+          :validation-notif="{
+            msg: getErrorMessage,
+            type: 'error',
+            show: hasError,
+          }" />
+        <StuiInputText
+          v-else
+          v-model="href"
+          name="href"
+          placeholder="http://examp.le" />
       </template>
-    </settings-container>
+    </SettingsContainer>
 
-    <settings-container
+    <SettingsContainer
       v-if="plugin.config.target"
       key="target"
       label="Target">
       <template slot="setting-right">
-        <stui-field addons>
-          <stui-button
+        <StuiField addons>
+          <StuiButton
             v-for="(icon, option) in plugin.config.options"
             :key="option"
             :data-tooltip="option"
             :title="option"
-            size="mini"
             :active="target === option"
             highlight
             expanded
             @click="changeTarget(option)">
             <i :class="`glyphicon glyphicon-${icon}`" />
-          </stui-button>
-        </stui-field>
+          </StuiButton>
+        </StuiField>
       </template>
-    </settings-container>
+    </SettingsContainer>
 
-    <settings-container
+    <SettingsContainer
       v-if="plugin.config.title"
       key="title"
       label="Title">
       <template slot="setting-right">
-        <stui-input-text
+        <StuiInputText
           v-model="title"
           name="title"
-          type="text"
-          size="mini"
           placeholder="Title" />
       </template>
-    </settings-container>
+    </SettingsContainer>
   </div>
 </template>
 

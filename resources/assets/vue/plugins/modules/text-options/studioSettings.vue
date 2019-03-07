@@ -295,9 +295,9 @@ export default {
   padding: 10px 0;
 }
 .el-button {
-  width: 34px;
+  width: 36px;
   padding: 4px 4px;
-  margin: 2.5px;
+  margin: 2px;
   height: 32px;
 }
 </style>

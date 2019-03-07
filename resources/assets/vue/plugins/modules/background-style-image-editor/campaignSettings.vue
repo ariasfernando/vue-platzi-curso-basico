@@ -122,8 +122,4 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-  .settings-wrapper {
-    margin-bottom: 10px;
-  }
-</style>
+
