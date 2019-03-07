@@ -103,11 +103,13 @@ class RestructureOfRows extends Migration
 
                             Logging::info('Start set plugins rows >>>>');
                             $module_structure['rows'][0]['plugins'] = [];
-                            $module_structure['rows'][0]['plugins']['rowEqualHeightForColumn'] = $module_plugins['moduleEqualHeightForColumn'];
-                            $module_structure['rows'][0]['plugins']['rowEqualHeightForColumn']['name'] = 'row-equal-height-for-column';
-                            $module_structure['rows'][0]['plugins']['rowEqualHeightForColumn']['target']= [];
-                            $module_structure['rows'][0]['plugins']['rowEqualHeightForColumn']['target'][0]= 'row';
-                            unset($module_plugins['moduleEqualHeightForColumn']);
+                            if (isset($module_plugins['moduleEqualHeightForColumn'])) {
+                                $module_structure['rows'][0]['plugins']['rowEqualHeightForColumn'] = $module_plugins['moduleEqualHeightForColumn'];
+                                $module_structure['rows'][0]['plugins']['rowEqualHeightForColumn']['name'] = 'row-equal-height-for-column';
+                                $module_structure['rows'][0]['plugins']['rowEqualHeightForColumn']['target']= [];
+                                $module_structure['rows'][0]['plugins']['rowEqualHeightForColumn']['target'][0]= 'row';
+                                unset($module_plugins['moduleEqualHeightForColumn']);
+                            }
                             Logging::info('End <<<<');
 
                             Logging::info('Start set container rows >>>>');
