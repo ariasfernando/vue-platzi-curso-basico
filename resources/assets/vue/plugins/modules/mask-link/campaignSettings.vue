@@ -1,33 +1,26 @@
 <template>
-  <settings-container class="field-font-family" :label="plugin.title">
+  <settings-container :label="plugin.title">
     <template slot="setting-bottom">
-      <el-input
-          name="mask_description"
-          size="mini"
+      <stui-input-text
           placeholder="Mask Tag"
-          v-model="mask_description"
-          :class="{'input': true, 'is-danger': errors.has('mask_description') }"></el-input>
+          v-model="maskDescription" />
     </template>
   </settings-container>
 </template>
 
 <script>
 import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {
-  props: ["name", "plugin", "moduleDataIndex", "moduleDataKey"],
   components: { SettingsContainer },
+  props: ["moduleDataIndex", "moduleDataKey"],
+  mixins: [pluginCampaignMixin],
   computed: {
-    currentCustomModule() {
-      return this.$store.getters["campaign/currentCustomModule"];
-    },
-    module() {
-      return this.$store.getters["campaign/modules"][this.currentCustomModule];
-    },
-    mask_description: {
+    maskDescription: {
       get() {
-        if (!_.isEmpty(this.currentComponent) && this.component) {
-          return this.component[this.plugin.subComponent].attribute.dataDescription || '';
+        if (this.module.type === 'studio') {
+          return this.element[this.subComponent].attribute.dataDescription;
         } else if (typeof this.moduleDataIndex != 'undefined' || typeof this.moduleDataKey != 'undefined') {
           return this.module.data && !_.isUndefined(this.module.data[this.moduleDataKey]) && !_.isUndefined(this.module.data[this.moduleDataKey][this.moduleDataIndex])
             ? this.module.data[this.moduleDataKey][this.moduleDataIndex].dataDescription
@@ -40,61 +33,23 @@ export default {
         this.saveComponentProperty("dataDescription", value);
       },
     },
-    currentComponent() {
-      return this.$store.getters["campaign/currentComponent"];
-    },
-    component() {
-      let component = {};
-      if (Object.keys(this.currentComponent).length !== 0) {
-        const moduleId = this.currentComponent.moduleId;
-        const columnId = this.currentComponent.columnId;
-        const componentId = this.currentComponent.componentId;
-
-        component = this.$store.getters["campaign/modules"][moduleId].structure.columns[columnId].components[componentId];
-      }
-      switch (component.type) {
-        case 'button-element':
-          this.plugin.subComponent ='button';
-          break;
-        case 'image-element':
-          this.plugin.subComponent ='image';
-          break;
-        case 'text-element':
-          this.plugin.subComponent ='container';
-          break;
-        case 'divider-element':
-          this.plugin.subComponent ='divider';
-          break;
-        default:
-          break;
-      }
-      return component;
+    subComponent() {
+      return this.element.type.split('-')[0];
     }
   },
-  data() {
-    return {
-      description: ""
-    };
-  },
   created() {
-    if (_.has(this.component, 'plugins.destinationUrl.config.validations.url.selected')) {
-      this.component.plugins.destinationUrl.config.validations.url.selected = 'url';
+    if (_.has(this.element, 'plugins.destinationUrl.config.validations.url.selected')) {
+      this.element.plugins.destinationUrl.config.validations.url.selected = 'url';
     }
   },
   methods: {
     saveComponentProperty(property, value) {
       value = value.replace(/[^a-zA-Z0-9_\[\]]/g, '');
-      if (!_.isEmpty(this.currentComponent)) {
-        const payload = {
-          moduleId: this.currentComponent.moduleId,
-          columnId: this.currentComponent.columnId,
-          componentId: this.currentComponent.componentId,
-          subComponent: this.plugin.subComponent,
-          link: "attribute",
+      if (this.module.type === 'studio') {
+        this.saveAttributeInThisElement({
           property,
-          value: value
-        };
-        this.$store.commit("campaign/saveComponentProperty", payload);
+          value
+        });
       } else if (typeof this.moduleDataIndex != 'undefined') {
         const data = JSON.parse(JSON.stringify(this.module.data));
         data[this.moduleDataKey][this.moduleDataIndex][property] = value;
@@ -114,37 +69,3 @@ export default {
   }
 };
 </script>
-<style lang="less">
-.plugin-wrapper-inner.plugin-background-color {
-  .el-input--mini {
-    width: 86px;
-    padding: 6px 0 0 0;
-  }
-  .el-color-picker__trigger {
-    padding: 3px;
-    height: 28px;
-    width: 34px;
-    border-right: 0;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 4px;
-  }
-  .el-color-picker {
-    padding: 6px 0 0 0;
-    float: left;
-  }
-  input.el-input__inner {
-    text-align: center;
-  }
-  .el-input.is-disabled .el-input__inner {
-    background-color: transparent !important;
-    color: #666666;
-    cursor: auto;
-    padding: 0;
-    font-size: 12px !important;
-    width: 87px !important;
-    border: 1px solid #dcdfe6 !important;
-  }
-}
-</style>
