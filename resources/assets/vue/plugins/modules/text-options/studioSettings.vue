@@ -145,11 +145,7 @@ export default {
     SettingsContainer,
   },
   mixins: [pluginMixinAdmin],
-  props: ['name', 'element', 'plugin'],
   computed: {
-    currentComponent() {
-      return this.$store.getters['module/currentComponent'];
-    },
     module() {
       return this.$store.getters['module/module'];
     },

@@ -63,20 +63,20 @@
           <template v-if="subopt.value && subopt.config" v-for="(interop, intername) in subopt.config">
             <settings-container v-if="$can('std-image-element_editor_'+intername)" :label="interop.label" :key="intername">
               <template slot="setting-right">
-                <StuiToggleButton v-if="interop.type === 'switch'" :value="interop.value" active-color="#78DCD6" @change="(value)=>updateInterField(value, `${name}.config.${subname}.config.${intername}.value`)" />
-                <StuiInputText  v-if="interop.type === 'text'" :value="interop.value" @change="(value)=>updateInterField(value, `${name}.config.${subname}.config.${intername}.value`)" />
+                <StuiToggleButton v-if="interop.type === 'switch'" :value="interop.value" active-color="#78DCD6" @change="(value)=>updateField(value, `${name}.config.${subname}.config.${intername}.value`)" />
+                <StuiInputText  v-if="interop.type === 'text'" :value="interop.value" @change="(value)=>updateField(value, `${name}.config.${subname}.config.${intername}.value`)" />
                 <StuiInputNumber
                   v-if="interop.type === 'number'"
                   v-validate="'required'"
                   :value="interop.value"
-                  @change="(value)=>updateInterField(value, `${name}.config.${subname}.config.${intername}.value`)"
+                  @change="(value)=>updateField(value, `${name}.config.${subname}.config.${intername}.value`)"
                   :min="interop.min || 0"
                   :max="interop.max || Infinity"
                   :step="parseFloat(interop.step)" />
                 <el-select
                   size="mini"
                   v-if="interop.type === 'select' || interop.type === 'multi-select'"
-                  @change="(value) => updateInterField(value, `${name}.config.${subname}.config.${intername}.value`)"
+                  @change="(value) => updateField(value, `${name}.config.${subname}.config.${intername}.value`)"
                   :value="interop.value"
                   :multiple="interop.type === 'multi-select'">
                   <el-option

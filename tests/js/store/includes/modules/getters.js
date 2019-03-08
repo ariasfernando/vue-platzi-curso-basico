@@ -32,23 +32,6 @@ describe('trigger getter:', () => {
 
     done();
   });
-  it('"currentComponent", expect state module has object', (done) => {
-    store.commit('module/setModuleData', mocks.module.getModule);
-    let dataSetting = {
-      columnId: 0,
-      componentId: 0,
-    };
-
-    store.commit('module/setCurrentComponent', dataSetting);
-
-    let getDataCurrentComponent = store.getters['module/currentComponent'];
-
-    expect(getDataCurrentComponent).toEqual(dataSetting);
-
-    dataSetting = getDataCurrentComponent = null;
-
-    done();
-  });
   it('"buildingMode", expect state buildingMode has \'mobile\'', (done) => {
     store.commit('module/setBuildingMode', 'mobile');
 

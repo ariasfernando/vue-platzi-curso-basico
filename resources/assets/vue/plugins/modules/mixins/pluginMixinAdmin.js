@@ -1,9 +1,6 @@
 export default {
   props: ['element', 'name', 'plugin', 'pluginKey', 'columnId'],
   computed: {
-    currentComponent() {
-      return this.$store.getters['module/currentComponent'];
-    },
     module() {
       return this.$store.getters['module/module'];
     },

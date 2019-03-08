@@ -142,19 +142,6 @@ const getters = {
   moduleHeight(state) {
     return state.moduleHeight;
   },
-  currentComponent(state) {
-    if (state.currentElementId) {
-      let columnIndex = getColumnIndexByElementId(state.module, state.currentElementId);
-      let componentIndex = getComponentIndexByElementId(state.module, state.currentElementId);
-      columnIndex = columnIndex === false ? undefined : columnIndex;
-      componentIndex = componentIndex === false ? undefined : componentIndex;
-      return {
-        columnIndex,
-        componentIndex,
-      };
-    }
-    return {};
-  },
   currentElementId(state) {
     return state.currentElementId;
   },
