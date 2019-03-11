@@ -343,6 +343,7 @@
               // Set processed (if using "sync" as QUEUE_DRIVER)
               if (completeResponse.processed) {
                 finishedProcessing();
+                finishedProcessing = null;
               } else if (completeResponse.jobId) {
                 // Poll server with job id when using an async queue driver.
                 let processInterval = setInterval(() => {
@@ -350,6 +351,7 @@
                     if (response.status === 'finished') {
                       clearInterval(processInterval);
                       finishedProcessing();
+                      finishedProcessing = null;
                     }
                     else if (response.status === 'failed') {
                       clearInterval(processInterval);
