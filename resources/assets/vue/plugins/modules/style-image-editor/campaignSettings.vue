@@ -35,12 +35,14 @@
             type: 'error',
             msg: getErrorMessage,
             show: hasError,
-          }" />
+          }"
+          :debounce="500" />
         <StuiInputText
           v-else
           v-model="alt"
           class="image-alt-text"
-          placeholder="Alt text" />
+          placeholder="Alt text"
+          :debounce="500" />
       </template>
     </SettingsContainer>
     <ImageModal
