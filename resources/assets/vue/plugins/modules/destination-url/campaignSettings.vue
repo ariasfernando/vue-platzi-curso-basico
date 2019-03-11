@@ -14,12 +14,14 @@
             msg: getErrorMessage,
             type: 'error',
             show: hasError,
-          }" />
+          }"
+          :debounce="500" />
         <StuiInputText
           v-else
           v-model="href"
           name="href"
-          placeholder="http://examp.le" />
+          placeholder="http://examp.le"
+          :debounce="500" />
       </template>
     </SettingsContainer>
 
@@ -52,7 +54,8 @@
         <StuiInputText
           v-model="title"
           name="title"
-          placeholder="Title" />
+          placeholder="Title"
+          :debounce="500" />
       </template>
     </SettingsContainer>
   </div>

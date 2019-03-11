@@ -4,7 +4,8 @@
       <stui-input-number
         v-model="height"
         :max="options.max"
-        :min="options.min" />
+        :min="options.min"
+        :debounce="500" />
     </template>
   </settings-container>
 </template>
