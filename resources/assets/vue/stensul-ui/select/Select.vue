@@ -1,25 +1,36 @@
 <template>
-  <div class="control" :class="{'is-expanded': expanded}">
-    <el-select
-      v-model="localValue"
-      class="stui-select"
-      v-bind="$attrs"
-      :class="isNumbered ? 'is-numbered' : ''"
-      size="mini"
-      :multiple="multiple"
-      :placeholder="placeholder">
-      <el-option
-        v-for="(item, index) in list"
-        :key="item.value || index"
-        :label="item.label || item"
-        :value="item.value || item" />
-    </el-select>
-  </div>
+  <StuiField
+    vertical
+    :class="{'is-expanded': expanded}">
+    <div class="control">
+      <ElSelect
+        v-model="localValue"
+        class="stui-select"
+        v-bind="$attrs"
+        :class="{
+          'is-Numbered' : isNumbered,
+          'is-danger': validationNotif.type === 'error' & validationNotif.show
+        }"
+        size="mini"
+        :multiple="multiple"
+        :placeholder="placeholder"
+        @blur="handleBlur">
+        <ElOption
+          v-for="(item, index) in list"
+          :key="item.value || index"
+          :label="item.label || item.name || item"
+          :disabled="item.disabled || false"
+          :value="item.value || item" />
+      </ElSelect>
+    </div>
+    <StuiNotif v-if="validationNotif.show" :value="validationNotif" />
+  </StuiField>
 </template>
 
 <script>
 export default {
   name: 'StuiSelect',
+  inheritAttrs: false,
   props: {
     value: {
       type: [String, Array, Boolean],
@@ -52,6 +63,12 @@ export default {
       default: false,
     },
     expanded: Boolean,
+    validationNotif: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
   },
   computed: {
     localValue: {
@@ -70,6 +87,11 @@ export default {
         this.$emit('input', value);
         this.$emit('change', value);
       },
+    },
+  },
+  methods: {
+    handleBlur(value) {
+      this.$emit('blur', value);
     },
   },
 };
@@ -94,6 +116,13 @@ export default {
     .el-input .el-input__suffix {
       right: 0px;
       color: $stui-input-border-color;
+    }
+  }
+  &.is-danger {
+    /deep/ {
+      .el-input__inner {
+        border-color: $stui-color-danger;
+      }
     }
   }
 }

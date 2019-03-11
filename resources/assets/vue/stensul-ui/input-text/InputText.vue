@@ -1,16 +1,26 @@
 <template>
-  <stui-input-disabled v-if="disabled" :value="value" />
-  <div v-else class="control" :class="{'is-expanded': expanded}">
-    <el-input
-      v-bind="$attrs"
-      class="stui-input-text"
-      :class="{'is-muted' : isMuted}"
-      :value="_value"
-      size="mini"
-      :disabled="isMuted || inputDisabled"
-      @blur="$emit('blur')"
-      @change="(value)=>change(value)" />
-  </div>
+  <StuiInputDisabled v-if="disabled" :value="value" />
+  <StuiField
+    v-else
+    vertical
+    :class="{'is-expanded': expanded}">
+    <div class="control">
+      <ElInput
+        :value="_value"
+        v-bind="$attrs"
+        class="stui-input-text"
+        :class="{
+          'is-muted' : isMuted,
+          'is-danger': validationNotif.type === 'error' & validationNotif.show
+        }"
+        size="mini"
+        :disabled="isMuted || inputDisabled"
+        @blur="handleBlur"
+        @input="handleInput"
+        @change="handleChange" />
+    </div>
+    <StuiNotif v-if="validationNotif.show" :value="validationNotif" />
+  </StuiField>
 </template>
 
 <script>
@@ -19,6 +29,7 @@ import muted from '../mixins/muted';
 export default {
   name: 'InputText',
   mixins: [muted],
+  inheritAttrs: false,
   props: {
     value: {
       type: [String, Number, Object, Boolean],
@@ -34,6 +45,12 @@ export default {
     },
     expanded: Boolean,
     inputDisabled: Boolean,
+    validationNotif: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
   },
   computed: {
     _value() {
@@ -44,8 +61,13 @@ export default {
     },
   },
   methods: {
-    change(value) {
+    handleBlur(value) {
+      this.$emit('blur', value);
+    },
+    handleInput(value) {
       this.$emit('input', value);
+    },
+    handleChange(value) {
       this.$emit('change', value);
     },
   },
@@ -68,16 +90,26 @@ export default {
     border-color: $stui-color-secondary;
   }
 }
-.stui-input-text.is-muted {
-  /deep/ {
-    .el-input__inner,
-    .el-textarea__inner,
-    .el-input.is-disabled .el-input__inner,
-    .el-textarea.is-disabled .el-textarea__inner {
-      background-color: #f5f7fa;
-      border-color: #e4e7ed;
-      color: #c0c4cc;
-      cursor: auto;
+.stui-input-text {
+  &.is-muted {
+    /deep/ {
+      .el-input__inner,
+      .el-textarea__inner,
+      .el-input.is-disabled .el-input__inner,
+      .el-textarea.is-disabled .el-textarea__inner {
+        background-color: #f5f7fa;
+        border-color: #e4e7ed;
+        color: #c0c4cc;
+        cursor: auto;
+      }
+    }
+  }
+  &.is-danger {
+    /deep/ {
+      .el-input__inner,
+      .el-textarea__inner {
+        border-color: $stui-color-danger;
+      }
     }
   }
 }

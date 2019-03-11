@@ -13,7 +13,7 @@ function buttonDefault() {
           {
             name: 'palette-background-color',
             title: 'palette Background Color',
-            aclName: 'palette-background-color',
+            aclName: 'background-color',
           },
         ],
       },
