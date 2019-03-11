@@ -2,8 +2,8 @@
 </template>
 
 <script>
-import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 import contrast from 'contrast';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {
   mixins: [pluginCampaignMixin],
@@ -32,7 +32,9 @@ export default {
               // reset tinymce to refresh changes on text
               const editorId = this.getTinyId(this.moduleIdInstance, component.id);
               setTimeout(() => {
-                document.getElementById(editorId).dispatchEvent(new Event('tiny-style-reset'));
+                if (document.getElementById(editorId)) {
+                  document.getElementById(editorId).dispatchEvent(new Event('tiny-style-reset'));
+                }
               }, 10);
             }
           });

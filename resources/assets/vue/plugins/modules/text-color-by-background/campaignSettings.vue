@@ -30,7 +30,9 @@ export default {
           // reset tinymce to refresh changes on text
           const editorId = this.getTinyId(this.moduleIdInstance, comp.id);
           setTimeout(() => {
-            document.getElementById(editorId).dispatchEvent(new Event('tiny-style-reset'));
+            if (document.getElementById(editorId)) {
+              document.getElementById(editorId).dispatchEvent(new Event('tiny-style-reset'));
+            }
           }, 10);
         }
       });
