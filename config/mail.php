@@ -61,7 +61,7 @@ $default = [
 
     'from' => [
         'address' => strtolower(env('MAIL_FROM_ADDRESS', 'info@stensul.com')),
-        'name' => env('MAIL_FROM_NAME', "stensul Email Creation Platform")],
+        'name' => env('MAIL_FROM_NAME', "stensul Email Generation Platform")],
 
     /*
     |--------------------------------------------------------------------------
