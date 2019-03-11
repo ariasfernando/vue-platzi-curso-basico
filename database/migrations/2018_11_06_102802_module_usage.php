@@ -24,7 +24,7 @@ class ModuleUsage extends Migration
             });
         }
 
-        \CampaignModel::withTrashed()->chunk(100, function ($campaigns) {
+        \CampaignModel::withTrashed()->chunk(20, function ($campaigns) {
             foreach ($campaigns as $campaign) {
                 Log::info(sprintf('Fetching campaign id: %s', $campaign->id));
                 if (isset($campaign['modules_data'])) {

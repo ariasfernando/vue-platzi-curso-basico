@@ -35,7 +35,7 @@ class ConvertToggleElementIdToNumber extends Migration
     }
 
     protected function setCampaignConvertToggleElementIdToNumber() {
-        Campaign::withTrashed()->chunk(100, function ($campaigns) {
+        Campaign::withTrashed()->chunk(20, function ($campaigns) {
             Logging::info('-------------------------');
             Logging::info('CAMPAIGNS');
             Logging::info('-------------------------');
@@ -68,7 +68,7 @@ class ConvertToggleElementIdToNumber extends Migration
     }
 
     protected function setModuleConvertToggleElementIdToNumber() {
-        Module::withTrashed()->chunk(100, function ($modules) {
+        Module::withTrashed()->chunk(20, function ($modules) {
             Logging::info('-------------------------');
             Logging::info('STUDIO');
             Logging::info('-------------------------');

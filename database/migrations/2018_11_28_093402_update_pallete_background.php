@@ -29,10 +29,12 @@ class UpdatePalleteBackground extends Migration
         */
 
     protected function setCampaignRenamePaletteBackgroundColor() {
-        Campaign::withTrashed()->chunk(100, function ($campaigns) {
-            Logging::info('-------------------------');
-            Logging::info('CAMPAIGNS');
-            Logging::info('-------------------------');
+
+        Logging::info('-------------------------');
+        Logging::info('CAMPAIGNS');
+        Logging::info('-------------------------');
+
+        Campaign::withTrashed()->chunk(20, function ($campaigns) {
 
             foreach ($campaigns as $campaign) {
                 Logging::info('Campaign id= ' . $campaign->id);
@@ -47,7 +49,7 @@ class UpdatePalleteBackground extends Migration
                                     if (isset($component_value['plugins'])) {
                                         foreach ($component_value['plugins'] as $plugin_name => $plugin) {
                                             if ($plugin_name === 'paletteBackgroundColor') {
-                                                Logging::info('compoenent id= ' . $component_value['id']);
+                                                Logging::info('component id= ' . $component_value['id']);
                                                 $modules_data[$key]['structure']['columns'][$column_key]['components'][$component_key]
                                                 ['plugins']['paletteBackgroundColor']['name'] = 'palette-background-color';
                                             }
@@ -59,11 +61,7 @@ class UpdatePalleteBackground extends Migration
                     }
                 }
                 $campaign->modules_data = $modules_data;
-
-                /*
-                 * Test and compare modules_data before and after and then
-                 * uncomment the following line to save the campaign.
-                */
+                $campaign->timestamps = false;
                 $campaign->save();
             }
         });
@@ -75,13 +73,11 @@ class UpdatePalleteBackground extends Migration
         * and edit in structure.columns.components.button.attribute.width
         */
 
-        Module::withTrashed()->chunk(100, function ($modules) {
-            Logging::info('-------------------------');
-            Logging::info('STUDIO');
-            Logging::info('-------------------------');
-            // Make it faster by disabling query log.
+        Logging::info('-------------------------');
+        Logging::info('STUDIO');
+        Logging::info('-------------------------');
 
-            $modules = Module::all();
+        Module::withTrashed()->chunk(20, function ($modules) {
 
             foreach ($modules as $key => &$module) {
                 $module_structure = $module->structure;
@@ -95,7 +91,7 @@ class UpdatePalleteBackground extends Migration
                                 if (isset($component_value['plugins'])) {
                                     foreach ($component_value['plugins'] as $plugin_name => $plugin) {
                                         if ($plugin_name === 'paletteBackgroundColor') {
-                                            Logging::info('compoenent id= ' . $component_value['id']);
+                                            Logging::info('component id= ' . $component_value['id']);
                                             $module_structure['columns'][$column_key]['components'][$component_key]
                                             ['plugins']['paletteBackgroundColor']['name']  = 'palette-background-color';
                                         }
@@ -107,6 +103,7 @@ class UpdatePalleteBackground extends Migration
                 }
 
                 $module->structure = $module_structure;
+                $module->timestamps = false;
                 $module->save();
             }
         });
