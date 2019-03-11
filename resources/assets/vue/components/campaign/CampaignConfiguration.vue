@@ -11,20 +11,23 @@
                 id="campaignName"
                 v-model="campaignName"
                 v-validate.initial="'required'"
-                type="text"
                 placeholder="Email Name"
                 name="campaignName"
-                :class="{'input': true, 'is-danger': errors.has('campaignName') }"
+                :validation-notif="{
+                  msg: errors.first('campaignName'),
+                  type: 'error',
+                  show: errors.has('campaignName')
+                }"
                 @change="saveCampaignName"
                 @focus="checkName" />
-              <a
-                v-if="enableFavorite"
-                href="#"
+            </template>
+            <template v-if="enableFavorite" slot="label-append">
+              <div
                 title="Favorite"
+                class="add-favorite"
                 @click.prevent="toggleFavorite">
                 <i :class="favoriteClass" class="glyphicon" />
-              </a>
-              <span v-show="errors.has('campaignName')" class="help is-danger">{{ errors.first('campaignName') }}</span>
+              </div>
             </template>
           </settings-container>
 
@@ -78,23 +81,22 @@
 
           <settings-container v-if="enableAutoSave" label="Auto Save" class="last-saved" key="auto-save" :label-expanded="true">
             <template slot="setting-right">
-              <div class="control">
+              <stui-field vertical>
                 <stui-field>
                   <div class="control is-expanded">
                     <secondary-spinner />
                   </div>
                   <stui-toggle-button
                     id="autoSave"
-                    class="pull-right"
                     :value="campaign.auto_save"
                     @change="autoSaveChange" />
                 </stui-field>
-                <label
+                <div
                   v-if="!secondaryLoading"
-                  class="autosave-message pull-right">
+                  class="autosave-message">
                   last saved: {{ campaign.updated_at.substring(0,16) }}
-                </label>
-              </div>
+                </div>
+              </stui-field>
             </template>
           </settings-container>
           <settings-container
@@ -432,6 +434,8 @@
   font-style: italic;
   padding: 0;
   text-align: right;
+  font-weight: bold;
+  padding-top: 4px;
 }
 </style>
 
@@ -496,6 +500,11 @@
     .v-switch-core {
       background: #dddddd;
       border: 1px solid #dddddd;
+    }
+    .add-favorite {
+      cursor: pointer;
+      line-height: 28px;
+      text-align: right;
     }
     .glyphicon-star-empty {
       color: #999999;

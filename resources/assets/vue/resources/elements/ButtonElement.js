@@ -28,6 +28,8 @@ function buttonDefault() {
         paddingRight: '15px',
       },
       styleOption: {
+        autoWidth: true,
+        isNormalLetterSpacing: false,
       },
       attribute: {
         width: '150',
