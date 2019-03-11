@@ -35,9 +35,12 @@
 
           <div class="modal-footer">
             <slot name="footer">
+              <a type="button" class="btn btn-download-html beta-btn-secondary"
+                @click="downloadHTML"
+                :href="$_app.config.baseUrl + '/campaign/download-html/' + campaign.campaign_id">Download HTML</a>
               <button v-if="campaign.process_plaintext" type="button" class="btn btn-plain-text">Plaintext</button>
 
-              <div v-if="campaign.library_config.esp && campaign.library_config.espProvider"
+              <div v-if="campaign.library_config.espProvider && campaign.library_config.espProvider !== 'none'"
                    type="button" class="btn btn-default btn-upload-api beta-btn-secondary" :data-campaign-id="campaign.campaign_id"
                    :data-api-driver="campaign.library_config.espProvider" @click="uploadModal">
                    Upload to {{campaign.library_config.espProvider | capitalize}}
@@ -161,7 +164,10 @@
         if(this.minified[key].toggle){
           this.minified[key].output = this.minified[key].minified_html;
         }
-      }
+      },
+      downloadHTML() {
+        $(window).unbind('beforeunload');
+      },
     },
     filters: {
       capitalize: function (value) {

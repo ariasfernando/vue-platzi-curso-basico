@@ -61,16 +61,13 @@ export default {
 
     /deep/ {
       > .settings-container:first-of-type,
-      > .settings-container.is-first,
-      > .settings-wrapper > .settings-container:first-of-type,
-      > .settings-wrapper > .settings-container.is-first {
-        > label,
-        &.is-setting-bottom > .control > label {
-          padding-top: 0px;
+      > .settings-wrapper > .settings-container:first-of-type {
+        &.is-setting-bottom {
+          margin-top: -4px;
         }
       }
-      .settings-container + div:not(.is-first),
-      .settings-wrapper + div:not(.is-first){
+      .settings-container + div:not(.is-first):not(.has-no-gap),
+      .settings-wrapper + div:not(.is-first):not(.has-no-gap){
         padding-top: 10px;
       }
     }

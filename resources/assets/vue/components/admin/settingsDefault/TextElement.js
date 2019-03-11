@@ -34,7 +34,7 @@ function textDefault() {
       {
         groupLabel: 'Padding',
         settings: [
-          padding({ subComponent: 'container' }),
+          padding({ subComponent: 'container', aclName: 'padding_padding' }),
         ],
       },
       {

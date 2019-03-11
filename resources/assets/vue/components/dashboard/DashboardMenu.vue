@@ -1,7 +1,7 @@
 <template>
   <div v-if="$can('create_campaign') && menu.length">
     <a v-show="menu.length === 1 && menu[0].type=== 'item'"
-       class="btn btn-default btn-create beta-btn-primary" :href="$_app.config.baseUrl + '/campaign/edit/?locale=en_us'">
+       class="btn btn-default btn-create beta-btn-primary" :href="$_app.config.baseUrl + '/campaign/edit/?locale=en_us'" id="createNewEmailButton">
       <i class="glyphicon glyphicon-plus-sign" /> Create a new email
     </a>
 

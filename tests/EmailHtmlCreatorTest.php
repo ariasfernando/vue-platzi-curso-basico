@@ -6,7 +6,7 @@ use Stensul\Services\EmailHtmlCreator;
 use Stensul\Models\Campaign;
 
 /**
- * Test html Email Creation Platform service
+ * Test html Email Generation Platform service
  *
  */
 class EmailHtmlCreatorTest extends TestCase

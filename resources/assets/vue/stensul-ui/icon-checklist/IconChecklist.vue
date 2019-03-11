@@ -48,6 +48,11 @@ export default {
 .stui-icon-checklist {
   text-align: left;
   border-color: $stui-input-border-color;
+  margin-left: -2px;
+  margin-right: -2px;
+  margin-top: -2px;
+  margin-bottom: 2px;
+
   /deep/ {
     .el-button:focus,
     .el-button:hover {
@@ -61,10 +66,11 @@ export default {
       background-color: $stui-color-secondary;
     }
     .el-button {
-      width: 26px;
+      width: 28px;
       padding: 4px 4px;
-      height: 26px;
+      height: 28px;
       font-size: 13px;
+      margin: 2px;
     }
   }
 }

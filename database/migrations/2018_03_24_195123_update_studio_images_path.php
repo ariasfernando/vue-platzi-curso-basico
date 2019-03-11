@@ -41,7 +41,7 @@ class UpdateStudioImagesPath extends Migration
          * Iterate through all campaigns
          * Get a bunch of campaigns at a time to save roundtrip times to the server.
         */
-        Campaign::withTrashed()->chunk(100, function ($campaigns) {
+        Campaign::withTrashed()->chunk(20, function ($campaigns) {
 
             foreach ($campaigns as $campaign) {
                 Logging::info('Campaign ' . $campaign->id);
@@ -98,7 +98,7 @@ class UpdateStudioImagesPath extends Migration
          * Iterate through all modules
          * Get a bunch of modules at a time to save roundtrip times to the server.
         */
-        Module::withTrashed()->chunk(100, function ($modules) {
+        Module::withTrashed()->chunk(20, function ($modules) {
 
             foreach ($modules as $module) {
 

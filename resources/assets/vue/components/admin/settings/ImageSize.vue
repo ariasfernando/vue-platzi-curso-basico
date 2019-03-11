@@ -10,13 +10,14 @@
     </SettingsContainer>
     <SettingsContainer
       v-if="isPxWidth"
-      :no-label="true">
+      :no-label="true"
+      custom-class="has-no-gap">
       <template slot="setting-bottom">
         <StuiField addons>
           <StuiInputNumber
             v-model="width"
             controls-position="right"
-            class="generic-number"
+            class="stui-field--left"
             :min="min"
             :max="maxValueWidth" />
           <div class="control is-center">
@@ -28,7 +29,7 @@
           <StuiInputNumber
             v-model="height"
             controls-position="right"
-            class="generic-number"
+            class="stui-field--right"
             false-text="auto"
             :disabled="isBlockHeight"
             :min="min" />
@@ -184,7 +185,8 @@ export default {
       color: $stui-label-color;
     }
   }
-  .control:not(.is-center) {
+  .stui-field--left,
+  .stui-field--right {
     width: 50%;
   }
 }
