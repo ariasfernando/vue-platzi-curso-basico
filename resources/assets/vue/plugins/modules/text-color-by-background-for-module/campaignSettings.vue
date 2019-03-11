@@ -17,7 +17,7 @@ export default {
       const value = contrast(bgcolor) === 'light' ? this.plugin.config.darkText : this.plugin.config.lightText;
       // Loop through columns and components
       _.each(this.element.structure.rows, (row) => {
-        _.each(rows.columns, (column) => {
+        _.each(row.columns, (column) => {
           _.each(column.components, (component) => {
             const subComponent = component.type.split('-')[0];
             // Set new text color
