@@ -58,7 +58,7 @@
                 <div class="form-group submit-row">
                     <div class="text-center">
                         <button type="submit" class="btn" id="loginButton" >Login</button >
-                        <div class="sublink"><a href="{{ url('/password/email') }}" id="forgotPasswordLink">Forgot password?</a></div >
+                        <div class="sublink"><a href="{{$is_admin ? url('/password/email/admin') : url('/password/email') }}" id="forgotPasswordLink">Forgot password?</a></div>
                         @if ( env('USER_REGISTRATION', false) )
                             <a href="{{ url('/auth/register') }}" class="register" id="registerNewUserLink">Don't have a user? Register here.</a >
                         @endif

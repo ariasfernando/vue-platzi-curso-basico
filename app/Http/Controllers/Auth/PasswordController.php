@@ -2,6 +2,7 @@
 
 namespace Stensul\Http\Controllers\Auth;
 
+use Session;
 use Auth;
 use Mail;
 use Activity;
@@ -53,16 +54,18 @@ class PasswordController extends Controller
     /**
      * Get email view.
      *
+     * @param string $admin Optional URL parameter "admin" to indicate if we're requesting a password reset from the admin login page.
      * @return \Illuminate\View\View
      */
-    public function getEmail()
+    public function getEmail($admin = false)
     {
         if (\Config::get('challenge.enabled')) {
             $challenge_provider = \Config::get('challenge.default');
             $config = \Config::get('challenge.providers.' . $challenge_provider);
             return view('auth.password')
                     ->with('challenge_key', $config['key'])
-                    ->with('challenge_provider', $challenge_provider);
+                    ->with('challenge_provider', $challenge_provider)
+                    ->with('is_admin', $admin === 'admin');
         }
         return view('auth.password');
     }
@@ -89,6 +92,9 @@ class PasswordController extends Controller
         $user_auth = User::where('email', '=', $data_params["email"])->first();
 
         if (is_null($user_auth['status']) || $user_auth['status'] != "deleted") {
+            if ($request->get('admin')) {
+                Session::put('redirect_admin', true);
+            }
             $this->passwords->sendResetLink($data_params, function ($message) {
                 $message->subject($this->getEmailSubject());
             });
@@ -155,7 +161,12 @@ class PasswordController extends Controller
             case PasswordBroker::INVALID_USER:
             case PasswordBroker::PASSWORD_RESET:
                 Activity::log('User restored', array('properties' => ['user_id' => new ObjectID($user->_id)]));
-                return redirect('auth/login')->with('message', 'SUCCESS_CHANGE');
+                $redirect = 'auth/login';
+                if (Session::has('redirect_admin')) {
+                    Session::remove('redirect_admin');
+                    $redirect = '/admin/login';
+                }
+                return redirect($redirect)->with('message', 'SUCCESS_CHANGE');
 
             default:
                 return redirect()->back()
