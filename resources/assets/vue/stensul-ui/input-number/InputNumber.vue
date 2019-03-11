@@ -32,6 +32,11 @@ export default {
   name: 'InputNumber',
   mixins: [muted],
   inheritAttrs: false,
+  data() {
+    return {
+      timeOut: null,
+    };
+  },
   props: {
     value: {
       type: [Number, String, Object, Boolean],
@@ -53,13 +58,24 @@ export default {
         return {};
       },
     },
+    debounce: {
+      type: Number,
+      default: 0,
+    },
   },
   methods: {
     handleBlur(value) {
       this.$emit('blur', value);
     },
     handleInput(value) {
-      this.$emit('input', value);
+      if (this.debounce > 0) {
+        if (this.timeOut) {
+          window.clearTimeout(this.timeOut);
+        }
+        this.timeOut = window.setTimeout(() => this.$emit('input', value), this.debounce);
+      } else {
+        this.$emit('input', value);
+      }
     },
     handleChange(value) {
       this.$emit('change', value);
