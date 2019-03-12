@@ -724,36 +724,6 @@ describe('== Campaign Store ==', () => {
 
       done();
     });
-    it('"setCustomModule with data, expect to set value de current custom module"', (done) => {
-      let moduleId = 0;
-
-      store.commit('campaign/setCustomModule', moduleId);
-
-
-      let stateCurrentModuleId = store.state.campaign.currentCustomModuleId;
-
-      expect(stateCurrentModuleId).toEqual(moduleId);
-
-      moduleId = null;
-      stateCurrentModuleId = null;
-
-      done();
-    });
-    it('"unsetCustomModule, expect to set value de current custom to undefined"', (done) => {
-      let moduleId = 0;
-
-      store.commit('campaign/setCustomModule', moduleId);
-      store.commit('campaign/unsetCustomModule');
-
-      let stateCurrentModuleId = store.state.campaign.currentCustomModuleId;
-
-      expect(stateCurrentModuleId).toBeUndefined();
-
-      moduleId = null;
-      stateCurrentModuleId = null;
-
-      done();
-    });
     it('"setTemplating" with data, expect to set campaign_data.template to true', (done) => {
       let templating = true;
       let campaignData = {

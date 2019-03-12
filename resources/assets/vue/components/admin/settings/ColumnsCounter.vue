@@ -1,10 +1,10 @@
 <template>
-  <settings-container label="Columns counter">
+  <SettingsContainer label="Columns">
     <template slot="setting-right">
       <StuiInputNumber
-        v-model="columnsCounter"/>
+        v-model="columnsCounter" />
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 <script>
 import SettingMixin from '../mixins/SettingMixin';
@@ -53,8 +53,3 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-.width-full {
-  width: 100%;
-}
-</style>
