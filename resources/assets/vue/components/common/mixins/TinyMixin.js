@@ -205,7 +205,7 @@ export default {
     },
     tinyLength() {
       // An empty element is removed in order to avoid count the bogus char.
-      const parsedText = this.$textElement.find('[data-mce-bogus]').length === 0 ? this.$textElement : this.$textElement.clone().find('[data-mce-bogus]').remove();
+      const parsedText = this.$textElement.find('[data-mce-bogus]').length === 0 ? this.$textElement : this.$textElement.clone().find('[data-mce-bogus]').remove().end();
       return parsedText.text().length;
     },
     maxCharsValidation(event) {
