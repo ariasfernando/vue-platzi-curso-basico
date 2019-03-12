@@ -1,5 +1,5 @@
 <template>
-  <element-container :component="component" :is-active="isActive" @select-component="selectComponentHandler">
+  <ElementContainer :component="component" :is-active="isActive" @select-component="selectComponentHandler">
     <table
       :width="component.container.attribute.width || '100%'"
       :style="{width:widthStyle(component.container.attribute.width || '100%')}"
@@ -54,7 +54,7 @@
         </td>
       </tr>
     </table>
-  </element-container>
+  </ElementContainer>
   <!-- IMAGE ELEMENT ENDS -->
 </template>
 
@@ -78,13 +78,27 @@ export default {
   methods: {
     imageUrl(imagePath) {
       if (imagePath === '' || imagePath.includes('default/')) {
-        let width = this.component.image.attribute.width;
-        if (width === '100%') {
-          width = this.columnWidth(this.columnId);
+        const width =
+          this.component.image.attribute.width === '100%'
+            ? this.columnWidth(this.columnId)
+            : this.component.image.attribute.width;
+        let ratio = 0;
+        switch (this.component.image.attribute.ratio) {
+          case '1:1':
+            ratio = 1;
+            break;
+          case '4:3':
+            ratio = 3 / 4;
+            break;
+          case '16:9':
+          default:
+            ratio = 9 / 16;
         }
+
         return this.createPlaceholder(
           width,
           this.component.image.attribute.height,
+          ratio,
         );
       }
       return this.$_app.config.imageUrl + imagePath;

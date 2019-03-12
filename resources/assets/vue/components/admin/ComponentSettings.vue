@@ -21,7 +21,7 @@
                 <Component
                   :is="'input-' + setting.type"
                   v-for="(setting,i) in settingGroup.settings"
-                  :key="i+setting.type"
+                  :key="i+setting.type+currentElement.id"
                   v-bind="settingProps(setting)"
                   @setting-updated="saveElementProperty" />
               </b-collapse>

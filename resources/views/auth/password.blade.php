@@ -25,6 +25,7 @@
         <div class="text-center">
             <form class="form-horizontal" role="form" method="POST" action="{{ url('/password/email') }}">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="admin" value="{{$is_admin or ''}}">
 
                 <div class="form-group">
                     @if (session('status'))
