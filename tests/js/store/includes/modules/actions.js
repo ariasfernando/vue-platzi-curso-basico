@@ -25,9 +25,6 @@ let moduleState = {};
 const mockModServiceResolve = (optionMock) => {
   moduleService[optionMock.method] = jest.fn().mockResolvedValue(optionMock.resolveWith);
 };
-const mockModServiceRejected = (optionMock) => {
-  moduleService[optionMock.method] = jest.fn().mockRejectedValue(optionMock.resolveWith);
-};
 const mockModServiceRestore = (optionMock) => {
   moduleService[optionMock.method].mockReset();
 };
@@ -198,38 +195,6 @@ describe('trigger action:', () => {
       done();
     });
   });
-  it('"getModuleData" with erroneous moduleId, expect to catch error', (done) => {
-    let { modStore, setDataMock } = mockMutation(['error']);
-    mockModServiceRestore({
-      method: 'getModule',
-    });
-    mockModServiceRejected({
-      method: 'getModule',
-      resolveWith: 'No query results for model [Stensul\\Models\\Module] 5',
-    });
-
-    modStore.dispatch('getModuleData', '5').then(() => {
-      console.log('');
-      console.log('');
-      console.log('');
-      console.log('');
-      console.log('');
-      console.log('');
-      console.log('');
-      console.log('');
-      console.log('');
-      console.log('');
-    }).catch(() => {
-      expect(setDataMock[0].mock.calls.length).toEqual(1);
-
-      modStore = setDataMock = null;
-      mockModServiceRestore({
-        method: 'getModule',
-      });
-      done();
-    });
-  });
-
   it('"saveModuleData" with data, expect has saved the module edition', () => {
     let moduleData = {
       moduleId: '5b3ce34792f8ef00137bb103',
@@ -618,7 +583,7 @@ describe('trigger action:', () => {
     };
     let response = { id: '5b3ce34792f8ef00137bb103', message: 'SUCCESS' };
     let newStruct = {
-      moduleId: '5b3ce34792f8ef00137bb105',
+      moduleId: '5b3ce34792f8ef00137bb103',
     };
 
     nock(baseUrl)
@@ -1025,7 +990,7 @@ describe('trigger action:', () => {
     };
     let response = { id: '5b3ce34792f8ef00137bb103', message: 'SUCCESS' };
     let newStruct = {
-      moduleId: '5b3ce34792f8ef00137bb105',
+      moduleId: '5b3ce34792f8ef00137bb103',
     };
 
     store.commit('module/setModuleData', newStruct);

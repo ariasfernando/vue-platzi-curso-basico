@@ -27,22 +27,28 @@ export default {
       return this.getElement(this.currentElementId);
     },
     templateInnerWidth() {
-      return this.templateWidth - this.elementBorderAndPaddingHorizontalSpace(this.module.structure);
+      return (
+        this.templateWidth -
+        this.elementBorderAndPaddingHorizontalSpace(this.module.structure)
+      );
     },
     templateWidth() {
-      return this.isCampaign ? this.$store.getters['campaign/campaign'].library_config.templateWidth : 640;
+      return this.isCampaign
+        ? this.$store.getters['campaign/campaign'].library_config.templateWidth
+        : 640;
     },
     imageWidth() {
       const width = this.component.image.attribute.width;
       if (_.endsWith(width, '%')) {
         const elementBorderAndPaddingHorizontalSpace = this.row.columns[this.columnId].content
-        ? this.elementBorderAndPaddingHorizontalSpace(this.row.columns[this.columnId].content)
-        : 0;
-        const imageContainerWidth = this.columnWidth(this.columnId) -
+          ? this.elementBorderAndPaddingHorizontalSpace(this.row.columns[this.columnId].content)
+          : 0;
+        const imageContainerWidth =
+          this.columnWidth(this.columnId) -
           this.elementBorderAndPaddingHorizontalSpace(this.row.columns[this.columnId].container) -
           elementBorderAndPaddingHorizontalSpace -
           this.elementBorderAndPaddingHorizontalSpace(this.component.container);
-        return ((imageContainerWidth / 100) * _.parseInt(width));
+        return (imageContainerWidth / 100) * _.parseInt(width);
       }
       return width;
     },
@@ -53,16 +59,22 @@ export default {
       return !_.isEmpty(this.$store.getters['campaign/campaign']);
     },
     isStudio() {
-      return this.$router ? this.$router.currentRoute.matched[0].components.default.name === 'EditModule' : false;
+      return this.$router
+        ? this.$router.currentRoute.matched[0].components.default.name === 'EditModule'
+        : false;
     },
     isPreview() {
-      return this.$router ? this.$router.currentRoute.matched[0].components.default.name === 'Modules' : false;
+      return this.$router
+        ? this.$router.currentRoute.matched[0].components.default.name === 'Modules'
+        : false;
     },
     isInvertedStacking() {
       return this.row.columnsStacking === 'invertedStacking';
     },
     buildingMode() {
-      return this.isCampaign ? this.$store.getters['campaign/buildingMode'] : this.$store.getters['module/buildingMode'];
+      return this.isCampaign
+        ? this.$store.getters['campaign/buildingMode']
+        : this.$store.getters['module/buildingMode'];
     },
     textOptions() {
       return this.isPreview ? false : textOptions();
@@ -77,21 +89,16 @@ export default {
       return this.$store.getters['module/draggable'].changed;
     },
     elementSelectorTop() {
-      const top = this.moduleHeight[`row-${this.row.id}`] ? this.moduleHeight[`row-${this.row.id}`] : 150;
-      const paddingBottom = _.parseInt(
-        this.module.structure.style.paddingBottom || 0,
-      );
-      const borderBottom = _.parseInt(
-        this.module.structure.style.borderBottomWidth || 0,
-      );
-      return top + paddingBottom + borderBottom;
+      return this.moduleHeight[`row-${this.row.id}`]
+        ? this.moduleHeight[`row-${this.row.id}`]
+        : 150;
     },
   },
   methods: {
     getTinyId(elementId, idInstance) {
       return idInstance
-      ? `idInstance-${idInstance}-componentId-${elementId}`
-      :`componentId-${elementId}`;
+        ? `idInstance-${idInstance}-componentId-${elementId}`
+        : `componentId-${elementId}`;
     },
     getElement(elementId) {
       let element = false;
@@ -154,7 +161,9 @@ export default {
     },
     elementBorderPaddingAndHeight(element) {
       const elementBorderAndPadding = this.elementBorderAndPadding(element);
-      const styles = _.isEmpty(elementBorderAndPadding) ? {} : elementBorderAndPadding;
+      const styles = _.isEmpty(elementBorderAndPadding)
+        ? {}
+        : elementBorderAndPadding;
       styles.height = this.widthStyle(element.attribute.height);
       return styles;
     },

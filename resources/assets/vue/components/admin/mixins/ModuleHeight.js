@@ -2,15 +2,15 @@ export default {
   methods: {
     setModuleHeight() {
       const firstRow = this.module.structure.rows[0];
-      const setModuleHeight = (rowId, value)=>{
+      const setModuleHeight = (rowId, value) => {
         this.$store.commit('module/setModuleHeight', {
-          key:`row-${rowId}`,
+          key: `row-${rowId}`,
           value,
         });
-      }
+      };
       const setModuleHeightByRow = (row, type) => {
         let value = 0;
-        const $row = $(`${type === 'multyRows' ? '[data-row-id=' + row.id + '] ' : ''}.column-draggable.has-component`)
+        const $row = $(`${type === 'multyRows' ? `[data-row-id=${row.id}] ` : ''}.column-draggable.has-component`);
         const $columns = $row.parents('[column-id]').length ? $row.parents('[column-id]') : $row;
         $columns.each((index, item) => {
           value = Math.max(value, $(item).height());
@@ -21,14 +21,17 @@ export default {
         setModuleHeight(row.id, value);
       };
 
-      if (this.module.structure.rows.length === 1 && this.module.structure.rows[0].columns.length === 1 ){
-        const value = $('.module-wrapper').height();
-        setModuleHeight(firstRow.id, value)
+      if (this.module.structure.rows.length === 1 && this.module.structure.rows[0].columns.length === 1) {
+        let value = 150;
+        if (this.module.structure.rows[0].columns[0].components.length >= 1) {
+          value = $('.st-content-component').height();
+        }
+        setModuleHeight(firstRow.id, value);
       } else if (this.module.structure.rows.length === 1) {
-        setModuleHeightByRow(firstRow)
+        setModuleHeightByRow(firstRow);
       } else if (this.module.structure.rows.length > 1) {
-        _.forEach(this.module.structure.rows, (row)=>setModuleHeightByRow(row, 'multyRows'))
-      };
+        _.forEach(this.module.structure.rows, row => setModuleHeightByRow(row, 'multyRows'));
+      }
     },
   },
 };
