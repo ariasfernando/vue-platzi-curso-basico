@@ -22,7 +22,7 @@
                       type: 'error',
                       show: errors.has(`trk-${item.name}`)
                     }"
-                    @input="(value) => onInputChange(`trk-${item.name}`, $event)" />
+                    @input="(value) => onInputChange(`trk-${item.name}`, value)" />
                 </template>
                 <template v-else-if="item.input_type === 'hidden'" slot="setting-bottom">
                   <el-input
