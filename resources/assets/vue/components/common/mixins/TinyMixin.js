@@ -204,9 +204,8 @@ export default {
       return parseInt(editor.settings.min_chars) || undefined;
     },
     tinyLength() {
-      // An empty element is removed in order to avoid count the bogus char.
-      const parsedText = this.$textElement.find('[data-mce-bogus]').length === 0 ? this.$textElement : this.$textElement.clone().find('[data-mce-bogus]').remove().end();
-      return parsedText.text().length;
+      // Remove "zero width no-break space" character
+      return this.$textElement.text().replace(/\uFEFF/g, '').length;
     },
     maxCharsValidation(event) {
       // Check for Characters Limit
