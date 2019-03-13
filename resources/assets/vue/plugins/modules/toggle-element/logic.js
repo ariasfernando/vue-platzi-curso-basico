@@ -184,7 +184,6 @@ export default {
                 payload.property = updateData.property;
                 payload.value = updateData.value;
               }
-              debugger
               this.saveElementProperty(payload);
             }
           }
