@@ -60,13 +60,13 @@ export default {
   mixins: [SettingContainerMixin],
   computed: {
     columnLabel() {
-      let columnindex = this.currentColumnIndex;
+      let columnIndex = this.currentColumnIndex;
       if (this.isInvertedStacking) {
-        columnindex = this.currentRow.columns.length - columnindex;
+        columnIndex = this.currentRow.columns.length - columnIndex;
       } else {
-        ++columnindex;
+        ++columnIndex;
       }
-      return `Column ${columnindex} Styles`;
+      return `Column ${columnIndex} Styles`;
     },
   },
 };

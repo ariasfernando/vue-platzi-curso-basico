@@ -111,13 +111,13 @@ module.exports = {
       styles.top = 0;
       if (!this.hasComponents) {
         styles.minHeight = '150px';
-        styles.height = `${this.moduleHeight[`row-${this.row.id}`] }px`;
+        styles.height = `${this.moduleHeight[`row-${this.row.id}`]}px`;
       }
       if (type === 'EmptyColumn') {
         styles.opacity = type && this.hasComponents ? 0 : 1;
       }
       if (type === 'HighlightOfElement') {
-        styles.height = `${this.moduleHeight[`row-${this.row.id}`] }px`;
+        styles.height = `${this.moduleHeight[`row-${this.row.id}`]}px`;
       }
       return styles;
     },
@@ -128,7 +128,7 @@ module.exports = {
         (this.$refs.draggable.$el.children.length > 1 ||
           this.$refs.draggable.$el.children[0].style.display !== 'none');
     },
-    onAdd(e, rowIndex, columnIndex){
+    onAdd(e) {
       if (e.from.getAttribute('class') === 'components-list') {
         const componentId = e.newIndex;
         const type = e.clone.getAttribute('data-type');
@@ -163,13 +163,13 @@ module.exports = {
       this.emitChange();
     },
     columnLabel(columnId) {
-      let columnindex = columnId;
+      let columnIndex = columnId;
       if (this.isInvertedStacking) {
-        columnindex = this.row.columns.length - columnindex;
+        columnIndex = this.row.columns.length - columnIndex;
       } else {
-        ++columnindex;
+        ++columnIndex;
       }
-      return `Column ${columnindex}`;
+      return `Column ${columnIndex}`;
     },
   },
   watch: {
