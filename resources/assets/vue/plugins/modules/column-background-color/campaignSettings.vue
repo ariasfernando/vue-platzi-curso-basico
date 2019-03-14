@@ -1,9 +1,9 @@
 <template>
-  <settings-container :label="plugin.title">
+  <SettingsContainer :label="plugin.title">
     <template slot="setting-right">
       <stui-color-picker v-model="colors" />
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 
 <script>

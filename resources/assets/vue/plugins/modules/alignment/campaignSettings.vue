@@ -1,5 +1,5 @@
 <template>
-  <settings-container :label="plugin.title">
+  <SettingsContainer :label="plugin.title">
     <template slot="setting-right">
       <stui-field addons>
         <stui-button
@@ -15,7 +15,7 @@
         </stui-button>
       </stui-field>
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 
 <script>

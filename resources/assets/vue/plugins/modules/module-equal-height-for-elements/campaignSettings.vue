@@ -11,6 +11,20 @@ export default {
       subComponent: 'container',
     };
   },
+  watch: {
+    module: {
+      handler() {
+        this.setEqualHeights();
+        if (this.buildingMode === 'mobile') {
+          $('#shadowRender')[0].dispatchEvent(new Event('update-iframe'));
+        }
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.setEqualHeights();
+  },
   methods: {
     getHigherHeight(components) {
       const moduleIdInstance = this.moduleIdInstance;
@@ -36,20 +50,6 @@ export default {
           this.addClassToElement({ value: 'st-equal-height', elementId });
         });
       });
-    },
-  },
-  mounted() {
-    this.setEqualHeights();
-  },
-  watch: {
-    module: {
-      handler: function() {
-        this.setEqualHeights();
-        if (this.buildingMode === 'mobile') {
-          $('#shadowRender')[0].dispatchEvent(new Event('update-iframe'));
-        }
-      },
-      deep: true,
     },
   },
 };

@@ -1,21 +1,21 @@
 <template>
-  <settings-container :label="plugin.title">
+  <SettingsContainer :label="plugin.title">
     <template slot="setting-bottom">
       <stui-input-text
-          placeholder="Mask Tag"
-          v-model="maskDescription" />
+        v-model="maskDescription"
+        placeholder="Mask Tag" />
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 
 <script>
-import SettingsContainer from "../../../components/common/settings/containers/SettingsContainer.vue";
+import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {
   components: { SettingsContainer },
-  props: ["moduleDataIndex", "moduleDataKey"],
   mixins: [pluginCampaignMixin],
+  props: ['moduleDataIndex', 'moduleDataKey'],
   computed: {
     maskDescription: {
       get() {
@@ -25,17 +25,16 @@ export default {
           return this.module.data && !_.isUndefined(this.module.data[this.moduleDataKey]) && !_.isUndefined(this.module.data[this.moduleDataKey][this.moduleDataIndex])
             ? this.module.data[this.moduleDataKey][this.moduleDataIndex].dataDescription
             : null;
-        } else {
-          return this.module.data && this.module.data['dataDescription'] ? this.module.data['dataDescription'] : null;
         }
+        return this.module.data && this.module.data.dataDescription ? this.module.data.dataDescription : null;
       },
       set(value) {
-        this.saveComponentProperty("dataDescription", value);
+        this.saveComponentProperty('dataDescription', value);
       },
     },
     subComponent() {
       return this.element.type.split('-')[0];
-    }
+    },
   },
   created() {
     if (_.has(this.element, 'plugins.destinationUrl.config.validations.url.selected')) {
@@ -43,14 +42,14 @@ export default {
     }
   },
   methods: {
-    saveComponentProperty(property, value) {
-      value = value.replace(/[^a-zA-Z0-9_\[\]]/g, '');
+    saveComponentProperty(property, newValue) {
+      const value = newValue.replace(/[^a-zA-Z0-9_\[\]]/g, '');
       if (this.module.type === 'studio') {
         this.saveAttributeInThisElement({
           property,
-          value
+          value,
         });
-      } else if (typeof this.moduleDataIndex != 'undefined') {
+      } else if (typeof this.moduleDataIndex !== 'undefined') {
         const data = JSON.parse(JSON.stringify(this.module.data));
         data[this.moduleDataKey][this.moduleDataIndex][property] = value;
         this.$store.commit('campaign/saveCustomModuleData', {
@@ -65,7 +64,7 @@ export default {
           data,
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>

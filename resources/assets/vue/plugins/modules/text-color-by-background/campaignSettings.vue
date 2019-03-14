@@ -2,8 +2,8 @@
 </template>
 
 <script>
-import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 import contrast from 'contrast';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {
   mixins: [pluginCampaignMixin],
@@ -16,7 +16,7 @@ export default {
     bgcolor(bgcolor) {
       const value = contrast(bgcolor) === 'light' ? this.plugin.config.darkText : this.plugin.config.lightText;
       // Loop through columns and components
-      _.each(this.element.components, (comp, compId) => {
+      _.each(this.element.components, (comp) => {
         const subComponent = comp.type.split('-')[0];
         // Set new text color
         if (subComponent === 'text') {

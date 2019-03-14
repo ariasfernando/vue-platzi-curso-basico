@@ -58,7 +58,7 @@ export default {
     },
     addClassEqualHeight() {
       _.each(this.row.columns, (column) => {
-          this.addClassToElement({ value: 'st-equal-height', elementId: column.id });
+        this.addClassToElement({ value: 'st-equal-height', elementId: column.id });
       });
     },
     getImagesUrls() {
@@ -90,7 +90,7 @@ export default {
   },
   watch: {
     module: {
-      handler: function (newModule) {
+      handler(newModule) {
         const newImagesUrls = this.getImagesUrls(newModule);
         if (this.previousImagesUrls.length > 0) {
           for (let i = 0; i < this.previousImagesUrls.length; i++) {
@@ -106,7 +106,7 @@ export default {
         }
 
         if (this.buildingMode === 'mobile') {
-          this.iframe.dispatchEvent(new Event("update-iframe"))
+          this.iframe.dispatchEvent(new Event('update-iframe'));
         }
       },
       deep: true,

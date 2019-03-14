@@ -53,17 +53,17 @@ export default {
       validateOptions:
       [
         {
-          value:'disabled',
+          value: 'disabled',
           label: 'No Validation',
         },
         {
-          value:'url',
+          value: 'url',
           label: 'Validate Format',
         },
         {
-          value:'urlAndDestination',
+          value: 'urlAndDestination',
           label: 'Format and Destination',
-        }
+        },
       ],
     };
   },

@@ -1,9 +1,9 @@
 <template>
-  <settings-container label="Background Color" custom-class="plugin-palette">
+  <SettingsContainer label="Background Color" custom-class="plugin-palette">
     <template slot="setting-right">
       <stui-color-picker v-model="colors" :palette="palette()" />
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 
 <script>
@@ -21,7 +21,7 @@ export default {
         return { hex: this.module.structure.attribute.bgcolor };
       },
       set(value) {
-        this.saveAttributeInThisElement({property:'bgcolor', value: value.hex}) 
+        this.saveAttributeInThisElement({ property: 'bgcolor', value: value.hex }) 
       },
     },
   },

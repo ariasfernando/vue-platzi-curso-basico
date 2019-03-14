@@ -5,7 +5,7 @@
 import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {
-  name: 'module-height-sync',
+  name: 'ModuleHeightSync',
   mixins: [pluginCampaignMixin],
   data() {
     return {
@@ -31,6 +31,9 @@ export default {
       deep: true,
     },
   },
+  mounted() {
+    this.setModuleHeight();
+  },
   methods: {
     saveModuleAttribute(property, value) {
       if (this.isCustom) {
@@ -42,7 +45,7 @@ export default {
         payload.data[property] = value;
         this.$store.commit('campaign/saveCustomModuleData', payload);
       } else {
-        saveAttributeInThisElement({property, value})
+        this.saveAttributeInThisElement({ property, value });
       }
     },
     setModuleHeight() {
@@ -65,9 +68,6 @@ export default {
       }
       return height;
     },
-  },
-  mounted() {
-    this.setModuleHeight();
   },
 };
 </script>
