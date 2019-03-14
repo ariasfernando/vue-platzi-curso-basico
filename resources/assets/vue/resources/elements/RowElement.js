@@ -1,4 +1,3 @@
-import ColumnElement from './ColumnElement';
 export default {
   type: 'row-element',
   columnsStacking: 'normal',
