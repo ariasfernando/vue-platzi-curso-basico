@@ -306,6 +306,7 @@ const actions = {
     }
     /* develblock:end */
     context.commit('addRow', { row: element.getProperties() });
+    context.dispatch('addColumn', { rowId: element.getProperties().id });
   },
   addColumn(context, { rowId }) {
     // Get column plugins
