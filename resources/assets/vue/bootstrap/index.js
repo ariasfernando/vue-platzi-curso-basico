@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import configService from '../services/config';
 import customer from 'customer';
 import dictionary from '../resources/dictionary';
