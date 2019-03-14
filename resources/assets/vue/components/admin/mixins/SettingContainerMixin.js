@@ -90,7 +90,7 @@ export default {
     currentColumnIndex() {
       let columnIndex = false;
       _.forEach(this.module.structure.rows, (row) => {
-        _.forEach(row.columns, (column) => {
+        _.forEach(row.columns, (column, currentColumnIndex) => {
           if (column.id === this.currentElementId) {
             columnIndex = currentColumnIndex;
             return false;
@@ -204,8 +204,8 @@ export default {
       _.forEach(group.plugins, (item) => {
         // const typeAcl = this.typeAcl === 'module' ? '' : `-${this.typeAcl}`;
         if (this.currentElement.plugins[_.camelCase(item.name)]) {
-            // Todo: We need a permissions refactor to facilitate its use STD-569.
-            // (this.$can(`std${typeAcl}-plugin-${item.aclName}`) &&
+          // Todo: We need a permissions refactor to facilitate its use STD-569.
+          // (this.$can(`std${typeAcl}-plugin-${item.aclName}`) &&
           show = true;
           pluginsToShow.push(item);
         }

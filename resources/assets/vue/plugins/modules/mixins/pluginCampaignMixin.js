@@ -75,31 +75,31 @@ export default {
     },
     getElement(elementId) {
       if (!this.isCustom) {
-          if (!elementId) {
-            return this.module;
+        if (!elementId) {
+          return this.module;
+        }
+        let element = false;
+        _.forEach(this.module.structure.rows, (row) => {
+          if (row.id === elementId) {
+            element = row;
+            return false;
           }
-          let element = false;
-          _.forEach(this.module.structure.rows, (row) => {
-            if (row.id === elementId) {
-              element = row;
+          _.forEach(row.columns, (column) => {
+            if (column.id === elementId) {
+              element = column;
               return false;
             }
-            _.forEach(row.columns, (column) => {
-              if (column.id === elementId) {
-                element = column;
+            _.forEach(column.components, (currentComponent) => {
+              if (currentComponent.id === elementId) {
+                element = currentComponent;
                 return false;
               }
-              _.forEach(column.components, (currentComponent) => {
-                if (currentComponent.id === elementId) {
-                  element = currentComponent;
-                  return false;
-                }
-                return true;
-              });
-              return !element;
+              return true;
             });
             return !element;
           });
+          return !element;
+        });
         return element;
       };
       return this.module.data[elementId];
@@ -109,18 +109,18 @@ export default {
         let columnIndex = false;
         _.forEach(this.module.structure.rows, (row) => {
           _.forEach(row.columns, (column, currentColumnIndex) => {
-              if (column.id === elementId) {
+            if (column.id === elementId) {
+              columnIndex = currentColumnIndex;
+              return false;
+            }
+            _.forEach(column.components, (currentComponent) => {
+              if (currentComponent.id === elementId) {
                 columnIndex = currentColumnIndex;
                 return false;
               }
-              _.forEach(column.components, (currentComponent) => {
-                if (currentComponent.id === elementId) {
-                  columnIndex = currentColumnIndex;
-                  return false;
-                }
-              });
-              return columnIndex === false;
             });
+            return columnIndex === false;
+          });
           return columnIndex === false;
         });
         return columnIndex;
