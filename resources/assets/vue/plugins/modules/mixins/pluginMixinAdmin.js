@@ -24,7 +24,7 @@ export default {
       });
     },
     toggle(value) {
-      this.updatePluginConfig({type: 'enabled', value});
+      this.updatePluginConfig({ type: 'enabled', value });
       this.setSlideToggles(value ? true : undefined);
     },
     updatePluginConfig({ type, path, value }) {

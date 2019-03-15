@@ -63,7 +63,7 @@ export default {
       };
       this.$store.commit('campaign/saveElementPluginData', payload);
     },
-    saveElementInThisPluginData({ type, path, value, plugin }) {
+    saveElementInThisPluginData({ type, path, value }) {
       const payload = {
         elementId: this.element.id,
         plugin: _.camelCase(this.name),
@@ -101,7 +101,7 @@ export default {
           return !element;
         });
         return element;
-      };
+      }
       return this.module.data[elementId];
     },
     getColumnIndexByelementId(elementId) {
@@ -118,6 +118,7 @@ export default {
                 columnIndex = currentColumnIndex;
                 return false;
               }
+              return true;
             });
             return columnIndex === false;
           });
@@ -141,6 +142,7 @@ export default {
                 column = CurrentColumn;
                 return false;
               }
+              return true;
             });
             return column === false;
           });
@@ -168,6 +170,7 @@ export default {
                 row = currentRow;
                 return false;
               }
+              return true;
             });
             return row === false;
           });
@@ -185,7 +188,7 @@ export default {
             rowIndex = currentRowIndex;
             return false;
           }
-          _.forEach(row.columns, (currentColumn) => {
+          _.forEach(currentRow.columns, (currentColumn) => {
             if (currentColumn.id === elementId) {
               rowIndex = currentRowIndex;
               return false;
@@ -195,6 +198,7 @@ export default {
                 rowIndex = currentRowIndex;
                 return false;
               }
+              return true;
             });
             return rowIndex === false;
           });
@@ -210,14 +214,15 @@ export default {
         _.forEach(this.module.structure.rows, (row) => {
           _.forEach(row.columns, (column) => {
             _.forEach(column.components, (currentComponent, currentComponentIndex) => {
-                if (currentComponent.id === elementId) {
-                  componentIndex = currentComponentIndex;
-                  return false;
-                }
-              });
-              return componentIndex === false;
+              if (currentComponent.id === elementId) {
+                componentIndex = currentComponentIndex;
+                return false;
+              }
+              return true;
             });
             return componentIndex === false;
+          });
+          return componentIndex === false;
         });
         return componentIndex;
       }

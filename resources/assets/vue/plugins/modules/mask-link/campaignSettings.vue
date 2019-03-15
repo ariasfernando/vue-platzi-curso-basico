@@ -21,7 +21,7 @@ export default {
       get() {
         if (this.module.type === 'studio') {
           return this.element[this.subComponent].attribute.dataDescription;
-        } else if (typeof this.moduleDataIndex != 'undefined' || typeof this.moduleDataKey != 'undefined') {
+        } else if (typeof this.moduleDataIndex !== 'undefined' || typeof this.moduleDataKey !== 'undefined') {
           return this.module.data && !_.isUndefined(this.module.data[this.moduleDataKey]) && !_.isUndefined(this.module.data[this.moduleDataKey][this.moduleDataIndex])
             ? this.module.data[this.moduleDataKey][this.moduleDataIndex].dataDescription
             : null;

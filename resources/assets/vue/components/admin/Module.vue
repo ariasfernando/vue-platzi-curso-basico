@@ -31,31 +31,31 @@
             :row="row"
             :with-row="module.structure.rows.length > 1"
             @select-component="selectComponent">
-              <ColumnManager :row="row" :module="module">
-                <template slot-scope="{columnData}">
-                  <ColumnDraggable
+            <ColumnManager :row="row" :module="module">
+              <template slot-scope="{columnData}">
+                <ColumnDraggable
+                  :row="row"
+                  :row-index="rowIndex"
+                  :module="module"
+                  :column-id="columnData.columnId"
+                  :column="columnData.column"
+                  @select-component="selectComponent">
+                  <Component
+                    :is="component.studioKey || component.type"
+                    v-for="(component, componentId) in columnData.column.components"
+                    :key="component.id"
                     :row="row"
-                    :row-index="rowIndex"
                     :module="module"
+                    class="st-component"
+                    :component="component"
+                    :element="component"
                     :column-id="columnData.columnId"
-                    :column="columnData.column"
-                    @select-component="selectComponent">
-                    <Component
-                      :is="component.studioKey || component.type"
-                      v-for="(component, componentId) in columnData.column.components"
-                      :key="component.id"
-                      :row="row"
-                      :module="module"
-                      class="st-component"
-                      :component="component"
-                      :element="component"
-                      :column-id="columnData.columnId"
-                      :is-active="currentElementId === component.id"
-                      :component-id="componentId"
-                      @select-component="selectComponent" />
-                  </ColumnDraggable>
-                </template>
-              </ColumnManager>
+                    :is-active="currentElementId === component.id"
+                    :component-id="componentId"
+                    @select-component="selectComponent" />
+                </ColumnDraggable>
+              </template>
+            </ColumnManager>
           </RowContainer>
         </table>
       </td>
