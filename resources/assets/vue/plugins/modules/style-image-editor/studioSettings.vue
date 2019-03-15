@@ -6,13 +6,13 @@
       </template>
     </SettingsContainer>
     <b-collapse :id="pluginKey" :visible="arrowState">
-      <SettingsContainer v-if="plugin.enabled && $can('std-image-element_editor_plugin-mobile-upload')" label="Mobile Image Upload">
+      <SettingsContainer v-if="plugin.enabled" label="Mobile Image Upload">
         <template slot="setting-right">
           <StuiToggleButton :value="hasImageMobile" @change="toggleImageMobile" />
         </template>
       </SettingsContainer>
       <template v-for="(option, name) in plugin.config" v-if="plugin.enabled">
-        <SettingsContainer v-if="$can('std-image-element_editor_'+name)" :label="option.label" :key="name">
+        <SettingsContainer :label="option.label" :key="name">
           <template slot="setting-right">
             <StuiToggleButton v-if="option.type === 'switch'" :disabled="!plugin.enabled" :value="option.value" @change="(value)=>updateField(value, `${name}.value`)" />
             <StuiInputNumber
@@ -39,7 +39,7 @@
           </template>
         </SettingsContainer>
         <template v-if="option.value && option.config" v-for="(subopt, subname) in option.config">
-          <SettingsContainer v-if="$can('std-image-element_editor_'+subname)" :label="subopt.label" :key="subname">
+          <SettingsContainer :key="name + subname" :label="subopt.label">
             <template slot="setting-right">
               <StuiToggleButton v-if="subopt.type === 'switch'" :value="subopt.value" active-color="#78DCD6" @change="(value)=>updateField(value, `${name}.config.${subname}.value`)" />
               <StuiInputText v-if="subopt.type === 'text'" :value="subopt.value" @change="(value)=>updateField(value, `${name}.config.${subname}.value`)" />
@@ -54,16 +54,17 @@
               <el-select
                 v-if="subopt.type === 'select' || subopt.type === 'multi-select'"
                 :value="subopt.value"
+                size="mini"
                 :multiple="subopt.type === 'multi-select'"
                 :list="subopt.options"
                 @change="(value) => updateField(value, `${name}.config.${subname}.value`)" />
             </template>
           </SettingsContainer>
           <template v-if="subopt.value && subopt.config" v-for="(interop, intername) in subopt.config">
-            <SettingsContainer v-if="$can('std-image-element_editor_'+intername)" :key="intername" :label="interop.label">
+            <SettingsContainer :key="name + subname + intername" :label="interop.label">
               <template slot="setting-right">
                 <StuiToggleButton v-if="interop.type === 'switch'" :value="interop.value" active-color="#78DCD6" @change="(value)=>updateField(value, `${name}.config.${subname}.config.${intername}.value`)" />
-                <StuiInputText  v-if="interop.type === 'text'" :value="interop.value" @change="(value)=>updateField(value, `${name}.config.${subname}.config.${intername}.value`)" />
+                <StuiInputText v-if="interop.type === 'text'" :value="interop.value" @change="(value)=>updateField(value, `${name}.config.${subname}.config.${intername}.value`)" />
                 <StuiInputNumber
                   v-if="interop.type === 'number'"
                   v-validate="'required'"
@@ -108,7 +109,7 @@ export default {
   mounted() {
     this.$store.dispatch('module/getLibraries', {
       plugin: this.name,
-      elementId: this.elementId,
+      elementId: this.element.id,
     });
   },
   methods: {
@@ -117,7 +118,7 @@ export default {
     },
     toggleImageMobile(value) {
       const payload = {
-        elementId: this.elementId,
+        elementId: this.element.id,
         subComponent: 'image',
         link: 'styleOption',
         property: 'hasImageMobile',
