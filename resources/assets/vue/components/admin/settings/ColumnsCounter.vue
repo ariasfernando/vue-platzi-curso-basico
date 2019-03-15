@@ -27,9 +27,6 @@ export default {
       set(value) {
         const column = value;
         const numColumn = this.element.columns.length;
-        if (numColumn === column) {
-          return true;
-        }
         if (numColumn > column) {
           this.$store.commit('module/removeColumn', {
             rowId: this.element.id,
@@ -44,10 +41,11 @@ export default {
             });
           }
         }
-        this.$store.dispatch('module/normalizeColumns', {
-          rowId: this.element.id,
-        });
-        return true;
+        if (numColumn !== column) {
+          this.$store.dispatch('module/normalizeColumns', {
+            rowId: this.element.id,
+          });
+        }
       },
     },
   },
