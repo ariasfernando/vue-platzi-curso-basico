@@ -57,17 +57,17 @@ export default {
       };
     },
     addClassEqualHeight() {
-      _.each(this.row.columns, (column) => {
+      _.each(this.element.columns, (column) => {
         this.addClassToElement({ value: 'st-equal-height', elementId: column.id });
       });
     },
     getImagesUrls() {
       const imagesUrls = [];
-      for (const columnId in this.row.columns) {
-        const column = this.row.columns[columnId];
+      for (const columnId in this.element.columns) {
+        const column = this.element.columns[columnId];
         for (const componentId in column.components) {
-          if (this.row.columns[columnId].components[componentId].type === 'image-element') {
-            imagesUrls.push(this.row.columns[columnId].components[componentId].image.attribute.placeholder);
+          if (this.element.columns[columnId].components[componentId].type === 'image-element') {
+            imagesUrls.push(this.element.columns[columnId].components[componentId].image.attribute.placeholder);
           }
         }
       }
@@ -89,9 +89,9 @@ export default {
     this.setEqualHeights();
   },
   watch: {
-    module: {
-      handler(newModule) {
-        const newImagesUrls = this.getImagesUrls(newModule);
+    element: {
+      handler(newElement) {
+        const newImagesUrls = this.getImagesUrls(newElement);
         if (this.previousImagesUrls.length > 0) {
           for (let i = 0; i < this.previousImagesUrls.length; i++) {
             if (this.previousImagesUrls[i] === newImagesUrls[i]) {
