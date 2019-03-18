@@ -229,19 +229,21 @@ export default {
       return undefined;
     },
     addClassToElement({ elementId, value }) {
-      const element = elementId
-        ? this.getElement(elementId)
+      const subElement = elementId
+        ? this.getElement(elementId).container
         : this.module.structure;
-      let classes = element.container.attribute.classes;
+      let classes = subElement.attribute.classes;
+      const subComponent = elementId ? 'container' : undefined;
       const classesArr = classes ? classes.split(' ') : [];
       const index = classesArr.indexOf(value);
+
       if (index === -1) {
         classesArr.push(value);
         classes = classesArr.join(' ');
         this.saveElementProperty({
           moduleIdInstance: this.moduleIdInstance,
           elementId,
-          subComponent: 'container',
+          subComponent,
           link: 'attribute',
           property: 'classes',
           value: classes,
