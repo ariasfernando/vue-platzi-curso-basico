@@ -150,7 +150,7 @@ class HelperServiceProvider extends ServiceProvider
 
         foreach ($user_libraries as $library) {
             $library_config = Library::findOrFail($library['_id'])->config;
-            if (isset($library_config['esp']) && $library_config['esp'] && $library_config['espProvider']) {
+            if (isset($library_config['espProvider']) && $library_config['espProvider'] !== 'none') {
                 if (!$library_id || $library_id == $library['_id']) {
                     $api_drivers[] = $library_config['espProvider'];
                 }
