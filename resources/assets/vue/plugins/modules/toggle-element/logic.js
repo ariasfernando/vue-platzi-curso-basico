@@ -175,8 +175,8 @@ export default {
               const payload = {
                 elementId: rule.target.elementId,
               };
-              if (update.path) {
-                payload.path = update.path;
+              if (updateData.path) {
+                payload.path = updateData.path;
                 payload.value = updateData.value;
               } else {
                 payload.subComponent = updateData.subComponent;
