@@ -9,7 +9,7 @@
       :value="paletteValue"
       :palette="palette"
       :disabled="disabled || isMuted"
-      @input="(value)=>change(value)" />
+      @input="handleChange" />
     <template v-else>
       <div class="input-text-hex" @click="openColorPicker()">
         <StuiInputText
@@ -23,7 +23,7 @@
         :value="pickerValue"
         color-format="hex"
         :disabled="disabled || isMuted"
-        @change="(value)=>change(value)" />
+        @change="handleChange" />
     </template>
   </div>
 </template>
@@ -91,7 +91,7 @@ export default {
     openColorPicker() {
       this.$refs[`color-picker-${this.instance}`].$el.children[0].click();
     },
-    change(val) {
+    handleChange(val) {
       const value = val === null ? false : val;
       this.$emit('input', value);
       this.$emit('change', value);
@@ -202,6 +202,8 @@ export default {
   margin-right: 6px !important;
 }
 .stui-color-palette /deep/ .vc-compact {
+  width: 100%;
+  box-shadow: none!important;
   padding-top: 5px;
   padding-left: 6px;
   border: 1px solid $stui-input-border-color !important;

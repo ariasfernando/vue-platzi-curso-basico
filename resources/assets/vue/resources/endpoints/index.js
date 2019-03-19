@@ -63,7 +63,7 @@ module.exports = {
   api: {
     uploadEmail: { method: 'post', path: `${baseUrl}/api/upload-email` },
     uploadedHistory: { method: 'get', path: `${baseUrl}/api/history?campaign_id=:campaignId` },
-    getFolders: { method: 'get', path: `${baseUrl}/api/folders?api_driver=:api_driver` },
+    getFolders: { method: 'get', path: `${baseUrl}/api/folders?api_driver=:apiDriver` },
   },
   dashboard: {
     getMenu: { method: 'get', path: `${baseUrl}/dashboard/menu` },

@@ -60,7 +60,7 @@ class AddKeyToTextOptions extends Migration
     }
 
     protected function setCampaignTextOptionsLinkKey() {
-        Campaign::withTrashed()->chunk(100, function ($campaigns) {
+        Campaign::withTrashed()->chunk(20, function ($campaigns) {
             Logging::info('-------------------------');
             Logging::info('CAMPAIGNS');
             Logging::info('-------------------------');
@@ -91,6 +91,7 @@ class AddKeyToTextOptions extends Migration
                     }
                 }
                 $campaign->modules_data = $modules_data;
+                $campaign->timestamps = false;
                 $campaign->save();
             }
         });

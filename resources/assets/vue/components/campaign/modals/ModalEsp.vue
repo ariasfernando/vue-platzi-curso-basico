@@ -72,5 +72,10 @@
         window.location.href = '/#finished-campaign';
       },
     },
+    created () {
+      if (this.campaign.library_config.espProvider && this.campaign.library_config.espProvider !== 'none') {
+        configService.getConfig('api.' + this.campaign.library_config.espProvider).then((response) => this.espProviderConfig = response);
+      }
+    }
   };
 </script>

@@ -4,10 +4,9 @@
     :class="rootClasses">
     <template v-if="hasSettingRight">
       <StuiField>
-        <div
-          v-if="!noLabel && checkbox === undefined"
-          class="control">
+        <StuiField>
           <label
+            v-if="!noLabel && checkbox === undefined"
             :class="{[`is-level-${level}`] : level}"
             :title="title">
             {{ label }}
@@ -20,22 +19,23 @@
                 :class="{collapsed: arrow}" />
             </span>
           </label>
-        </div>
-        <StuiCheckbox
-          v-if="checkbox !== undefined"
-          :label="label"
-          :value="checkbox"
-          :class="{[`level-${level}`] : level}"
-          :disabled="disabled"
-          @change="(value)=>{$emit('checkboxChange', value)}" />
-        <slot name="setting-right" />
+          <StuiCheckbox
+            v-if="checkbox !== undefined"
+            :label="label"
+            :value="checkbox"
+            :class="{[`level-${level}`] : level}"
+            :disabled="disabled"
+            @change="(value)=>{$emit('checkboxChange', value)}" />
+        </StuiField>
+        <StuiField>
+          <slot name="setting-right" />
+        </StuiField>
       </StuiField>
     </template>
 
     <template v-if="hasSettingSideBySide">
       <StuiField>
-        <div
-          class="control half-setting--left">
+        <StuiField vertical class="half-setting--left">
           <label
             v-if="!noLabel"
             :class="{[`is-level-${level}`] : level}"
@@ -43,9 +43,8 @@
             {{ labelLeft }}
           </label>
           <slot name="setting-half-left" />
-        </div>
-        <div
-          class="control half-setting--right">
+        </StuiField>
+        <StuiField vertical class="half-setting--right">
           <label
             v-if="!noLabel"
             :class="{[`level-${level}`] : level}"
@@ -53,38 +52,42 @@
             {{ labelRight }}
           </label>
           <slot name="setting-half-right" />
-        </div>
+        </StuiField>
       </StuiField>
     </template>
 
     <template v-if="hasSettingBottom">
-      <div v-if="!noLabel" class="control">
-        <label
-          :class="{[`is-level-${level}`] : level}"
-          :title="title">
-          {{ label }}
-          <span
-            v-if="arrow !== undefined"
-            class="arrow"
-            @click="$emit('toggleArrow', !arrow)">
-            <i
-              class="glyphicon glyphicon-menu-down"
-              :class="{collapsed: arrow}"
-              @click="$emit('toggleArrow', !arrow)" />
-          </span>
-        </label>
-      </div>
+      <StuiField v-if="!noLabel">
+        <StuiField>
+          <label
+            :class="{[`is-level-${level}`] : level}"
+            :title="title">
+            {{ label }}
+            <span
+              v-if="arrow !== undefined"
+              class="arrow"
+              @click="$emit('toggleArrow', !arrow)">
+              <i
+                class="glyphicon glyphicon-menu-down"
+                :class="{collapsed: arrow}"
+                @click="$emit('toggleArrow', !arrow)" />
+            </span>
+          </label>
+        </StuiField>
+        <StuiField v-if="hasLabelAppend">
+          <slot name="label-append" />
+        </StuiField>
+      </StuiField>
       <slot name="setting-bottom" />
     </template>
 
     <template v-if="hasSettingHalf">
-      <div v-if="!noLabel" class="control">
-        <label
-          :class="{[`is-level-${level}`] : level}"
-          :title="title">
-          {{ label }}
-        </label>
-      </div>
+      <label
+        v-if="!noLabel"
+        :class="{[`is-level-${level}`] : level}"
+        :title="title">
+        {{ label }}
+      </label>
       <slot name="setting-half" />
     </template>
   </div>
@@ -122,6 +125,9 @@ export default {
     },
     hasSettingHalf() {
       return Boolean(this.$slots['setting-half']);
+    },
+    hasLabelAppend() {
+      return Boolean(this.$slots['label-append']);
     },
     rootClasses() {
       return [
@@ -163,22 +169,22 @@ export default {
       width: 100%;
       font-weight: bold;
       border-bottom: 1px solid #ddd;
-      padding-top: 0px;
       padding-bottom: 10px;
       margin-bottom: 10px;
     }
   }
 
   &.is-setting-right /deep/,
-  &.is-setting-half /deep/,
   &.is-setting-side /deep/ {
-     > .stui-field > .control {
+     > .stui-field > .control,
+     > .stui-field > .stui-field {
       width: calc(50% - 2px);
     }
   }
 
   &.has-label-expanded  /deep/ {
-    > .stui-field > .control {
+    > .stui-field > .control,
+    > .stui-field > .stui-field {
       width: auto;
       flex-grow: 1;
       flex-shrink: 1;
@@ -203,11 +209,20 @@ export default {
     /deep/ .stui-toggle-button {
       float: none;
     }
+    &.is-first {
+      margin-top: -4px;
+      & + .is-setting-half {
+        margin-top: -6px;
+      }
+    }
   }
 
   &.is-setting-bottom {
     .arrow{
       float: right;
+    }
+    &.is-first {
+      margin-top: -4px;
     }
   }
   &.has-arrow:not(.is-active) {
@@ -222,18 +237,10 @@ export default {
     }
   }
 
-  span.is-danger {
-    font-size: 11px;
-    font-weight: 300;
-    color: #ce5f5f;
-  }
   .clearfix {
     clear: both;
   }
-  .is-danger /deep/ input,
-  .is-danger /deep/ textarea {
-    border-color: #ce5f5f!important;
-  }
+
   .arrow {
     padding: 0px 6px;
     &:before {

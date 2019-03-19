@@ -38,14 +38,21 @@
     </div>
 
     <!-- Modals -->
-    <modal-complete v-if="campaignReady"></modal-complete>
-    <modal-preview v-if="campaignReady"></modal-preview>
-    <modal-esp v-if="campaignReady"></modal-esp>
-    <modal-proof v-if="campaignReady"></modal-proof>
-    <modal-enable-templating v-if="campaignReady"></modal-enable-templating>
-    <modal-proof-track v-if="campaignReady"></modal-proof-track>
-
-    <spinner></spinner>
+    <modal-complete v-if="campaignReady" />
+    <modal-preview v-if="campaignReady" />
+    <modal-esp v-if="campaignReady" />
+    <modal-proof v-if="campaignReady" />
+    <modal-enable-templating v-if="campaignReady" />
+    <modal-proof-track v-if="campaignReady" />
+    <modal-insert-body
+      v-if="campaignReady && campaign.library_config.insertBody"
+      title="append"
+      @saveCampaign="$store.dispatch('campaign/saveCampaign', campaign)" />
+    <modal-insert-body
+      v-if="campaignReady && campaign.library_config.insertBody"
+      title="prepend"
+      @saveCampaign="$store.dispatch('campaign/saveCampaign', campaign)" />
+    <spinner />
 
   </div>
 </template>
@@ -73,6 +80,7 @@
   import Spinner from '../common/Spinner.vue'
   import Tracking from './Tracking.vue'
   import VueSticky from 'vue-sticky'
+  import ModalInsertBody from './modals/ModalInsertBody.vue';
 
   export default {
     name: 'Campaign',
@@ -91,6 +99,7 @@
       ModalPreview,
       ModalProof,
       ModalProofTrack,
+      ModalInsertBody,
       ModuleBackgroundSettings,
       ModuleSettings,
       ScrollbarContainer,
@@ -202,7 +211,10 @@
           });
 
         }, this.pingLockInterval);
-      }
+      },
+      submitBodyInsert() {
+
+      },
     },
     created: function () {
       this.$store.commit("global/setLoader", true);

@@ -54,20 +54,6 @@ export default [
         label: 'Template background palettes',
       },
       {
-        name: 'prependHtml',
-        aclName: 'library-advance-settings',
-        path: 'library.config',
-        type: 'stui-input-text',
-        label: 'Prepend to body',
-      },
-      {
-        name: 'appendHtml',
-        aclName: 'library-advance-settings',
-        path: 'library.config',
-        type: 'stui-input-text',
-        label: 'Append to body',
-      },
-      {
         click: 'openPropietaryStyles',
         aclName: 'library-basic-settings',
         type: 'stui-button',

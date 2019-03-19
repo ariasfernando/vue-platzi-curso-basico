@@ -1,5 +1,5 @@
 <template>
-  <div class="stui-field" :class="[rootClasses, fieldType()]">
+  <div class="stui-field" :class="rootClasses">
     <slot />
   </div>
 </template>
@@ -12,6 +12,7 @@ export default {
       type: Boolean,
       default: true,
     },
+    vertical: Boolean,
     groupMultiline: Boolean,
     position: {
       type: String,
@@ -26,10 +27,15 @@ export default {
   },
   computed: {
     rootClasses() {
-      return [this.newPosition, {
-        'is-expanded': this.expanded,
-        'is-grouped-multiline': this.groupMultiline,
-      }];
+      return [
+        this.fieldType(),
+        this.newPosition,
+        this.customClass,
+        {
+          'is-expanded': this.expanded,
+          'is-grouped-multiline': this.groupMultiline,
+        },
+      ];
     },
     newPosition() {
       if (this.position) {
@@ -52,6 +58,7 @@ export default {
      */
     fieldType() {
       if (this.addons) return 'has-addons';
+      if (this.vertical) return 'is-vertical';
       let renderedNode = 0;
       if (this.$slots.default) {
         renderedNode = this.$slots.default.reduce(
@@ -157,13 +164,16 @@ export default {
     justify-content: flex-start;
     & > .control {
       flex-shrink: 0;
-      &:not(:last-child) {
-        margin-right: 4px;
-      }
       &.is-expanded {
         flex-grow: 1;
         flex-shrink: 1;
       }
+    }
+    & > .control + .control,
+    & > .control + .stui-field,
+    & > .stui-field + .control,
+    & > .stui-field + .stui-field {
+      margin-left: 4px;
     }
     &.is-grouped-centered {
       justify-content: center;

@@ -1,7 +1,7 @@
 <template>
   <settings-container
     label="Width"
-    :checkbox="checkboxValue"
+    :checkbox="!checkboxValue"
     @checkboxChange="(value)=>checkboxChange(value)">
     <template slot="setting-right">
       <stui-input-number
@@ -50,12 +50,12 @@ export default {
       },
     },
     checkboxValue() {
-      return this.autoWidth !== undefined ? this.autoWidth : false;
+      return this.autoWidth === undefined ? false : this.autoWidth;
     },
   },
   methods: {
     checkboxChange(value) {
-      this.autoWidth = value;
+      this.autoWidth = !value;
     },
   },
 };

@@ -7,18 +7,18 @@
       :collapsable="false" />
     <div class="card card-custom" :class="{hidden: !showCurrentSettings}">
       <GroupContainer ref="component-settings-group" class="group-container-custom">
-        <template v-for="(module, moduleId) in modulesFiltered">
-          <template v-for="(column, columnId) in module.structure.columns">
+        <template v-for="(indexedModule) in modulesFiltered">
+          <template v-for="(column, columnId) in indexedModule.module.structure.columns">
             <template v-for="(component, componentId) in column.components">
               <Component
                 :is="'campaign-' + plugin.name"
-                v-for="(plugin, pluginKey) in componentPluginsFiltered(module, component)"
-                :key="`${getElementKey(module ,component)}-plugin-${plugin.name}`"
+                v-for="(plugin, pluginKey) in componentPluginsFiltered(indexedModule.module, component)"
+                :key="`${getElementKey(indexedModule.module ,component)}-plugin-${plugin.name}`"
                 :class="'plugin-' + plugin.name"
-                :element-key="getElementKey(module ,component)"
-                :element-location="{columnId, componentId ,moduleId}"
+                :element-key="getElementKey(indexedModule.module ,component)"
+                :element-location="{columnId, componentId , moduleId: indexedModule.index}"
                 :element="component"
-                :module="module"
+                :module="indexedModule.module"
                 :current-element-key="currentElementKey"
                 :name="plugin.name"
                 :plugin-key="pluginKey"
@@ -50,7 +50,7 @@ export default {
       return this.$store.getters['campaign/modules'];
     },
     modulesFiltered() {
-      return this.modules.filter(module => module.type === 'studio');
+      return this.modules.map((module, index) => ({index, module})).filter(indexedModule => indexedModule.module.type === 'studio');
     },
     currentComponent() {
       return this.$store.getters['campaign/currentComponent'];
@@ -155,9 +155,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.vue-js-switch {
-  margin-top: 4px;
-}
 .card-custom {
   padding-bottom: 0;
 }

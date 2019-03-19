@@ -11,20 +11,23 @@
                 id="campaignName"
                 v-model="campaignName"
                 v-validate.initial="'required'"
-                type="text"
                 placeholder="Email Name"
                 name="campaignName"
-                :class="{'input': true, 'is-danger': errors.has('campaignName') }"
+                :validation-notif="{
+                  msg: errors.first('campaignName'),
+                  type: 'error',
+                  show: errors.has('campaignName')
+                }"
                 @change="saveCampaignName"
                 @focus="checkName" />
-              <a
-                v-if="enableFavorite"
-                href="#"
+            </template>
+            <template v-if="enableFavorite" slot="label-append">
+              <div
                 title="Favorite"
+                class="add-favorite"
                 @click.prevent="toggleFavorite">
                 <i :class="favoriteClass" class="glyphicon" />
-              </a>
-              <span v-show="errors.has('campaignName')" class="help is-danger">{{ errors.first('campaignName') }}</span>
+              </div>
             </template>
           </settings-container>
 
@@ -78,23 +81,22 @@
 
           <settings-container v-if="enableAutoSave" label="Auto Save" class="last-saved" key="auto-save" :label-expanded="true">
             <template slot="setting-right">
-              <div class="control">
+              <stui-field vertical>
                 <stui-field>
                   <div class="control is-expanded">
                     <secondary-spinner />
                   </div>
                   <stui-toggle-button
                     id="autoSave"
-                    class="pull-right"
                     :value="campaign.auto_save"
                     @change="autoSaveChange" />
                 </stui-field>
-                <label
+                <div
                   v-if="!secondaryLoading"
-                  class="autosave-message pull-right">
+                  class="autosave-message">
                   last saved: {{ campaign.updated_at.substring(0,16) }}
-                </label>
-              </div>
+                </div>
+              </stui-field>
             </template>
           </settings-container>
           <settings-container
@@ -110,6 +112,13 @@
             </template>
           </settings-container>
         </group-container>
+        <group-container v-if="campaign.library_config.insertBody && canAccessInsertBody">
+          <settings-container label="Advanced Settings">
+            <template slot="setting-bottom">
+              <AdvancedSettings />
+            </template>
+          </settings-container>
+        </group-container>
       </div>
     </b-collapse>
   </div>
@@ -121,6 +130,7 @@
   import secondarySpinner from '../common/secondarySpinner.vue';
   import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
   import GroupContainer from "../common/containers/GroupContainer.vue";
+  import AdvancedSettings from './partials/AdvancedSettings.vue';
 
   export default {
     components: {
@@ -128,7 +138,8 @@
       secondarySpinner,
       LabelItemContainer,
       GroupContainer,
-      'compact-picker': Compact
+      'compact-picker': Compact,
+      AdvancedSettings,
     },
     name: 'CampaignConfiguration',
     data () {
@@ -158,6 +169,9 @@
       }
     },
     computed: {
+      canAccessInsertBody() {
+        return this.$can('access_prepend_body', 'access_append_body');
+      },
       editedSettings() {
         return this.$store.getters['campaign/editedSettings'];
       },
@@ -298,7 +312,7 @@
         this.$store.dispatch("config/getConfig", 'global_settings').then(response => {
           this.globalConfig = this.$store.getters["config/config"].global_settings;
           this.enableAutoSave = this.globalConfig.auto_save === '1';
-          this.enablePreheader = this.globalConfig.enable_preheader === '1' && this.campaign.library_config.preheader;
+          this.enablePreheader = this.campaign.library_config.preheader;
           this.enableTitle = this.globalConfig.enable_title === '1';
         }, error => {
           this.$store.commit("global/setLoader", false);
@@ -420,6 +434,8 @@
   font-style: italic;
   padding: 0;
   text-align: right;
+  font-weight: bold;
+  padding-top: 4px;
 }
 </style>
 
@@ -481,12 +497,14 @@
       margin-left: 3px;
       font-size: 10px;
     }
-    .vue-js-switch {
-      float: right;
-    }
     .v-switch-core {
       background: #dddddd;
       border: 1px solid #dddddd;
+    }
+    .add-favorite {
+      cursor: pointer;
+      line-height: 28px;
+      text-align: right;
     }
     .glyphicon-star-empty {
       color: #999999;

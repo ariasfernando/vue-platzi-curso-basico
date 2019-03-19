@@ -50,9 +50,6 @@
 </script>
 
 <style lang="less" scoped>
-  .vue-js-switch {
-    margin-top: 4px
-  }
   .card-custom {
     padding-bottom: 0;
   }
