@@ -67,6 +67,7 @@ class RestructureOfRows extends Migration
             }
             $module->structure = $module_structure;
             $module->plugins = $module_plugins;
+            $module->timestamps = false;
             $module->save();
         }
     }
@@ -126,11 +127,7 @@ class RestructureOfRows extends Migration
                     }
                 }
                 $campaign->modules_data = $modules_data;
-
-                /*
-                * Test and compare modules_data before and after and then
-                * uncomment the following line to save the campaign.
-                */
+                $campaign->timestamps = false;
                 $campaign->save();
             }
         });

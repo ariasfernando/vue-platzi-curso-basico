@@ -18,9 +18,9 @@ import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 
 export default {
-  mixins: [pluginMixinAdmin],
   components: {
     SettingsContainer,
   },
+  mixins: [pluginMixinAdmin],
 };
 </script>

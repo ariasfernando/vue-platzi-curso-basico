@@ -4,8 +4,8 @@
       v-if="withRow"
       :data-type="element.type"
       :data-row-id="element.id"
-       @mouseover="isHover = true"
-       @mouseleave="isHover = false">
+      @mouseover="isHover = true"
+      @mouseleave="isHover = false">
       <td
         width="100%"
         :height="element.container.attribute.height"
@@ -41,7 +41,7 @@
               </table>
             </td>
           </tr>
-          <slot v-else/>
+          <slot v-else />
         </table>
         <ElementSelector
           v-if="isStudio"
@@ -56,7 +56,7 @@
       </td>
     </tr>
     <template v-else>
-      <slot/>
+      <slot />
       <ElementSelector
         v-if="isStudio"
         class="row"
@@ -73,20 +73,20 @@
 
 <script>
 import ElementMixin from '../../common/mixins/ElementMixin';
-import Wrapper from '../Wrapper';
-import ElementSelector from '../ElementSelector';
+import Wrapper from '../Wrapper.vue';
+import ElementSelector from '../ElementSelector.vue';
 
 export default {
   name: 'RowContainer',
+  components: {
+    ElementSelector,
+    Wrapper,
+  },
   mixins: [ElementMixin],
   data() {
     return {
       isHover: false,
     };
-  },
-  components: {
-    ElementSelector,
-    Wrapper,
   },
 };
 </script>

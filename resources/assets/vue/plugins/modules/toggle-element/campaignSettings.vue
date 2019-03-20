@@ -1,29 +1,29 @@
 <template>
-  <settings-container
+  <SettingsContainer
     v-if="module"
     :label="plugin.title"
     level="first"
     label-expanded="true">
     <template slot="setting-bottom">
       <div class="clearfix">
-        <settings-container v-for="element in plugin.data.elements" :key="element.id" :label="element.label">
+        <SettingsContainer v-for="element in plugin.data.elements" :key="element.id" :label="element.label">
           <template slot="setting-half">
             <stui-toggle-button
               :value="getValue(element.id)"
               expanded
               @change="value => toggleChange(value, element.id)" />
           </template>
-        </settings-container>
+        </SettingsContainer>
       </div>
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 
 <script>
 import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 import validatorMixin from '../mixins/validatorMixin';
-import logicMixin from './logic.js';
+import logicMixin from './logic';
 
 export default {
   components: { SettingsContainer },

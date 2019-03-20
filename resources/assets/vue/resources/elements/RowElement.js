@@ -1,4 +1,3 @@
-import ColumnElement from './ColumnElement';
 export default {
   type: 'row-element',
   columnsStacking: 'normal',
@@ -10,11 +9,6 @@ export default {
     },
     styleOption: {},
   },
-  columns: [
-    {
-      ...ColumnElement,
-      id: Math.floor(100000 + (Math.random() * 900000)),
-   }
-  ],
+  columns: [],
   plugins: {},
 };

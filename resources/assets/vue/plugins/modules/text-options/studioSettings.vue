@@ -224,19 +224,19 @@ export default {
     },
     toggleOption(path, oldValue) {
       const value = !oldValue;
-      this.updatePluginConfig({value, path})
+      this.updatePluginConfig({ value, path });
     },
     changeOption(value, subOption, settingName) {
       const path = `options.${subOption}.${settingName}`;
 
-      this.updatePluginConfig({value, path})
+      this.updatePluginConfig({ value, path });
     },
     changeSetting(newValue, settingName) {
       const path = `settings.${settingName}.content`;
       const value = Application.utils.isJsonString(newValue)
         ? JSON.parse(newValue)
         : newValue;
-      this.updatePluginConfig({value, path})
+      this.updatePluginConfig({ value, path });
     },
     tinySettingContent(content) {
       if (content) {

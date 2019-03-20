@@ -1,6 +1,6 @@
 <template>
   <div class="settings-wrapper plugin-wrapper">
-    <settings-container :no-label="true">
+    <SettingsContainer :no-label="true">
       <template slot="setting-bottom">
         <stui-button
           type="gray"
@@ -10,8 +10,8 @@
           Upload Background Image
         </stui-button>
       </template>
-    </settings-container>
-    <image-modal
+    </SettingsContainer>
+    <ImageModal
       v-if="showImageEditor"
       :config="plugin.config"
       :library-images="libraryImages"

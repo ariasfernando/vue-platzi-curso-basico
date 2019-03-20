@@ -89,7 +89,7 @@ export default {
     },
     currentColumnIndex() {
       let columnIndex = false;
-      _.forEach(this.module.structure.rows, (row, currentColumnIndex) => {
+      _.forEach(this.module.structure.rows, (row) => {
         _.forEach(row.columns, (column, currentColumnIndex) => {
           if (column.id === this.currentElementId) {
             columnIndex = currentColumnIndex;
@@ -115,7 +115,7 @@ export default {
           elementIndex = currentRowIndex;
           return false;
         }
-        _.forEach(row.columns, (column, currentColumnIndex) => {
+        _.forEach(row.columns, (column) => {
           if (column.id === this.currentElementId) {
             elementIndex = currentRowIndex;
             return false;
@@ -202,11 +202,10 @@ export default {
       let show = false;
       const pluginsToShow = [];
       _.forEach(group.plugins, (item) => {
-        const typeAcl = this.typeAcl === 'module' ? '' : `-${this.typeAcl}`;
-        if (
+        // const typeAcl = this.typeAcl === 'module' ? '' : `-${this.typeAcl}`;
+        if (this.currentElement.plugins[_.camelCase(item.name)]) {
+          // Todo: We need a permissions refactor to facilitate its use STD-569.
           // (this.$can(`std${typeAcl}-plugin-${item.aclName}`) &&
-          this.currentElement.plugins[_.camelCase(item.name)]
-        ) {
           show = true;
           pluginsToShow.push(item);
         }
@@ -219,10 +218,9 @@ export default {
       let show = false;
       const settingsToShow = [];
       _.forEach(group.settings, (item) => {
-        if (
-          (item.dependOn === undefined || _.get(this, item.dependOn))
-          //&& this.$can(`std-${this.typeAcl}_${item.aclName}`)
-        ) {
+        if ((item.dependOn === undefined || _.get(this, item.dependOn))) {
+          // Todo: We need a permissions refactor to facilitate its
+          // && this.$can(`std-${this.typeAcl}_${item.aclName}`)
           show = true;
           settingsToShow.push(item);
         }

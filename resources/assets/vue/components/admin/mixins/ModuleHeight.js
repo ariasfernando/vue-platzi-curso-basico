@@ -10,7 +10,7 @@ export default {
       };
       const setModuleHeightByRow = (row, type) => {
         let value = 0;
-        const $row = $(`${type === 'multyRows' ? `[data-row-id=${row.id}] ` : ''}.column-draggable.has-component`);
+        const $row = $(`${type === 'multiRows' ? `[data-row-id=${row.id}] ` : ''}.column-draggable.has-component`);
         const $columns = $row.parents('[column-id]').length ? $row.parents('[column-id]') : $row;
         $columns.each((index, item) => {
           value = Math.max(value, $(item).height());
@@ -30,7 +30,7 @@ export default {
       } else if (this.module.structure.rows.length === 1) {
         setModuleHeightByRow(firstRow);
       } else if (this.module.structure.rows.length > 1) {
-        _.forEach(this.module.structure.rows, row => setModuleHeightByRow(row, 'multyRows'));
+        _.forEach(this.module.structure.rows, row => setModuleHeightByRow(row, 'multiRows'));
       }
     },
   },

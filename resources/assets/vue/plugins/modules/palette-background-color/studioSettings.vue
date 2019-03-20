@@ -10,7 +10,7 @@
       </template>
     </SettingsContainer>
     <b-collapse :id="pluginKey" :visible="arrowState">
-      <SettingsContainer 
+      <SettingsContainer
         label="Use Palette from Library"
         :label-expanded="true">
         <template slot="setting-right">
@@ -47,7 +47,7 @@ export default {
         return this.plugin.config.paletteName;
       },
       set(value) {
-        this.updatePluginConfig({value, path: 'paletteName'});
+        this.updatePluginConfig({ value, path: 'paletteName' });
       },
     },
     customPalette: {
@@ -55,7 +55,7 @@ export default {
         return this.plugin.config.options.bgcolor.palette.join(',');
       },
       set(value) {
-        this.updatePluginConfig({value: value.split(','), path: 'options.bgcolor.palette'});
+        this.updatePluginConfig({ value: value.split(','), path: 'options.bgcolor.palette' });
       },
     },
   },
