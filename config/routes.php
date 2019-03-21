@@ -46,6 +46,7 @@ $default = [
             '/proof/reviewers/{id}'                  => 'ProofController@getReviewers',
             '/proof/users'                           => 'ProofController@getUsers',
             '/support/{section}'                     => 'SupportController@support',
+            '/proxy/fetch/'                          => 'ProxyController@getFetch',
         ],
 
         'post' => [
