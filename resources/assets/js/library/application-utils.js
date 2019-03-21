@@ -1124,7 +1124,7 @@ Application.utils = {
           if ($element.is('table')) {
             $element.replaceWith($element.find('td:first').html());
           } else {
-            $element[0].outerHTML = $element[0].innerHTML;
+            $element.replaceWith($element.html());
           }
         }
       });
