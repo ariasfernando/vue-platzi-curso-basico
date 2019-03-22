@@ -57,7 +57,13 @@
                 size="mini"
                 :multiple="subopt.type === 'multi-select'"
                 :list="subopt.options"
-                @change="(value) => updateField(value, `${name}.config.${subname}.value`)" />
+                @change="(value) => updateField(value, `${name}.config.${subname}.value`)">
+                  <el-option
+                    v-for="(opt, key) in subopt.options"
+                    :value="key"
+                    :key="key"
+                    :label="opt.name ? opt.name : opt"></el-option>
+              </el-select>
             </template>
           </SettingsContainer>
           <template v-if="subopt.value && subopt.config" v-for="(interop, intername) in subopt.config">
