@@ -43,8 +43,9 @@ class ProxyController extends Controller
         }
 
         $cache_key = sprintf('controllers:campaign:getfetch_%s', sha1($url));
-        if ($response = \Cache::get($cache_key)) {
-            return $response;
+        if ($cache_record = \Cache::get($cache_key)) {
+            return response($cache_record['content'])
+                ->header('Content-Type', $cache_record['headers']['Content-Type'][0] ?? 'text/html');
         }
 
         $client = new Client();
@@ -53,8 +54,15 @@ class ProxyController extends Controller
         try {
             $response = $client->request('GET', $url, $params);
             $contents = $response->getBody()->getContents();
-            \Cache::put($cache_key, $contents, $ttl_minutes);
-            return $contents;
+            $cache_record = [
+                'content' => $contents,
+                'headers' => $response->getHeaders(),
+            ];
+
+            \Cache::put($cache_key, $cache_record, $ttl_minutes);
+
+            return response($contents)
+                ->header('Content-Type', $cache_record['headers']['Content-Type'][0] ?? 'text/html');
         } catch (\GuzzleHttp\Exception\ClientException $exception) {
             // 4xx errors
             abort($exception->getCode(), $exception->getMessage());
