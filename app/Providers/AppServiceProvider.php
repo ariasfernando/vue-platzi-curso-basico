@@ -11,6 +11,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $socialite = $this->app->make('Laravel\Socialite\Contracts\Factory');
+        $socialite->extend(
+            'okta',
+            function($app) use ($socialite) {
+                $config = $app['config']['services.okta'];
+                return $socialite->buildProvider(\Stensul\Socialite\Okta\OktaProvider::class, $config);
+            }
+        );
         \CampaignModel::observe(\Stensul\Observers\CampaignObserver::class);
     }
 

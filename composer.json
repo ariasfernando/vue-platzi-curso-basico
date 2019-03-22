@@ -32,7 +32,8 @@
         "zaininnari/html-minifier": "^0.4.2",
         "stensul/responsys-provider": "2.*",
         "wyrihaximus/html-compress": "^1.4",
-        "stensul/html-to-pdf-service-provider": "3.*"
+        "stensul/html-to-pdf-service-provider": "3.*",
+        "stensul/okta-socialite": "1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

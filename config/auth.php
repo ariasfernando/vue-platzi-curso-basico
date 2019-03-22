@@ -113,10 +113,7 @@ return [
     |
     */
 
-    'oauth_scopes' => [
-        'https://www.googleapis.com/auth/plus.me',
-        'https://www.googleapis.com/auth/plus.profile.emails.read',
-    ],
+    'oauth_scopes' => [],
 
     /*
     |--------------------------------------------------------------------------
