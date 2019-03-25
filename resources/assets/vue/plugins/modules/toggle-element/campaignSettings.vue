@@ -72,18 +72,17 @@ export default {
     },
     toggleChange(value, elementId) {
       if (this.plugin.data.preventEmpty && !value) {
-        _.forEach(this.plugin.data.elements, (element) => {
-          if (element.id !== elementId && this.getValue(element.id)) {
-            this.toggleElement(value, elementId);
-            return false;
-          }
-          return true;
-        });
+        const otherElementIsEnabled = this.plugin.data.elements.some(element =>
+          element.id !== elementId && this.getValue(element.id));
 
-        this.$root.$toast("You've to leave at least one element", {
-          className: 'et-error',
-          horizontalPosition: 'right',
-        });
+        if (otherElementIsEnabled) {
+          this.toggleElement(value, elementId);
+        } else {
+          this.$root.$toast("You've to leave at least one element", {
+            className: 'et-error',
+            horizontalPosition: 'right',
+          });
+        }
       } else {
         this.toggleElement(value, elementId);
       }
