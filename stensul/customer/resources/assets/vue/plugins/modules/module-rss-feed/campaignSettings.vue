@@ -104,7 +104,7 @@ export default {
         const template = _.template(_.get(commit, 'mask', '${value}'));
         if (!element) return;
         const commitPath = commit.commitPath.split('.');
-        const property = commitPath.reduce((ret, key, index) => {
+        const payload = commitPath.reduce((ret, key, index) => {
           ret[scopeLevels[index]] = key;
           return ret;
         }, {
@@ -115,7 +115,11 @@ export default {
           }),
           property: commitPath.pop()
         });
-        this.saveElementProperty(property);
+        this.saveElementProperty(payload);
+        if (payload.property === 'text') this.saveElementProperty(Object.assign({}, payload, {
+          property: 'textDirty',
+          value: Math.floor(100000 + (Math.random() * 900000)),
+        }));
       })
       this.showModal = false;
     }
