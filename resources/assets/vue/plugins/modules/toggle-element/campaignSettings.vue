@@ -33,6 +33,23 @@ export default {
       subComponent: 'container',
     };
   },
+
+  computed: {
+    modules() {
+      return this.$store.getters['campaign/modules'];
+    },
+    moduleIndex() {
+      let moduleIndex = false;
+      _.forEach(this.modules, (currentModule, currentModuleIndex) => {
+        if (currentModule.idInstance === this.moduleIdInstance) {
+          moduleIndex = currentModuleIndex;
+          return false;
+        }
+        return true;
+      });
+      return moduleIndex;
+    },
+  },
   methods: {
     getValue(elementId) {
       if (this.isCustom) {
@@ -44,12 +61,12 @@ export default {
     toggleElement(value, elementId, preventDefault) {
       if (this.isCustom) {
         this.$store.dispatch('campaign/updateCustomElementProperty', {
-          moduleId: this.currentCustomModule,
+          moduleId: this.moduleIndex,
           subComponent: elementId,
           property: 'enableElement',
           value,
         });
-        this.resetErrors(value, this.currentCustomModule);
+        this.resetErrors(value, this.moduleIndex);
       } else {
         const payload = {
           elementId,
@@ -59,6 +76,7 @@ export default {
         };
         if (!preventDefault) {
           this.saveElementProperty(payload);
+          this.resetErrors(value, this.moduleIndex);
         }
         this.resetErrors(value, this.moduleId);
       }
@@ -87,10 +105,10 @@ export default {
         this.toggleElement(value, elementId);
       }
     },
-    resetErrors(value, moduleId) {
-      this.$store.commit('campaign/clearErrorsByModuleId', moduleId);
+    resetErrors(value, moduleIndex) {
+      this.$store.commit('campaign/clearErrorsByModuleId', moduleIndex);
       if (this.isCustom) {
-        this.registerCustomModuleDefaultValidationErrors(moduleId);
+        this.registerCustomModuleDefaultValidationErrors(moduleIndex);
       }
     },
   },

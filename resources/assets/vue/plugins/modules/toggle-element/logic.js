@@ -46,7 +46,7 @@ export default {
           target = this.getNextActiveComponent(rule, -1);
           break;
         case 'last': {
-          const componentsLength = this.module.structure.columns[rule.columnIndex].components.length;
+          const componentsLength = this.getColumnByElementId(rule.elementId).components.length;
           target = this.getPreviousActiveComponent(rule, componentsLength);
           break;
         }
@@ -64,8 +64,8 @@ export default {
       return target;
     },
     getPreviousActiveComponent(rule, start) {
-      const components = this.module.structure.columns[rule.columnIndex].components;
-      const startFrom = start || rule.componentIndex;
+      const components = this.getColumnByElementId(rule.elementId).components;
+      const startFrom = start || this.getComponentIndexByElementId(rule.elementId);
 
       // - 1 omits current component and start from the previous one
       const searchIndex = startFrom - 1;
@@ -86,8 +86,8 @@ export default {
       return target;
     },
     getNextActiveComponent(rule, start) {
-      const components = this.module.structure.columns[rule.columnIndex].components;
-      const startFrom = start || rule.componentIndex;
+      const components = this.getColumnByElementId(rule.elementId).components;
+      const startFrom = start || this.getComponentIndexByElementId(rule.elementId);
 
       // + 1 omits current component and start from the next one
       const searchIndex = startFrom + 1;
@@ -166,7 +166,7 @@ export default {
             if (this.isCustom) {
               // @TODO: test if this works for custom modules
               // this.$store.dispatch("campaign/updateCustomElementProperty", {
-              //     moduleId: this.currentCustomModule,
+              //     moduleId: this.moduleId,
               //     subComponent: rule.elementId,
               //     property: update.property,
               //     value: update.value
@@ -175,8 +175,8 @@ export default {
               const payload = {
                 elementId: rule.target.elementId,
               };
-              if (updateData.path) {
-                payload.path = updateData.path;
+              if (rule.path) {
+                payload.path = rule.path;
                 payload.value = updateData.value;
               } else {
                 payload.subComponent = updateData.subComponent;
@@ -184,6 +184,7 @@ export default {
                 payload.property = updateData.property;
                 payload.value = updateData.value;
               }
+
               this.saveElementProperty(payload);
             }
           }

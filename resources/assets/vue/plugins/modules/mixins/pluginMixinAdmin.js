@@ -1,20 +1,8 @@
 export default {
   props: ['element', 'name', 'plugin', 'pluginKey', 'columnId'],
   computed: {
-    currentComponent() {
-      return this.$store.getters['module/currentComponent'];
-    },
     module() {
       return this.$store.getters['module/module'];
-    },
-    component() {
-      if (this.module.structure.columns[this.currentComponent.columnId]) {
-        const component = this.module.structure.columns[
-          this.currentComponent.columnId
-        ].components[this.currentComponent.componentId];
-        return component;
-      }
-      return null;
     },
     slideToggle() {
       return this.$store.getters['module/slideToggles'][this.pluginKey];
@@ -36,7 +24,7 @@ export default {
       });
     },
     toggle(value) {
-      this.updatePluginConfig({type: 'enabled', value});
+      this.updatePluginConfig({ type: 'enabled', value });
       this.setSlideToggles(value ? true : undefined);
     },
     updatePluginConfig({ type, path, value }) {

@@ -4,7 +4,7 @@
     :data-type="component.type"
     :element-id="component.id"
     :class="[getMobileClasses(component,'tr'), {'is-studio': isStudio}, {'is-active': isActive}]"
-    @mousedown="clickOnComponent">
+    @mousedown.stop="clickOnComponent">
     <td
       width="100%"
       :height="component.container.attribute.height"
@@ -32,8 +32,8 @@ export default {
   },
   mixins: [MobileStylesMixin, ElementMixin],
   methods: {
-    clickOnComponent(e) {
-      this.$emit('select-component', e);
+    clickOnComponent() {
+      this.$emit('select-component');
     },
   },
 };

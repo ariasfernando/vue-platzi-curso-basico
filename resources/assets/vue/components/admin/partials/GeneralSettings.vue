@@ -21,12 +21,12 @@
             resize="none"
             @setting-updated="descriptionUpdatedHandler" />
           <input-generic-number
-            label="Columns"
+            label="Rows"
             name="length"
-            :element="module.structure.columns"
+            :element="module.structure.rows"
             :min-value="1"
             :max-value="8"
-            @setting-updated="settingColumnsHandler" />
+            @setting-updated="settingRowsHandler" />
         </group-container>
       </b-card>
     </b-collapse>
@@ -49,7 +49,7 @@ export default {
   },
   data() {
     return {
-      maxCols: 8,
+      maxRows: 6,
     };
   },
   computed: {
@@ -61,32 +61,25 @@ export default {
     },
   },
   methods: {
-    settingColumnsHandler(eventData) {
-      const cols = eventData.value;
-      const numCols = this.module.structure.columns.length;
-      if (numCols === cols) {
+    settingRowsHandler({value}) {
+      const Rows = value;
+      const numRows = this.module.structure.rows.length;
+      if (numRows === Rows) {
         return true;
       }
-      if (numCols > cols) {
-        this.$store.commit('module/removeColumns', {
-          index: cols,
-          number: numCols - cols,
+      if (numRows > Rows) {
+        this.$store.commit('module/removeRows', {
+          index: Rows,
+          number: numRows - Rows,
         });
         // unSet current component
-        this.$store.commit('module/setCurrentComponent', {
-          columnId: undefined,
-          componentId: undefined,
-        });
+        this.$store.commit('module/setCurrentElementId', false);
       }
-      if (numCols < cols) {
-        for (let i = numCols; i < cols; i++) {
-          this.$store.dispatch('module/addColumn');
+      if (numRows < Rows) {
+        for (let i = numRows; i < Rows; i++) {
+          this.$store.dispatch('module/addRow');
         }
       }
-      this.$store.dispatch(
-        'module/normalizeColumns',
-        this.module.structure.columns,
-      );
       return true;
     },
     nameUpdatedHandler(eventData) {

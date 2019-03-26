@@ -1,5 +1,5 @@
 <template>
-  <SettingsContainer 
+  <SettingsContainer
     :label="plugin.title"
     :label-expanded="true">
     <template slot="setting-right">

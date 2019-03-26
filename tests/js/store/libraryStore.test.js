@@ -6,14 +6,14 @@
 
 /* vendor import */
 import { createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex/dist/vuex';
+import Vuex from 'vuex';
 import { cloneDeep } from 'lodash';
 import nock from 'nock';
 /* local import */
 import libraryStore from '@/store/libraryStore';
 import moduleStore from '@/store/moduleStore';
 import campaignStore from '@/store/campaignStore';
-import mocks from '@/resources/mocks';
+import mocks from '../mocks';
 
 const localVue = createLocalVue();
 
@@ -101,9 +101,9 @@ describe('== Library Store ==', () => {
 
     it('trigger "getModulesData" and return the library data', async (done) => {
       nock(baseUrl)
-      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
-      .get('/campaign/menu-items/5b2c13af57ea5300113fc7b2')
-      .reply(200, mocks.library.getMenuItems);
+        .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+        .get('/campaign/menu-items/5b2c13af57ea5300113fc7b2')
+        .reply(200, mocks.library.getMenuItems);
 
       await store.dispatch('library/getModulesData', '5b2c13af57ea5300113fc7b2').then(() => {
         expect(store.state.library.modules).toEqual(mocks.library.getMenuItems);
@@ -132,9 +132,9 @@ describe('== Library Store ==', () => {
       };
 
       nock(baseUrl)
-      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
-      .get('/campaign/menu-items/E')
-      .reply(500, failResponse);
+        .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+        .get('/campaign/menu-items/E')
+        .reply(500, failResponse);
 
       await store.dispatch('library/getModulesData', 'E').then(() => {
         expect(console.error).toHaveBeenCalled();

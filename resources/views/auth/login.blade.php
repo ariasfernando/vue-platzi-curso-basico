@@ -12,7 +12,7 @@
         <div class="text-center">
             <a href="/" class="stensul-logo open-sans" target="_blank">stensul</a>
             <h4>
-                {{$is_admin or false ? 'Administration Panel' : 'Email Creation Platform'}}
+                {{$is_admin or false ? 'Administration Panel' : 'Email Generation Platform'}}
             </h4>
         </div>
 
@@ -43,11 +43,11 @@
                 @endif
 
                 <div class="form-group">
-                    <input type="email" class="form-control" placeholder="Email Address" name="email" value="{{ old('email') }}">
+                    <input type="email" class="form-control" placeholder="Email Address" name="email" value="{{ old('email') }}" id="emailText">
                 </div>
 
                 <div class="form-group">
-                    <input type="password" placeholder="Password" class="form-control" name="password">
+                    <input type="password" placeholder="Password" class="form-control" name="password" id="passwordText">
                 </div>
 
                 @if ( isset($challenge_provider) )
@@ -57,10 +57,10 @@
 
                 <div class="form-group submit-row">
                     <div class="text-center">
-                        <button type="submit" class="btn">Login</button>
-                        <div class="sublink"><a href="{{ url('/password/email') }}">Forgot password?</a></div>
+                        <button type="submit" class="btn" id="loginButton" >Login</button >
+                        <div class="sublink"><a href="{{$is_admin ? url('/password/email/admin') : url('/password/email') }}" id="forgotPasswordLink">Forgot password?</a></div>
                         @if ( env('USER_REGISTRATION', false) )
-                            <a href="{{ url('/auth/register') }}" class="register">Don't have a user? Register here.</a>
+                            <a href="{{ url('/auth/register') }}" class="register" id="registerNewUserLink">Don't have a user? Register here.</a >
                         @endif
                     </div>
                 </div>

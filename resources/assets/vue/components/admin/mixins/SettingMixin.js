@@ -4,8 +4,8 @@ export default {
     'column-id',
     'component',
     'default-value',
-    'false-text',
     'element',
+    'false-text',
     'is-disable',
     'isDisablePercentage',
     'isInverted',
@@ -22,6 +22,7 @@ export default {
     'options',
     'placeholder',
     'resize',
+    'row',
     'setting-position',
     'setting-slot',
     'showSetting',
@@ -32,9 +33,6 @@ export default {
     this.setDefaultValue();
   },
   computed: {
-    currentComponent() {
-      return this.$store.getters['module/currentComponent'];
-    },
     mainSetting: {
       get() {
         if (this.link) {

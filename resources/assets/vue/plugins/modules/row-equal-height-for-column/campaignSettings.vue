@@ -16,17 +16,18 @@ export default {
   methods: {
     getHigherHeight() {
       const moduleIdInstance = this.moduleIdInstance;
-      const selector = `[module-id-instance="${moduleIdInstance}"] .st-equal-height > table`;
+      const rowSelector = this.module.structure.rows.length > 1 ? `[data-row-id="${this.element.id}"]` : '';
+      const selector = `[module-id-instance="${moduleIdInstance}"] ${rowSelector} [data-column-id] >tr>td>table`;
       let $itemsToEqualize = false;
       if (this.buildingMode === 'desktop') {
         $itemsToEqualize = $(selector);
       } else {
-        $itemsToEqualize = $('#shadowRender').contents().find(selector);
+        $itemsToEqualize = $(this.iframe).contents().find(selector);
       }
       let higherHeight = 0;
       $itemsToEqualize.each((index, item) => {
         const columnId = $(item).closest('[data-column-id]').attr('data-column-id');
-        const columnHeight = $(item).height() + this.getPaddingTopAndBottom(columnId);
+        const columnHeight = $(item).height() + this.getVerticalBorderAndPadding(columnId);
         higherHeight = Math.max(higherHeight, columnHeight);
       });
       return higherHeight;
@@ -35,8 +36,8 @@ export default {
       setTimeout(() => {
         const higherHeight = this.getHigherHeight();
         if (higherHeight !== this.previousHeight) {
-          _.each(this.module.structure.columns, (column, columnIndex) => {
-            const height = higherHeight - this.getPaddingTopAndBottom(columnIndex);
+          _.each(this.getElement(this.element.id).columns, (column, columnIndex) => {
+            const height = higherHeight - this.getVerticalBorderAndPadding(columnIndex);
             this.saveElementProperty({
               elementId: column.id,
               link: 'attribute',
@@ -56,29 +57,30 @@ export default {
       };
     },
     addClassEqualHeight() {
-      _.each(this.module.structure.columns, (column) => {
-          this.addClassToElement({ value: 'st-equal-height', elementId: column.id });
+      _.each(this.element.columns, (column) => {
+        this.addClassToElement({ value: 'st-equal-height', elementId: column.id });
       });
     },
-    getImagesUrls(module) {
+    getImagesUrls() {
       const imagesUrls = [];
-      for (const columnId in module.structure.columns) {
-        const column = module.structure.columns[columnId];
+      for (const columnId in this.element.columns) {
+        const column = this.element.columns[columnId];
         for (const componentId in column.components) {
-          if (module.structure.columns[columnId].components[componentId].type === 'image-element') {
-            imagesUrls.push(module.structure.columns[columnId].components[componentId].image.attribute.placeholder);
+          if (this.element.columns[columnId].components[componentId].type === 'image-element') {
+            imagesUrls.push(this.element.columns[columnId].components[componentId].image.attribute.placeholder);
           }
         }
       }
       return imagesUrls;
     },
     setImagesUrls() {
-      this.previousImagesUrls = _.cloneDeep(this.getImagesUrls(this.module));
+      this.previousImagesUrls = _.cloneDeep(this.getImagesUrls());
     },
-    getPaddingTopAndBottom(columnIndex) {
-      const column = this.module.structure.columns[columnIndex];
-      const padding = parseInt(column.container.style.paddingTop || 0) + parseInt(column.container.style.paddingBottom || 0);
-      return padding;
+    getVerticalBorderAndPadding(columnIndex) {
+      const column = this.getElement(this.element.id).columns[columnIndex];
+      const verticalPadding = parseInt(column.container.style.paddingTop || 0) + parseInt(column.container.style.paddingBottom || 0);
+      const verticalBorder = parseInt(column.container.style.borderTopWidth || 0) + parseInt(column.container.style.borderBottomWidth || 0);
+      return verticalPadding + verticalBorder;
     },
   },
   mounted() {
@@ -87,9 +89,9 @@ export default {
     this.setEqualHeights();
   },
   watch: {
-    module: {
-      handler: function (newModule) {
-        const newImagesUrls = this.getImagesUrls(newModule);
+    element: {
+      handler(newElement) {
+        const newImagesUrls = this.getImagesUrls(newElement);
         if (this.previousImagesUrls.length > 0) {
           for (let i = 0; i < this.previousImagesUrls.length; i++) {
             if (this.previousImagesUrls[i] === newImagesUrls[i]) {
@@ -104,7 +106,7 @@ export default {
         }
 
         if (this.buildingMode === 'mobile') {
-          $('#shadowRender')[0].dispatchEvent(new Event("update-iframe"))
+          this.iframe.dispatchEvent(new Event('update-iframe'));
         }
       },
       deep: true,

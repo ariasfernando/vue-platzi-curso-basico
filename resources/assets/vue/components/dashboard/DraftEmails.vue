@@ -43,10 +43,10 @@
         </thead>
         <tbody>
           <tr v-for="campaign in campaigns.data" v-bind:key="campaign._id" :data-campaign="campaign._id">
-            <td class="last-modified">
+            <td class="last-modified" id="createdByText">
               <span>{{campaign.created_at}}</span><br><span class="text-overflow" :title="campaign.created_by.email">by {{campaign.created_by.email}}</span>
             </td>
-            <td class="last-modified">
+            <td class="last-modified" id="modifyByText">
               <span>{{campaign.updated_at}}</span><br><span class="text-overflow" :title="campaign.updated_by.email">by {{campaign.updated_by.email}}</span>
             </td>
             <td :title="campaign.campaign_name">

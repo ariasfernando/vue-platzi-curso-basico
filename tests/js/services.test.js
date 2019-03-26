@@ -6,7 +6,7 @@
 
 import nock from 'nock';
 import libraryService from '@/services/library';
-import mocks from '@/resources/mocks';
+import mocks from './mocks';
 
 require('dotenv').config();
 
@@ -30,9 +30,9 @@ describe('== Services ==', () => {
     describe('Search Libraries', () => {
       it('Should return a list of libraries', (done) => {
         nock(baseUrl)
-        .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
-        .post('/admin/library/list')
-        .reply(200, mocks.library.searchLibraries);
+          .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+          .post('/admin/library/list')
+          .reply(200, mocks.library.searchLibraries);
         libraryService.searchLibraries().then((result) => {
           expect(result).toEqual(mocks.library.searchLibraries);
         }).then(done, done);
@@ -42,9 +42,9 @@ describe('== Services ==', () => {
     describe('Fetch Libraries', () => {
       it('Should return a list of libraries', (done) => {
         nock(baseUrl)
-        .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
-        .get('/dashboard/libraries')
-        .reply(200, mocks.library.fetchLibraries);
+          .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+          .get('/dashboard/libraries')
+          .reply(200, mocks.library.fetchLibraries);
         libraryService.fetchLibraries().then((result) => {
           expect(result).toEqual(mocks.library.fetchLibraries);
         }).then(done, done);

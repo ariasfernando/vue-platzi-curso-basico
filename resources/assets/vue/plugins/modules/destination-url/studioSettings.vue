@@ -8,13 +8,13 @@
     <b-collapse :id="pluginKey" :visible="arrowState">
       <SettingsContainer label="Required">
         <template slot="setting-right">
-          <StuiToggleButton v-if="$can('std-'+component.type+'-plugin-destination-url-validate')" :value="plugin.config.validations.required" @change="(value)=>updatePluginConfig({ value, path: 'validations.required' })" />
+          <StuiToggleButton v-if="$can('std-'+element.type+'-plugin-destination-url-validate')" :value="plugin.config.validations.required" @change="(value)=>updatePluginConfig({ value, path: 'validations.required' })" />
         </template>
       </SettingsContainer>
       <SettingsContainer label="Validate URL">
         <template slot="setting-right">
           <StuiSelect
-            v-if="$can('std-'+component.type+'-plugin-destination-url-validations')"
+            v-if="$can('std-'+element.type+'-plugin-destination-url-validations')"
             size="mini"
             :value="validationValue"
             :list="validateOptions"
@@ -23,7 +23,7 @@
       </SettingsContainer>
       <SettingsContainer label="Target">
         <template slot="setting-right">
-          <StuiToggleButton v-if="$can('std-'+component.type+'-plugin-destination-url-target')" :value="plugin.config.target" @change="(value)=>updatePluginConfig({ value, path: 'target' })" />
+          <StuiToggleButton v-if="$can('std-'+element.type+'-plugin-destination-url-target')" :value="plugin.config.target" @change="(value)=>updatePluginConfig({ value, path: 'target' })" />
         </template>
       </SettingsContainer>
       <SettingsContainer label="Title">
@@ -53,17 +53,17 @@ export default {
       validateOptions:
       [
         {
-          value:'disabled',
+          value: 'disabled',
           label: 'No Validation',
         },
         {
-          value:'url',
+          value: 'url',
           label: 'Validate Format',
         },
         {
-          value:'urlAndDestination',
+          value: 'urlAndDestination',
           label: 'Format and Destination',
-        }
+        },
       ],
     };
   },
@@ -73,10 +73,10 @@ export default {
     },
   },
   watch: {
-    component: {
+    element: {
       handler() {
         if (this.plugin.subComponent === undefined) {
-          switch (this.component.type) {
+          switch (this.element.type) {
             case 'button-element':
               this.plugin.subComponent = 'button';
               break;
@@ -92,21 +92,6 @@ export default {
         }
       },
       deep: true,
-    },
-  },
-  methods: {
-    updateField(value, option) {
-      const config = {};
-
-      _.set(config, option, value);
-
-      const payload = {
-        plugin: this.name,
-        columnId: this.currentComponent.columnId,
-        componentId: this.currentComponent.componentId,
-        config,
-      };
-      this.$store.commit('module/savePlugin', payload);
     },
   },
 };
