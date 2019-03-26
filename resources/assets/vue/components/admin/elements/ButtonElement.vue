@@ -31,7 +31,7 @@
                   :style="fontStyles(component.button)"
                   :valign="component.button.attribute.valign || ''">
                   <tiny-mce
-                    :editor-id="`componentId-${component.id}`"
+                    :editor-id="getTinyId(element.id)"
                     :font-styles="fontStyles(component.button)"
                     :text="component.data.text"
                     :type="component.type"

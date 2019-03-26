@@ -1,29 +1,29 @@
 <template>
-  <settings-container
+  <SettingsContainer
     v-if="module"
     :label="plugin.title"
     level="first"
     label-expanded="true">
     <template slot="setting-bottom">
       <div class="clearfix">
-        <settings-container v-for="element in plugin.data.elements" :key="element.id" :label="element.label">
+        <SettingsContainer v-for="element in plugin.data.elements" :key="element.id" :label="element.label">
           <template slot="setting-half">
             <stui-toggle-button
               :value="getValue(element.id)"
               expanded
               @change="value => toggleChange(value, element.id)" />
           </template>
-        </settings-container>
+        </SettingsContainer>
       </div>
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 
 <script>
 import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 import validatorMixin from '../mixins/validatorMixin';
-import logicMixin from './logic.js';
+import logicMixin from './logic';
 
 export default {
   components: { SettingsContainer },
@@ -32,6 +32,23 @@ export default {
     return {
       subComponent: 'container',
     };
+  },
+
+  computed: {
+    modules() {
+      return this.$store.getters['campaign/modules'];
+    },
+    moduleIndex() {
+      let moduleIndex = false;
+      _.forEach(this.modules, (currentModule, currentModuleIndex) => {
+        if (currentModule.idInstance === this.moduleIdInstance) {
+          moduleIndex = currentModuleIndex;
+          return false;
+        }
+        return true;
+      });
+      return moduleIndex;
+    },
   },
   methods: {
     getValue(elementId) {
@@ -43,12 +60,12 @@ export default {
     toggleElement(value, elementId) {
       if (this.isCustom) {
         this.$store.dispatch('campaign/updateCustomElementProperty', {
-          moduleId: this.currentCustomModule,
+          moduleId: this.moduleIndex,
           subComponent: elementId,
           property: 'enableElement',
           value,
         });
-        this.resetErrors(value, this.currentCustomModule);
+        this.resetErrors(value, this.moduleIndex);
       } else {
         const payload = {
           elementId,
@@ -57,7 +74,7 @@ export default {
           value,
         };
         this.saveElementProperty(payload);
-        this.resetErrors(value, this.moduleId);
+        this.resetErrors(value, this.moduleIndex);
       }
 
       this.runLogic(value, elementId);
@@ -83,10 +100,10 @@ export default {
         this.toggleElement(value, elementId);
       }
     },
-    resetErrors(value, moduleId) {
-      this.$store.commit('campaign/clearErrorsByModuleId', moduleId);
+    resetErrors(value, moduleIndex) {
+      this.$store.commit('campaign/clearErrorsByModuleId', moduleIndex);
       if (this.isCustom) {
-        this.registerCustomModuleDefaultValidationErrors(moduleId);
+        this.registerCustomModuleDefaultValidationErrors(moduleIndex);
       }
     },
   },

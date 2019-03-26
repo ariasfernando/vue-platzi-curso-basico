@@ -2,11 +2,11 @@ const studioSettings = require('./studioSettings.vue');
 const campaignSettings = require('./campaignSettings.vue');
 
 module.exports = {
-  name: 'module-equal-height-for-column',
+  name: 'row-equal-height-for-column',
   title: 'Equal Height',
   version: '0.0.1',
   author: 'facundo.garcia@stensul.com',
-  target: ['module'],
+  target: ['row'],
   studioSettings,
   campaignSettings,
   config: {

@@ -173,21 +173,25 @@ class StaticProcessor
                 }
             } // studio modules
             else {
-                if (isset($module['structure']) && isset($module['structure']['columns'])) {
-                    foreach ($module['structure']['columns'] as $column_key => $column_value) {
-                        if (isset($column_value['components'])) {
-                            foreach ($column_value['components'] as $component_key => $component_value) {
-                                if (isset($component_value['type']) && ($component_value['type'] === 'image-element')) {
-                                    if (isset($component_value['image'])
-                                        && isset($component_value['image']['attribute'])) {
-                                        if (isset($component_value['image']['attribute']['placeholder'])) {
-                                            $filename = DS . 'images' . DS . trim($component_value['image']['attribute']['placeholder']);
-                                            $assets[$filename] = null;
-                                        }
+                if (isset($module['structure']) && isset($module['structure']['rows'])) {
+                    foreach ($module['structure']['rows'] as $row_key => $row_value) {
+                        if (isset($row_value['columns'])) {
+                            foreach ($row_value['columns'] as $column_key => $column_value) {
+                                if (isset($column_value['components'])) {
+                                    foreach ($column_value['components'] as $component_key => $component_value) {
+                                        if (isset($component_value['type']) && ($component_value['type'] === 'image-element')) {
+                                            if (isset($component_value['image'])
+                                                && isset($component_value['image']['attribute'])) {
+                                                if (isset($component_value['image']['attribute']['placeholder'])) {
+                                                    $filename = DS . 'images' . DS . trim($component_value['image']['attribute']['placeholder']);
+                                                    $assets[$filename] = null;
+                                                }
 
-                                        if (isset($component_value['image']['attribute']['placeholderMobile'])) {
-                                            $filename = DS . 'images' . DS . trim($component_value['image']['attribute']['placeholderMobile']);
-                                            $assets[$filename] = null;
+                                                if (isset($component_value['image']['attribute']['placeholderMobile'])) {
+                                                    $filename = DS . 'images' . DS . trim($component_value['image']['attribute']['placeholderMobile']);
+                                                    $assets[$filename] = null;
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -273,27 +277,31 @@ class StaticProcessor
                 }
             } // studio modules
             else {
-                if (isset($module['structure']) && isset($module['structure']['columns'])) {
-                    foreach ($module['structure']['columns'] as $column_key => $column_value) {
-                        if (isset($column_value['components'])) {
-                            foreach ($column_value['components'] as $component_key => $component_value) {
-                                if (isset($component_value['type']) && ($component_value['type'] === 'image-element')) {
-                                    if (isset($component_value['image']) && isset($component_value['image']['attribute'])) {
-                                        if (isset($component_value['image']['attribute']['placeholder'])) {
-                                            $modules_data[$key]['structure']['columns'][$column_key]['components']
-                                                [$component_key]['image']['attribute']['placeholder'] = str_replace(
-                                                    $from->id,
-                                                    $this->getCampaign()->id,
-                                                    $component_value['image']['attribute']['placeholder']
-                                                );
-                                        }
-                                        if (isset($component_value['image']['attribute']['placeholderMobile'])) {
-                                            $modules_data[$key]['structure']['columns'][$column_key]['components']
-                                                [$component_key]['image']['attribute']['placeholderMobile'] = str_replace(
-                                                    $from->id,
-                                                    $this->getCampaign()->id,
-                                                    $component_value['image']['attribute']['placeholderMobile']
-                                                );
+                if (isset($module['structure']) && isset($module['structure']['rows'])) {
+                    foreach ($module['structure']['rows'] as $row_key => $row_value) {
+                        if (isset($row_value['columns'])) {
+                            foreach ($row_value['columns'] as $column_key => $column_value) {
+                                if (isset($column_value['components'])) {
+                                    foreach ($column_value['components'] as $component_key => $component_value) {
+                                        if (isset($component_value['type']) && ($component_value['type'] === 'image-element')) {
+                                            if (isset($component_value['image']) && isset($component_value['image']['attribute'])) {
+                                                if (isset($component_value['image']['attribute']['placeholder'])) {
+                                                    $modules_data[$key]['structure']['rows'][$row_key]['columns'][$column_key]['components']
+                                                        [$component_key]['image']['attribute']['placeholder'] = str_replace(
+                                                            $from->id,
+                                                            $this->getCampaign()->id,
+                                                            $component_value['image']['attribute']['placeholder']
+                                                        );
+                                                }
+                                                if (isset($component_value['image']['attribute']['placeholderMobile'])) {
+                                                    $modules_data[$key]['structure']['rows'][$row_key]['columns'][$column_key]['components']
+                                                        [$component_key]['image']['attribute']['placeholderMobile'] = str_replace(
+                                                            $from->id,
+                                                            $this->getCampaign()->id,
+                                                            $component_value['image']['attribute']['placeholderMobile']
+                                                        );
+                                                }
+                                            }
                                         }
                                     }
                                 }

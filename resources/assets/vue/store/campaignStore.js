@@ -4,7 +4,6 @@ import Vue from 'vue';
 import {
   defer,
 } from 'q';
-import clone from 'clone';
 import campaignService from '../services/campaign';
 import imageService from '../services/image';
 
@@ -17,17 +16,24 @@ const convertArrayToObject = (element, { subComponent, link }) => {
 
 const getElement = (module, elementId) => {
   let element = false;
-  _.forEach(module.structure.columns, (column) => {
-    if (column.id === elementId) {
-      element = column;
+  _.forEach(module.structure.rows, (row) => {
+    if (row.id === elementId) {
+      element = row;
       return false;
     }
-    _.forEach(column.components, (CurrentComponent) => {
-      if (CurrentComponent.id === elementId) {
-        element = CurrentComponent;
+    _.forEach(row.columns, (column) => {
+      if (column.id === elementId) {
+        element = column;
         return false;
       }
-      return true;
+      _.forEach(column.components, (currentComponent) => {
+        if (currentComponent.id === elementId) {
+          element = currentComponent;
+          return false;
+        }
+        return true;
+      });
+      return !element;
     });
     return !element;
   });
@@ -73,11 +79,9 @@ function campaignStore() {
       modules: [],
       editedSettings: {},
       campaignValidated: false,
-      currentModuleId: undefined,
-      currentCustomModuleId: undefined,
-      currentComponent: {},
+      currentElementId: false,
+      currentModuleIdInstance: false,
       currentCustomComponent: {},
-      activeModule: undefined,
       modalCode: false,
       modalComplete: false,
       modalPreview: false,
@@ -119,20 +123,14 @@ function campaignStore() {
       editedSettings(state) {
         return state.editedSettings;
       },
-      currentComponent(state) {
-        return state.currentComponent;
+      currentElementId(state) {
+        return state.currentElementId;
+      },
+      currentModuleIdInstance(state) {
+        return state.currentModuleIdInstance;
       },
       currentCustomComponent(state) {
         return state.currentCustomComponent;
-      },
-      currentModule(state) {
-        return state.currentModuleId;
-      },
-      activeModule(state) {
-        return state.activeModule;
-      },
-      currentCustomModule(state) {
-        return state.currentCustomModuleId;
       },
       isProcessing(state) {
         return state.processing;
@@ -196,8 +194,8 @@ function campaignStore() {
       setToggleImageEditor(state, stateModal) {
         state.showImageEditor = stateModal;
       },
-      setToggleModuleSettings(state, toggleValue) {
-        state.showModuleSettings = toggleValue;
+      setShowModuleSettings(state, value) {
+        state.showModuleSettings = value;
       },
       addModule(state, moduleData) {
         state.modules.push(moduleData);
@@ -238,7 +236,7 @@ function campaignStore() {
       saveCampaignData(state, payload) {
         const update = {};
         update[payload.name] = payload.value;
-        const newData = _.extend(clone(state.campaign.campaign_data), update);
+        const newData = _.extend(_.cloneDeep(state.campaign.campaign_data), update);
 
         state.campaign.campaign_data = newData;
       },
@@ -255,11 +253,20 @@ function campaignStore() {
       setProcessStatus(state, processed = true) {
         state.campaign.campaign_data.processed = processed;
       },
-      setCurrentComponent(state, data) {
-        state.currentComponent = data;
+      setShowModuleSetting(state, value) {
+        state.showModuleSetting = value;
       },
-      unsetCurrentComponent(state) {
-        state.currentComponent = {};
+      setCurrentElementId(state, elementId) {
+        state.currentElementId = elementId;
+        state.showModuleSettings = false;
+      },
+      setCurrentModuleIdInstance(state, elementId) {
+        state.currentModuleIdInstance = elementId;
+      },
+      unsetCurrentElement(state) {
+        state.currentModuleIdInstance = false;
+        state.currentElementId = false;
+        state.showModuleSettings = false;
       },
       setCurrentCustomComponent(state, data) {
         state.currentCustomComponent = data;
@@ -267,37 +274,11 @@ function campaignStore() {
       unsetCurrentCustomComponent(state) {
         state.currentCustomComponent = {};
       },
-      setActiveModule(state, moduleId) {
-        state.activeModule = moduleId;
-      },
-      unsetActiveModule(state) {
-        state.activeModule = undefined;
-      },
-      setActiveLastModule(state) {
-        state.activeModule = state.modules.length - 1;
-      },
-      saveComponent(state, data) {
-        const moduleId = data.moduleId;
-        const columnId = data.columnId;
-        const componentId = data.componentId;
-        state.modules[moduleId].structure.columns[columnId].components[componentId] = data.component;
-        this.commit('campaign/setDirty', true);
-      },
-      savePlugin(state, payload) {
-        let plugin = state.modules[payload.moduleId];
-        if (payload.componentId >= 0) {
-          // save component plugin
-          plugin = plugin.structure.columns[payload.columnId].components[payload.componentId].plugins[payload.plugin];
-        } else if (payload.columnId >= 0) {
-          // save column plugin
-          plugin = plugin.structure.columns[payload.columnId].plugins[payload.plugin];
-        } else {
-          // save module plugin
-          plugin = plugin.plugins[payload.plugin];
-        }
+      savePluginDeprecate(state, {moduleId, rowId, columnId, componentId, plugin, data}) {
+        plugin = state.modules[moduleId].structure.rows[rowId || 0].columns[columnId].components[componentId].plugins[plugin];
         plugin.data = {
           ...plugin.data,
-          ...payload.data,
+          ...data,
         };
         this.commit('campaign/setDirty', true);
       },
@@ -320,51 +301,6 @@ function campaignStore() {
         const pluginOption = searchOrCreateLevel(pluginData, pathArray);
         Vue.set(pluginOption.data, pluginOption.property, value);
       },
-      saveComponentProperty(state, data) {
-        // DEPRECATE, use saveElementProperty
-        const component = state.modules[data.moduleId].structure.columns[data.columnId].components[data.componentId];
-        const subComponent = data.subComponent ? component[data.subComponent] : component;
-        const properties = data.link ? subComponent[data.link] : subComponent;
-        Vue.set(properties, data.property, data.value);
-        this.commit('campaign/setDirty', true);
-      },
-      saveColumnAttribute(state, data) {
-        // DEPRECATE
-        const attributes = state.modules[data.moduleId].structure.columns[data.columnId].container.attribute;
-        const newData = {};
-        newData[data.attribute] = data.attributeValue;
-        state
-          .modules[data.moduleId]
-          .structure.columns[data.columnId]
-          .container.attribute = { ...attributes, ...newData };
-        this.commit('campaign/setDirty', true);
-      },
-      saveColumnProperty(state, data) {
-        const columns = state.modules[data.moduleId].structure.columns;
-        const column = columns[data.columnId];
-        const columnClone = _.cloneDeep(column);
-        const subComponent = data.subComponent ? column[data.subComponent] : column;
-        const properties = data.link ? subComponent[data.link] : subComponent;
-        Vue.set(properties, data.property, data.value);
-        this.commit('campaign/setDirty', true);
-        // hack to make the column array reactive
-        // note: for more info check vue documentation #Array-Change-Detection
-        if (!_.isEqual(columnClone, column)) {
-          Vue.set(columns, data.columnId, column);
-        }
-      },
-      saveModuleAttribute(state, data) {
-        // DEPRECATE
-        const attributes = state.modules[data.moduleId].structure.attribute;
-        attributes[data.attribute] = data.attributeValue;
-        this.commit('campaign/setDirty', true);
-      },
-      saveModuleProperty(state, data) {
-        const module = state.modules[data.moduleId].structure;
-        const properties = data.link ? module[data.link] : module;
-        Vue.set(properties, data.property, data.value);
-        this.commit('campaign/setDirty', true);
-      },
       saveModuleData(state, data) {
         // TODO: Migrate saveCustomModuleData to this method
         // Prevent empty arrays returned by php-mongo
@@ -373,7 +309,7 @@ function campaignStore() {
         }
 
         // This workaround is because Vue cannot react on changes when you set an item inside an array with its index
-        const newData = _.extend(clone(state.modules[data.moduleId].data), data.data);
+        const newData = _.extend(_.cloneDeep(state.modules[data.moduleId].data), data.data);
         state.modules[data.moduleId].data = newData;
         this.commit('campaign/setDirty', true);
       },
@@ -384,7 +320,7 @@ function campaignStore() {
         }
 
         // This workaround is because Vue cannot react on changes when you set an item inside an array with its index
-        const newData = _.extend(clone(state.modules[data.moduleId].data), data.data);
+        const newData = _.extend(_.cloneDeep(state.modules[data.moduleId].data), data.data);
         Vue.set(state.modules[data.moduleId], 'data', newData);
         this.commit('campaign/setDirty', true);
       },
@@ -417,9 +353,9 @@ function campaignStore() {
           state.modules[data.moduleId].data[data.field][data.index] = {};
         }
 
-        const newData = _.extend(clone(state.modules[data.moduleId].data[data.field][data.index]), data.value);
+        const newData = _.extend(_.cloneDeep(state.modules[data.moduleId].data[data.field][data.index]), data.value);
         state.modules[data.moduleId].data[data.field][data.index] = newData;
-        state.modules[data.moduleId].data[data.field] = clone(state.modules[data.moduleId].data[data.field]);
+        state.modules[data.moduleId].data[data.field] = _.cloneDeep(state.modules[data.moduleId].data[data.field]);
         this.commit('campaign/setDirty', true);
       },
       saveCustomModuleDataField(state, data) {
@@ -436,7 +372,7 @@ function campaignStore() {
         }
 
         if ('merge' in data && data.merge === true) {
-          const newData = _.extend(clone(state.modules[data.moduleId].data[data.field]), data.value);
+          const newData = _.extend(_.cloneDeep(state.modules[data.moduleId].data[data.field]), data.value);
           state.modules[data.moduleId].data[data.field] = newData;
         } else {
           state.modules[data.moduleId].data[data.field] = data.value;
@@ -453,7 +389,7 @@ function campaignStore() {
           Vue.set(state.modules[param.moduleId].params, param.field, {});
         }
         if ('merge' in param && param.merge === true) {
-          const newParams = _.extend(clone(state.modules[param.moduleId].params[param.field]), param.value);
+          const newParams = _.extend(_.cloneDeep(state.modules[param.moduleId].params[param.field]), param.value);
           Vue.set(state.modules[param.moduleId].params, param.field, newParams);
         } else {
           Vue.set(state.modules[param.moduleId].params, param.field, param.value);
@@ -462,19 +398,6 @@ function campaignStore() {
       },
       setEditorOptions(state, toolbar) {
         state.editorToolbar = toolbar;
-      },
-      setCurrentModule(state, moduleId) {
-        state.currentModuleId = moduleId;
-        state.currentComponent = {};
-      },
-      unsetCurrentModule(state) {
-        state.currentModuleId = undefined;
-      },
-      setCustomModule(state, moduleId) {
-        state.currentCustomModuleId = moduleId;
-      },
-      unsetCustomModule(state) {
-        state.currentCustomModuleId = undefined;
       },
       setTemplating(state, templating) {
         state.campaign.campaign_data.template = templating;
@@ -489,18 +412,19 @@ function campaignStore() {
           Vue.set(state.modules[moduleId].data, 'errors', []);
         }
       },
-      clearErrorsByScope(state, scope) {
-        const moduleErrors = state.modules[scope.moduleId].data.errors || [];
+      clearErrorsByScope(state, {idInstance, moduleId, rowId, columnId, componentId, type, name, elementName}) {
+        const moduleErrors = state.modules[moduleId].data.errors || [];
         let filtered = () => {};
-        if (scope.type === 'custom') {
-          filtered = moduleErrors.filter(err => !(_.isEqual(err.scope.elementName, scope.elementName)
-            && _.isEqual(err.scope.idInstance, scope.idInstance)));
+        if (type === 'custom') {
+          filtered = moduleErrors.filter(err => !(_.isEqual(err.scope.elementName, elementName)
+            && _.isEqual(err.scope.idInstance, idInstance)));
         } else {
-          filtered = moduleErrors.filter(err => !(_.isEqual(err.scope.name, scope.name)
-            && _.isEqual(err.scope.columnId, scope.columnId)
-            && _.isEqual(err.scope.componentId, scope.componentId)));
+          filtered = moduleErrors.filter(err => !(_.isEqual(err.scope.name, name)
+            && _.isEqual(err.scope.rowId, rowId)
+            && _.isEqual(err.scope.columnId, columnId)
+            && _.isEqual(err.scope.componentId, componentId)));
         }
-        Vue.set(state.modules[scope.moduleId].data, 'errors', filtered);
+        Vue.set(state.modules[moduleId].data, 'errors', filtered);
       },
       setCampaignName(state, campaignName) {
         Vue.set(state.campaign.campaign_data, 'campaign_name', campaignName);
@@ -554,6 +478,7 @@ function campaignStore() {
             // This will be removed when a final solution for validations is in place.
             const indexToRemove = moduleErrors.findIndex(
               err => (_.isEqual(err.scope.name, error.scope.name)
+                && _.isEqual(err.scope.rowId || 0, error.scope.rowId || 0)
                 && _.isEqual(err.scope.columnId, error.scope.columnId)
                 && _.isEqual(err.scope.componentId, error.scope.componentId)
                 && _.isUndefined(err.scope.msg)
@@ -564,6 +489,7 @@ function campaignStore() {
 
             moduleErrorsByField = moduleErrors.filter(
               err => (_.isEqual(err.scope.name, error.scope.name)
+                && _.isEqual(err.scope.rowId || 0, error.scope.rowId || 0)
                 && _.isEqual(err.scope.columnId, error.scope.columnId)
                 && _.isEqual(err.scope.componentId, error.scope.componentId)
                 && _.isEqual(err.scope.msg, error.scope.msg)

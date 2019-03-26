@@ -36,6 +36,6 @@ import ElementMixin from '../../common/mixins/ElementMixin.js';
 export default {
   name: 'ColumnRender',
   mixins: [ElementMixin],
-  props: ['moduleId', 'column', 'columnId', 'isInverted', 'dataColumnId'],
+  props: ['moduleId', 'column', 'columnId', 'isInverted', 'dataColumnId', 'row'],
 };
 </script>

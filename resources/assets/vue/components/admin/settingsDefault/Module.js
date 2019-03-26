@@ -2,7 +2,6 @@ import {
   bgcolor,
   borderGroup,
   classes,
-  columnsStacking,
   padding,
 } from './settings';
 
@@ -34,7 +33,6 @@ function moduleDefault() {
         groupLabel: 'Behavior',
         settings: [
           classes(),
-          columnsStacking(),
         ],
       },
     ],

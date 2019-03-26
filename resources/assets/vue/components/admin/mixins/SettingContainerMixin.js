@@ -31,17 +31,16 @@ export default {
     'input-text-align': elementSettings.TextAlign,
     'input-vertical-align': elementSettings.VerticalAlign,
     'input-width': elementSettings.Width,
+    'input-columns-counter': elementSettings.ColumnsCounter,
   },
   mixins: [AclMixing],
-  props: ['currentComponent'],
+  props: ['columnId'],
   computed: {
     settings() {
       return settingsDefault[this.type]().componentSettings;
     },
     filteredSettings() {
-      return this.settings.filter(setting =>
-        this.hasPermissionsInGroup(setting, `std-${this.typeAcl}_`),
-      );
+      return this.settingGroupFilter(this.settings);
     },
     pluginsGroups() {
       const pluginsGroups = pluginsLayout[this.type] ? pluginsLayout[this.type]().componentPlugins : [];
@@ -61,31 +60,109 @@ export default {
       return this.$store.getters['module/currentElementId'];
     },
     currentElement() {
-      if (!this.currentElementId) {
-        return this.module;
-      }
+      return this.currentElementId ? this.getElement(this.currentElementId) : this.module;
+    },
+    currentRow() {
       let element = false;
-      _.forEach(this.module.structure.columns, (column) => {
-        if (column.id === this.currentElementId) {
-          element = column;
+      _.forEach(this.module.structure.rows, (row) => {
+        if (row.id === this.currentElementId) {
+          element = row;
           return false;
         }
-        _.forEach(column.components, (CurrentComponent) => {
-          if (CurrentComponent.id === this.currentElementId) {
-            element = CurrentComponent;
+        _.forEach(row.columns, (column) => {
+          if (column.id === this.currentElementId) {
+            element = row;
             return false;
           }
-          return true;
+          _.forEach(column.components, (currentComponent) => {
+            if (currentComponent.id === this.currentElementId) {
+              element = row;
+              return false;
+            }
+            return true;
+          });
+          return !element;
         });
         return !element;
       });
       return element;
     },
+    currentColumnIndex() {
+      let columnIndex = false;
+      _.forEach(this.module.structure.rows, (row) => {
+        _.forEach(row.columns, (column, currentColumnIndex) => {
+          if (column.id === this.currentElementId) {
+            columnIndex = currentColumnIndex;
+            return false;
+          }
+          _.forEach(column.components, (currentComponent) => {
+            if (currentComponent.id === this.currentElementId) {
+              columnIndex = currentColumnIndex;
+              return false;
+            }
+            return true;
+          });
+          return columnIndex === false;
+        });
+        return columnIndex === false;
+      });
+      return columnIndex;
+    },
+    currentRowIndex() {
+      let elementIndex = false;
+      _.forEach(this.module.structure.rows, (row, currentRowIndex) => {
+        if (row.id === this.currentElementId) {
+          elementIndex = currentRowIndex;
+          return false;
+        }
+        _.forEach(row.columns, (column) => {
+          if (column.id === this.currentElementId) {
+            elementIndex = currentRowIndex;
+            return false;
+          }
+          _.forEach(column.components, (currentComponent) => {
+            if (currentComponent.id === this.currentElementId) {
+              elementIndex = currentRowIndex;
+              return false;
+            }
+            return true;
+          });
+          return elementIndex === false;
+        });
+        return elementIndex === false;
+      });
+      return elementIndex;
+    },
   },
   methods: {
+    getElement(elementId) {
+      let element = false;
+      _.forEach(this.module.structure.rows, (row) => {
+        if (row.id === elementId) {
+          element = row;
+          return false;
+        }
+        _.forEach(row.columns, (column) => {
+          if (column.id === elementId) {
+            element = column;
+            return false;
+          }
+          _.forEach(column.components, (currentComponent) => {
+            if (currentComponent.id === elementId) {
+              element = currentComponent;
+              return false;
+            }
+            return true;
+          });
+          return !element;
+        });
+        return !element;
+      });
+      return element;
+    },
     settingProps(setting) {
       return {
-        'column-id': this.currentComponent.columnId,
+        'column-id': this.currentColumnIndex,
         'default-value': setting.value,
         'false-text': setting.falseText,
         'is-disable-percentage': setting.isDisablePercentage,
@@ -104,6 +181,7 @@ export default {
         link: setting.link,
         module: this.module,
         name: setting.name,
+        row: this.currentRow,
         'no-label': setting.noLabel,
         options: setting.options,
         placeholder: setting.placeholder,
@@ -124,11 +202,10 @@ export default {
       let show = false;
       const pluginsToShow = [];
       _.forEach(group.plugins, (item) => {
-        const typeAcl = this.typeAcl === 'module' ? '' : `-${this.typeAcl}`;
-        if (
-          (this.$can(`std${typeAcl}-plugin-${item.aclName}`)
-          && this.currentElement.plugins[_.camelCase(item.name)])
-        ) {
+        // const typeAcl = this.typeAcl === 'module' ? '' : `-${this.typeAcl}`;
+        if (this.currentElement.plugins[_.camelCase(item.name)]) {
+          // Todo: We need a permissions refactor to facilitate its use STD-569.
+          // (this.$can(`std${typeAcl}-plugin-${item.aclName}`) &&
           show = true;
           pluginsToShow.push(item);
         }
@@ -141,10 +218,9 @@ export default {
       let show = false;
       const settingsToShow = [];
       _.forEach(group.settings, (item) => {
-        if (
-          (item.dependOn === undefined || _.get(this, item.dependOn)) &&
-          this.$can(`std-${this.typeAcl}_${item.aclName}`)
-        ) {
+        if ((item.dependOn === undefined || _.get(this, item.dependOn))) {
+          // Todo: We need a permissions refactor to facilitate its
+          // && this.$can(`std-${this.typeAcl}_${item.aclName}`)
           show = true;
           settingsToShow.push(item);
         }
@@ -152,13 +228,6 @@ export default {
       });
       group.settings = settingsToShow;
       return show;
-    },
-    pluginFilter(plugins) {
-      const typeAcl = this.typeAcl === 'module' ? '' : `-${this.typeAcl}`;
-      return plugins.filter(plugin =>
-        this.$can(`std${typeAcl}-plugin-${plugin.aclName}`)
-        && this.currentElement.plugins[_.camelCase(plugin.name)],
-      );
     },
     saveElementProperty({ link, subComponent, name, value }) {
       const data = {

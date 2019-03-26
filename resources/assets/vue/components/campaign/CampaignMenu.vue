@@ -1,8 +1,8 @@
 <template>
   <div class="expand st-module-menu-wrapper">
     <label-item-container label="MODULES" icon="glyphicon-th-large" v-b-toggle.modules></label-item-container>
-      <b-collapse id="modules" visible class="card">
-        <div v-if="ready" v-for="(item, i) in items" :key="i" >
+      <b-collapse id="modules" visible class="card" v-if="ready">
+        <div v-for="(item, i) in items" :key="i" >
           <div v-if="item.sub_menu" class="expand-subitem-button">
             <label-item-container :label="item.name" icon="glyphicon-folder-open" v-b-toggle="item.name" class="subitem-button"></label-item-container>
               <b-collapse :id="item.name" class="content-collapse">
@@ -91,10 +91,6 @@
       items() {
         return this.$store.getters["library/modules"];
       },
-      activeModule() {
-        const activeModuleId = this.$store.getters["campaign/activeModule"];
-        return this.modules[activeModuleId] || undefined;
-      }
     },
     created() {
       // Set defaults for modules from menu

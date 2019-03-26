@@ -1,5 +1,5 @@
 <template>
-  <div v-if="module ? module.settings : false">
+  <div v-if="module && module.type === 'custom'">
     <label-item-container
     :label="title"
     icon="glyphicon-tasks"
@@ -7,14 +7,13 @@
     ></label-item-container>
     <div class="card card-custom">
       <group-container class="group-container-custom">
-        <component :is="'custom-settings-' + module.key" :module-id="currentCustomModule" :module="module"></component>
+        <component :is="'custom-settings-' + module.key" :module-id="moduleIndex" :module="module"></component>
       </group-container>
     </div>
   </div>
 </template>
 
 <script>
-  import _ from 'lodash'
   import GroupContainer from "../common/containers/GroupContainer.vue";
   import LabelItemContainer from "../common/containers/LabelItemContainer.vue";
 
@@ -31,15 +30,37 @@
         }
         return this.module.title;
       },
-      currentCustomModule() {
-        return this.$store.getters["campaign/currentCustomModule"];
-      },
       currentCustomComponent() {
         return this.$store.getters["campaign/currentCustomComponent"];
       },
+      modules() {
+        return this.$store.getters['campaign/modules'];
+      },
+      currentModuleIdInstance() {
+        return this.$store.getters["campaign/currentModuleIdInstance"];
+      },
+      moduleIndex() {
+        let moduleIndex = false;
+        _.forEach(this.modules, (currentModule, currentModuleIndex) => {
+          if (currentModule.idInstance === this.currentModuleIdInstance) {
+            moduleIndex = currentModuleIndex;
+            return false;
+          }
+          return true;
+        });
+        return moduleIndex;
+      },
       module() {
-        return this.$store.getters["campaign/modules"][this.currentCustomModule];
-      }
+        let module = false;
+        _.forEach(this.modules, (currentModule) => {
+          if (currentModule.idInstance === this.currentModuleIdInstance) {
+            module = currentModule;
+            return false;
+          }
+          return true;
+        });
+        return module;
+      },
     },
     methods: {
       toCamel(str) {

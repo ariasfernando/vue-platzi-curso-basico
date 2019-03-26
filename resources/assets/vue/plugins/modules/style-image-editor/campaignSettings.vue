@@ -35,12 +35,14 @@
             type: 'error',
             msg: getErrorMessage,
             show: hasError,
-          }" />
+          }"
+          :debounce="500" />
         <StuiInputText
           v-else
           v-model="alt"
           class="image-alt-text"
-          placeholder="Alt text" />
+          placeholder="Alt text"
+          :debounce="500" />
       </template>
     </SettingsContainer>
     <ImageModal
@@ -200,8 +202,9 @@ export default {
         data.imgMobile = uploadedImgs[images.length - 1];
       }
       delete data.images;
-      this.$store.commit('campaign/savePlugin', {
+      this.$store.commit('campaign/savePluginDeprecate', {
         plugin: this.pluginKey,
+        rowId: this.elementLocation.rowId,
         moduleId: this.elementLocation.moduleId,
         columnId: this.elementLocation.columnId,
         componentId: this.elementLocation.componentId,

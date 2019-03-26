@@ -1,12 +1,13 @@
 <template>
-  <settings-container :label="plugin.title">
+  <SettingsContainer :label="plugin.title">
     <template slot="setting-right">
       <stui-input-number
         v-model="height"
         :max="options.max"
-        :min="options.min" />
+        :min="options.min"
+        :debounce="500" />
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 
 <script>

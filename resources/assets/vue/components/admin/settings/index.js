@@ -1,8 +1,8 @@
 import BorderGroup from './BorderGroup.vue';
 import ButtonCaret from './ButtonCaret.vue';
-import HorizontalPaddingGroup from './HorizontalPaddingGroup.vue';
 import ButtonWidth from './ButtonWidth.vue';
 import ClassInput from './ClassInput.vue';
+import ColumnsCounter from './ColumnsCounter.vue';
 import ColumnsStacking from './ColumnsStacking.vue';
 import FontFamily from './FontFamily.vue';
 import FontWeight from './FontWeight.vue';
@@ -13,6 +13,7 @@ import GenericNumber from './GenericNumber.vue';
 import GenericSelect from './GenericSelect.vue';
 import GenericSwitch from './GenericSwitch.vue';
 import GenericText from './GenericText.vue';
+import HorizontalPaddingGroup from './HorizontalPaddingGroup.vue';
 import ImageSize from './ImageSize.vue';
 import LetterSpacing from './LetterSpacing.vue';
 import PaddingGroup from './PaddingGroup.vue';
@@ -23,9 +24,9 @@ import Width from './Width.vue';
 const Settings = {
   BorderGroup,
   ButtonCaret,
-  HorizontalPaddingGroup,
   ButtonWidth,
   ClassInput,
+  ColumnsCounter,
   ColumnsStacking,
   FontFamily,
   FontWeight,
@@ -36,6 +37,7 @@ const Settings = {
   GenericSelect,
   GenericSwitch,
   GenericText,
+  HorizontalPaddingGroup,
   ImageSize,
   LetterSpacing,
   PaddingGroup,

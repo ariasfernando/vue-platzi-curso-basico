@@ -1,5 +1,4 @@
 const studioSettings = require('./studioSettings.vue');
-const campaignSettings = require('./campaignSettings.vue');
 
 module.exports = {
   name: 'mobile-styles',
@@ -8,7 +7,6 @@ module.exports = {
   author: 'matias@stensul.com',
   target: ['button', 'divider', 'image', 'text'],
   studioSettings,
-  campaignSettings,
   config: {
     settings: {
       hiddenMobile: {

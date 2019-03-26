@@ -25,31 +25,7 @@ export default {
       return this.$store.getters['campaign/modules'];
     },
     isRenderIframe() {
-      let render = false;
-      _.each(this.modules, (module, moduleIndex) => {
-        _.each(module.plugins, (plugin, pluginKey) => {
-          if (this.isRenderSetting(plugin, pluginKey)) {
-            render = true;
-          }
-        });
-        if(module.structure){
-          _.each(module.structure.columns, (column, columnIndex) => {
-            _.each(column.plugins, (plugin, pluginKey) => {
-              if (this.isRenderSetting(plugin, pluginKey)) {
-                render = true;
-              }
-            });
-            _.each(column.components, (component, componentIndex) => {
-              _.each(component.plugins, (plugin, pluginKey) => {
-                if (this.isRenderSetting(plugin, pluginKey)) {
-                  render = true;
-                }
-              });
-            });
-          });
-        }
-      });
-      if(!this.headEmail) {
+      if (!this.headEmail) {
         this.setHeadEmail();
       }
     }
