@@ -190,8 +190,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
 
         function getSelectionContent() {
           selectedElm = selection.getNode();
-          var htmlContent = (selectedElm.nodeName == "P")? selectedElm.innerHTML : selectedElm.outerHTML;
-          return (selectedElm.textContent === selection.getContent()) ? htmlContent : selection.getContent();
+          return (selectedElm.textContent === selection.getContent()) ? selectedElm.outerHTML : selection.getContent();
         }
 
         function mceInsertLink(linkAttrs){
