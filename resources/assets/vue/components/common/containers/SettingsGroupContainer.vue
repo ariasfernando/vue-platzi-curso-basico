@@ -14,6 +14,7 @@
             :no-label="!setting.label">
             <template :slot="setting.settingSlot || 'setting-bottom'">
               <component
+                v-bind="setting.props"
                 :is="setting.type"
                 v-validate="setting.validate"
                 :value="getValue((setting.path !== undefined ? `${setting.path}.`:'')+setting.name)"
@@ -28,6 +29,7 @@
                 :text="setting.text"
                 :type="setting.propType"
                 :width="setting.width"
+                @input="(value) => setting.changeEvent === 'input' && $emit('set-value', {value, path:setting.path, name:setting.name})"
                 @click="()=>{$emit(setting.click); $emit('click', setting.click)}"
                 @change="(value)=>{$emit('set-value', {value, path:setting.path, name:setting.name})}" />
               <span
@@ -66,7 +68,7 @@ export default {
           show = false;
         }
       });
-      if (!this.$can(element.aclName)) {
+      if (element.aclName && !this.$can(element.aclName)) {
         show = false;
       }
       return show;
