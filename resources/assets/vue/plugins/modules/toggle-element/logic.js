@@ -25,8 +25,8 @@ export default {
           const rule = {
             ...logicRule,
             toggledElementId,
-            columnIndex: this.getColumnIndexByComponentId(toggledElementId),
-            componentIndex: this.getComponentIndexByComponentId(toggledElementId),
+            columnIndex: this.getColumnIndexByElementId(toggledElementId),
+            componentIndex: this.getComponentIndexByElementId(toggledElementId),
           };
           rule.target = this.setRuleTarget(rule);
           this.applyLogicUpdates(rule);
@@ -46,7 +46,7 @@ export default {
           target = this.getNextActiveComponent(rule, -1);
           break;
         case 'last': {
-          const componentsLength = this.getColumnByElementId(rule.elementId).components.length;
+          const componentsLength = this.getColumnByElementId(rule.toggledElementId).components.length;
           target = this.getPreviousActiveComponent(rule, componentsLength);
           break;
         }
@@ -64,8 +64,8 @@ export default {
       return target;
     },
     getPreviousActiveComponent(rule, start) {
-      const components = this.getColumnByElementId(rule.elementId).components;
-      const startFrom = start || this.getComponentIndexByElementId(rule.elementId);
+      const components = this.getColumnByElementId(rule.toggledElementId).components;
+      const startFrom = start || this.getComponentIndexByElementId(rule.toggledElementId);
 
       // - 1 omits current component and start from the previous one
       const searchIndex = startFrom - 1;
@@ -86,8 +86,8 @@ export default {
       return target;
     },
     getNextActiveComponent(rule, start) {
-      const components = this.getColumnByElementId(rule.elementId).components;
-      const startFrom = start || this.getComponentIndexByElementId(rule.elementId);
+      const components = this.getColumnByElementId(rule.toggledElementId).components;
+      const startFrom = start || this.getComponentIndexByElementId(rule.toggledElementId);
 
       // + 1 omits current component and start from the next one
       const searchIndex = startFrom + 1;
@@ -175,8 +175,8 @@ export default {
               const payload = {
                 elementId: rule.target.elementId,
               };
-              if (rule.path) {
-                payload.path = rule.path;
+              if (updateData.path) {
+                payload.path = updateData.path;
                 payload.value = updateData.value;
               } else {
                 payload.subComponent = updateData.subComponent;
@@ -184,7 +184,6 @@ export default {
                 payload.property = updateData.property;
                 payload.value = updateData.value;
               }
-
               this.saveElementProperty(payload);
             }
           }

@@ -105,7 +105,7 @@ export default {
       }
       return this.module.data[elementId];
     },
-    getColumnIndexByelementId(elementId) {
+    getColumnIndexByElementId(elementId) {
       if (!this.isCustom) {
         let columnIndex = false;
         _.forEach(this.module.structure.rows, (row) => {

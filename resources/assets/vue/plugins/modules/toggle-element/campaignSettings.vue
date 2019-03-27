@@ -76,7 +76,6 @@ export default {
         };
         if (!preventDefault) {
           this.saveElementProperty(payload);
-          this.resetErrors(value, this.moduleIndex);
         }
         this.resetErrors(value, this.moduleId);
       }
@@ -88,13 +87,13 @@ export default {
         value,
       });
     },
-    toggleChange(value, elementId) {
+    toggleChange(value, elementId, preventDefault) {
       if (this.plugin.data.preventEmpty && !value) {
         const otherElementIsEnabled = this.plugin.data.elements.some(element =>
           element.id !== elementId && this.getValue(element.id));
 
         if (otherElementIsEnabled) {
-          this.toggleElement(value, elementId);
+          this.toggleElement(value, elementId, preventDefault);
         } else {
           this.$root.$toast("You've to leave at least one element", {
             className: 'et-error',
@@ -102,7 +101,7 @@ export default {
           });
         }
       } else {
-        this.toggleElement(value, elementId);
+        this.toggleElement(value, elementId, preventDefault);
       }
     },
     resetErrors(value, moduleIndex) {
