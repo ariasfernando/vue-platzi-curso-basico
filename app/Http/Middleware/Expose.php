@@ -26,11 +26,19 @@ class Expose
         if (count($source)) {
             if (is_array($map) && count($map)) {
                 /**
-                 * $v is in the form value or value.key or value.key.another_key
+                 * $data is in the form value or value.key || value.key.another_key || []
+                 * maybe do this recursive?
                  */
-                foreach ($map as $v) {
-                    if (array_has(config($key), $v)) {
-                        config(['exposed.'.$key.'.'.$v => config($key.'.'.$v)]);
+                foreach ($map as $data_name => $data) {
+                    if (is_array($data)) {
+                        foreach ($data as $data_key) {
+                            if (array_has(config($key.'.'.$data_name), $data_key)) {
+                                config(['exposed.'.$key.'.'.$data_name.'.'.$data_key => config($key.'.'.$data_name.'.'.$data_key)]);
+                            }
+                        }
+                    } else
+                    if (array_has(config($key), $data)) {
+                        config(['exposed.'.$key.'.'.$data => config($key.'.'.$data)]);
                     }
                 }
             } elseif ($map === '*') {

@@ -71,7 +71,7 @@ class EditColumnsWidth extends Migration
         * and edit in structure.columns.components.button.attribute.width
         */ 
 
-        Campaign::withTrashed()->chunk(100, function ($campaigns) {
+        Campaign::withTrashed()->chunk(20, function ($campaigns) {
             Logging::info('-------------------------');
             Logging::info('CAMPAIGNS');
             Logging::info('-------------------------');
@@ -107,7 +107,7 @@ class EditColumnsWidth extends Migration
         * and edit in structure.columns.components.button.attribute.width
         */
 
-        Module::withTrashed()->chunk(100, function ($modules) {
+        Module::withTrashed()->chunk(20, function ($modules) {
             Logging::info('-------------------------');
             Logging::info('STUDIO');
             Logging::info('-------------------------');

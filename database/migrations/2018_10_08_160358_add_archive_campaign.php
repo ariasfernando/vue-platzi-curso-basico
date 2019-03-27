@@ -16,7 +16,7 @@ class AddArchiveCampaign extends Migration
     {
         DB::connection()->disableQueryLog();
 
-        Campaign::withTrashed()->chunk(100, function ($campaigns) {
+        Campaign::withTrashed()->chunk(20, function ($campaigns) {
             foreach ($campaigns as $campaign) {
                 $campaign->archive = false;
                 $campaign->timestamps = false;
