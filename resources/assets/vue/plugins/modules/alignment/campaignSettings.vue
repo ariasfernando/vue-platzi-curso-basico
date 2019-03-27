@@ -1,5 +1,5 @@
 <template>
-  <settings-container :label="plugin.title">
+  <SettingsContainer :label="plugin.title">
     <template slot="setting-right">
       <stui-field addons>
         <stui-button
@@ -10,12 +10,12 @@
           :data-tooltip="option"
           highlight
           expanded
-          @click="changeAlignment(option)">
+          @click="value = option">
           <i :class="`fa fa-align-${option}`" />
         </stui-button>
       </stui-field>
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 
 <script>
@@ -42,11 +42,6 @@ export default {
           this.saveAttributeInThisElement({ subComponent: 'button', property: 'align', value });
         }
       },
-    },
-  },
-  methods: {
-    changeAlignment(option) {
-      this.value = option;
     },
   },
 };

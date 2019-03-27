@@ -30,7 +30,8 @@
             <module-settings v-if="showModuleSettings" />
             <module-background-settings />
             <component-settings />
-            <custom-module-settings v-if="currentCustomModule" />
+            <row-settings />
+            <custom-module-settings />
             <shadow-render />
           </div>
         </scrollbar-container>
@@ -58,7 +59,6 @@
 </template>
 
 <script>
-  import _ from 'lodash'
   import CampaignConfiguration from './CampaignConfiguration.vue'
   import CampaignMenu from './CampaignMenu.vue'
   import CampaignService from '../../services/campaign'
@@ -75,6 +75,7 @@
   import ModalProofTrack from './modals/ModalProofTrack.vue';
   import ModuleBackgroundSettings from './ModuleBackgroundSettings.vue'
   import ModuleSettings from './ModuleSettings.vue'
+  import RowSettings from './RowSettings.vue'
   import ScrollbarContainer from '../common/containers/ScrollbarContainer.vue';
   import ShadowRender from './ShadowRender.vue'
   import Spinner from '../common/Spinner.vue'
@@ -102,6 +103,7 @@
       ModalInsertBody,
       ModuleBackgroundSettings,
       ModuleSettings,
+      RowSettings,
       ScrollbarContainer,
       ShadowRender,
       Spinner,
@@ -126,12 +128,6 @@
       },
       locked() {
         return this.campaign.campaign_data && this.campaign.campaign_data.locked;
-      },
-      currentComponent() {
-        return this.$store.getters["campaign/currentComponent"];
-      },
-      currentCustomModule() {
-        return !_.isUndefined(this.$store.getters["campaign/currentCustomModule"]);
       },
       dirty() {
         return this.$store.getters["campaign/dirty"];

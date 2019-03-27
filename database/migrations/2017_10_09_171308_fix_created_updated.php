@@ -22,7 +22,7 @@ class FixCreatedUpdated extends Migration
     {
         DB::connection()->disableQueryLog();
 
-        Campaign::withTrashed()->chunk(100, function ($campaigns) {
+        Campaign::withTrashed()->chunk(20, function ($campaigns) {
 
             foreach ($campaigns as $campaign) {
                 if (!is_array($campaign->created_by)) {

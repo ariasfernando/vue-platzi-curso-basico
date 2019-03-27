@@ -308,35 +308,30 @@ class Eloqua implements ApiConnector
         }
 
         if (isset($error)) {
-            if (!$this->flushed_cache) {
-                Cache::forget('api:eloqua:url');
-                Cache::forget('api:eloqua:token');
-                Cache::forget('api:eloqua:' . $this->library_name . ':url');
-                Cache::forget('api:eloqua:' . $this->library_name . ':token');
+            Cache::forget('api:eloqua:url');
+            Cache::forget('api:eloqua:token');
+            Cache::forget('api:eloqua:' . $this->library_name . ':url');
+            Cache::forget('api:eloqua:' . $this->library_name . ':token');
 
+            Session::forget('api:eloqua:url');
+            Session::forget('api:eloqua:url:expires_in');
+            Session::forget('api:eloqua:token');
+            Session::forget('api:eloqua:token:expires_in');
+            Session::forget('api:eloqua:refresh');
 
-                Session::forget('api:eloqua:url');
-                Session::forget('api:eloqua:url:expires_in');
-                Session::forget('api:eloqua:token');
-                Session::forget('api:eloqua:token:expires_in');
-                Session::forget('api:eloqua:refresh');
-                $this->flushed_cache = true;
-                return $this->call($options);
-            } else {
-                $error_message = isset($error['data']['error_description'])
-                    ? $error['data']['error_description']
-                    : $error['status'];
+            $error_message = isset($error['data']['error_description'])
+                ? $error['data']['error_description']
+                : $error['status'];
 
-                Activity::log('Error Eloqua [' . $error['status'] . ']', [
-                    'properties' => [
-                        'message' => $error_message
-                    ]
-                ]);
+            Activity::log('Error Eloqua [' . $error['status'] . ']', [
+                'properties' => [
+                    'message' => $error_message
+                ]
+            ]);
 
-                \Log::error(json_encode($error));
+            \Log::error(json_encode($error));
 
-                throw new \Exception($error_message);
-            }
+            throw new \Exception($error_message);
         } else {
             return json_decode($response->getBody()->getContents(), true);
         }
@@ -350,46 +345,33 @@ class Eloqua implements ApiConnector
     private function getEmailFolderId()
     {
         $eloqua_config = $this->eloqua_config;
+        
+        if (!empty($eloqua_config['libraries'][$this->library_name]['email_folder_name'])) {
+            $search_param = "search=name='" . $eloqua_config['libraries'][$this->library_name]['email_folder_name'] . "'";
+        } elseif (!empty($eloqua_config['email_folder_name'])) {
+            $search_param = "search=name='" . $eloqua_config['email_folder_name'] . "'";
+        } else {
+            $search_param = "isSystem='true'";
+        }
 
         $options = [
             'type' => $eloqua_config['list_folders']['type'],
-            'path' => $eloqua_config['list_folders']['url']
+            'path' => $eloqua_config['list_folders']['url'] . "?" . $search_param
         ];
 
+        $folder_id = null;
         $folders = $this->call($options);
-
-        if (isset($folders['elements'])) {
-            $folderId = null;
-            $folders = $folders['elements'];
-
-            for ($i = 0; $i < count($folders); $i++) {
-                if (!empty($eloqua_config['libraries'][$this->library_name]['email_folder_name'])) {
-                    if ($folders[$i]['name'] == $eloqua_config['libraries'][$this->library_name]['email_folder_name']) {
-                        $folderId = $folders[$i]['id'];
-                        break;
-                    }
-                } elseif (!empty($eloqua_config['email_folder_name'])) {
-                    if ($folders[$i]['name'] == $eloqua_config['email_folder_name']) {
-                        $folderId = $folders[$i]['id'];
-                        break;
-                    }
-                } elseif ($folders[$i]['isSystem'] === 'true') {
-                    $folderId = $folders[$i]['id'];
-                    break;
-                }
-            }
-
-            if (is_null($folderId)) {
-                if (!empty($eloqua_config['libraries'][$this->library_name]['email_folder_name'])) {
-                    return (int) $this->createEmailFolder(
-                        $eloqua_config['libraries'][$this->library_name]['email_folder_name']
-                    );
-                }
-                return (int) $this->createEmailFolder($eloqua_config['email_folder_name']);
-            }
-
-            return (int) $folderId;
+        
+        if (!empty($folders['elements'])) {
+            $folder_id = $folders['elements'][0]['id'];
+        } elseif (!empty($eloqua_config['libraries'][$this->library_name]['email_folder_name'])) {
+            $folder_id = (int) $this->createEmailFolder(
+                $eloqua_config['libraries'][$this->library_name]['email_folder_name']
+            );
+        } else {
+            $folder_id = (int) $this->createEmailFolder($eloqua_config['email_folder_name']);
         }
+        return $folder_id;
     }
 
     /**
@@ -468,7 +450,6 @@ class Eloqua implements ApiConnector
                             'html' => $campaign->body_html
                         ],
                         "isPlainTextEditable" => true,
-                        "sendPlainTextOnly" => true,
                         'plainText' => $campaign->plain_text
                     ]
                 ]

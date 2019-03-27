@@ -44,7 +44,7 @@ export default {
               this.applyLogicUpdates(settings);
               break;
             case 'last':
-              const components = this.module.structure.columns[this.getColumnIndexByComponentId(settings.elementId)].components;
+              const components = this.getColumnByElementId(settings.elementId).components;
               settings.target = this.getPreviousActiveComponent(settings, components.length);
               this.applyLogicUpdates(settings);
               break;
@@ -59,8 +59,8 @@ export default {
       }
     },
     getPreviousActiveComponent(settings, startFrom) {
-      const components = this.module.structure.columns[this.getColumnIndexByComponentId(settings.elementId)].components;
-      startFrom = startFrom || this.getComponentIndexByComponentId(settings.elementId);
+      const components = this.getColumnByElementId(settings.elementId).components;
+      startFrom = startFrom || this.getComponentIndexByElementId(settings.elementId);
 
       // - 1 omits current component and start from the previous one
       const searchIndex = startFrom - 1;
@@ -78,8 +78,8 @@ export default {
       return target;
     },
     getNextActiveComponent(settings, startFrom) {
-      const components = this.module.structure.columns[this.getColumnIndexByComponentId(settings.elementId)].components;
-      startFrom = startFrom || this.getComponentIndexByComponentId(settings.elementId);
+      const components = this.getColumnByElementId(settings.elementId).components;
+      startFrom = startFrom || this.getComponentIndexByElementId(settings.elementId);
 
       // + 1 omits current component and start from the next one
       const searchIndex = startFrom + 1;
@@ -130,7 +130,7 @@ export default {
             if (this.isCustom) {
               // More testing is needed
               // this.$store.dispatch("campaign/updateCustomElementProperty", {
-              //     moduleId: this.currentCustomModule,
+              //     moduleId: this.moduleId,
               //     subComponent: settings.elementId,
               //     property: update.property,
               //     value: update.value

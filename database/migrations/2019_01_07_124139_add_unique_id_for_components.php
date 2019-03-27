@@ -17,7 +17,7 @@ class AddUniqueIdForComponents extends Migration
     public function up()
     {
         DB::connection()->disableQueryLog();
-        Module::withTrashed()->chunk(100, function ($modules) {
+        Module::withTrashed()->chunk(20, function ($modules) {
     
             foreach ($modules as $key => &$module) {
                 $module_structure = $module->structure;

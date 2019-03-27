@@ -1,15 +1,15 @@
 <template>
   <div class="expand st-module-menu-wrapper">
     <label-item-container label="MODULES" icon="glyphicon-th-large" v-b-toggle.modules></label-item-container>
-      <b-collapse id="modules" visible class="card">
-        <div v-if="ready" v-for="(item, i) in items" :key="i" >
+      <b-collapse id="modules" visible class="card" v-if="ready">
+        <div v-for="(item, i) in items" :key="i" >
           <div v-if="item.sub_menu" class="expand-subitem-button">
             <label-item-container :label="item.name" icon="glyphicon-folder-open" v-b-toggle="item.name" class="subitem-button"></label-item-container>
               <b-collapse :id="item.name" class="content-collapse">
                   <div v-for="(subitem, j) in item.sub_menu" :key="j">
                     <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd" v-if="!subitem.mandatory">
                       <group-container  @click="addModuleByKey(subitem.key, 'subitem')" :clickeable="true">
-                        <settings-container :label="subitem.name" customClass="draggable-item" :module-id="subitem.key" :module-type="'subitem'" >
+                        <settings-container :label="subitem.name" :label-expanded="true" customClass="draggable-item" :module-id="subitem.key" :module-type="'subitem'" >
                           <template slot="setting-right">
                             <i class="glyphicon glyphicon-plus icon-plus" style="float: right;"></i>
                           </template>
@@ -21,7 +21,7 @@
           </div>
         <draggable v-else-if="!item.mandatory"  :element="'div'" :options="options" @clone="onClone" @end="onEnd">
             <group-container @click="addModuleByKey(item.key, 'item')" :clickeable="true">
-              <settings-container :label="item.name" customClass="draggable-item" :module-id="item.key" :module-type="'item'" >
+              <settings-container :label="item.name" :label-expanded="true" customClass="draggable-item" :module-id="item.key" :module-type="'item'" >
                 <template slot="setting-right">
                   <i class="glyphicon glyphicon-plus icon-plus" style="float: right;"></i>
                 </template>
@@ -91,10 +91,6 @@
       items() {
         return this.$store.getters["library/modules"];
       },
-      activeModule() {
-        const activeModuleId = this.$store.getters["campaign/activeModule"];
-        return this.modules[activeModuleId] || undefined;
-      }
     },
     created() {
       // Set defaults for modules from menu
@@ -231,9 +227,12 @@
   .expand-subitem-button{
     background: #edecef;
     border: 1px solid #d5d3d9;
-    margin-bottom: 5px;
+    margin: 5px 0px;
     border-radius: 2px;
     position: relative;
+    &:last-of-type {
+      margin-bottom: 0px;
+    }
   }
   .expand-subitem-button /deep/ p{
     color: #514960!important;

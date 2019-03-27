@@ -2,7 +2,7 @@
   <div>
     <LabelItemContainer
       v-b-toggle.module-settings-styles
-      label="Row Styles"
+      label="Module Styles"
       icon="glyphicon-cog" />
     <b-collapse id="module-settings-styles" visible accordion="module-settings">
       <b-card class="control">
@@ -61,11 +61,5 @@ import SettingContainerMixin from '../mixins/SettingContainerMixin';
 
 export default {
   mixins: [SettingContainerMixin],
-  computed: {
-    hasMoreThanOneColumn() {
-      // This is used in a dependOn in a module setting.
-      return this.module.structure.columns.length > 1;
-    },
-  },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <settings-container class="field-font-family" label="Font Family">
+  <SettingsContainer class="field-font-family" label="Font Family">
     <template slot="setting-right">
       <stui-select
         v-model="fontFamily"
@@ -7,7 +7,7 @@
         size="mini"
         :list="plugin.config" />
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 
 <script>

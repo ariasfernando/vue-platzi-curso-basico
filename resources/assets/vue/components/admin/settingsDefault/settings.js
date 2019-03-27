@@ -179,7 +179,7 @@ export function lineHeight(props) {
 
 export function padding(props) {
   const { subComponent, aclName, label, noLabel, type } = props || {};
-  const coso = {
+  return {
     name: 'padding',
     aclName: aclName || 'style_padding',
     type: type || 'padding-group',
@@ -187,7 +187,6 @@ export function padding(props) {
     noLabel,
     subComponent,
   };
-  return coso;
 }
 
 export function placeholder() {
@@ -251,5 +250,12 @@ export function width(props) {
     minValue,
     subComponent,
     value: value || '',
+  };
+}
+
+export function columnsCounter(props) {
+  return {
+    type: 'columns-counter',
+    label: 'ColumnsCounter',
   };
 }

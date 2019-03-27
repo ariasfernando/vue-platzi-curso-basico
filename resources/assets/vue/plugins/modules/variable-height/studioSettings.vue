@@ -50,7 +50,6 @@ export default {
     changeOption(valueHeight, nameHeight) {
       let maxHeight = this.plugin.config.options.max;
       let minHeight = this.plugin.config.options.min;
-      let options = {};
 
       if (nameHeight === 'max') {
         maxHeight = valueHeight;
@@ -60,18 +59,13 @@ export default {
         minHeight = valueHeight;
       }
 
-      value = {
+      const value = {
         max: maxHeight,
         min: minHeight,
       };
 
-      this.updatePluginConfig({value})
+      this.updatePluginConfig({ value });
     },
   },
 };
 </script>
-<style lang="scss" scoped>
-.el-input-number--mini {
-  width: 100%;
-}
-</style>

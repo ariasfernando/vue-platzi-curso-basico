@@ -11,19 +11,18 @@
                 <template v-if="item.input_type === 'select'" slot="setting-bottom">
                   <stui-select
                     v-validate="'required'"
-                    class="float-left width-full"
-                    :class="{'is-danger': errors.has(`trk-${item.name}`)}"
                     :name="`trk-${item.name}`"
                     :value="trackingData[`trk-${key}`]"
                     placeholder=""
                     :data-vv-as="item.label"
                     size="mini"
                     :list="item.options"
-                    @input="onInputChange(`trk-${item.name}`, $event)" />
-                  <span
-                    v-show="errors.has(`trk-${item.name}`)"
-                    class="help is-danger">{{ errors.first(`trk-${item.name}`) }}
-                  </span>
+                    :validation-notif="{
+                      msg: errors.first(`trk-${item.name}`),
+                      type: 'error',
+                      show: errors.has(`trk-${item.name}`)
+                    }"
+                    @input="(value) => onInputChange(`trk-${item.name}`, value)" />
                 </template>
                 <template v-else-if="item.input_type === 'hidden'" slot="setting-bottom">
                   <el-input
@@ -38,16 +37,14 @@
                     :name="`trk-${item.name}`"
                     :value="trackingData[`trk-${key}`]"
                     :controls="false"
-                    class="float-left"
-                    :class="{'is-danger': errors.has(`trk-${item.name}`)}"
                     :data-vv-as="item.label"
-                    size="mini"
-                    @input="onInputChange(`trk-${item.name}`, $event)"
-                    @blur="onBlur(`trk-${item.name}`, $event.target.value, item.input_type)" />
-                  <span
-                    v-show="errors.has(`trk-${item.name}`)"
-                    class="help is-danger">{{ errors.first(`trk-${item.name}`) }}
-                  </span>
+                    :validation-notif="{
+                      msg: errors.first(`trk-${item.name}`),
+                      type: 'error',
+                      show: errors.has(`trk-${item.name}`)
+                    }"
+                    @input="(value) => onInputChange(`trk-${item.name}`, value)"
+                    @blur="($event) => onBlur(`trk-${item.name}`, $event.target.value, item.input_type)" />
                 </template>
               </settings-container>
             </template>
@@ -117,11 +114,3 @@
     },
   };
 </script>
-<style lang="less" scoped>
-.width-full {
-  width: 100%;
-}
-.settings-container /deep/ label{
-  font-weight: 600;
-}
-</style>

@@ -1,35 +1,30 @@
-function dividerDefault() {
-  return {
-    id: Math.floor(100000 + (Math.random() * 900000)),
-    type: 'image-element',
-    container: {
-      style: {},
-      styleOption: {
-        enableElement: true,
-      },
-      attribute: {},
+export default {
+  type: 'image-element',
+  container: {
+    style: {},
+    styleOption: {
+      enableElement: true,
     },
-    divider: {
-      attribute: {
-        align: 'center',
-        bgcolor: '#cccccc',
-        width: '100%',
-        classes: '',
-      },
-      style: {
-        height: '5px',
-        paddingTop: '10px',
-        paddingBottom: '10px',
-        paddingRight: '10px',
-        paddingLeft: '10px',
-        verticalAlign: 'middle',
-        margin: 0,
-      },
-      styleOption: {},
+    attribute: {},
+  },
+  divider: {
+    attribute: {
+      align: 'center',
+      bgcolor: '#cccccc',
+      width: '100%',
+      classes: '',
     },
-    plugins: {},
-    data: {},
-  };
-}
-
-module.exports = dividerDefault;
+    style: {
+      height: '5px',
+      paddingTop: '10px',
+      paddingBottom: '10px',
+      paddingRight: '10px',
+      paddingLeft: '10px',
+      verticalAlign: 'middle',
+      margin: 0,
+    },
+    styleOption: {},
+  },
+  plugins: {},
+  data: {},
+};

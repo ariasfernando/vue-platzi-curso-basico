@@ -8,30 +8,23 @@
 
 <script>
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {
   components: {
     SettingsContainer,
   },
-  props: ['name', 'plugin', 'moduleId', 'columnId'],
+  mixins: [pluginCampaignMixin],
+  data() {
+    return {
+      subComponent: 'container',
+    };
+  },
   computed: {
-    libraryConfig() {
-      return this.$store.state.campaign.campaign.library_config;
-    },
-    modules() {
-      return this.$store.getters['campaign/modules'];
-    },
-    column() {
-      return this.modules[this.moduleId].structure.columns[this.columnId];
-    },
     color: {
       get() {
         return {
-          hex:
-            this.column.container.attribute &&
-            this.column.container.attribute.bgcolor
-              ? this.column.container.attribute.bgcolor
-              : '',
+          hex: this.element.container.attribute.bgcolor || '',
         };
       },
       set(value) {
@@ -72,15 +65,7 @@ export default {
       if (!Application.utils.validateHexVal(val)) {
         value = val === null ? '' : Application.utils.rgbToHex(val);
       }
-      const payload = {
-        plugin: this.name,
-        moduleId: this.moduleId,
-        columnId: this.columnId,
-        attribute: 'bgcolor',
-        attributeValue: value,
-      };
-
-      this.$store.commit('campaign/saveColumnAttribute', payload);
+      this.saveAttributeInThisElement({ property: 'bgcolor', value });
     },
   },
 };

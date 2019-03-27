@@ -1,49 +1,51 @@
 <template>
   <div v-show="(elementKey === currentElementKey)" class="settings-wrapper">
-    <settings-container :no-label="true">
+    <SettingsContainer :no-label="true">
       <template slot="setting-bottom">
-        <stui-button
+        <StuiButton
           type="gray"
           width="full"
           @click="showModal('desktop')">
           <i class="glyphicon glyphicon-cloud-upload" />
           Upload Image
-        </stui-button>
+        </StuiButton>
       </template>
-    </settings-container>
-    <settings-container v-if="hasImageMobile" :no-label="true">
+    </SettingsContainer>
+    <SettingsContainer v-if="hasImageMobile" :no-label="true">
       <template slot="setting-bottom">
-        <stui-button
+        <StuiButton
           type="gray"
           width="full"
           :disabled="!plugin.data.img"
           @click="showModal('mobile')">
           <i class="glyphicon glyphicon-cloud-upload" />
           Upload Mobile Image
-        </stui-button>
+        </StuiButton>
       </template>
-    </settings-container>
-    <settings-container label="Alternative Text">
+    </SettingsContainer>
+    <SettingsContainer label="Alternative Text">
       <template slot="setting-right">
-        <stui-input-text
+        <StuiInputText
           v-if="validationRules"
           v-model="alt"
           v-validate.initial="validationRules"
           name="alt"
-          type="text"
           placeholder="Alt text"
-          size="mini"
-          class="image-alt-text"
-          :class="{'input': true, 'is-danger': hasError }" />
-        <stui-input-text
+          :validation-notif="{
+            type: 'error',
+            msg: getErrorMessage,
+            show: hasError,
+          }"
+          :debounce="500" />
+        <StuiInputText
           v-else
           v-model="alt"
           class="image-alt-text"
-          placeholder="Alt text" />
-        <span v-show="hasError" class="help is-danger">{{ getErrorMessage }}</span>
+          placeholder="Alt text"
+          :debounce="500" />
       </template>
-    </settings-container>
-    <image-modal
+    </SettingsContainer>
+    <ImageModal
       v-if="showImageEditor"
       :config="plugin.config"
       :library-images="libraryImages"
@@ -55,7 +57,7 @@
 </template>
 
 <script>
-import ImageModal from '../../../components/common/ImageModal';
+import ImageModal from '../../../components/common/ImageModal/index.vue';
 import imageService from '../../../services/image';
 import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
@@ -108,6 +110,7 @@ export default {
         });
         return rules.join('|');
       }
+      return false;
     },
     hasImageMobile() {
       return this.element.image.styleOption.hasImageMobile;
@@ -199,8 +202,9 @@ export default {
         data.imgMobile = uploadedImgs[images.length - 1];
       }
       delete data.images;
-      this.$store.commit('campaign/savePlugin', {
+      this.$store.commit('campaign/savePluginDeprecate', {
         plugin: this.pluginKey,
+        rowId: this.elementLocation.rowId,
         moduleId: this.elementLocation.moduleId,
         columnId: this.elementLocation.columnId,
         componentId: this.elementLocation.componentId,

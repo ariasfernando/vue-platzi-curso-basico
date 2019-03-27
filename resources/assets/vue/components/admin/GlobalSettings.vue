@@ -26,7 +26,7 @@
                 <tr v-for="setting in settings" :key="setting.name">
                   <td :title="setting.name">{{ setting.name }}</td>
                   <td>
-                      <toggle-button v-if="setting.properties.type == 'toogle'"
+                      <toggle-button v-if="setting.properties.type == 'toggle'"
                         class="pull-left"
                         :value="setting.value == 1"
                         id="setting"

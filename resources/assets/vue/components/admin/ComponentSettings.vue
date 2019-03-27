@@ -21,7 +21,7 @@
                 <Component
                   :is="'input-' + setting.type"
                   v-for="(setting,i) in settingGroup.settings"
-                  :key="i+setting.type"
+                  :key="i+setting.type+currentElement.id"
                   v-bind="settingProps(setting)"
                   @setting-updated="saveElementProperty" />
               </b-collapse>
@@ -38,7 +38,7 @@
             @toggleArrow="(value)=>setSlideToggles(getsettingGroupKey(currentElement.id, 'mobile-settings'), value)">
             <template slot="setting-bottom">
               <b-collapse :id="getsettingGroupKey(currentElement.id,  'mobile-settings')" :visible="slideToggles(getsettingGroupKey(currentElement.id,  'mobile-settings'))">
-                <studio-mobile-styles :plugin="currentElement.plugins.mobileStyles" name="mobileStyles" />
+                <studio-mobile-styles :plugin="currentElement.plugins.mobileStyles" name="mobileStyles" :element="currentElement"/>
               </b-collapse>
             </template>
           </SettingsContainer>

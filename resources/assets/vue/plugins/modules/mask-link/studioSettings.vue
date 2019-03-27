@@ -18,23 +18,18 @@
 
 <script>
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
-import pluginMixin from '../mixins/pluginMixinAdmin';
+import pluginMixinAdmin from '../mixins/pluginMixinAdmin';
 
 export default {
   components: { SettingsContainer },
-  mixins: [pluginMixin],
-  props: {
-    name: {
-      type: String,
-    },
-  },
+  mixins: [pluginMixinAdmin],
   computed: {
     dataDescription: {
       get() {
         return this.plugin.config.options.data;
       },
       set(value) {
-        this.updatePluginConfig({value, path: 'options.data'});
+        this.updatePluginConfig({ value, path: 'options.data' });
       },
     },
   },

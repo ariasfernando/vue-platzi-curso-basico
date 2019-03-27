@@ -1,9 +1,9 @@
 <template>
-  <settings-container :label="plugin.config.options.bgcolor.label" class="plugin-palette">
+  <SettingsContainer :label="plugin.config.options.bgcolor.label" class="plugin-palette">
     <template slot="setting-right">
       <stui-color-picker v-model="color" :palette="palette" />
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 
 <script>
@@ -11,10 +11,10 @@ import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 
 export default {
-  mixins: [pluginCampaignMixin],
   components: {
     SettingsContainer,
   },
+  mixins: [pluginCampaignMixin],
   computed: {
     palette() {
       return this.plugin.config.options.bgcolor.palette.map(
