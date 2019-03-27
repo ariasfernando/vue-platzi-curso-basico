@@ -301,15 +301,21 @@ function campaignStore() {
         };
         this.commit('campaign/setDirty', true);
       },
-      saveElementProperty(state, { moduleIdInstance, elementId, property, value, ...scope }) {
+      saveElementProperty(state, { moduleIdInstance, elementId, property, value, path, ...scope }) {
         const module = getModule(state.modules, moduleIdInstance);
         const element = elementId === undefined ? module.structure : getElement(module, elementId);
-        let properties = getProperties(element, scope);
-        if (Array.isArray(properties) && isNaN(property)) {
-          // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
-          properties = convertArrayToObject(element, scope);
+        if (path) {
+          const pathArray = path.split('.');
+          const elementOption = searchOrCreateLevel(element, pathArray);
+          Vue.set(elementOption.data, elementOption.property, value);
+        } else {
+          let properties = getProperties(element, scope);
+          if (Array.isArray(properties) && isNaN(property)) {
+            // prevent using named indexes on Array (sometimes the backend returns a array instead of a object.
+            properties = convertArrayToObject(element, scope);
+          }
+          Vue.set(properties, property, value);
         }
-        Vue.set(properties, property, value);
         this.commit('campaign/setDirty', true);
       },
       saveElementPluginData(state, { moduleIdInstance, elementId, type, plugin, path, value }) {

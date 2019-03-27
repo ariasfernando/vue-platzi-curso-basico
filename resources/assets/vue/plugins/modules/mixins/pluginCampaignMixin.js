@@ -21,13 +21,14 @@ export default {
     },
   },
   methods: {
-    saveElementProperty({ elementId, subComponent, link, property, value }) {
+    saveElementProperty({ elementId, subComponent, link, property, path, value }) {
       const payload = {
         moduleIdInstance: this.moduleIdInstance,
         elementId,
         subComponent: subComponent || this.plugin.subComponent || this.subComponent,
         link,
         property,
+        path,
         value,
       };
       this.$store.commit('campaign/saveElementProperty', payload);
@@ -56,6 +57,7 @@ export default {
               element = currentComponent;
               return false;
             }
+            return !element;
           });
           return !element;
         });
@@ -72,6 +74,7 @@ export default {
               columnIndex = currentColumnIndex;
               return false;
             }
+            return true;
           });
           return columnIndex === false;
         });
@@ -88,6 +91,7 @@ export default {
               componentIndex = currentComponentIndex;
               return false;
             }
+            return true;
           });
           return componentIndex === false;
         });

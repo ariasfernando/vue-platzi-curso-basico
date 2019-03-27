@@ -19,6 +19,7 @@ function imageDefault() {
       style: {},
       styleOption: {
         noMobileStretch: true,
+        isBlockHeight: true,
       },
     },
     plugins: {},

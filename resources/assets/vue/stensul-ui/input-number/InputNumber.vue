@@ -1,18 +1,28 @@
 <template>
-  <stui-input-disabled v-if="disabled" :value="value" :false-text="falseText" />
-  <div v-else class="control" :class="{'is-expanded': expanded}">
-    <el-input-number
-      v-bind="$attrs"
-      class="stui-input-number"
-      :class="{'is-muted' : isMuted}"
-      :value="Number(value)"
-      size="mini"
-      :controls="true"
-      controls-position="right"
-      :disabled="isMuted || inputDisabled"
-      @blur="$emit('blur')"
-      @change="(value)=>change(value)" />
-  </div>
+  <StuiInputDisabled v-if="disabled" :value="value" :false-text="falseText" />
+  <StuiField
+    v-else
+    vertical
+    :class="{'is-expanded': expanded}">
+    <div class="control">
+      <ElInputNumber
+        v-bind="$attrs"
+        class="stui-input-number"
+        :class="{
+          'is-muted' : isMuted,
+          'is-danger': validationNotif.type === 'error' & validationNotif.show
+        }"
+        :value="Number(value)"
+        size="mini"
+        :controls="true"
+        controls-position="right"
+        :disabled="isMuted || inputDisabled"
+        @blur="handleBlur"
+        @input="handleInput"
+        @change="handleChange" />
+    </div>
+    <StuiNotif v-if="validationNotif.show" :value="validationNotif" />
+  </StuiField>
 </template>
 
 <script>
@@ -21,6 +31,7 @@ import muted from '../mixins/muted';
 export default {
   name: 'InputNumber',
   mixins: [muted],
+  inheritAttrs: false,
   props: {
     value: {
       type: [Number, String, Object, Boolean],
@@ -36,10 +47,21 @@ export default {
     },
     expanded: Boolean,
     inputDisabled: Boolean,
+    validationNotif: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
   },
   methods: {
-    change(value) {
+    handleBlur(value) {
+      this.$emit('blur', value);
+    },
+    handleInput(value) {
       this.$emit('input', value);
+    },
+    handleChange(value) {
       this.$emit('change', value);
     },
   },
@@ -74,25 +96,30 @@ export default {
     }
   }
 }
-.stui-input-number.is-muted {
-  /deep/ {
-    .el-input-number__decrease,
-    .el-input-number__increase{
-      cursor: auto;
+.stui-input-number {
+  &.is-muted {
+    /deep/ {
+      .el-input-number__decrease,
+      .el-input-number__increase{
+        cursor: auto;
+      }
+      .el-input__inner,
+      .el-input.is-disabled .el-input__inner {
+        background-color: #f5f7fa;
+        border-color: #e4e7ed;
+        color: #c0c4cc;
+        cursor: auto;
+      }
     }
-    .el-input__inner,
-    .el-input.is-disabled .el-input__inner {
-      background-color: #f5f7fa;
-      border-color: #e4e7ed;
-      color: #c0c4cc;
-      cursor: auto;
+    .el-input-number__decrease {
+      border-radius: 0 0 1px 0;
+    }
+    .el-input-number__increase {
+      border-radius: 0 1px 0 0;
     }
   }
-  .el-input-number__decrease {
-    border-radius: 0 0 1px 0;
-  }
-  .el-input-number__increase {
-    border-radius: 0 1px 0 0;
+  &.is-danger /deep/ .el-input__inner {
+    border-color: $stui-color-danger;
   }
 }
 </style>
