@@ -64,7 +64,8 @@ export default {
         if (rules[k].cssRules) {
           rules[k].cssRules = this.forEachRule(rules[k].cssRules, (rules[k].media));
         } else if (rules[k].selectorText) {
-          rules[k].selectorText = this.newSelector(rules[k].selectorText, media);
+          const selectors = rules[k].selectorText.split(',').map(item => this.newSelector(item, media));
+          rules[k].selectorText = selectors.join(',');
           if (media) {
             this.parsed = this.parsed + rules[k].cssText;
           }
