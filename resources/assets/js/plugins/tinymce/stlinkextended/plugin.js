@@ -192,6 +192,23 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
             return true;
         }
 
+        function getSelectionContent() {
+          selectedElm = selection.getNode();
+          return (selectedElm.textContent === selection.getContent()) ? selectedElm.outerHTML : selection.getContent();
+        }
+
+        function mceInsertLink(linkAttrs){
+          // when an HTML is intented to be inserted, the "text" isn't founded.
+          // for that reason, we use the editor selection to insert the link executing the mceInsertLink.
+          // and instead of using formatLinkContent, we check again the link_format.
+          if(editor.settings.link_format.bold)
+            editor.formatter.toggle('bold');
+          if(editor.settings.link_format.underline)
+            editor.formatter.toggle('underline');
+          editor.execCommand('mceInsertLink', false, linkAttrs);
+          setTimeout(function(){editor.selection.collapse()},100);
+        }
+
         function isOnlyTextSelected(anchorElm) {
             var html = getSelectionContent();
 
@@ -530,7 +547,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                                 editor.insertContent(dom.createHTML('a', linkAttrs, formatLinkContent(data.text)));
                             }
                         } else {
-                            editor.insertContent(dom.createHTML('a', linkAttrs, formatLinkContent(data.text)));
+                            mceInsertLink(linkAttrs);
                         }
                     }
                 }
