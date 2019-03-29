@@ -8,19 +8,20 @@
         :label="settingGroup.groupLabel">
         <template slot="setting-bottom">
           <settings-container
-            v-for="(setting) in getSettings(settingGroup.settings)"
+            v-for="(setting, index) in getSettings(settingGroup.settings)"
             :key="`settingGroup-${groupKey}-setting-${setting.name}`"
             :label="setting.label"
-            :no-label="!setting.label">
+            :no-label="!setting.label"
+            :custom-class="{ 'is-first': index === 0 }">
             <template :slot="setting.settingSlot || 'setting-bottom'">
               <component
+                v-bind="setting.props"
                 :is="setting.type"
                 v-validate="setting.validate"
                 :value="getValue((setting.path !== undefined ? `${setting.path}.`:'')+setting.name)"
                 :placeholder="setting.placeholder"
                 :name="setting.name"
                 :list="getValue(setting.listPath)"
-                :class="{'is-danger': errors.has(setting.name) }"
                 :is-numbered="setting.isNumbered"
                 :get-split="setting.getSplit"
                 :set-join="setting.setJoin"
@@ -28,12 +29,13 @@
                 :text="setting.text"
                 :type="setting.propType"
                 :width="setting.width"
+                :validation-notif="{
+                  msg: errors.first(setting.name),
+                  type: 'error',
+                  show: errors.has(setting.name),
+                }"
                 @click="()=>{$emit(setting.click); $emit('click', setting.click)}"
-                @change="(value)=>{$emit('set-value', {value, path:setting.path, name:setting.name})}" />
-              <span
-                v-show="errors.has(setting.name)"
-                class="help is-danger">
-                {{ errors.first(setting.name) }}</span>
+                @input="(value)=> setValue(value, setting.path, setting.name)" />
             </template>
           </settings-container>
         </template>
@@ -55,6 +57,11 @@ export default {
   },
   mixins: [AclMixing],
   props: ['settings', 'settings-layout'],
+  data() {
+    return {
+      timer: null,
+    };
+  },
   methods: {
     getSettings(settings) {
       return settings.filter(this.filterElements);
@@ -66,13 +73,25 @@ export default {
           show = false;
         }
       });
-      if (!this.$can(element.aclName)) {
+      if (element.aclName && !this.$can(element.aclName)) {
         show = false;
       }
       return show;
     },
     getValue(path) {
       return _.get(this.settings, path);
+    },
+    setValue(value, path, name) {
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+      this.timer = setTimeout(() => {
+        this.$emit('set-value', {
+          value,
+          path,
+          name,
+        });
+      }, 300);
     },
   },
 };

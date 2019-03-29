@@ -33,7 +33,7 @@ class UpdateButtonsAutoWidth extends Migration
     }
 
     protected function setCampaignButtonsAutoWidth() {
-        Campaign::withTrashed()->chunk(100, function ($campaigns) {
+        Campaign::withTrashed()->chunk(20, function ($campaigns) {
             Logging::info('-------------------------');
             Logging::info('CAMPAIGNS');
             Logging::info('-------------------------');
@@ -75,7 +75,7 @@ class UpdateButtonsAutoWidth extends Migration
     }
 
     protected function setModuleButtonsAutoWidth() {
-        Module::withTrashed()->chunk(100, function ($modules) {
+        Module::withTrashed()->chunk(20, function ($modules) {
             Logging::info('-------------------------');
             Logging::info('STUDIO');
             Logging::info('-------------------------');

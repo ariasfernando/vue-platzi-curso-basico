@@ -37,7 +37,7 @@
               style="width:100%">
               <tr>
                 <td
-                  width="100%"
+                  :width="component.caret.attribute.url ? '' : '100%'"
                   :align="component.button.attribute.align"
                   :style="fontStyles(component.button)"
                   :valign="component.button.attribute.valign || ''">

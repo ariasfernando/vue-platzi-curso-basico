@@ -9,7 +9,7 @@
                   <div v-for="(subitem, j) in item.sub_menu" :key="j">
                     <draggable :element="'div'" :options="options" @clone="onClone" @end="onEnd" v-if="!subitem.mandatory">
                       <group-container  @click="addModuleByKey(subitem.key, 'subitem')" :clickeable="true">
-                        <settings-container :label="subitem.name" customClass="draggable-item" :module-id="subitem.key" :module-type="'subitem'" >
+                        <settings-container :label="subitem.name" :label-expanded="true" customClass="draggable-item" :module-id="subitem.key" :module-type="'subitem'" >
                           <template slot="setting-right">
                             <i class="glyphicon glyphicon-plus icon-plus" style="float: right;"></i>
                           </template>
@@ -21,7 +21,7 @@
           </div>
         <draggable v-else-if="!item.mandatory"  :element="'div'" :options="options" @clone="onClone" @end="onEnd">
             <group-container @click="addModuleByKey(item.key, 'item')" :clickeable="true">
-              <settings-container :label="item.name" customClass="draggable-item" :module-id="item.key" :module-type="'item'" >
+              <settings-container :label="item.name" :label-expanded="true" customClass="draggable-item" :module-id="item.key" :module-type="'item'" >
                 <template slot="setting-right">
                   <i class="glyphicon glyphicon-plus icon-plus" style="float: right;"></i>
                 </template>
@@ -231,9 +231,12 @@
   .expand-subitem-button{
     background: #edecef;
     border: 1px solid #d5d3d9;
-    margin-bottom: 5px;
+    margin: 5px 0px;
     border-radius: 2px;
     position: relative;
+    &:last-of-type {
+      margin-bottom: 0px;
+    }
   }
   .expand-subitem-button /deep/ p{
     color: #514960!important;

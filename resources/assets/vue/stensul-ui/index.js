@@ -9,6 +9,7 @@ const InputNumber = require('./input-number');
 const InputText = require('./input-text');
 const InputToggleableNumber = require('./input-toggleable-number');
 const InputToggleableText = require('./input-toggleable-text');
+const Notif = require('./notif');
 const Select = require('./select');
 const Spinner = require('./spinner');
 const SwitchDesktopMobile = require('./switch-desktop-mobile');
@@ -26,6 +27,7 @@ module.exports = {
   InputText,
   InputToggleableNumber,
   InputToggleableText,
+  Notif,
   Select,
   Spinner,
   SwitchDesktopMobile,
