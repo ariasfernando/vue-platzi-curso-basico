@@ -8,10 +8,10 @@
       <div class="clearfix">
         <SettingsContainer v-for="element in plugin.data.elements" :key="element.id" :label="element.label">
           <template slot="setting-half">
-            <StuiToggleButton
+            <stui-toggle-button
               :value="getValue(element.id)"
               expanded
-              @change="value => toggleChange(value, element.id, element.preventDefault)" />
+              @change="value => toggleChange(value, element.id)" />
           </template>
         </SettingsContainer>
       </div>
@@ -33,23 +33,39 @@ export default {
       subComponent: 'container',
     };
   },
+
+  computed: {
+    modules() {
+      return this.$store.getters['campaign/modules'];
+    },
+    moduleIndex() {
+      let moduleIndex = false;
+      _.forEach(this.modules, (currentModule, currentModuleIndex) => {
+        if (currentModule.idInstance === this.moduleIdInstance) {
+          moduleIndex = currentModuleIndex;
+          return false;
+        }
+        return true;
+      });
+      return moduleIndex;
+    },
+  },
   methods: {
     getValue(elementId) {
       if (this.isCustom) {
         return this.getElement(elementId).enableElement;
       }
-      const element = this.getElement(elementId);
-      return element.container.styleOption.forceVisible || element.container.styleOption.enableElement;
+      return this.getElement(elementId).container.styleOption.enableElement;
     },
-    toggleElement(value, elementId, preventDefault) {
+    toggleElement(value, elementId) {
       if (this.isCustom) {
         this.$store.dispatch('campaign/updateCustomElementProperty', {
-          moduleId: this.currentCustomModule,
+          moduleId: this.moduleIndex,
           subComponent: elementId,
           property: 'enableElement',
           value,
         });
-        this.resetErrors(value, this.currentCustomModule);
+        this.resetErrors(value, this.moduleIndex);
       } else {
         const payload = {
           elementId,
@@ -57,10 +73,8 @@ export default {
           property: 'enableElement',
           value,
         };
-        if (!preventDefault) {
-          this.saveElementProperty(payload);
-        }
-        this.resetErrors(value, this.moduleId);
+        this.saveElementProperty(payload);
+        this.resetErrors(value, this.moduleIndex);
       }
 
       this.runLogic(value, elementId);
@@ -72,25 +86,24 @@ export default {
     },
     toggleChange(value, elementId) {
       if (this.plugin.data.preventEmpty && !value) {
-        const otherElementIsEnabled = this.plugin.data.elements.some(element =>
-          element.id !== elementId && this.getValue(element.id));
-
-        if (otherElementIsEnabled) {
-          this.toggleElement(value, elementId);
-        } else {
-          this.$root.$toast("You've to leave at least one element", {
-            className: 'et-error',
-            horizontalPosition: 'right',
-          });
+        for (const i in this.plugin.data.elements) {
+          if (this.plugin.data.elements[i].id !== elementId && this.getValue(this.plugin.data.elements[i].id)) {
+            this.toggleElement(value, elementId);
+            return;
+          }
         }
+        this.$root.$toast("You've to leave at least one element", {
+          className: 'et-error',
+          horizontalPosition: 'right',
+        });
       } else {
         this.toggleElement(value, elementId);
       }
     },
-    resetErrors(value, moduleId) {
-      this.$store.commit('campaign/clearErrorsByModuleId', moduleId);
+    resetErrors(value, moduleIndex) {
+      this.$store.commit('campaign/clearErrorsByModuleId', moduleIndex);
       if (this.isCustom) {
-        this.registerCustomModuleDefaultValidationErrors(moduleId);
+        this.registerCustomModuleDefaultValidationErrors(moduleIndex);
       }
     },
   },

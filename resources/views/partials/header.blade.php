@@ -34,7 +34,7 @@
                             </div>
                         @endif
                         @if (Auth::user() && Auth::user()->can('access_admin'))
-                            <a href="{{ url('/admin')}}" class="help dropdown-toggle help-dropdown-menu">
+                            <a href="{{ url('/admin')}}" class="help dropdown-toggle help-dropdown-menu" id="adminIcon">
                                 <i class="glyphicon glyphicon-cog"></i>
                                 <span>Admin</span>
                             </a>

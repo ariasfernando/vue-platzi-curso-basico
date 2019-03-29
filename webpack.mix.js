@@ -27,6 +27,7 @@ mix.webpackConfig({
   },
   resolve: {
     alias: {
+      unit: path.join(__dirname, 'tests/js'),
       customer: path.join(__dirname, `${customerAssetsPath}/vue`),
       stensul: path.join(__dirname, assetsVuePath),
     },
@@ -199,20 +200,26 @@ mix
     jsonFile.readFile(revManifest, (err, obj) => {
       const newJson = {};
       _.forIn(obj, (value, key) => {
+        // eslint-disable-next-line no-useless-escape
         const newFilename = value.replace(/([^\.]+)\.([^\?]+)\?id=(.+)$/g, '$1-$3.$2');
+        // eslint-disable-next-line no-useless-escape
         const oldAsGlob = value.replace(/([^\.]+)\.([^\?]+)\?id=(.+)$/g, '$1-*.$2');
         // delete old versioned file
         del.sync([`public${oldAsGlob}`]);
         // copy as new versioned
+        // eslint-disable-next-line max-nested-callbacks
         fs.copyFile(`public${key}`, `public/${newFilename}`, (copyError) => {
+          // eslint-disable-next-line no-console
           if (copyError) console.error(copyError);
         });
         newJson[key] = newFilename;
       });
       jsonFile.writeFile(mixManifest, newJson, { spaces: 2 }, (writeError) => {
+        // eslint-disable-next-line no-console
         if (writeError) console.error(writeError);
       });
       if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
         console.log(
           '\x1b[37m%s\x1b[36m%s\x1b[0m',
           `${process.env.APP_NAME} tool running on --> `, process.env.APP_BASE_URL);

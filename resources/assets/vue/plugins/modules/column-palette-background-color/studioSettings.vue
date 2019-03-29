@@ -47,7 +47,7 @@ export default {
         return this.plugin.config.paletteName;
       },
       set(value) {
-        this.updatePluginConfig({value, path: 'paletteName'});
+        this.updatePluginConfig({ value, path: 'paletteName' });
       },
     },
     customPalette: {
@@ -55,7 +55,7 @@ export default {
         return this.plugin.config.paletteMap.join(',');
       },
       set(value) {
-        this.updatePluginConfig({value: value.split(','), path: 'paletteMap'});
+        this.updatePluginConfig({ value: value.split(','), path: 'paletteMap' });
       },
     },
   },

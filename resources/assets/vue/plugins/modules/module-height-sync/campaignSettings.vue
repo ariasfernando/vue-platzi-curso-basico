@@ -2,9 +2,11 @@
 </template>
 
 <script>
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
+
 export default {
-  name: 'module-height-sync',
-  props: ['name', 'module', 'plugin', 'moduleId'],
+  name: 'ModuleHeightSync',
+  mixins: [pluginCampaignMixin],
   data() {
     return {
       previousHeight: 0,
@@ -16,9 +18,6 @@ export default {
     },
     buildingMode() {
       return this.$store.getters['campaign/buildingMode'];
-    },
-    iframe() {
-      return document.getElementById('shadowRender');
     },
   },
   watch: {
@@ -32,22 +31,21 @@ export default {
       deep: true,
     },
   },
+  mounted() {
+    this.setModuleHeight();
+  },
   methods: {
-    saveModuleAttribute(property, value, columnId) {
-      const payload = {
-        moduleId: this.moduleId,
-        columnId,
-      };
+    saveModuleAttribute(property, value) {
       if (this.isCustom) {
-        payload.plugin = this.name;
-        payload.data = {};
+        const payload = {
+          moduleId: this.moduleId,
+          plugin: this.name,
+          data: {},
+        };
         payload.data[property] = value;
         this.$store.commit('campaign/saveCustomModuleData', payload);
       } else {
-        payload.link = 'attribute';
-        payload.property = property;
-        payload.value = value;
-        this.$store.commit('campaign/saveModuleProperty', payload);
+        this.saveAttributeInThisElement({ property, value });
       }
     },
     setModuleHeight() {
@@ -70,9 +68,6 @@ export default {
       }
       return height;
     },
-  },
-  mounted() {
-    this.setModuleHeight();
   },
 };
 </script>

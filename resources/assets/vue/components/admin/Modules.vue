@@ -23,7 +23,7 @@
           </div>
           <div class="level-right">
             <div class="level-item">
-              <div class="btn btn-default btn-create">
+              <div class="btn btn-default btn-create" id="createNewModuleButton">
                 <router-link to="/create">
                   <i class="glyphicon glyphicon-plus-sign" /> Create New Module
                 </router-link>

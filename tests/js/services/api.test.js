@@ -4,14 +4,10 @@
 /* eslint max-nested-callbacks: 0 */
 /* global Application */
 
-import nock from 'nock';
 import 'expect-more-jest';
 /* local import */
 import apiService from '@/services/api';
 import request from '@/utils/request';
-import endpoints from '@/resources/endpoints';
-import mocks from '@/resources/mocks';
-
 
 // uploadEmail: { method: 'post', path: `${baseUrl}/api/upload-email` },
 // uploadedHistory: { method: 'get', path: `${baseUrl}/api/history?campaign_id=:campaignId` },

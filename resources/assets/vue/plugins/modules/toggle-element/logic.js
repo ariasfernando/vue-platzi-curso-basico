@@ -1,81 +1,73 @@
 export default {
   methods: {
-    runLogic(toggledValue, toggledElementId) {
-      let logicRules = null;
-      const logicType = toggledValue ? 'on' : 'off';
+    runLogic(status, elementId) {
+      let logicRules;
+      status = status ? 'on' : 'off';
 
-      // check if current toggle has logic rules
-      // get the corresponding element logic
-      // if logic is defined, check if it points to a shortcut o if is a rule itself.
-      // if it's a string, it's a shortcut
-      this.plugin.data.elements.forEach((item) => {
-        if (toggledElementId === item.id) {
-          const logic = item.logic;
-          if (!_.isEmpty(logic)) {
-            if (_.isString(logic)) logicRules = this.plugin.data.shortcuts[logic][logicType];
-            else logicRules = logic[logicType];
+      // check if current toggle has settings rules
+      for (const index in this.plugin.data.elements) {
+        if (elementId === this.plugin.data.elements[index].id) {
+          const logic = this.plugin.data.elements[index].logic;
+          // check if logic points to a shortcut
+          if (_.isString(logic) && !_.isEmpty(logic)) {
+            logicRules = this.plugin.data.shortcuts[logic][status];
+          } else if (!_.isEmpty(this.plugin.data.elements[index].logic)) {
+            logicRules = this.plugin.data.elements[index].logic[status];
           }
         }
-      });
+      }
 
-      // for each rule in logicRules, apply logic
       if (logicRules) {
-        logicRules.forEach((logicRule) => {
-          // rule properties: type, id, ignore, applyIf, update
-          const rule = {
-            ...logicRule,
-            toggledElementId,
-            columnIndex: this.getColumnIndexByComponentId(toggledElementId),
-            componentIndex: this.getComponentIndexByComponentId(toggledElementId),
+        // for each rule, applyLogic
+        for (const index in logicRules) {
+          const rule = logicRules[index];
+          const settings = {
+            type: rule.type,
+            ids: rule.id,
+            ignores: rule.ignore,
+            applyIf: rule.applyIf,
+            updates: rule.update,
+            elementId,
           };
-          rule.target = this.setRuleTarget(rule);
-          this.applyLogicUpdates(rule);
-        });
-      }
-    },
-    setRuleTarget(rule) {
-      let target = null;
-      switch (rule.type) {
-        case 'previous':
-          target = this.getPreviousActiveComponent(rule);
-          break;
-        case 'next':
-          target = this.getNextActiveComponent(rule);
-          break;
-        case 'first':
-          target = this.getNextActiveComponent(rule, -1);
-          break;
-        case 'last': {
-          const componentsLength = this.module.structure.columns[rule.columnIndex].components.length;
-          target = this.getPreviousActiveComponent(rule, componentsLength);
-          break;
+
+          switch (settings.type) {
+            case 'previous':
+              settings.target = this.getPreviousActiveComponent(settings);
+              this.applyLogicUpdates(settings);
+              break;
+            case 'next':
+              settings.target = this.getNextActiveComponent(settings);
+              this.applyLogicUpdates(settings);
+              break;
+            case 'first':
+              settings.target = this.getNextActiveComponent(settings, -1);
+              this.applyLogicUpdates(settings);
+              break;
+            case 'last':
+              const components = this.getColumnByElementId(settings.elementId).components;
+              settings.target = this.getPreviousActiveComponent(settings, components.length);
+              this.applyLogicUpdates(settings);
+              break;
+            case 'self':
+              settings.target = {
+                elementId: settings.elementId,
+              };
+              this.applyLogicUpdates(settings);
+              break;
+          }
         }
-        case 'self':
-          target = {
-            elementId: rule.toggledElementId,
-          };
-          break;
-        default:
-          target = {
-            elementId: rule.id,
-          };
-          break;
       }
-      return target;
     },
-    getPreviousActiveComponent(rule, start) {
-      const components = this.module.structure.columns[rule.columnIndex].components;
-      const startFrom = start || rule.componentIndex;
+    getPreviousActiveComponent(settings, startFrom) {
+      const components = this.getColumnByElementId(settings.elementId).components;
+      startFrom = startFrom || this.getComponentIndexByElementId(settings.elementId);
 
       // - 1 omits current component and start from the previous one
       const searchIndex = startFrom - 1;
-      let target = null;
+      let target = false;
 
       for (let i = searchIndex; i >= 0; i--) {
-        const isEnabled = !_.isUndefined(components[i]) && components[i].container.styleOption
-          ? components[i].container.styleOption.enableElement
-          : false;
-
+        const isEnabled = !_.isUndefined(components[i]) && components[i].container.styleOption ? components[i].container.styleOption.enableElement : false;
         if (isEnabled) {
           target = {
             elementId: components[i].id,
@@ -85,18 +77,16 @@ export default {
       }
       return target;
     },
-    getNextActiveComponent(rule, start) {
-      const components = this.module.structure.columns[rule.columnIndex].components;
-      const startFrom = start || rule.componentIndex;
+    getNextActiveComponent(settings, startFrom) {
+      const components = this.getColumnByElementId(settings.elementId).components;
+      startFrom = startFrom || this.getComponentIndexByElementId(settings.elementId);
 
       // + 1 omits current component and start from the next one
       const searchIndex = startFrom + 1;
-      let target = null;
+      let target = false;
 
       for (let i = searchIndex; i <= components.length - 1; i++) {
-        const isEnabled = !_.isUndefined(components[i]) && components[i].container.styleOption
-          ? components[i].container.styleOption.enableElement
-          : false;
+        const isEnabled = !_.isUndefined(components[i]) && components[i].container.styleOption ? components[i].container.styleOption.enableElement : false;
         if (isEnabled) {
           target = {
             elementId: components[i].id,
@@ -106,88 +96,58 @@ export default {
       }
       return target;
     },
-    applyIf(rule) {
-      const conditions = [];
-      let matches = true;
-      let ignore = false;
-
-      // check target id matches an id un rule.id
-      // check if target id matches an id in rule.ignore
-      if (rule.id) {
-        matches = Array.isArray(rule.id)
-          ? _.indexOf(rule.id, rule.target.elementId) !== -1
-          : Number(rule.id) === Number(rule.target.elementId);
-      }
-      if (rule.ignore) {
-        ignore = Array.isArray(rule.ignore)
-          ? _.indexOf(rule.ignore, rule.target.elementId) !== -1
-          : Number(rule.ignore) === Number(rule.target.elementId);
-      }
-
-      // don't apply logic when:
-      if (!matches || ignore) {
-        return false;
-      }
-
-      // rule.applyIf is an array of conditions that should be met to apply the logic
-      // if it's undefined, logic should be applied
-      if (_.isUndefined(rule.applyIf)) {
+    applyIf(settings) {
+      if (_.isUndefined(settings.applyIf)) {
         return true;
       }
-
-      rule.applyIf.forEach((condition) => {
-        switch (condition.status) {
+      for (const index in settings.applyIf) {
+        const data = settings.applyIf[index];
+        switch (data.status) {
           case 'enabled':
-            // will check if target element is enabled
-            conditions.push(this.getValue(condition.target));
+            return this.getValue(data.target);
             break;
           case 'disabled':
-            // will check if target element is disabled
-            conditions.push(!this.getValue(condition.target));
-            break;
-          default:
-            conditions.push(false);
+            return !this.getValue(data.target);
             break;
         }
-      });
-      // return true if all condition were met
-      return conditions.every(value => value === true);
+      }
     },
-    applyLogicUpdates(rule) {
-      if (this.applyIf(rule)) {
-        // rule.update is an array of updates
-        // commit changes for each update
-        rule.update.forEach((update) => {
-          // use shortcut if exist
-          const shortcuts = this.plugin.data.shortcuts && this.plugin.data.shortcuts[update]
-            ? this.plugin.data.shortcuts[update] : false;
-          const updateData = shortcuts || update;
-          if (rule.target) {
+    applyLogicUpdates(settings) {
+      let applyLogicUpdates = false;
+
+      if (_.isEmpty(settings.ids) && typeof settings.target !== 'undefined') {
+        applyLogicUpdates = this.applyIf(settings);
+      } else if (typeof settings.target !== 'undefined' && _.indexOf(settings.ids, settings.target.elementId) !== -1) {
+        // if ids array is not empty, only apply logic if elementId matches and id in ids
+        applyLogicUpdates = this.applyIf(settings);
+      }
+
+      if (applyLogicUpdates) {
+        // for each update, commit changes
+        for (const index in settings.updates) {
+          const update = this.plugin.data.shortcuts[settings.updates[index]];
+          if (settings.target !== false) {
             if (this.isCustom) {
-              // @TODO: test if this works for custom modules
+              // More testing is needed
               // this.$store.dispatch("campaign/updateCustomElementProperty", {
-              //     moduleId: this.currentCustomModule,
-              //     subComponent: rule.elementId,
+              //     moduleId: this.moduleId,
+              //     subComponent: settings.elementId,
               //     property: update.property,
               //     value: update.value
               // });
             } else {
               const payload = {
-                elementId: rule.target.elementId,
+                subComponent: update.subComponent,
+                elementId: settings.target.elementId,
+                link: update.link,
+                property: update.property,
+                value: update.value,
               };
-              if (updateData.path) {
-                payload.path = updateData.path;
-                payload.value = updateData.value;
-              } else {
-                payload.subComponent = updateData.subComponent;
-                payload.link = updateData.link;
-                payload.property = updateData.property;
-                payload.value = updateData.value;
-              }
+
               this.saveElementProperty(payload);
             }
           }
-        });
+        }
       }
     },
   },

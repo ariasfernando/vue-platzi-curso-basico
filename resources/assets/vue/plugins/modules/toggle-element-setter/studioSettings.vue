@@ -61,9 +61,11 @@ export default {
           value: elements,
         };
         this.$store.commit('module/setPluginElementConfig', payload);
-
-        const enabled = elements.length !== 0;
-        this.$store.commit('module/togglePlugin', { plugin: 'toggleElement', enabled });
+        this.$store.commit('module/setPluginElementConfig', {
+          plugin: 'toggleElement',
+          type: 'enabled',
+          value: elements.length !== 0,
+        });
       },
     },
     isSet() {

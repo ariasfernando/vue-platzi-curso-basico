@@ -198,22 +198,19 @@ if (env("APP_ADMIN", false)) {
     $default['web']['post'] = array_merge($adminRoutes['post'], $default['web']['post']);
 }
 
-
-if (env('USER_LOGIN', 'default') != "oauth") {
-    $passwordRoutes = [
-        'get'    => [
-            '/password/email'          => 'Auth\PasswordController@getEmail',
-            '/password/reset/{token}'  => 'Auth\PasswordController@getReset',
-            '/password/change'         => 'Auth\PasswordController@getChange',
-        ],
-        'post'   => [
-            '/password/email'  => 'Auth\PasswordController@postEmail',
-            '/password/reset'  => 'Auth\PasswordController@postReset',
-            '/password/change' => 'Auth\PasswordController@postChange',
-        ],
-    ];
-    $default['web']['get'] = array_merge($passwordRoutes['get'], $default['web']['get']);
-    $default['web']['post'] = array_merge($passwordRoutes['post'], $default['web']['post']);
-}
+$passwordRoutes = [
+    'get'    => [
+        '/password/email/{admin?}' => 'Auth\PasswordController@getEmail',
+        '/password/reset/{token}'  => 'Auth\PasswordController@getReset',
+        '/password/change'         => 'Auth\PasswordController@getChange',
+    ],
+    'post'   => [
+        '/password/email'  => 'Auth\PasswordController@postEmail',
+        '/password/reset'  => 'Auth\PasswordController@postReset',
+        '/password/change' => 'Auth\PasswordController@postChange',
+    ],
+];
+$default['web']['get'] = array_merge($passwordRoutes['get'], $default['web']['get']);
+$default['web']['post'] = array_merge($passwordRoutes['post'], $default['web']['post']);
 
 return require 'recursive.php';

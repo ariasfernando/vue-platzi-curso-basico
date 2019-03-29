@@ -1,13 +1,7 @@
-import _, {
-  find,
-} from 'lodash';
-import clone from 'clone';
-
 export default {
   computed: {
-    activeModule() {
-      const activeModuleId = this.$store.getters['campaign/activeModule'];
-      return this.modules[activeModuleId] || undefined;
+    currentModuleIdInstance() {
+      return this.$store.getters["campaign/currentModuleIdInstance"];
     },
     modules() {
       return this.$store.getters['campaign/modules'];
@@ -113,10 +107,10 @@ export default {
       }
     },
     findModule(moduleKey, moduleType) {
-      return moduleType === 'item' ? find(this.items, m => m.key === moduleKey) : find(this.getSubitemsAsArray(), m => m.key === moduleKey);
+      return moduleType === 'item' ? this.items.find(m => m.key === moduleKey) : this.getSubitemsAsArray().find(m => m.key === moduleKey);
     },
     addModule(m, newIndex) {
-      const mod = clone(m);
+      const mod = _.cloneDeep(m);
       mod.data = mod.data ? mod.data : {};
       mod.idInstance = Math.floor(100000 + (Math.random() * 900000));
       if (this.campaignHasFixedTopModule(mod) || this.campaignHasFixedBottomModule(mod)) {
@@ -157,27 +151,20 @@ export default {
       }
     },
     insertModule({ index, moduleData }) {
-      this.$store.commit('campaign/unsetCurrentComponent');
-      this.$store.commit('campaign/unsetCurrentModule');
-      this.$store.commit('campaign/unsetCustomModule');
 
       // Insert module
       this.$store.commit('campaign/insertModule', {
         index,
         moduleData,
       });
+      this.$store.commit("campaign/unsetCurrentElement");
       // Set active inserted module
-      this.$store.commit('campaign/setActiveModule', index);
-      if (this.activeModule.type === 'studio') {
-        // Save current component if module type is studio
-        this.$store.commit('campaign/setCurrentComponent', {
-          moduleId: index,
-          columnId: 0,
-          componentId: 0,
-        });
-      } else {
-        // Save customModule if module type is custom
-        this.$store.commit('campaign/setCustomModule', index);
+      this.$store.commit('campaign/setCurrentModuleIdInstance', moduleData.idInstance);
+      if (moduleData.type === 'studio') {
+        this.$store.commit(
+          'campaign/setCurrentElementId',
+          moduleData.structure.rows[0].columns[0].components[0].id,
+        );
       }
     },
     addFixedTopModule(moduleData) {

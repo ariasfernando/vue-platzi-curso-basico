@@ -29,9 +29,9 @@ function drawLines(context, width, height, lineColor) {
 }
 export default {
   methods: {
-    createPlaceholder(width, height, color = '#514960', font = '"Open Sans", Arial, sans-serif',
+    createPlaceholder(width, height, ratio = (9 / 16), color = '#514960', font = '"Open Sans", Arial, sans-serif',
       fontColor = 'white', lineColor = 'grey') {
-      const cHeight = height === 'auto' ? (width / 16) * 9 : height;
+      const cHeight = height === 'auto' ? width * ratio : height;
       const canvas = document.createElement('canvas');
       canvas.width = width;
       canvas.height = cHeight;

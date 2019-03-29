@@ -1,6 +1,6 @@
 <template>
   <div class="settings-wrapper plugin-wrapper">
-    <settings-container :no-label="true">
+    <SettingsContainer :no-label="true">
       <template slot="setting-bottom">
         <stui-button
           type="gray"
@@ -10,8 +10,8 @@
           Upload Background Image
         </stui-button>
       </template>
-    </settings-container>
-    <image-modal
+    </SettingsContainer>
+    <ImageModal
       v-if="showImageEditor"
       :config="plugin.config"
       :library-images="libraryImages"
@@ -25,15 +25,15 @@
 <script>
 import ImageModal from '../../../components/common/ImageModal/index.vue';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
-import validatorMixin from '../mixins/validator';
+import validatorMixin from '../mixins/validatorMixin';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {
   components: {
     ImageModal,
     SettingsContainer,
   },
-  mixins: [validatorMixin],
-  props: ['name', 'plugin', 'pluginKey', 'moduleId', 'module'],
+  mixins: [validatorMixin, pluginCampaignMixin],
   data() {
     return {
       showImageEditor: false,
@@ -42,11 +42,6 @@ export default {
       image: {},
       isEdit: false,
     };
-  },
-  computed: {
-    campaign() {
-      return this.$store.getters['campaign/campaign'];
-    },
   },
   methods: {
     close() {
@@ -72,7 +67,7 @@ export default {
             this.updateProperty('attribute', 'height', data.state.outputSize.height);
           }
           if (this.plugin.config['background-style-image-editor'].config.addClassEqualHeight) {
-            this.addClassEqualHeight();
+            this.addClassToElement({value:'st-equal-height'});
           }
           const temp = {};
           temp.img = data.img;
@@ -100,29 +95,16 @@ export default {
         });
       });
       delete data.images;
-      this.$store.commit('campaign/savePlugin', {
-        plugin: this.pluginKey,
-        moduleId: this.moduleId,
-        data,
+      this.saveElementInThisPluginData({
+        value: data,
       });
     },
     updateProperty(link, property, value) {
-      this.$store.commit('campaign/saveModuleProperty', {
-        moduleId: this.moduleId,
+      this.saveElementProperty({
         link,
         property,
         value,
       });
-    },
-    addClassEqualHeight() {
-      let classes = this.module.structure.attribute.classes;
-      const classesArr = classes ? classes.split(' ') : [];
-      const index = classesArr.indexOf('st-equal-height');
-      if (index === -1) {
-        classesArr.push('st-equal-height');
-        classes = classesArr.join(' ');
-        this.updateProperty('attribute', 'classes', classes);
-      }
     },
     showModal() {
       if (Object.keys(this.plugin.data).length > 0) {

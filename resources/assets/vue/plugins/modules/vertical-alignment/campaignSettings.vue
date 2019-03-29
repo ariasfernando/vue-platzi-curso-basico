@@ -1,5 +1,5 @@
 <template>
-  <settings-container :label="plugin.title">
+  <SettingsContainer :label="plugin.title">
     <template slot="setting-right">
       <stui-field addons>
         <stui-button
@@ -28,42 +28,29 @@
         </stui-button>
       </stui-field>
     </template>
-  </settings-container>
+  </SettingsContainer>
 </template>
 
 <script>
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 
 export default {
   components: { SettingsContainer },
-  props: ['name', 'plugin', 'moduleId', 'columnId'],
+  mixins: [pluginCampaignMixin],
   data() {
     return {
-      options: this.plugin.config.options,
+      subComponent: 'container',
     };
   },
   computed: {
-    modules() {
-      return this.$store.getters['campaign/modules'];
-    },
-    column() {
-      return this.modules[this.moduleId].structure.columns[this.columnId];
-    },
     value() {
-      return this.column.container.attribute.valign;
+      return this.element.container.attribute.valign;
     },
   },
   methods: {
     changeAlignment(value) {
-      const payload = {
-        moduleId: this.moduleId,
-        columnId: this.columnId,
-        subComponent: 'container',
-        link: 'attribute',
-        property: 'valign',
-        value,
-      };
-      this.$store.commit('campaign/saveColumnProperty', payload);
+      this.saveAttributeInThisElement({ property: 'valign', value });
     },
   },
 };

@@ -1,46 +1,43 @@
-
-<template />
+<template>
+</template>
 
 <script>
 import contrast from 'contrast';
+import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
 
 export default {
-  props: ['name', 'plugin', 'moduleId'],
+  mixins: [pluginCampaignMixin],
   computed: {
-    currentModule() {
-      return this.$store.getters['campaign/currentModule'];
-    },
-    module() {
-      return this.$store.getters['campaign/modules'][this.currentModule];
-    },
     bgcolor() {
-      return this.module.structure.attribute.bgcolor;
+      return this.element.structure.attribute.bgcolor;
     },
   },
   watch: {
     bgcolor(bgcolor) {
-      const color = contrast(bgcolor) === 'light' ? this.plugin.config.darkText : this.plugin.config.lightText;
+      const value = contrast(bgcolor) === 'light' ? this.plugin.config.darkText : this.plugin.config.lightText;
       // Loop through columns and components
-      _.each(this.module.structure.columns, (column, columnId) => {
-        _.each(this.module.structure.columns[columnId].components, (comp, compId) => {
-          const subComponent = comp.type.split('-')[0];
-          // Set new text color
-          if (subComponent === 'text') {
-            this.$store.commit('campaign/saveComponentProperty', {
-              moduleId: this.currentModule,
-              columnId,
-              componentId: compId,
-              subComponent,
-              link: 'style',
-              property: 'color',
-              value: color,
-            });
-            // reset tinymce to refresh changes on text
-            const editorId = `idInstance-${this.module.idInstance}-componentId-${comp.id}`;
-            setTimeout(() => {
-              document.getElementById(editorId).dispatchEvent(new Event('tiny-style-reset'));
-            }, 10);
-          }
+      _.each(this.element.structure.rows, (row) => {
+        _.each(row.columns, (column) => {
+          _.each(column.components, (component) => {
+            const subComponent = component.type.split('-')[0];
+            // Set new text color
+            if (subComponent === 'text') {
+              this.saveElementProperty({
+                elementId: component.id,
+                subComponent,
+                link: 'style',
+                property: 'color',
+                value,
+              });
+              // reset tinymce to refresh changes on text
+              const editorId = this.getTinyId(this.moduleIdInstance, component.id);
+              setTimeout(() => {
+                if (document.getElementById(editorId)) {
+                  document.getElementById(editorId).dispatchEvent(new Event('tiny-style-reset'));
+                }
+              }, 10);
+            }
+          });
         });
       });
     },

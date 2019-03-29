@@ -38,7 +38,7 @@
             @toggleArrow="(value)=>setSlideToggles(getsettingGroupKey(currentElement.id, 'mobile-settings'), value)">
             <template slot="setting-bottom">
               <b-collapse :id="getsettingGroupKey(currentElement.id,  'mobile-settings')" :visible="slideToggles(getsettingGroupKey(currentElement.id,  'mobile-settings'))">
-                <studio-mobile-styles :plugin="currentElement.plugins.mobileStyles" name="mobileStyles" />
+                <studio-mobile-styles :plugin="currentElement.plugins.mobileStyles" name="mobileStyles" :element="currentElement"/>
               </b-collapse>
             </template>
           </SettingsContainer>
