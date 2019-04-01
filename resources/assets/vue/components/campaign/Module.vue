@@ -41,31 +41,33 @@
       @mousedown.stop="onClickModule">
       <background-image :key="modulebackgroundImage" :element="module.structure" :width="templateInnerWidth">
         <template :slot="modulebackgroundImage ? 'with-background-image': 'without-background-image' ">
-          <RowContainer
-            v-for="(row, rowIndex) in module.structure.rows"
-            :key="rowIndex"
-            :module="module"
-            :element="row"
-            :row="row"
-            :with-row="module.structure.rows.length > 1">
-            <column-manager :module-id="moduleId" :module="module" :row="row">
-              <template slot-scope="{columnData}">
-                <component
-                  :is="component.key || component.type"
-                  v-for="(component, componentIndex) in columnData.column.components"
-                  :key="component.id"
-                  :component="component"
-                  :module-id="moduleId"
-                  :module="module"
-                  :element="component"
-                  :column-id="columnData.columnId"
-                  :row-index="rowIndex"
-                  :component-id="componentIndex"
-                  :row="row"
-                  @select-component="selectComponent" />
-              </template>
-            </column-manager>
-          </RowContainer>
+          <template v-for="(row, rowIndex) in module.structure.rows">
+            <RowContainer
+              v-if="isRowVisible(row)"
+              :key="rowIndex"
+              :module="module"
+              :element="row"
+              :row="row"
+              :with-row="module.structure.rows.length > 1">
+              <column-manager :module-id="moduleId" :module="module" :row="row">
+                <template slot-scope="{columnData}">
+                  <component
+                    :is="component.key || component.type"
+                    v-for="(component, componentIndex) in columnData.column.components"
+                    :key="component.id"
+                    :component="component"
+                    :module-id="moduleId"
+                    :module="module"
+                    :element="component"
+                    :column-id="columnData.columnId"
+                    :row-index="rowIndex"
+                    :component-id="componentIndex"
+                    :row="row"
+                    @select-component="selectComponent" />
+                </template>
+              </column-manager>
+            </RowContainer>
+          </template>
         </template>
       </background-image>
       <module-toolbar :module-id="moduleId" />
@@ -203,6 +205,9 @@ module.exports = {
           50,
         );
       }
+    },
+    isRowVisible(row) {
+      return _.get(row, 'container.styleOption.enableElement', true);
     },
     setModulesMouseLeave(e) {
       const $row = this.getModuleRow(e);

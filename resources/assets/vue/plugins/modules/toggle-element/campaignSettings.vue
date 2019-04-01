@@ -53,9 +53,9 @@ export default {
   methods: {
     getValue(elementId) {
       if (this.isCustom) {
-        return this.getElement(elementId).enableElement;
+        return _.get(this.getElement(elementId), 'enableElement', true);
       }
-      return this.getElement(elementId).container.styleOption.enableElement;
+      return _.get(this.getElement(elementId), 'container.styleOption.enableElement', true);
     },
     toggleElement(value, elementId) {
       if (this.isCustom) {
