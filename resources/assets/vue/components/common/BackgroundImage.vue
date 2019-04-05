@@ -3,10 +3,14 @@
     v-if="hasbackgroundImage"
     :start="msoStartingComment"
     :end="msoEndingComment">
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
-      <spacer v-if="paddingTop" :height="paddingTop" />
-
-      <slot name="with-background-image" />
+    <a
+      :data-contenteditable-href="element.attribute.href"
+      style="text-decoration:none;"
+      :target="element.attribute.target || '_blank'"
+      @click.prevent>
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+       <spacer v-if="paddingTop" :height="paddingTop" />
+        <slot name="with-background-image" />
 
       <wrapper-comment
         v-if="paddingBottom"
@@ -14,7 +18,9 @@
         end="<!--<![endif]-->">
         <spacer :height="paddingBottom" />
       </wrapper-comment>
+
     </table>
+    </a>
   </wrapper-comment>
   <table v-else width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
     <slot name="without-background-image" />
@@ -33,9 +39,12 @@ export default {
   },
   props: ['element', 'width'],
   computed: {
+    backgroundHref() {
+      return this.element.attribute.href ? `href="${this.element.attribute.href}"` : null;
+    },
     msoStartingComment() {
       return `<!--[if gte mso 9]>
-                    <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" strokecolor="none" style="width:${this.convertPxToPt(this.width)}; height:${this.convertPxToPt(this.element.attribute.height)};" stroke="false">
+                    <v:rect ${this.backgroundHref} xmlns:v="urn:schemas-microsoft-com:vml" fill="true" strokecolor="none" style="width:${this.convertPxToPt(this.width)}; height:${this.convertPxToPt(this.element.attribute.height)};" stroke="false">
                     <v:fill type="frame" src="${this.element.style.backgroundImage}" ${this.MsoBgcolor} />
                     <v:textbox inset="0,0,0,0">
                       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">

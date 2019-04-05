@@ -1111,6 +1111,22 @@ Application.utils = {
         return typeof jsonString == 'object';
     },
 
+    removeContentEditableHref(html) {
+      const $targetContenteditableHref = html.find('[data-contenteditable-href]')
+
+      $.each($targetContenteditableHref, (i, element) => {
+        const $element = $(element);
+        if ($element.find('[data-contenteditable-href]').length === 0) {
+          const content = element.outerHTML.replace('data-contenteditable-href', 'href');
+          element.outerHTML = content;
+        }
+      });
+      if (html.find('[data-contenteditable-href]').length > 0) {
+        this.removeContentEditableHref(html);
+      }
+      return html;
+    },
+
     // Remove wrappers element
     removeWrappers: function(html) {
       var $wrapperElementRemove = html.find('.stx-wrapper');

@@ -27,7 +27,12 @@ export default {
       return this.$store.state.campaign.campaign.library_config;
     },
     isCurrentElement() {
-      return this.elementKey === this.currentElementKey;
+      if (this.elementKey === this.currentElementKey){
+        if(this.element.type === 'studio') {
+          return this.$store.getters['campaign/showModuleSettings'];
+        }
+        return true;
+      };
     },
     iframe() {
       return document.getElementById('shadowRender');
