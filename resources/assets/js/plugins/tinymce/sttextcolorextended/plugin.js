@@ -283,6 +283,7 @@ tinymce.PluginManager.add('sttextcolorextended', function(editor) {
 		} else {
 			removeFormat(self.settings.format);
 		}
+		editor.bodyElement.dispatchEvent(new Event('tiny-style-change'));
 	}
 
 	editor.addButton('forecolor', {

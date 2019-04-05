@@ -246,6 +246,7 @@ tinymce.PluginManager.add('stbackcolorextended', function(editor) {
         } else {
             removeFormat(self.settings.format);
         }
+        editor.bodyElement.dispatchEvent(new Event('tiny-style-change'));
     }
 
     editor.addButton('backcolor', {

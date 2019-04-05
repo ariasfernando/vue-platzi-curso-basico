@@ -9,8 +9,9 @@
       :class="tinyClass"
       :style="fontStyles"
       @keyup="changeContent"
-      @tiny-change="changeContent"
+      @tiny-change="!sync ? changeContent($event) : () => {}"
       @tiny-style-reset="setStyles"
+      @tiny-style-change="sync ? changeContent($event) : () => {}"
       @input="changeContent"
       v-html="content" />
   </div>

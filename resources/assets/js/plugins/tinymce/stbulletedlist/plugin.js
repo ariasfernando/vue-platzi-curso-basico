@@ -254,6 +254,7 @@ tinymce.PluginManager.add('stbulletedlist', function(editor){
             icon: 'plus',
             onclick: function(e) {
                 addRow();
+                editor.bodyElement.dispatchEvent(new Event('tiny-style-change'));
             }
         });
 

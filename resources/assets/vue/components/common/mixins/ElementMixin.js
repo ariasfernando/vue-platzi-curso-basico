@@ -178,17 +178,24 @@ export default {
       this.$emit('select-component', this.element.id);
     },
     changeText(value) {
+      let elements = [this.component.id];
+      if (this.component.data.sync && this.component.data.sync.length) {
+        elements = elements.concat(this.component.data.sync);
+      }
+
       if (this.timer) {
         clearTimeout(this.timer);
       }
       this.timer = setTimeout(() => {
-        this.$store.dispatch(`${this.isCampaign ? 'campaign' : 'module'}/updateText`, {
-          moduleIdInstance: this.isCampaign ? this.module.idInstance : undefined,
-          elementId: this.component.id,
-          link: 'data',
-          property: 'text',
-          sync: false,
-          value,
+        elements.forEach(elementId => {
+          this.$store.dispatch(`${this.isCampaign ? 'campaign' : 'module'}/updateText`, {
+            moduleIdInstance: this.isCampaign ? this.module.idInstance : undefined,
+            elementId,
+            link: 'data',
+            property: 'text',
+            sync: elementId !== this.component.id,
+            value,
+          });
         });
       }, 100);
     },

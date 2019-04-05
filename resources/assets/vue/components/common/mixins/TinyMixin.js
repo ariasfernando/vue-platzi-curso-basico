@@ -3,7 +3,7 @@ import Adapter from './tinymce/Adapter';
 import listStylesFix from './tinymce/listStyles.fix';
 
 export default {
-  props: ['editor-id', 'textDirty', 'type', 'config', 'fontStyles', 'text', 'tinyClass'],
+  props: ['editor-id', 'textDirty', 'type', 'config', 'fontStyles', 'text', 'tinyClass', 'sync'],
   mixins: [
     Adapter,
   ],
@@ -564,6 +564,8 @@ export default {
               if (e.command === 'mceInsertContent' && $(e.value)[0].nodeName === 'A') {
                 _this.setLinkStyles();
               }
+              // Emit this event in order to update tiny content when styles are changed.
+              editor.bodyElement.dispatchEvent(new Event('tiny-style-change'));
             });
           listStylesFix(editor);
         },
