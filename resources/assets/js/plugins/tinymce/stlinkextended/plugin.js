@@ -32,6 +32,8 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
             } else {
                 callback(linkList);
             }
+
+            editor.bodyElement.dispatchEvent(new Event('tiny-style-change'));
         };
     }
 
@@ -680,7 +682,10 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         icon: 'unlink',
         tooltip: 'Remove link',
         cmd: 'unlink',
-        stateSelector: 'a[href]'
+        stateSelector: 'a[href]',
+        onclick: function() {
+          editor.bodyElement.dispatchEvent(new Event('tiny-style-change'));
+        },
     });
 
     editor.addShortcut('Meta+K', '', createLinkList(showDialog));

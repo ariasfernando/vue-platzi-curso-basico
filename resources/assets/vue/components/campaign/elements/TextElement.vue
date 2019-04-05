@@ -27,6 +27,7 @@
               :type="component.type"
               :text-dirty="component.data.textDirty"
               :config="component.plugins.textOptions"
+              :sync="component.data.sync && component.data.sync.length"
               @changeText="changeText" />
           </td>
         </tr>

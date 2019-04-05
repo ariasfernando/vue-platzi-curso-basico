@@ -31,6 +31,8 @@ tinymce.PluginManager.add('stformatsmenu', function (editor) {
 
                     this.value('');
                 }
+                
+                editor.bodyElement.dispatchEvent(new Event('tiny-style-change'));
             },
             onPostRender: function () {
                 this.value('');
