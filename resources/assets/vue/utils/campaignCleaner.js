@@ -103,14 +103,7 @@ export default {
     $cleanedHtml.find('.text-overlay-toolbox').remove();
 
     // Convert data-contenteditable-href to href
-    if ($cleanedHtml.find('[data-contenteditable-href]').length) {
-      const $targetContenteditableHref = $cleanedHtml.find('[data-contenteditable-href]');
-
-      $.each($targetContenteditableHref, (key, element) => {
-        const content = element.outerHTML.replace('data-contenteditable-href', 'href');
-        element.outerHTML = content;
-      });
-    }
+    $cleanedHtml = Application.utils.removeContentEditableHref($cleanedHtml);
 
     // Replace data-tag-before
     if ($cleanedHtml.find('[data-tag-before]').length) {

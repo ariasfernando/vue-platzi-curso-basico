@@ -70,12 +70,15 @@ export default {
   components: { SettingsContainer },
   mixins: [validatorMixin, pluginCampaignMixin],
   computed: {
+    subElement() {
+      return this.element[this.plugin.subComponent] || this.element.structure;
+    },
     target() {
-      return this.element[this.plugin.subComponent].attribute.target || '_blank';
+      return this.subElement.attribute.target || '_blank';
     },
     href: {
       get() {
-        return this.element[this.plugin.subComponent].attribute.href;
+        return this.subElement.attribute.href;
       },
       set(value) {
         this.saveAttributeInThisElement({ property: 'href', value });
@@ -83,7 +86,7 @@ export default {
     },
     title: {
       get() {
-        return this.element[this.plugin.subComponent].attribute.title;
+        return this.subElement.attribute.title;
       },
       set(value) {
         this.saveAttributeInThisElement({ property: 'title', value });
