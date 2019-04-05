@@ -1112,12 +1112,12 @@ Application.utils = {
     },
 
     removeContentEditableHref(html) {
-      const $targetContenteditableHref = html.find('[data-contenteditable-href]')
+      var $targetContenteditableHref = html.find('[data-contenteditable-href]')
 
       $.each($targetContenteditableHref, (i, element) => {
-        const $element = $(element);
+        var $element = $(element);
         if ($element.find('[data-contenteditable-href]').length === 0) {
-          const content = element.outerHTML.replace('data-contenteditable-href', 'href');
+          var content = element.outerHTML.replace('data-contenteditable-href', 'href');
           element.outerHTML = content;
         }
       });
