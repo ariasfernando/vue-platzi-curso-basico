@@ -1111,10 +1111,10 @@ Application.utils = {
         return typeof jsonString == 'object';
     },
 
-    removeContentEditableHref(html) {
+    removeContentEditableHref: function (html) {
       var $targetContenteditableHref = html.find('[data-contenteditable-href]')
 
-      $.each($targetContenteditableHref, (i, element) => {
+      $.each($targetContenteditableHref, function (i, element) {
         var $element = $(element);
         if ($element.find('[data-contenteditable-href]').length === 0) {
           var content = element.outerHTML.replace('data-contenteditable-href', 'href');
