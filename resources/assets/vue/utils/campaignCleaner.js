@@ -499,7 +499,7 @@ export default {
         <td class="st-hide-hack">
           <table cellpadding="0" cellspacing="0" border="0" align="center" width="${width}">
             <tr>
-              <td cellpadding="0" cellspacing="0" border="0" height="1" style="background-color: #ffffff; line-height: 1px; height: 1px; min-width: ${width}px;">
+              <td cellpadding="0" cellspacing="0" border="0" height="1" style="background-color: transparent; line-height: 1px; height: 1px; min-width: ${width}px;">
                 <img src="${Application.globals.baseUrl}/_common/images/en_us/spacer.gif" height="1" width="${width}" style="max-height: 1px; display: block; width: ${width}px; min-width: ${width}px; border: 0;"/>
               </td>
             </tr>
@@ -509,5 +509,5 @@ export default {
       htmlStructure.find('.st-wrapper-table').append($hack);
     }
     return htmlStructure;
-  }
+  },
 };
