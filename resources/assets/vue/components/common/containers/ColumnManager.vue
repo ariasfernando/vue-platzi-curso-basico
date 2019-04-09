@@ -16,6 +16,7 @@
           :module="module">
           <template v-for="(column, columnId) in row.columns">
             <ColumnRender
+              v-if="isColumnVisible(column)"
               :key="'column-' + columnId"
               :module-id="moduleId"
               :column="column"
@@ -81,10 +82,15 @@ export default {
   computed: {
     columnsFixed() {
       if (this.row.columnsStacking === 'columnsFixed') {
-        return this.row.columns;
+        return this.row.columns.filter(column => this.isColumnVisible(column));
       }
       return [];
     },
   },
+  methods: {
+    isColumnVisible(column) {
+      return _.get(column, 'container.styleOption.enableElement', true);
+    }
+  }
 };
 </script>

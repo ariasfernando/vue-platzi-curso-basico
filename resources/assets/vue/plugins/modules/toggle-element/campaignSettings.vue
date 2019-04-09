@@ -53,9 +53,9 @@ export default {
   methods: {
     getValue(elementId) {
       if (this.isCustom) {
-        return this.getElement(elementId).enableElement;
+        return _.get(this.getElement(elementId), 'enableElement', true);
       }
-      return this.getElement(elementId).container.styleOption.enableElement;
+      return _.get(this.getElement(elementId), 'container.styleOption.enableElement', true);
     },
     toggleElement(value, elementId) {
       if (this.isCustom) {
@@ -74,7 +74,6 @@ export default {
           value,
         };
         this.saveElementProperty(payload);
-        this.resetErrors(value, this.moduleIndex);
       }
 
       this.runLogic(value, elementId);
@@ -101,7 +100,6 @@ export default {
       }
     },
     resetErrors(value, moduleIndex) {
-      this.$store.commit('campaign/clearErrorsByModuleId', moduleIndex);
       if (this.isCustom) {
         this.registerCustomModuleDefaultValidationErrors(moduleIndex);
       }
