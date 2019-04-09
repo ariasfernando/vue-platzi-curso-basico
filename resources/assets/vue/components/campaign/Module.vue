@@ -104,8 +104,8 @@ module.exports = {
     TextElement,
   },
   created() {
+    this.clearErrorsByModuleId(this.moduleId);
     if (this.module.type === 'custom') {
-      this.$store.commit('campaign/clearErrorsByModuleId', this.moduleId);
       this.registerCustomModuleDefaultValidationErrors(this.moduleId);
     }
   },

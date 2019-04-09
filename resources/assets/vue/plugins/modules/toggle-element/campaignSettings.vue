@@ -74,7 +74,6 @@ export default {
           value,
         };
         this.saveElementProperty(payload);
-        this.resetErrors(value, this.moduleIndex);
       }
 
       this.runLogic(value, elementId);
@@ -101,7 +100,6 @@ export default {
       }
     },
     resetErrors(value, moduleIndex) {
-      this.$store.commit('campaign/clearErrorsByModuleId', moduleIndex);
       if (this.isCustom) {
         this.registerCustomModuleDefaultValidationErrors(moduleIndex);
       }
