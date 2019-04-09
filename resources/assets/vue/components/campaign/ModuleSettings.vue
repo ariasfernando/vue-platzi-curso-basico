@@ -22,7 +22,7 @@
         <b-card no-block>
           <b-tabs card :no-fade="true">
             <b-tab
-              v-for="(column, columnKey) in columns(module.structure.rows[0].columns)"
+              v-for="({ column }, columnKey) in columns(module.structure.rows[0].columns)"
               :key="columnKey"
               :title="`${columnKey+1}`"
               :button-id="`column-${columnKey}`">
@@ -150,7 +150,7 @@ export default {
     },
     columnPlugins(col, $app) {
       const out = {};
-      _.each(col.plugins, (plugin, pluginKey) => {
+      _.each(_.get(col, 'plugins'), (plugin, pluginKey) => {
         if (plugin.enabled && plugin.render !== false && $app.modulePlugins[pluginKey]) {
           out[pluginKey] = plugin;
         }
@@ -161,7 +161,10 @@ export default {
       const out = [];
       _.each(columns, (column, index) => {
         if (this.hasEnabledPlugins(column)) {
-          out[index] = column;
+          out.push({
+            column,
+            columnKey: index,
+          });
         }
       });
       return out;
