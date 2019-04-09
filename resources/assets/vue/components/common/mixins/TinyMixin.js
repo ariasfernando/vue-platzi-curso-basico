@@ -204,7 +204,8 @@ export default {
       return parseInt(editor.settings.min_chars) || undefined;
     },
     tinyLength() {
-      return this.$textElement.text().length;
+      // Remove "zero width no-break space" character
+      return this.$textElement.text().replace(/\uFEFF/g, '').length;
     },
     maxCharsValidation(event) {
       // Check for Characters Limit
