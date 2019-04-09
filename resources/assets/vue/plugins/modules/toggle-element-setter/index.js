@@ -5,7 +5,7 @@ module.exports = {
   title: 'Toggle element',
   version: '0.0.1',
   author: 'facundo.garcia@stensul.com',
-  target: ['button', 'image', 'text', 'divider'],
+  target: ['button', 'image', 'text', 'divider', 'row', 'column'],
   studioSettings,
   config: {
   },

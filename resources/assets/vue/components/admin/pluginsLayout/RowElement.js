@@ -10,6 +10,15 @@ function rowDefault() {
           },
         ],
       },
+      {
+        plugins: [
+          {
+            name: 'toggle-element-setter',
+            title: 'Toggle element',
+            aclName: 'toggle-element-setter',
+          },
+        ],
+      },
     ],
   };
 }
