@@ -5,42 +5,42 @@ module.exports = {
   title: 'RSS Feed',
   version: '0.0.1',
   author: 'hanuman.peri@stensul.com',
-  target: ['module'],
+  target: ['module', 'row', 'column'],
   campaignSettings,
   config: {
     source: {
-      type: 'ss',
+      type: 'rss',
       url: 'https://threatvector.cylance.com/content/dam/cylance-blog/en_us/rss_en_us.xml',
-      feedPath: 'rss.channel.item'
+      feedPath: 'rss.channel.item',
     },
     filters: {
       searchPaths: [
         'description',
         'title',
         'link',
-        'creator'
-      ]
+        'creator',
+      ],
     },
     commits: [
       {
         type: 'element',
         match: {
-          name: 'description'
+          name: 'description',
         },
         entryPath: 'description',
         mask: '<p>${value}</p>',
-        commitPath: 'data.text'
+        commitPath: 'data.text',
       },
       {
         type: 'element',
         match: {
-          name: 'title'
+          name: 'title',
         },
         entryPath: 'title',
         mask: '<p>${value}</p>',
-        commitPath: 'data.text'
-      }
-    ]
+        commitPath: 'data.text',
+      },
+    ],
   },
   data: {},
   render: true,

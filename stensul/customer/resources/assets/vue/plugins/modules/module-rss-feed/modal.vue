@@ -1,27 +1,27 @@
 <template>
   <ModalContainer
     :title="title"
-    :buttonSubmitText="buttonSubmitText"
-    @submit-modal="ev => $emit('select', this.selected)"
+    :button-submit-text="buttonSubmitText"
+    @submit-modal="ev => $emit('select', selected)"
     @close-modal="ev => $emit('close-modal', ev)">
     <div class="layout">
       <div v-if="filtersLayout" class="filters">
         <SettingsGroupContainer
-            :settings="settings"
-            :settings-layout="filtersLayout"
-            @set-value="setValue"/>
+          :settings="settings"
+          :settings-layout="filtersLayout"
+          @set-value="setValue" />
       </div>
       <div class="feed">
         <template v-if="!working">
           <div
+            v-for="(entry, index) in filtered"
+            :key="`index-${index}`"
             :class="{
               'entry-container': true,
               selected: selected === entry
             }"
-            :key="`index-${index}`"
-            v-for="(entry, index) in filtered"
             @click="ev => selected = entry">
-            <compoment :is="adapter" :entry="entry" />
+            <Compoment :is="adapter" :entry="entry" />
           </div>
         </template>
       </div>
@@ -35,6 +35,10 @@ import ModalContainer from 'stensul/components/common/containers/ModalContainer.
 import SettingsGroupContainer from 'stensul/components/common/containers/SettingsGroupContainer.vue';
 
 export default {
+  components: {
+    SettingsGroupContainer,
+    ModalContainer,
+  },
   props: [
     'title',
     'filter',
@@ -43,10 +47,6 @@ export default {
     'filtersLayout',
     'buttonSubmitText',
   ],
-  components: {
-    SettingsGroupContainer,
-    ModalContainer,
-  },
   data() {
     return {
       settings: {
@@ -64,34 +64,30 @@ export default {
         this.filtered = this.entries.filter(entry => this.filter(entry, filters));
       },
       deep: true,
-      immediate: true
+      immediate: true,
     },
-    'source': {
-      handler({ type, url, feedPath }) {
+    source: {
+      handler({ url, feedPath }) {
         this.working = true;
         this.fetch(url)
-          .then(text => {
-            return (new DOMParser()).parseFromString(text,"text/xml");
-          })
+          .then(text => (new DOMParser()).parseFromString(text, 'text/xml'))
           .then(xmlDoc => this.xmlToObject(xmlDoc))
           .then(obj => _.get(obj, feedPath, []))
-          .then(entries => {
+          .then((entries) => {
             this.entries = entries;
             this.settings = _.cloneDeep(this.settings);
             this.working = false;
-          })
+          });
       },
       immediate: true,
-    }
-  },
-  computed: {
+    },
   },
   methods: {
     setValue({ value, path, name }) {
       _.set(this.settings, `${path}.${name}`, value);
       this.settings = _.cloneDeep(this.settings);
     },
-    fetch(url, options) {
+    fetch(url) {
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', `/proxy/fetch?url=${encodeURIComponent(url)}`);
@@ -106,28 +102,28 @@ export default {
     },
     xmlToObject(xml) {
       let obj = {};
-      if (xml.nodeType == 1) {
+      if (xml.nodeType === 1) {
         if (xml.attributes.length > 0) {
-        obj["@attributes"] = {};
-          for (var j = 0; j < xml.attributes.length; j++) {
-            var attribute = xml.attributes.item(j);
-            obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
+          obj['@attributes'] = {};
+          for (let j = 0; j < xml.attributes.length; j++) {
+            const attribute = xml.attributes.item(j);
+            obj['@attributes'][attribute.nodeName] = attribute.nodeValue;
           }
         }
-      } else if (xml.nodeType == 3) {
+      } else if (xml.nodeType === 3) {
         obj = xml.nodeValue;
       }
-      if (xml.hasChildNodes() && xml.childNodes.length === 1 && xml.childNodes[0].nodeType === 3 && !obj["@attributes"]) {
+      if (xml.hasChildNodes() && xml.childNodes.length === 1 && xml.childNodes[0].nodeType === 3 && !obj['@attributes']) {
         obj = xml.childNodes[0].nodeValue;
       } else if (xml.hasChildNodes()) {
-        for (var i = 0; i < xml.childNodes.length; i++) {
+        for (let i = 0; i < xml.childNodes.length; i++) {
           const item = xml.childNodes.item(i);
           const nodeName = item.nodeName;
-          if (typeof(obj[nodeName]) == "undefined") {
+          if (typeof (obj[nodeName]) === 'undefined') {
             obj[nodeName] = this.xmlToObject(item);
           } else {
-            if (typeof(obj[nodeName].push) == "undefined") {
-              var old = obj[nodeName];
+            if (typeof (obj[nodeName].push) === 'undefined') {
+              const old = obj[nodeName];
               obj[nodeName] = [];
               obj[nodeName].push(old);
             }
@@ -136,9 +132,9 @@ export default {
         }
       }
       return obj;
-    }
-  }
-}
+    },
+  },
+};
 
 </script>
 

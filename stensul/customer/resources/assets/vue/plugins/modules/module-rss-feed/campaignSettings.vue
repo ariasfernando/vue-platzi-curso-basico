@@ -83,6 +83,23 @@ export default {
   },
   computed: {
     elements() {
+      if (this.element.type === 'column-element') {
+        return _.get(this.element, 'components', []).reduce((retComponents, component) => {
+          retComponents.push(component);
+          return retComponents;
+        }, []);
+      }
+      if (this.element.type === 'row-element') {
+        return _.get(this.element, 'columns', []).reduce((retColumns, column) => {
+          retColumns.push(column);
+          return _.get(column, 'components', []).reduce((retComponents, component) => {
+            retComponents.push(component);
+            return retComponents;
+          }, retColumns);
+        }, []);
+      }
+
+      // is a module
       return _.get(this.module, 'structure.rows', []).reduce((retRows, row) => {
         retRows.push(row);
         return _.get(row, 'columns', []).reduce((retColumns, column) => {
