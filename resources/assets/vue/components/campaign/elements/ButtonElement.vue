@@ -38,7 +38,7 @@
               style="width:100%">
               <tr>
                 <td
-                  :width="component.caret.attribute.url ? '' : '100%'"
+                  :width="component.caret.attribute.url ? undefined : '100%'"
                   :align="component.button.attribute.align"
                   :style="fontStyles(component.button)"
                   :valign="component.button.attribute.valign || ''">
@@ -54,7 +54,12 @@
                 <td
                   v-if="component.caret.attribute.url"
                   :width="widthCaret"
-                  :style="[elementBorderAndPadding(component.caret), {'width': widthStyle(widthCaret)}]">
+                  :valign="component.caret.attribute.valign || 'middle'"
+                  :style="[
+                    elementBorderAndPadding(component.caret),
+                    fontStyles(component.button),
+                    { width: widthStyle(widthCaret), textAlign: 'left' },
+                  ]">
                   <img
                     :src="$_app.config.imageUrl + component.caret.attribute.url"
                     :bgcolor="component.caret.attribute.bgcolor"
@@ -62,7 +67,7 @@
                     :height="component.caret.attribute.height === 'auto' ? undefined : component.caret.attribute.height"
                     :valign="component.caret.attribute.valign || 'middle'"
                     :class="component.caret.attribute.classes || ''"
-                    style="display: inline-block !important; border:0;">
+                    style="display: inline-block !important; border:0; vertical-align: baseline;">
                 </td>
               </tr>
             </table>
