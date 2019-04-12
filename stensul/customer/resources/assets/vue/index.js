@@ -3,6 +3,7 @@ import * as customElements from './customElements';
 
 const plugins = require('./plugins');
 const fonts = require('./config/fonts');
+const hooks = require('./hooks');
 
 module.exports = {
   modules,
@@ -11,4 +12,5 @@ module.exports = {
   config: {
     fonts,
   },
+  hooks,
 };
