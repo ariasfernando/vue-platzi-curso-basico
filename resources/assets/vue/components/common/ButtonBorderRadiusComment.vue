@@ -72,6 +72,21 @@ export default {
     buttonAlignment() {
       return this.component.container.attribute.align || 'center';
     },
+    caret() {
+      const { attribute } = this.component.caret;
+      if (!attribute.url) return '';
+
+      return `
+        <img
+          src="${this.$_app.config.imageUrl}${attribute.url}"
+          bgcolor="${attribute.bgcolor || ''}"
+          width="${attribute.width}"
+          ${attribute.height === 'auto' ? '' : `height="${attribute.height}"`}
+          valign="${attribute.valign || 'middle'}"
+          class="${attribute.classes || ''}"
+          style="display: inline-block !important; border:0; vertical-align: baseline;">
+      `;
+    },
     content() {
       return `<!--[if mso]>
           <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
@@ -93,7 +108,7 @@ export default {
                   <w:anchorlock/>
                   <v:textbox inset="0,0,0,0"><center style="${
                     this.textStyles
-                  }">${this.text}</center></v:textbox>
+                  }">${this.text}${this.caret}</center></v:textbox>
                 </v:roundrect>
               </td>
             </tr>
@@ -226,7 +241,7 @@ export default {
       // we get the text using jQuery instead of using component.data.text because the text is inside tinymce
       // tinymce only updates the store when the user makes text edits, and we have
       // some custom plugins that make changes to texts in tinymce without triggering a edition event
-      this.text = $(`#${this.editorId}`).html();
+      this.text = $(`#${this.editorId}`).html().replace(/<p/g, '<span').replace(/<\/p>/g, '</span>');
     },
     setWidth() {
       const style = this.component.button.style;
