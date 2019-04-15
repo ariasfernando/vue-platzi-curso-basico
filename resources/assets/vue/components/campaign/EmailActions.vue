@@ -199,6 +199,14 @@
         });
         return promise;
       },
+      validateTree(node) {
+        if (typeof node.validateComponent === 'function') {
+          node.validateComponent();
+        }
+        node.$children.forEach((child) => {
+          this.validateTree(child);
+        });
+      },
       _validate(customMessage = undefined) {
       	let errorMessage = '';
         if (this.$_app.utils.validator.imagesErrors('#emailCanvas')) {
@@ -216,6 +224,12 @@
        	if (!this._validateEmptyEmail()) {
         	return false;
        	}
+
+        try {
+          this.validateTree(this.$parent);
+        } catch (e) {
+          errorMessage = e.message;
+        }
 
         if (errorMessage !== '') {
           this.$root.$toast(
