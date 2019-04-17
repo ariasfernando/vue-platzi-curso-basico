@@ -329,12 +329,18 @@ export default {
 .library {
   padding-top: 46px;
   margin-top: -15px;
+
   .edit-library-column {
     height: calc(100vh - 103px)!important;
+
     &.is-center-column {
       background-color: #f0f0f0;
       // this should be updated to 540 if a 3rd column is added
-      width: calc(100vw - 270px);
+      position: absolute;
+      left: 270px;
+      right: 0;
+      width: auto;
+
       .scrollbar-container-inner {
         padding-top: 20px;
         padding-bottom: 20px;
@@ -343,38 +349,44 @@ export default {
       }
     }
   }
+
   .control-label {
     width: 30% !important;
   }
+
   .header {
     color: @stensul-purple;
     background-color: @stensul-white;
     height: 46px;
-    padding: 7px 0px;
-    box-shadow: 0px 0px 4px #999999;
+    padding: 7px 0;
+    box-shadow: 0 0 4px #999999;
     z-index: 2;
     position: fixed;
     top: 56px;
     z-index: 2;
     left: 15px;
     right: 15px;
+
     .header-col {
       height: 100%;
     }
+
     .vertical-center {
       min-height: 100%;
       display: flex;
       align-items: center;
     }
+
     .section-title {
       font-size: 18px;
-      font-family: 'Open Sans', Arial, sans-serif;
+      font-family: "Open Sans", Arial, sans-serif;
       font-weight: 300;
     }
 
-    .btn-margin-right{
+    .btn-margin-right {
       margin-right: 10px;
     }
+
     .stui-switch-desktop-mobile {
       margin-top: 2px;
     }
