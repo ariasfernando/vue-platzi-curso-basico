@@ -61,14 +61,13 @@
               <div
                 v-show="page.three"
                 ref="wrapperSie"
-                class="wrapper-sie"
-                >
-                <style-image-editor 
-                v-if="page.three && this.currentImage" 
-                :sieoptions="sieOptions" 
-                ref="sie" 
-                @image-submit="submitImage">
-                </style-image-editor>
+                class="wrapper-sie">
+                <StyleImageEditor
+                  v-if="page.three && currentImage"
+                  ref="sie"
+                  :sieoptions="sieOptions"
+                  @on-mount="onSieMount"
+                  @image-submit="submitImage" />
               </div>
             </slot>
           </div>
@@ -94,15 +93,21 @@
 </template>
 
 <script>
-import _ from 'lodash';
-import styleImageEditor from 'stensul-sie-vue';
+
+import StyleImageEditor from 'stensul-sie-vue';
 import imageHelper from './image-helper';
 import sieHelper from './sie-helper';
 
+const originalMounted = StyleImageEditor.mounted;
+StyleImageEditor.mounted = function mounted(...args) { // overrides .mounted()
+  originalMounted.call(this, ...args);
+  this.$emit('on-mount', this);
+};
+
 export default {
-  props: ['config', 'libraryImages', 'overlayImages' ,'data'],
+  props: ['config', 'libraryImages', 'overlayImages', 'data'],
   components: {
-    styleImageEditor
+    StyleImageEditor,
   },
   data() {
     return {
@@ -143,6 +148,31 @@ export default {
     },
   },
   methods: {
+    onSieMount(sieComponent) {
+      const self = this;
+      _.get(sieComponent, 'sieoptions.plugins', []).forEach(({ definition, type }) => {
+        if (type === 'sie-plugin-text') {
+          definition.inyected = true;
+          definition.prototype.initTiny = function initTiny() {
+            const options = _.merge({
+              selector: '.editable',
+              skin: false,
+              inline: true,
+              plugins: ['textcolor', 'paste', 'colorpicker'],
+              toolbar: this.text.toolbar,
+              menubar: false,
+              statusbar: false,
+              fixed_toolbar_container: `#${this.toolbarId}`,
+              paste_as_text: true,
+              content_style: 'p{ margin:0px }',
+              auto_focus: this.tinyContainer.id,
+              init_instance_callback: editor => (this.tinymc = editor),
+            }, _.get(self.config, 'sie-plugin-text_text.tinyOptions'));
+            tinymce.init(options);
+          };
+        }
+      });
+    },
     changeImage(params) {
       const urlDefault = params['sie-plugin-image_upload']['uploaddefault']['value'];
       const options = JSON.parse(JSON.stringify(params));
