@@ -96,7 +96,7 @@ class RestructureOfRows extends Migration
                             $module_structure['rows'][0] = [];
                             $module_structure['rows'][0]['id'] = 123456;
                             $module_structure['rows'][0]['type'] = 'row-element';
-                            $module_structure['rows'][0]['columnsStacking'] = $module_structure['columnsStacking'];
+                            $module_structure['rows'][0]['columnsStacking'] = $module_structure['columnsStacking'] ?? 'normal';
                             $module_structure['rows'][0]['columns'] = $module_structure['columns'];
                             unset($module_structure['columns']);
                             unset($module_structure['columnsStacking']);
