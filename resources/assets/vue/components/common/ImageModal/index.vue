@@ -62,11 +62,11 @@
                 v-show="page.three"
                 ref="wrapperSie"
                 class="wrapper-sie">
-                <StyleImageEditor
+                <CustomStyleImageEditor
                   v-if="page.three && currentImage"
                   ref="sie"
                   :sieoptions="sieOptions"
-                  @on-mount="onSieMount"
+                  :tiny-options="tinyOptions"
                   @image-submit="submitImage" />
               </div>
             </slot>
@@ -94,20 +94,16 @@
 
 <script>
 
-import StyleImageEditor from 'stensul-sie-vue';
+// StyleImageEditor is replaced in this instance as a temporary workaround to support TinyMCE options in text plugin
+import CustomStyleImageEditor from 'customer/components/custom-sie-vue.vue';
+
 import imageHelper from './image-helper';
 import sieHelper from './sie-helper';
-
-const originalMounted = StyleImageEditor.mounted;
-StyleImageEditor.mounted = function mounted(...args) { // overrides .mounted()
-  originalMounted.call(this, ...args);
-  this.$emit('on-mount', this);
-};
 
 export default {
   props: ['config', 'libraryImages', 'overlayImages', 'data'],
   components: {
-    StyleImageEditor,
+    CustomStyleImageEditor,
   },
   data() {
     return {
@@ -135,6 +131,9 @@ export default {
       });
       return this.changeImage(params);
     },
+    tinyOptions() {
+      return _.get(this.config, 'sie-plugin-text_text.tinyOptions');
+    },
     images() {
       const sections = [];
       let i, chunk = 5;
@@ -148,31 +147,6 @@ export default {
     },
   },
   methods: {
-    onSieMount(sieComponent) {
-      const self = this;
-      _.get(sieComponent, 'sieoptions.plugins', []).forEach(({ definition, type }) => {
-        if (type === 'sie-plugin-text') {
-          definition.inyected = true;
-          definition.prototype.initTiny = function initTiny() {
-            const options = _.merge({
-              selector: '.editable',
-              skin: false,
-              inline: true,
-              plugins: ['textcolor', 'paste', 'colorpicker'],
-              toolbar: this.text.toolbar,
-              menubar: false,
-              statusbar: false,
-              fixed_toolbar_container: `#${this.toolbarId}`,
-              paste_as_text: true,
-              content_style: 'p{ margin:0px }',
-              auto_focus: this.tinyContainer.id,
-              init_instance_callback: editor => (this.tinymc = editor),
-            }, _.get(self.config, 'sie-plugin-text_text.tinyOptions'));
-            tinymce.init(options);
-          };
-        }
-      });
-    },
     changeImage(params) {
       const urlDefault = params['sie-plugin-image_upload']['uploaddefault']['value'];
       const options = JSON.parse(JSON.stringify(params));
