@@ -20,5 +20,4 @@ return [
             'title', 'class'
         ],
     ],
-    'services' => '*',
 ];

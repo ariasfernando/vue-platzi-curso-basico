@@ -1,12 +1,14 @@
 <?php
 
+$overrideFile = str_replace('config/' . basename(__FILE__),  'stensul/customer/config/' . basename(__FILE__), __FILE__);
+
 /**
  * DS is the new DIRECTORY_SEPARATOR
  */
 defined('DS')
     or define('DS', DIRECTORY_SEPARATOR);
 
-return [
+$default = [
 
     /*
     |--------------------------------------------------------------------------
@@ -314,4 +316,7 @@ return [
         'enabled' => true
     ],
 ];
+
+return require 'recursive.php';
+
 

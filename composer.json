@@ -33,7 +33,7 @@
         "stensul/responsys-provider": "2.*",
         "wyrihaximus/html-compress": "^1.4",
         "stensul/html-to-pdf-service-provider": "3.*",
-        "stensul/okta-socialite": "1.*"
+        "stensul/okta-socialite": "^2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

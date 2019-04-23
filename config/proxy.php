@@ -1,7 +1,6 @@
 <?php
-$overrideFile = (env('APP_NAME', false))
-? str_replace(basename(__FILE__), ucwords(strtolower(env('APP_NAME'))) . '/' . basename(__FILE__), __FILE__)
-: false;
+
+$overrideFile = str_replace('config/' . basename(__FILE__),  'stensul/customer/config/' . basename(__FILE__), __FILE__);
 
 /**
  * ProxyController whitelist, only URL's matching exactly what's on this config will be proxied.
