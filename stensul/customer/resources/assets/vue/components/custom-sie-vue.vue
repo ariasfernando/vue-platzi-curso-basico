@@ -26,6 +26,20 @@ export default {
               content_style: 'p{ margin:0px }',
               auto_focus: this.tinyContainer.id,
               init_instance_callback: editor => (this.tinymc = editor),
+              setup(editor) {
+                editor.on('focus', (e) => {
+                  const $toolbar = $(editor.settings.fixed_toolbar_container);
+                  if (!$toolbar.find('div[aria-label="Font Sizes"] .text-size').length) {
+                    setTimeout(() => {
+                      $toolbar.find('div[aria-label="Font Sizes"] button:first')
+                        .empty()
+                        .addClass('stx-sie-toolbar-button')
+                        .append('<div class="small">A</div>')
+                        .append('<div class="big">A</div>');
+                    });
+                  }
+                });
+              },
             }, self.tinyOptions));
           },
         });
@@ -35,3 +49,21 @@ export default {
 };
 
 </script>
+
+<style lang="less">
+  button.stx-sie-toolbar-button {
+    height: 26px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+
+    .small {
+      font-size: 80%;
+    }
+
+    .big {
+      font-size: 120%;
+    }
+  }
+</style>
