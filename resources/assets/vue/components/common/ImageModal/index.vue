@@ -61,14 +61,13 @@
               <div
                 v-show="page.three"
                 ref="wrapperSie"
-                class="wrapper-sie"
-                >
-                <style-image-editor 
-                v-if="page.three && this.currentImage" 
-                :sieoptions="sieOptions" 
-                ref="sie" 
-                @image-submit="submitImage">
-                </style-image-editor>
+                class="wrapper-sie">
+                <CustomStyleImageEditor
+                  v-if="page.three && currentImage"
+                  ref="sie"
+                  :sieoptions="sieOptions"
+                  :config="config"
+                  @image-submit="submitImage" />
               </div>
             </slot>
           </div>
@@ -94,15 +93,17 @@
 </template>
 
 <script>
-import _ from 'lodash';
-import styleImageEditor from 'stensul-sie-vue';
+
+// StyleImageEditor is replaced in this instance as a temporary workaround to support TinyMCE options in text plugin
+import CustomStyleImageEditor from 'customer/components/custom-sie-vue.vue';
+
 import imageHelper from './image-helper';
 import sieHelper from './sie-helper';
 
 export default {
-  props: ['config', 'libraryImages', 'overlayImages' ,'data'],
+  props: ['config', 'libraryImages', 'overlayImages', 'data'],
   components: {
-    styleImageEditor
+    CustomStyleImageEditor,
   },
   data() {
     return {
