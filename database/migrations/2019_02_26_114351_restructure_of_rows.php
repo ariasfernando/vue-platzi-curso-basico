@@ -23,7 +23,7 @@ class RestructureOfRows extends Migration
     }
 
     protected function setNewEstructureOfRowsInStudio() {
-        $modules = Module::all();
+        $modules = Module::withTrashed();
         Logging::info('-------------------------');
         Logging::info('Studio modules');
         Logging::info('-------------------------');
@@ -40,7 +40,7 @@ class RestructureOfRows extends Migration
                 $module_structure['rows'][0] = [];
                 $module_structure['rows'][0]['id'] = 123456;
                 $module_structure['rows'][0]['type'] = 'row-element';
-                $module_structure['rows'][0]['columnsStacking'] = $module_structure['columnsStacking'];
+                $module_structure['rows'][0]['columnsStacking'] = $module_structure['columnsStacking'] ?? 'normal';
                 $module_structure['rows'][0]['columns'] = $module_structure['columns'];
                 unset($module_structure['columns']);
                 unset($module_structure['columnsStacking']);
@@ -72,7 +72,7 @@ class RestructureOfRows extends Migration
         }
     }
     protected function setNewEstructureOfRowsInCampaign() {
-        Campaign::withTrashed()->chunk(100, function ($campaigns) {
+        Campaign::withTrashed()->chunk(30, function ($campaigns) {
             Logging::info('-------------------------');
             Logging::info('Campaigns modules');
             Logging::info('-------------------------');
