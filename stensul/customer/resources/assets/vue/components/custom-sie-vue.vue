@@ -13,6 +13,7 @@ export default {
   },
   mounted() {
     const self = this;
+    $(this.$el).toggleClass('no-image-overlay-upload', !_.get(this.config, 'sie-plugin-image-overlay_image.config.overlay_upload.value', true))
     _.get(this, 'sieoptions.plugins', []).forEach((plugin) => {
       if (plugin.type === 'sie-plugin-text' && !plugin.definition.prototype.inyected) {
         Object.assign(plugin.definition.prototype, {
@@ -56,6 +57,12 @@ export default {
 </script>
 
 <style lang="less">
+  #sie.no-image-overlay-upload {
+    #upload {
+      display: none;
+    }
+  }
+
   button.stx-sie-toolbar-button {
     height: 26px;
     display: flex;
