@@ -66,7 +66,7 @@
                   v-if="page.three && currentImage"
                   ref="sie"
                   :sieoptions="sieOptions"
-                  :tiny-options="tinyOptions"
+                  :config="config"
                   @image-submit="submitImage" />
               </div>
             </slot>
@@ -130,9 +130,6 @@ export default {
         }
       });
       return this.changeImage(params);
-    },
-    tinyOptions() {
-      return _.get(this.config, 'sie-plugin-text_text.tinyOptions');
     },
     images() {
       const sections = [];

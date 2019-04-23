@@ -4,8 +4,13 @@ import StyleImageEditor from 'stensul-sie-vue';
 export default {
   extends: StyleImageEditor,
   props: [
-    'tinyOptions',
+    'config',
   ],
+  computed: {
+    tinyOptions() {
+      return _.get(this.config, 'sie-plugin-text_text.tinyOptions');
+    },
+  },
   mounted() {
     const self = this;
     _.get(this, 'sieoptions.plugins', []).forEach((plugin) => {
