@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1ac41ee797c0f75ec4dffce2163577e",
+    "content-hash": "49bf276956e334bec838a101d9164c9b",
     "packages": [
         {
             "name": "akamai-open/edgegrid-auth",
@@ -3292,17 +3292,17 @@
         },
         {
             "name": "stensul/okta-socialite",
-            "version": "v1.0.0",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "git@git.stensuldev.net:composer/okta-socialite.git",
-                "reference": "c131ec1acf518020a2c82b9291f80669cd60b7e9"
+                "reference": "bafda16d3f071d96837c48b2d4acaf7e4616a4bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://composer.stensuldev.net/dist/stensul/okta-socialite/stensul-okta-socialite-v1.0.0-2abd5f.zip",
-                "reference": "c131ec1acf518020a2c82b9291f80669cd60b7e9",
-                "shasum": "4db5cb3e3db6a857156a2a4b030ed96c1381e822"
+                "url": "https://composer.stensuldev.net/dist/stensul/okta-socialite/stensul-okta-socialite-v2.0.0-95171f.zip",
+                "reference": "bafda16d3f071d96837c48b2d4acaf7e4616a4bd",
+                "shasum": "2540b0b58d6268cbf7d838fb19fa094fd544fe9d"
             },
             "type": "library",
             "autoload": {
@@ -3317,7 +3317,7 @@
                 }
             ],
             "description": "Socialite PLugin for OKTA SSO",
-            "time": "2017-10-24T19:08:16+00:00"
+            "time": "2019-04-16T21:31:23+00:00"
         },
         {
             "name": "stensul/php-imageproxy",
