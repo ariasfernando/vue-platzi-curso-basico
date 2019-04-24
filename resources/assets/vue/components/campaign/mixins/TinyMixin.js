@@ -226,26 +226,28 @@ export default {
       let firstTextNode = firstTextElement.firstChild;
 
       // if the first node is a text node, we go up to te parent element.
-      if (firstTextNode.nodeName === '#text') {
-        firstTextNode = firstTextElement;
-      }
-
-      const lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
-      const actualLines = divHeight / lineHeight;
-
-      if (actualLines > this.tinyMaxLines()) {
-        this.setError({
-          toastMessage: `You've exceeded the maximum number of lines (${this.tinyMaxLines()})`,
-        });
-
-        // Prevent insertion of more lines
-        if (event) {
-          event.preventDefault();
-          event.stopPropagation();
+      if (firstTextNode) {
+        if (firstTextNode.nodeName === '#text') {
+          firstTextNode = firstTextElement;
         }
-        return false;
+
+        const lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
+        const actualLines = divHeight / lineHeight;
+
+        if (actualLines > this.tinyMaxLines()) {
+          this.setError({
+            toastMessage: `You've exceeded the maximum number of lines (${this.tinyMaxLines()})`,
+          });
+
+          // Prevent insertion of more lines
+          if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          return false;
+        }
+        this.clearError();
       }
-      this.clearError();
     },
     minCharsValidation(event) {
       if (this.tinyLength() < this.tinyMin()) {
