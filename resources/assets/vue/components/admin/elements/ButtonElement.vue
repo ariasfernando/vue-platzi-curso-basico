@@ -30,14 +30,24 @@
                   :align="component.button.attribute.align"
                   :style="fontStyles(component.button)"
                   :valign="component.button.attribute.valign || ''">
-                  <tiny-mce
-                    :editor-id="getTinyId(element.id)"
-                    :font-styles="fontStyles(component.button)"
-                    :text="component.data.text"
-                    :type="component.type"
-                    :text-dirty="component.data.textDirty"
-                    :config="textOptions"
-                    @changeText="changeText" />
+                  <!-- this tag is used to enable clicking the button in Outlook -->
+                  <a
+                    :data-contenteditable-href="component.button.attribute.href || ''"
+                    :target="component.button.attribute.target || '_blank'"
+                    :style="component.button.style.textDecoration || 'text-decoration:none;'"
+                    class="stx-display-block"
+                    :title="component.button.attribute.title || ''"
+                    :data-description="component.button.attribute.dataDescription || ''"
+                    @click.prevent>
+                    <tiny-mce
+                      :editor-id="getTinyId(element.id)"
+                      :font-styles="fontStyles(component.button)"
+                      :text="component.data.text"
+                      :type="component.type"
+                      :text-dirty="component.data.textDirty"
+                      :config="textOptions"
+                      @changeText="changeText" />
+                  </a>
                 </td>
                 <td
                   v-if="component.caret.attribute.url"
@@ -97,11 +107,11 @@ export default {
       return {
         width,
         'min-width': this.component.button.style.minWidth === '0px'
-            ? undefined
-            : this.component.button.style.minWidth,
+          ? undefined
+          : this.component.button.style.minWidth,
         'max-width': this.component.button.style.maxWidth === '0px'
-            ? undefined
-            : this.component.button.style.maxWidth,
+          ? undefined
+          : this.component.button.style.maxWidth,
         'border-collapse': 'initial',
       };
     },
@@ -120,5 +130,8 @@ export default {
 <style lang="less">
 .stx-position-relative {
   position: relative;
+}
+.stx-display-block {
+  display: block;
 }
 </style>

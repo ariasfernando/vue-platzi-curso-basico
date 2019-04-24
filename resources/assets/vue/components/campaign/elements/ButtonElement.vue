@@ -43,14 +43,25 @@
                   :align="component.button.attribute.align"
                   :style="fontStyles(component.button)"
                   :valign="component.button.attribute.valign || ''">
-                  <TinyMce
-                    :editor-id="getTinyId(element.id, module.idInstance)"
-                    :font-styles="fontStyles(component.button)"
-                    :text="component.data.text"
-                    :text-dirty="component.data.textDirty"
-                    :type="component.type"
-                    :config="component.plugins.textOptions"
-                    @changeText="changeText" />
+                  <!-- this tag is used to enable clicking the button in Outlook -->
+                  <a
+                    :data-contenteditable-href="component.button.attribute.href || ''"
+                    :target="component.button.attribute.target || '_blank'"
+                    :data-persist-styles="JSON.stringify({'mso-line-height-rule': 'exactly', 'line-height': lineHeightCalculate(component.button)})"
+                    :style="component.button.style.textDecoration || 'text-decoration:none;'"
+                    class="stx-display-block"
+                    :title="component.button.attribute.title || ''"
+                    :data-description="component.button.attribute.dataDescription || ''"
+                    @click.prevent>
+                    <TinyMce
+                      :editor-id="getTinyId(element.id, module.idInstance)"
+                      :font-styles="fontStyles(component.button)"
+                      :text="component.data.text"
+                      :text-dirty="component.data.textDirty"
+                      :type="component.type"
+                      :config="component.plugins.textOptions"
+                      @changeText="changeText" />
+                  </a>
                 </td>
                 <td
                   v-if="component.caret.attribute.url"
@@ -164,3 +175,8 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+  .stx-display-block {
+    display: block;
+  }
+</style>

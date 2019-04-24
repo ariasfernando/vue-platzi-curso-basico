@@ -155,7 +155,18 @@ export default {
 
     // Convert special chars to html entities ---
     $cleanedHtml = this.encodeHtmlEntities($cleanedHtml);
-    return this.charConvert($cleanedHtml.html());
+    // replace data-v attributes, which are set because we are using scoped styles and vue-loader
+    return this.charConvert($cleanedHtml.html()).replace(/data-v-[\w]+=""[\s]*/g, '');
+  },
+
+  replaceDataContentEditableHref($cleanedHtml) {
+    const $targetContenteditableHref = $cleanedHtml.find('[data-contenteditable-href]');
+    if ($targetContenteditableHref.length) {
+      const element = $targetContenteditableHref[0];
+      const content = element.outerHTML.replace('data-contenteditable-href', 'href');
+      element.outerHTML = content;
+      this.replaceDataContentEditableHref($cleanedHtml);
+    }
   },
 
   // display plain text modal.
