@@ -158,8 +158,10 @@ export default {
     // replace data-v attributes, which are set because we are using scoped styles and vue-loader
     return this.charConvert($cleanedHtml.html()).replace(/data-v-[\w]+=""[\s]*/g, '');
   },
-
   replaceDataContentEditableHref($cleanedHtml) {
+    // We need to preserve the parent <a> with its children <a> in order to fix a bug with the button click in outlook
+    // We Don't use .attr() and .remove() because ESP needs the href like as first attribute of the <a> tag
+    // Also if we iterate all tags with a loop, when the parent <a> is modified the childred reference didn't exist
     const $targetContenteditableHref = $cleanedHtml.find('[data-contenteditable-href]');
     if ($targetContenteditableHref.length) {
       const element = $targetContenteditableHref[0];
