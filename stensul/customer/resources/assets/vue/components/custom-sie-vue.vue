@@ -40,8 +40,8 @@ export default {
           const canvas = await html2canvas(this.tinyWrapper, {
               logging: false,
               backgroundColor: null,
-              width: outputsize.width,
-              height: outputsize.height,
+              width: this.size.width,
+              height: this.size.height,
               y: outputsize.top !== 0 ? top + outputsize.top : undefined,
               x: outputsize.left !== 0 ? left + outputsize.left: undefined,
           })
