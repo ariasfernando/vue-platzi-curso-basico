@@ -36,6 +36,7 @@ export default {
       return Object.assign(Plugin.prototype, {
         'custom-inyected': true,
         async render(outputsize) {
+          const sie = component.sie;
           const { top, left } = $(this.tinyWrapper).offset();
           const canvas = await html2canvas(this.tinyWrapper, {
               logging: false,
@@ -118,6 +119,14 @@ export default {
   #sie.no-image-overlay-upload {
     #upload {
       display: none;
+    }
+  }
+
+  .editor-gallery {
+    background-color: #f4f4f4;
+
+    .gallery-wrapper {
+      z-index: 10;
     }
   }
 
