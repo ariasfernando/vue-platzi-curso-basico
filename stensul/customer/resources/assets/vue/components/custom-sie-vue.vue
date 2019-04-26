@@ -1,6 +1,7 @@
 <script>
 import StyleImageEditor from 'stensul-sie-vue';
 import html2canvas from 'html2canvas';
+import resizeCanvas from 'resize-canvas';
 
 export default {
   extends: StyleImageEditor,
@@ -38,17 +39,23 @@ export default {
 
       return Object.assign(Plugin.prototype, {
         'custom-inyected': true,
-        async render(outputsize) {
-          const sie = component.sie;
+        async render(outputSize) {
           const { top, left } = $(this.tinyWrapper).offset();
           const canvas = await html2canvas(this.tinyWrapper, {
             logging: false,
             backgroundColor: null,
-            width: this.size.width,
-            height: this.size.height,
-            y: outputsize.top !== 0 ? top + outputsize.top : undefined,
-            x: outputsize.left !== 0 ? left + outputsize.left : undefined,
+            width: outputSize.width,
+            height: outputSize.height,
+            y: outputSize.top !== 0 ? top + outputSize.top : undefined,
+            x: outputSize.left !== 0 ? left + outputSize.left : undefined,
           });
+          if (outputSize.scale !== 1) {
+            resizeCanvas({
+              canvas,
+              from: [0, 0],
+              size: [canvas.width / outputSize.scale, canvas.height / outputSize.scale],
+            });
+          }
           return canvas;
         },
         startMoving(event) {
