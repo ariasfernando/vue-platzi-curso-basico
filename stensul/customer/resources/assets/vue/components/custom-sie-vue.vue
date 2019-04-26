@@ -17,20 +17,23 @@ export default {
       'sie-plugin-text': {
         handler: this.inyectTextPlugin,
         baseProps: [
-        ]
-      }
-    }
-    $(this.$el).toggleClass('no-image-overlay-upload', !_.get(this.config, 'sie-plugin-image-overlay_image.config.overlay_upload.value', true))
+        ],
+      },
+    };
+    $(this.$el).toggleClass('no-image-overlay-upload', !_.get(this.config, 'sie-plugin-image-overlay_image.config.overlay_upload.value', true));
     _.get(this, 'sieoptions.plugins', []).forEach((plugin) => {
-      if (inyectors[plugin.type]) return inyectors[plugin.type].handler.call(this, {
-        component: this,
-        Plugin: plugin.definition,
-        baseProps: _.pick(plugin.definition.prototype, inyectors[plugin.type].baseProps),
-      });
+      if (inyectors[plugin.type]) {
+        return inyectors[plugin.type].handler.call(this, {
+          component: this,
+          Plugin: plugin.definition,
+          baseProps: _.pick(plugin.definition.prototype, inyectors[plugin.type].baseProps),
+        });
+      }
+      return undefined;
     });
   },
   methods: {
-    inyectTextPlugin({ component, Plugin, baseProps }) {
+    inyectTextPlugin({ component, Plugin }) {
       if (Plugin.prototype['custom-inyected']) return Plugin;
 
       return Object.assign(Plugin.prototype, {
@@ -39,42 +42,42 @@ export default {
           const sie = component.sie;
           const { top, left } = $(this.tinyWrapper).offset();
           const canvas = await html2canvas(this.tinyWrapper, {
-              logging: false,
-              backgroundColor: null,
-              width: this.size.width,
-              height: this.size.height,
-              y: outputsize.top !== 0 ? top + outputsize.top : undefined,
-              x: outputsize.left !== 0 ? left + outputsize.left: undefined,
-          })
+            logging: false,
+            backgroundColor: null,
+            width: this.size.width,
+            height: this.size.height,
+            y: outputsize.top !== 0 ? top + outputsize.top : undefined,
+            x: outputsize.left !== 0 ? left + outputsize.left : undefined,
+          });
           return canvas;
         },
         startMoving(event) {
           const target = event.currentTarget;
           const parent = event.currentTarget.parentElement;
           const { top: targetTop, left: targetLeft } = $(target).position();
-          const eventX = event.clientX,
-              eventY = event.clientY,
-              targetWidth = target.clientWidth,
-              targetHeight = target.clientHeight,
-              parentWidth = parent.clientWidth,
-              parentHeight = parent.clientHeight;
+          const eventX = event.clientX;
+          const eventY = event.clientY;
+          const targetWidth = target.clientWidth;
+          const targetHeight = target.clientHeight;
+          const parentWidth = parent.clientWidth;
+          const parentHeight = parent.clientHeight;
 
-          const diffX = eventX - targetLeft,
-              diffY = eventY - targetTop;
+          const diffX = eventX - targetLeft;
+          const diffY = eventY - targetTop;
 
           document.onmousemove = (evt) => {
-              const posX = evt.clientX,
-                  posY = evt.clientY;
-              let endX = posX - diffX,
-                  endY = posY - diffY;
+            const posX = evt.clientX;
+            const posY = evt.clientY;
+            let endX = posX - diffX;
+            let endY = posY - diffY;
 
-              if (endX + targetWidth > parentWidth) endX = parentWidth - targetWidth;
-              if (endY + targetHeight > parentHeight) endY = parentHeight - targetHeight;
-              if (endX < 0) endX = 0;
-              if (endY < 0) endY = 0;
+            if (endX + targetWidth > parentWidth) endX = parentWidth - targetWidth;
+            if (endY + targetHeight > parentHeight) endY = parentHeight - targetHeight;
+            if (endX < 0) endX = 0;
+            if (endY < 0) endY = 0;
 
-              target.style.left = endX + 'px';
-              target.style.top = endY + 'px';
+            target.style.left = `${endX}px`;
+            target.style.top = `${endY}px`;
           };
         },
         initTiny() {
@@ -92,7 +95,7 @@ export default {
             auto_focus: this.tinyContainer.id,
             init_instance_callback: editor => (this.tinymc = editor),
             setup(editor) {
-              editor.on('focus', (e) => {
+              editor.on('focus', () => {
                 const $toolbar = $(editor.settings.fixed_toolbar_container);
                 if (!$toolbar.find('div[aria-label="Font Sizes"] .text-size').length) {
                   setTimeout(() => {
@@ -109,8 +112,8 @@ export default {
           }, component.tinyOptions));
         },
       });
-    }
-  }
+    },
+  },
 };
 
 </script>

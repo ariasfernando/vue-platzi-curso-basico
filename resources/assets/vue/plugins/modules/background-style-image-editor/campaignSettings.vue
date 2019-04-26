@@ -27,6 +27,7 @@ import ImageModal from '../../../components/common/ImageModal/index.vue';
 import SettingsContainer from '../../../components/common/settings/containers/SettingsContainer.vue';
 import validatorMixin from '../mixins/validatorMixin';
 import pluginCampaignMixin from '../mixins/pluginCampaignMixin';
+import imageService from '../../../services/image';
 
 export default {
   components: {
@@ -42,6 +43,14 @@ export default {
       image: {},
       isEdit: false,
     };
+  },
+  created() {
+    const ovGallery = _.get(this.plugin.config, 'sie-plugin-image-overlay_image.config.overlay_gallery.config.set_images.value');
+    if (ovGallery !== null) {
+      imageService.getMedia(ovGallery).then((res) => {
+        this.overlayImages = res.map(image => image.path);
+      });
+    }
   },
   methods: {
     close() {
