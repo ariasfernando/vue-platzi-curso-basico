@@ -8,11 +8,6 @@ export default {
   props: [
     'config',
   ],
-  computed: {
-    tinyOptions() {
-      return _.get(this.config, 'sie-plugin-text_text.tinyOptions');
-    },
-  },
   mounted() {
     const inyectors = {
       'sie-plugin-text': {
@@ -28,13 +23,14 @@ export default {
           component: this,
           Plugin: plugin.definition,
           baseProps: _.pick(plugin.definition.prototype, inyectors[plugin.type].baseProps),
+          plugin: _.get(this.config, 'sie-plugin-text_text'),
         });
       }
       return undefined;
     });
   },
   methods: {
-    inyectTextPlugin({ component, Plugin }) {
+    inyectTextPlugin({ Plugin, plugin }) {
       if (Plugin.prototype['custom-inyected']) return Plugin;
 
       return Object.assign(Plugin.prototype, {
@@ -100,7 +96,10 @@ export default {
             paste_as_text: true,
             content_style: 'p{ margin:0px }',
             auto_focus: this.tinyContainer.id,
-            init_instance_callback: editor => (this.tinymc = editor),
+            init_instance_callback: (editor) => {
+              $(this.tinyContainer).css(_.get(plugin, 'container.style', {}));
+              this.tinymc = editor;
+            },
             setup(editor) {
               editor.on('focus', () => {
                 const $toolbar = $(editor.settings.fixed_toolbar_container);
@@ -116,7 +115,7 @@ export default {
                 }
               });
             },
-          }, component.tinyOptions));
+          }, _.get(plugin, 'tinyOptions')));
         },
       });
     },
