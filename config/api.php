@@ -294,7 +294,8 @@ return [
         'list_folders' => [
             'type' => 'GET',
             'url' => '/rest/asset/v1/folders.json'
-        ]
+        ],       
+        'folder_by_role' => []
     ],
 
     'epsilon' => [
