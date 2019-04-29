@@ -150,10 +150,19 @@ class Marketo implements ApiConnector
     private function getFolder($folder_id = null)
     {
         $folder = [];
-        $folder_config = $this->marketo_config['folder'];
 
         if (is_null($folder_id)) {
-            $folder_id = $folder_config['id'];
+        
+            $user = Auth::user();
+            $roles = array_intersect($user->roles, array_keys($this->marketo_config['folder_by_role']));
+
+            if(!empty($roles)) {
+                $role = array_pop($roles);
+                $folder_id = $this->marketo_config['folder_by_role'][$role];
+            } else {
+                $folder_config = $this->marketo_config['folder'];
+                $folder_id = $folder_config['id'];
+            }
         }
 
         if ($folder_id) {
