@@ -11,6 +11,8 @@ export default {
       'mce-edit-focus',
       'mce-content-body',
       'hubspot-mergetag',
+      'is-active',
+      'is-inactive',
     ],
     // Array of attributes to clean from final html
     attrSelectors: [
@@ -84,6 +86,9 @@ export default {
     // Remove wrappers element ( .stx-wrapper )
     $cleanedHtml = Application.utils.removeWrappers($cleanedHtml);
 
+    // replace p tags with spans inside buttons as Outlook button text is not vertically aligned
+    this.replacePTags($cleanedHtml);
+
     // Remove every class starting with "stx-"
     $cleanedHtml.find("[class*=' stx-'], [class^='stx-']").removeClass((index, css) => (css.match(/(^|\s)stx-\S+/g) || []).join(' '));
 
@@ -138,18 +143,8 @@ export default {
     $cleanedHtml = this.removeCommentDivs($cleanedHtml);
 
     // Skip <% %> Tags
-    if ($cleanedHtml.find('a').length) {
-      const $links = $cleanedHtml.find('a');
-      $.each($links, (i, element) => {
-        const $element = $(element);
-        const href = $element.attr('href');
-        if (href) {
-          $element.attr('href', href.replace('<%', 'LT%').replace('%>', '%GT'));
-        } else {
-          $element.replaceWith($element.html());
-        }
-      });
-    }
+    const linksToReplace = $cleanedHtml.find('a').toArray();
+    this.skipTags(linksToReplace);
 
     $cleanedHtml = this.addMediaQueryHack($cleanedHtml);
 
@@ -158,6 +153,20 @@ export default {
     // replace data-v attributes, which are set because we are using scoped styles and vue-loader
     return this.charConvert($cleanedHtml.html()).replace(/data-v-[\w]+=""[\s]*/g, '');
   },
+
+  replacePTags($cleanedHtml) {
+    const pTags = $cleanedHtml.find('.stx-replace-p-tag');
+    $.each(pTags, (i, element) => {
+      element.outerHTML = element.outerHTML
+        // as this will replace p tags, if the user has included two paragraphps
+        // we need to include a br for when the p turn into spans
+        .replace(/<br>/g, '')
+        .replace(/<\/p><p/g, '</p><br><p')
+        .replace(/<p/g, '<span')
+        .replace(/<\/p>/g, '</span>');
+    });
+  },
+
   replaceDataContentEditableHref($cleanedHtml) {
     // We need to preserve the parent <a> with its children <a> in order to fix a bug with the button click in outlook
     // We Don't use .attr() and .remove() because ESP needs the href like as first attribute of the <a> tag
@@ -168,6 +177,21 @@ export default {
       const content = element.outerHTML.replace('data-contenteditable-href', 'href');
       element.outerHTML = content;
       this.replaceDataContentEditableHref($cleanedHtml);
+    }
+  },
+
+  skipTags(links) {
+    if (links.length) {
+      const element = links[links.length - 1];
+      const $element = $(element);
+      const href = $element.attr('href');
+      if (href) {
+        $element.attr('href', href.replace('<%', 'LT%').replace('%>', '%GT'));
+      } else {
+        $element.replaceWith($element.html());
+      }
+      links.pop();
+      this.skipTags(links);
     }
   },
 
@@ -195,21 +219,25 @@ export default {
   },
 
   addCSSHacks($target, newStyles) {
-    newStyles.replace(';', '');
     const originalStyles = $target.attr('style');
     let originalStylesArray = originalStyles.split(';');
+    const newStylesArray = newStyles.split(';');
 
-    if (!originalStyles.includes(newStyles)) {
-      originalStylesArray.push(newStyles);
-    }
+    _.forEachRight(newStylesArray, (style) => {
+      const index = originalStylesArray.indexOf(style);
+      if (index === -1 && style !== '') {
+        // most of these styles are for outlook and they should be before other styles
+        originalStylesArray.unshift(style);
+      }
+    });
 
     for (let i = 0; i < originalStylesArray.length; i++) {
       originalStylesArray[i] = originalStylesArray[i].replace(' ', '');
     }
 
     originalStylesArray = originalStylesArray.filter(item => item !== '');
-    newStyles = originalStylesArray.join('; ');
-    $target.attr('style', newStyles);
+    const stylesToAdd = originalStylesArray.join('; ');
+    $target.attr('style', stylesToAdd);
   },
 
   encodeHtmlEntities($cleanedHtml) {

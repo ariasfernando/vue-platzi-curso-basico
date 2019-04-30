@@ -28,6 +28,7 @@
                 <td
                   width="100%"
                   :align="component.button.attribute.align"
+                  :data-persist-styles="JSON.stringify({'mso-line-height-rule': 'exactly'})"
                   :style="fontStyles(component.button)"
                   :valign="component.button.attribute.valign || ''">
                   <!-- this tag is used to enable clicking the button in Outlook -->
@@ -35,7 +36,7 @@
                     :data-contenteditable-href="component.button.attribute.href || ''"
                     :target="component.button.attribute.target || '_blank'"
                     :style="component.button.style.textDecoration || 'text-decoration:none;'"
-                    class="stx-display-block"
+                    class="stx-display-block stx-replace-p-tag"
                     :title="component.button.attribute.title || ''"
                     :data-description="component.button.attribute.dataDescription || ''"
                     @click.prevent>

@@ -41,6 +41,7 @@
                 <td
                   :width="component.caret.attribute.url ? undefined : '100%'"
                   :align="component.button.attribute.align"
+                  :data-persist-styles="JSON.stringify({'mso-line-height-rule': 'exactly'})"
                   :style="fontStyles(component.button)"
                   :valign="component.button.attribute.valign || ''">
                   <!-- this tag is used to enable clicking the button in Outlook -->
@@ -49,7 +50,7 @@
                     :target="component.button.attribute.target || '_blank'"
                     :data-persist-styles="JSON.stringify({'mso-line-height-rule': 'exactly', 'line-height': lineHeightCalculate(component.button)})"
                     :style="component.button.style.textDecoration || 'text-decoration:none;'"
-                    class="stx-display-block"
+                    class="stx-display-block stx-replace-p-tag"
                     :title="component.button.attribute.title || ''"
                     :data-description="component.button.attribute.dataDescription || ''"
                     @click.prevent>
@@ -107,6 +108,31 @@ export default {
   },
   mixins: [MobileStylesMixin, ElementMixin],
   computed: {
+    buttonStyles() {
+      const outlookStyles = `
+        margin-left: ${_.parseInt(this.component.button.style.paddingLeft || 0)}px !important; 
+        padding-right: ${_.parseInt(this.component.button.style.paddingRight || 0)}px !important; 
+        padding-left: 0px !important;
+        border: none !important;
+      `;
+      return `
+      <!--[if mso 15]>
+            <style type="text/css">
+                .outlook-padding-${this.componentId}{
+                    ${outlookStyles}
+                }
+            </style>
+        <![endif]-->
+        
+        <!--[if mso 16]>
+            <style type="text/css">
+                .outlook-padding-${this.componentId}{
+                    ${outlookStyles}
+                }
+            </style>
+        <![endif]-->
+      `;
+    },
     width() {
       return this.component.button.styleOption.autoWidth
         ? undefined
