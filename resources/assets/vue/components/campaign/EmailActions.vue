@@ -73,7 +73,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-default beta-btn-secondary" @click="$refs.noApprovedModal.hide();">Cancel</button>
-        <button class="btn btn-default beta-btn-primary" @click="isApproved = true; complete();">Ok</button>
+        <button class="btn btn-default beta-btn-primary" @click="isApproved = true; $refs.noApprovedModal.hide(); complete(); ">Ok</button>
       </div>
     </b-modal>
   </div>
