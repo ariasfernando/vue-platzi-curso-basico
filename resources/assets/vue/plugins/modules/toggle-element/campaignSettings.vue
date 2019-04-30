@@ -57,7 +57,7 @@ export default {
       }
       return _.get(this.getElement(elementId), 'container.styleOption.enableElement', true);
     },
-    toggleElement(value, elementId) {
+    toggleElement(value, elementId, preventDefault) {
       if (this.isCustom) {
         this.$store.dispatch('campaign/updateCustomElementProperty', {
           moduleId: this.moduleIndex,
@@ -73,7 +73,10 @@ export default {
           property: 'enableElement',
           value,
         };
-        this.saveElementProperty(payload);
+        if (!preventDefault) {
+          this.saveElementProperty(payload);
+        }
+        this.resetErrors(value, this.moduleId);
       }
 
       this.runLogic(value, elementId);
@@ -83,20 +86,21 @@ export default {
         value,
       });
     },
-    toggleChange(value, elementId) {
+    toggleChange(value, elementId, preventDefault) {
       if (this.plugin.data.preventEmpty && !value) {
-        for (const i in this.plugin.data.elements) {
-          if (this.plugin.data.elements[i].id !== elementId && this.getValue(this.plugin.data.elements[i].id)) {
-            this.toggleElement(value, elementId);
-            return;
-          }
+        const otherElementIsEnabled = this.plugin.data.elements.some(element =>
+          element.id !== elementId && this.getValue(element.id));
+
+        if (otherElementIsEnabled) {
+          this.toggleElement(value, elementId, preventDefault);
+        } else {
+          this.$root.$toast("You've to leave at least one element", {
+            className: 'et-error',
+            horizontalPosition: 'right',
+          });
         }
-        this.$root.$toast("You've to leave at least one element", {
-          className: 'et-error',
-          horizontalPosition: 'right',
-        });
       } else {
-        this.toggleElement(value, elementId);
+        this.toggleElement(value, elementId, preventDefault);
       }
     },
     resetErrors(value, moduleIndex) {
