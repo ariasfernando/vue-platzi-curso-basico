@@ -151,6 +151,8 @@ export default {
       });
     }
 
+    $cleanedHtml = this.addMediaQueryHack($cleanedHtml);
+
     // Convert special chars to html entities ---
     $cleanedHtml = this.encodeHtmlEntities($cleanedHtml);
     return this.charConvert($cleanedHtml.html());
@@ -479,5 +481,29 @@ export default {
     });
 
     return str;
+  },
+  /**
+   * Hack for devices with media queries unsupported
+   */
+  addMediaQueryHack(htmlStructure) {
+    const width = htmlStructure.find('.st-wrapper-table').width() || 600;
+    const style = `background-color: transparent; line-height: 1px; height: 1px; min-width: ${width}px;`;
+    const styleImage = `max-height: 1px; display: block; width: ${width}px; min-width: ${width}px; border: 0;`;
+    const src = `${Application.globals.baseUrl}/_common/images/en_us/spacer.gif`;
+    if (!htmlStructure.hasClass('st-hide-hack')) {
+      const $hack = $(`<tr>
+        <td class="st-hide-hack">
+          <table cellpadding="0" cellspacing="0" border="0" align="center" width="${width}">
+            <tr>
+              <td cellpadding="0" cellspacing="0" border="0" height="1" style="${style}">
+                <img src="${src}" height="1" width="${width}" style="${styleImage}"/>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>`)[0];
+      htmlStructure.find('.st-wrapper-table').append($hack);
+    }
+    return htmlStructure;
   },
 };

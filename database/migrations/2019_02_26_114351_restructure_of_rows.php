@@ -23,56 +23,57 @@ class RestructureOfRows extends Migration
     }
 
     protected function setNewEstructureOfRowsInStudio() {
-        $modules = Module::all();
-        Logging::info('-------------------------');
-        Logging::info('Studio modules');
-        Logging::info('-------------------------');
-        foreach ($modules as $key => &$module) {
-            $module_structure = $module->structure;
-            $module_plugins = $module->plugins;
+        Module::withTrashed()->chunk(20, function ($modules) {
+            Logging::info('-------------------------');
+            Logging::info('Studio modules');
+            Logging::info('-------------------------');
+            foreach ($modules as $key => &$module) {
+                $module_structure = $module->structure;
+                $module_plugins = $module->plugins;
 
-            if (isset($module_structure) && isset($module_structure['columns'])) {
+                if (isset($module_structure) && isset($module_structure['columns'])) {
 
-                Logging::info('--------------');
-                Logging::info('set module name : '.$module['name']);
-                Logging::info('Start set rows columns >>>>');
-                $module_structure['rows'] = [];
-                $module_structure['rows'][0] = [];
-                $module_structure['rows'][0]['id'] = 123456;
-                $module_structure['rows'][0]['type'] = 'row-element';
-                $module_structure['rows'][0]['columnsStacking'] = $module_structure['columnsStacking'];
-                $module_structure['rows'][0]['columns'] = $module_structure['columns'];
-                unset($module_structure['columns']);
-                unset($module_structure['columnsStacking']);
-                Logging::info('End <<<<');
+                    Logging::info('--------------');
+                    Logging::info('set module name : '.$module['name']);
+                    Logging::info('Start set rows columns >>>>');
+                    $module_structure['rows'] = [];
+                    $module_structure['rows'][0] = [];
+                    $module_structure['rows'][0]['id'] = 123456;
+                    $module_structure['rows'][0]['type'] = 'row-element';
+                    $module_structure['rows'][0]['columnsStacking'] = $module_structure['columnsStacking'] ?? 'normal';
+                    $module_structure['rows'][0]['columns'] = $module_structure['columns'];
+                    unset($module_structure['columns']);
+                    unset($module_structure['columnsStacking']);
+                    Logging::info('End <<<<');
 
-                Logging::info('Start set plugins rows >>>>');
-                $module_structure['rows'][0]['plugins'] = [];
-                if (isset($module_plugins['moduleEqualHeightForColumn'])) {
-                    $module_structure['rows'][0]['plugins']['rowEqualHeightForColumn'] = $module_plugins['moduleEqualHeightForColumn'];
-                    $module_structure['rows'][0]['plugins']['rowEqualHeightForColumn']['name'] = 'row-equal-height-for-column';
-                    $module_structure['rows'][0]['plugins']['rowEqualHeightForColumn']['target']= [];
-                    $module_structure['rows'][0]['plugins']['rowEqualHeightForColumn']['target'][0]= 'row';
+                    Logging::info('Start set plugins rows >>>>');
+                    $module_structure['rows'][0]['plugins'] = [];
+                    if (isset($module_plugins['moduleEqualHeightForColumn'])) {
+                        $module_structure['rows'][0]['plugins']['rowEqualHeightForColumn'] = $module_plugins['moduleEqualHeightForColumn'];
+                        $module_structure['rows'][0]['plugins']['rowEqualHeightForColumn']['name'] = 'row-equal-height-for-column';
+                        $module_structure['rows'][0]['plugins']['rowEqualHeightForColumn']['target']= [];
+                        $module_structure['rows'][0]['plugins']['rowEqualHeightForColumn']['target'][0]= 'row';
+                        unset($module_plugins['moduleEqualHeightForColumn']);
+                    }
+                    Logging::info('End <<<<');
+
+                    Logging::info('Start set container rows >>>>');
+                    $module_structure['rows'][0]['container'] = [];
+                    $module_structure['rows'][0]['container']['style'] = [];
+                    $module_structure['rows'][0]['container']['attribute'] = [];
+                    $module_structure['rows'][0]['container']['styleOption'] = [];
                     unset($module_plugins['moduleEqualHeightForColumn']);
+                    Logging::info('End <<<<');
                 }
-                Logging::info('End <<<<');
-
-                Logging::info('Start set container rows >>>>');
-                $module_structure['rows'][0]['container'] = [];
-                $module_structure['rows'][0]['container']['style'] = [];
-                $module_structure['rows'][0]['container']['attribute'] = [];
-                $module_structure['rows'][0]['container']['styleOption'] = [];
-                unset($module_plugins['moduleEqualHeightForColumn']);
-                Logging::info('End <<<<');
+                $module->structure = $module_structure;
+                $module->plugins = $module_plugins;
+                $module->timestamps = false;
+                $module->save();
             }
-            $module->structure = $module_structure;
-            $module->plugins = $module_plugins;
-            $module->timestamps = false;
-            $module->save();
-        }
+        });
     }
     protected function setNewEstructureOfRowsInCampaign() {
-        Campaign::withTrashed()->chunk(100, function ($campaigns) {
+        Campaign::withTrashed()->chunk(30, function ($campaigns) {
             Logging::info('-------------------------');
             Logging::info('Campaigns modules');
             Logging::info('-------------------------');
@@ -96,7 +97,7 @@ class RestructureOfRows extends Migration
                             $module_structure['rows'][0] = [];
                             $module_structure['rows'][0]['id'] = 123456;
                             $module_structure['rows'][0]['type'] = 'row-element';
-                            $module_structure['rows'][0]['columnsStacking'] = $module_structure['columnsStacking'];
+                            $module_structure['rows'][0]['columnsStacking'] = $module_structure['columnsStacking'] ?? 'normal';
                             $module_structure['rows'][0]['columns'] = $module_structure['columns'];
                             unset($module_structure['columns']);
                             unset($module_structure['columnsStacking']);

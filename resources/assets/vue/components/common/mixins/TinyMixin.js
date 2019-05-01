@@ -204,7 +204,8 @@ export default {
       return parseInt(editor.settings.min_chars) || undefined;
     },
     tinyLength() {
-      return this.$textElement.text().length;
+      // Remove "zero width no-break space" character
+      return this.$textElement.text().replace(/\uFEFF/g, '').length;
     },
     maxCharsValidation(event) {
       // Check for Characters Limit
@@ -228,9 +229,10 @@ export default {
       let firstTextNode = firstTextElement.firstChild;
 
       // if the first node is a text node, we go up to te parent element.
-      if (firstTextNode.nodeName === '#text') {
-        firstTextNode = firstTextElement;
-      }
+      if (firstTextNode) {
+        if (firstTextNode.nodeName === '#text') {
+          firstTextNode = firstTextElement;
+        }
 
       let lineHeight = 0;
 
@@ -245,19 +247,20 @@ export default {
       // note: to perform the correct calculation, actualLines must be an integer
       const actualLines = Math.floor(divHeight / lineHeight);
 
-      if (actualLines > this.tinyMaxLines()) {
-        this.setError({
-          toastMessage: `You've exceeded the maximum number of lines (${this.tinyMaxLines()})`,
-        });
+        if (actualLines > this.tinyMaxLines()) {
+          this.setError({
+            toastMessage: `You've exceeded the maximum number of lines (${this.tinyMaxLines()})`,
+          });
 
-        // Prevent insertion of more lines
-        if (event) {
-          event.preventDefault();
-          event.stopPropagation();
+          // Prevent insertion of more lines
+          if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          return false;
         }
-        return false;
+        this.clearError();
       }
-      this.clearError();
     },
     minCharsValidation(event) {
       if (this.tinyLength() < this.tinyMin()) {
