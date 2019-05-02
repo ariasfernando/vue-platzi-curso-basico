@@ -18,6 +18,7 @@ function Campaign(data) {
   this.campaign_settings = data.campaign.campaign_data.campaign_settings || {};
   this.append_html = data.campaign.campaign_data.append_html;
   this.prepend_html = data.campaign.campaign_data.prepend_html;
+  this.style = data.campaign.campaign_data.style || {};
   // hack to save fonts
   this.campaign_fonts = Vue.prototype.$_app.config.fonts || {};
 

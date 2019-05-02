@@ -30,6 +30,7 @@
             :bgcolor="component.button.attribute.bgcolor"
             :height="component.button.attribute.height"
             style="vertical-align: middle; width:100%;"
+            :class="outlookClass"
             :style="elementBorderPaddingAndHeight(component.button)">
             <table
               cellpadding="0"
@@ -108,30 +109,12 @@ export default {
   },
   mixins: [MobileStylesMixin, ElementMixin],
   computed: {
-    buttonStyles() {
-      const outlookStyles = `
-        margin-left: ${_.parseInt(this.component.button.style.paddingLeft || 0)}px !important; 
-        padding-right: ${_.parseInt(this.component.button.style.paddingRight || 0)}px !important; 
-        padding-left: 0px !important;
-        border: none !important;
-      `;
-      return `
-      <!--[if mso 15]>
-            <style type="text/css">
-                .outlook-padding-${this.componentId}{
-                    ${outlookStyles}
-                }
-            </style>
-        <![endif]-->
-        
-        <!--[if mso 16]>
-            <style type="text/css">
-                .outlook-padding-${this.componentId}{
-                    ${outlookStyles}
-                }
-            </style>
-        <![endif]-->
-      `;
+    paddingLeft() {
+      return _.parseInt(this.component.button.style.paddingLeft || 0);
+    },
+    outlookClass() {
+      // this class is used to define specific styles for buttons in Outlook
+      return `outlook-padding-${this.paddingLeft}`;
     },
     width() {
       return this.component.button.styleOption.autoWidth

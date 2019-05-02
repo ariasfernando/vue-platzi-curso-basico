@@ -295,15 +295,57 @@
         }
         return true;
       },
-      showProofTracking(){
+      showProofTracking() {
         this.$store.commit('campaign/toggleModal', 'modalProofTrack');
         return true;
       },
       template() {
-        this.$store.commit("campaign/toggleModal", 'modalEnableTemplating');
+        this.$store.commit('campaign/toggleModal', 'modalEnableTemplating');
       },
       checkProcessStatus(processId) {
         return campaignService.checkProcessStatus(processId);
+      },
+      getOutlookPaddings() {
+        const outlookPaddings = [];
+        _.each(this.modules, (module) => {
+          _.each(module.structure.columns, (column) => {
+            _.each(column.components, (component) => {
+              if (component.type === 'button-element') {
+                const padding = _.parseInt(component.button.style.paddingLeft || 0);
+                if (!outlookPaddings.includes(padding)) {
+                  outlookPaddings.push(padding);
+                }
+              }
+            });
+          });
+        });
+        return outlookPaddings;
+      },
+      getOutlookStyles() {
+        const outlookPaddings = this.getOutlookPaddings();
+        let outlookStyles = '';
+        _.each(outlookPaddings, (outlookPadding) => {
+          const styles = `
+            <style type="text/css">
+              .outlook-padding-${outlookPadding}{
+                margin-left: ${outlookPadding}px !important; 
+                padding-left: 0px !important;
+                border: none !important;
+              }
+            </style>
+          `;
+          const elementOutlookStyles = `
+            <!--[if mso 15]>
+              ${styles}
+            <![endif]-->
+              
+            <!--[if mso 16]>
+              ${styles}
+            <![endif]-->
+          `;
+          outlookStyles = `${outlookStyles} ${elementOutlookStyles}`;
+        });
+        return outlookStyles;
       },
       complete() {
         // Do not save if there are missing or wrong fields
@@ -330,27 +372,29 @@
         }
 
         const bodyHtml = html_beautify(cleanHtml, {
-          'indent_size': 2
+          indent_size: 2,
         });
 
         // Set campaign as processing
         this.$store.commit('campaign/setProcessingStatus');
 
+        this.$store.commit('campaign/saveOutlookStyle', this.getOutlookStyles());
+
         // Save Request
         this._save(bodyHtml).then(() => {
           // Process Campaign
-          this.$store.dispatch("campaign/completeCampaign", this.campaign)
+          this.$store.dispatch('campaign/completeCampaign', this.campaign)
             .then(completeResponse => {
 
               let finishedProcessing = () => {
                 // Set campaign as processed
                 this.$store.commit('campaign/setProcessStatus');
                 // Reload campaign data
-                this.$store.dispatch("campaign/getCampaignData", this.campaign.campaign_id).then(() => {
+                this.$store.dispatch('campaign/getCampaignData', this.campaign.campaign_id).then(() => {
                   // Show complete after campaign is completely processed
-                  this.$store.commit("campaign/toggleModal", 'modalComplete');
+                  this.$store.commit('campaign/toggleModal', 'modalComplete');
                   // Redirect to `/dashboard` if user refreshes the page
-                  window.history.replaceState(null, null, "?processed=true");
+                  window.history.replaceState(null, null, '?processed=true');
                 });
               };
 

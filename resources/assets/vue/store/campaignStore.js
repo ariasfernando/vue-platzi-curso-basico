@@ -438,6 +438,9 @@ function campaignStore() {
       error(err) {
         console.error(err);
       },
+      saveOutlookStyle(state, style) {
+        Vue.set(state.campaign.campaign_data, 'style', { ...state.style, outlook: style });
+      },
     },
     actions: {
       updateCustomElement(context, payload) {
