@@ -17,7 +17,7 @@
   </div>
 </template>
 <script>
-import mixinTiny from './mixins/TinyMixin.js';
+import mixinTiny from './mixins/TinyMixin';
 
 export default {
   mixins: [mixinTiny],
@@ -45,6 +45,11 @@ export default {
 };
 </script>
 <style lang="scss">
+[data-type='text-element'] .stx-edit-text,
+[data-type='button-element'] .stx-edit-text {
+  min-width: 10px;
+}
+
 .stx-toolbar {
   position: absolute;
   transform: translate(0, -35px);
@@ -61,12 +66,6 @@ export default {
   }
   .mce-menu-item-preview .mce-text {
     font-size: 14px !important;
-  }
-  [data-type='button-element'] .stx-edit-text {
-    min-width: 10px;
-  }
-  [data-type='text-element'] .stx-edit-text {
-    min-width: 10px;
   }
   .mce-grid td.mce-grid-cell div {
     line-height: 10px;
