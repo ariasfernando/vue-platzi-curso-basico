@@ -93,6 +93,15 @@ export default {
         ? this.moduleHeight[`row-${this.row.id}`]
         : 150;
     },
+    /**
+     * return cotnainer persistStyles (styles that vue doesn't accept)
+     * @returns {string|undefined}
+     * @example
+     * { "mso-hide": "all", "mso-table-lspace: 0pt" }
+     */
+    persistStyles() {
+      return JSON.stringify(_.get(this.component, 'container.styleOption.persistStyles'));
+    },
   },
   methods: {
     getTinyId(elementId, idInstance) {

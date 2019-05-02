@@ -1,5 +1,5 @@
 <template>
-  <element-container :component="component" @select-component="selectComponentHandler">
+  <ElementContainer :component="component" @select-component="selectComponentHandler">
     <ButtonBorderRadiusComment
       v-if="hasBorderRadius"
       :component="component"
@@ -21,6 +21,7 @@
         cellpadding="0"
         cellspacing="0"
         border="0"
+        :data-persist-styles="persistStyles"
         :width="buttonContainerWidth"
         :style="tableStyles">
         <tr>
@@ -42,7 +43,7 @@
                   :align="component.button.attribute.align"
                   :style="fontStyles(component.button)"
                   :valign="component.button.attribute.valign || ''">
-                  <tiny-mce
+                  <TinyMce
                     :editor-id="getTinyId(element.id, module.idInstance)"
                     :font-styles="fontStyles(component.button)"
                     :text="component.data.text"
@@ -76,7 +77,7 @@
       </table>
     </a>
     <div v-if="hasBorderRadius" class="stx-wrapper" v-html="notMsoEndingComment" />
-  </element-container>
+  </ElementContainer>
 </template>
 
 <script>
@@ -121,9 +122,9 @@ export default {
     },
     widthCaret() {
       return (
-        _.parseInt(this.component.caret.attribute.width) +
-          _.parseInt(this.component.caret.style.paddingLeft) ||
-        0 + _.parseInt(this.component.caret.style.paddingRight) ||
+        _.parseInt(this.component.caret.attribute.width, 10) +
+          _.parseInt(this.component.caret.style.paddingLeft, 10) ||
+        0 + _.parseInt(this.component.caret.style.paddingRight, 10) ||
         0
       );
     },
@@ -135,7 +136,7 @@ export default {
     },
     hasBorderRadius() {
       if (this.component.button.style.borderRadius) {
-        const borderRadius = parseInt(this.component.button.style.borderRadius);
+        const borderRadius = parseInt(this.component.button.style.borderRadius, 10);
         return borderRadius !== 0;
       }
       return false;

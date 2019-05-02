@@ -1,5 +1,5 @@
 <template>
-  <element-container :component="component" @select-component="selectComponentHandler">
+  <ElementContainer :component="component" @select-component="selectComponentHandler">
     <a
       :data-contenteditable-href="component.text.attribute.href"
       :style="component.text.style.textDecoration || 'text-decoration:none;'"
@@ -9,6 +9,7 @@
         :width="component.text.attribute.width || '100%'"
         :style="{'width': widthStyle(component.text.attribute.width) || '100%'}"
         :align="component.container.attribute.align"
+        :data-persist-styles="persistStyles"
         border="0"
         cellpadding="0"
         cellspacing="0">
@@ -20,7 +21,7 @@
             :align="component.text.attribute.align || 'left'"
             :bgcolor="component.text.attribute.bgcolor"
             :style="[fontStyles(component.text), elementBorderAndPadding(component.text), {width:'100%'}]">
-            <tiny-mce
+            <TinyMce
               :editor-id="getTinyId(element.id, module.idInstance)"
               :font-styles="fontStyles(component.text)"
               :text="component.data.text"
@@ -33,7 +34,7 @@
         </tr>
       </table>
     </a>
-  </element-container>
+  </ElementContainer>
 </template>
 
 <script>
