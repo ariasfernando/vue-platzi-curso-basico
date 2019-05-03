@@ -1,7 +1,7 @@
 <template>
   <ElementContainer :component="component" @select-component="selectComponentHandler">
     <ButtonBorderRadiusComment
-      v-if="hasBorderRadius"
+      v-if="applyBorderRadiusComment"
       :component="component"
       :module="module"
       :module-id="moduleId"
@@ -9,7 +9,7 @@
       :column-id="columnId"
       :component-id="componentId"
       :editor-id="`idInstance-${module.idInstance}-componentId-${component.id}`" />
-    <div v-if="hasBorderRadius" class="stx-wrapper" v-html="notMsoStartingComment" />
+    <div v-if="applyBorderRadiusComment" class="stx-wrapper" v-html="notMsoStartingComment" />
     <a
       :data-contenteditable-href="component.button.attribute.href || ''"
       :target="component.button.attribute.target || '_blank'"
@@ -76,7 +76,7 @@
         </tr>
       </table>
     </a>
-    <div v-if="hasBorderRadius" class="stx-wrapper" v-html="notMsoEndingComment" />
+    <div v-if="applyBorderRadiusComment" class="stx-wrapper" v-html="notMsoEndingComment" />
   </ElementContainer>
 </template>
 
@@ -134,12 +134,25 @@ export default {
     notMsoEndingComment() {
       return '<!--<![endif]-->';
     },
+    moduleHasBackgroundImage() {
+      const pluginEnabled = _.get(this.module.plugins, 'backgroundStyleImageEditor.enabled');
+      const hasBackgroundImage = !!_.get(this.module.plugins, 'backgroundStyleImageEditor.data.img');
+
+      return pluginEnabled && hasBackgroundImage;
+    },
     hasBorderRadius() {
-      if (this.component.button.style.borderRadius) {
-        const borderRadius = parseInt(this.component.button.style.borderRadius, 10);
+      if (this.component.button.style.borderRadius && !this.moduleHasBackgroundImage) {
+        const borderRadius = parseInt(this.component.button.style.borderRadius);
         return borderRadius !== 0;
       }
       return false;
+    },
+    /**
+     * Returns if button has to apply comment for outlook
+     * @returns {boolean}
+     */
+    applyBorderRadiusComment() {
+      return this.hasBorderRadius && !this.moduleHasBackgroundImage;
     },
     buttonContainerWidth() {
       const { behaviour } = this.component;
