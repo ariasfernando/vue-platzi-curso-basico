@@ -11,7 +11,7 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 	 */
 	echo "<he"; ?><?php echo "ad>"; ?>
 	
-		<!--if gte mso 9><xml>
+		<!--[if gte mso 9]><xml>
 			<o:OfficeDocumentSettings>
 			<o:AllowPNG/>
 			<o:PixelsPerInch>96</o:PixelsPerInch>
