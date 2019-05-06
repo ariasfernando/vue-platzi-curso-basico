@@ -17,7 +17,7 @@ xmlns:o="urn:schemas-microsoft-com:office:office">
 			<o:PixelsPerInch>96</o:PixelsPerInch>
 			</o:OfficeDocumentSettings>
 			</xml>
-		<!endif-->
+		<![endif]-->
 		
 		<!--[if IEMobile]>
 			<meta http-equiv="X-UA-Compatible" content="IE=edge">
