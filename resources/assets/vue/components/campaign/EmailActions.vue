@@ -308,14 +308,16 @@
       getOutlookPaddings() {
         const outlookPaddings = [];
         _.each(this.modules, (module) => {
-          _.each(module.structure.columns, (column) => {
-            _.each(column.components, (component) => {
-              if (component.type === 'button-element') {
-                const padding = _.parseInt(component.button.style.paddingLeft || 0);
-                if (!outlookPaddings.includes(padding)) {
-                  outlookPaddings.push(padding);
+          _.each(module.structure.rows, (row) => {
+            _.each(row.columns, (column) => {
+              _.each(column.components, (component) => {
+                if (component.type === 'button-element') {
+                  const padding = _.parseInt(component.button.style.paddingLeft || 0);
+                  if (!outlookPaddings.includes(padding)) {
+                    outlookPaddings.push(padding);
+                  }
                 }
-              }
+              });
             });
           });
         });
