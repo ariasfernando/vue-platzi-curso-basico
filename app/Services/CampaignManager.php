@@ -103,10 +103,6 @@ class CampaignManager
             $campaign->tracking = $inputs['tracking'];
         }
 
-        if (isset($inputs['tracking'])) {
-            $campaign->tracking = $inputs['tracking'];
-        }
-
         $campaign->tags = [];
         if (!empty($inputs['tags'])) {
             $campaign->tags = array_unique($inputs['tags']);
