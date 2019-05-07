@@ -141,8 +141,8 @@ export default {
       return pluginEnabled && hasBackgroundImage;
     },
     hasBorderRadius() {
-      if (this.component.button.style.borderRadius && !this.moduleHasBackgroundImage) {
-        const borderRadius = parseInt(this.component.button.style.borderRadius);
+      if (this.component.button.style.borderRadius) {
+        const borderRadius = parseInt(this.component.button.style.borderRadius, 10);
         return borderRadius !== 0;
       }
       return false;
