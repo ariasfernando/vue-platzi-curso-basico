@@ -37,14 +37,26 @@ export default {
     Spacer,
     WrapperComment,
   },
-  props: ['element', 'width'],
+  props: ['element', 'width', 'plugin'],
+  data() {
+    return {
+      wrapperHeight: 0,
+    };
+  },
+  mounted() {
+    if (this.hasbackgroundImage) this.updateWrapperHeight();
+  },
   computed: {
     backgroundHref() {
       return this.element.attribute.href ? `href="${this.element.attribute.href}"` : null;
     },
+    height() {
+      const attributeHeight = this.element.attribute.height || 0;
+      return Math.max(attributeHeight, this.wrapperHeight, this.imageHeight);
+    },
     msoStartingComment() {
       return `<!--[if gte mso 9]>
-                    <v:rect ${this.backgroundHref} xmlns:v="urn:schemas-microsoft-com:vml" fill="true" strokecolor="none" style="width:${this.convertPxToPt(this.width)}; height:${this.convertPxToPt(this.element.attribute.height)};" stroke="false">
+                    <v:rect ${this.backgroundHref} xmlns:v="urn:schemas-microsoft-com:vml" fill="true" strokecolor="none" style="width:${this.convertPxToPt(this.width)}; height:${this.convertPxToPt(this.height)};" stroke="false">
                     <v:fill type="frame" src="${this.element.style.backgroundImage}" ${this.MsoBgcolor} />
                     <v:textbox inset="0,0,0,0">
                       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
@@ -89,6 +101,12 @@ export default {
   methods: {
     convertPxToPt(value) {
       return `${Math.ceil(parseFloat(value) * 0.75)}pt`;
+    },
+    onKeyup: _.debounce(function() {
+      this.updateWrapperHeight();
+    }, 300),
+    updateWrapperHeight() {
+      this.wrapperHeight = this.$refs.wrapper.clientHeight;
     },
   },
 };
