@@ -38,21 +38,16 @@ export default {
     WrapperComment,
   },
   props: ['element', 'width', 'plugin'],
-  data() {
-    return {
-      wrapperHeight: 0,
-    };
-  },
-  mounted() {
-    if (this.hasbackgroundImage) this.updateWrapperHeight();
-  },
   computed: {
     backgroundHref() {
       return this.element.attribute.href ? `href="${this.element.attribute.href}"` : null;
     },
+    moduleHeight() {
+      return _.get(this.plugin, 'data.moduleHeight', 0);
+    },
     height() {
       const attributeHeight = this.element.attribute.height || 0;
-      return Math.max(attributeHeight, this.wrapperHeight, this.imageHeight);
+      return Math.max(attributeHeight, this.moduleHeight);
     },
     msoStartingComment() {
       return `<!--[if gte mso 9]>
@@ -61,7 +56,7 @@ export default {
                     <v:textbox inset="0,0,0,0">
                       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
                           <tr>
-                            <td width="100%" style="height:${this.convertPxToPt(this.element.attribute.height)};" valign="${this.valign}">
+                            <td width="100%" style="height:${this.convertPxToPt(this.height)};" valign="${this.valign}">
                   <![endif]-->`;
     },
     msoEndingComment() {
@@ -101,12 +96,6 @@ export default {
   methods: {
     convertPxToPt(value) {
       return `${Math.ceil(parseFloat(value) * 0.75)}pt`;
-    },
-    onKeyup: _.debounce(function() {
-      this.updateWrapperHeight();
-    }, 300),
-    updateWrapperHeight() {
-      this.wrapperHeight = this.$refs.wrapper.clientHeight;
     },
   },
 };
