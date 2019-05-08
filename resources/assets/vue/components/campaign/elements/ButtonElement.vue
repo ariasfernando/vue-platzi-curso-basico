@@ -114,7 +114,7 @@ export default {
     },
     outlookClass() {
       // this class is used to define specific styles for buttons in Outlook
-      return `outlook-padding-${this.paddingLeft}`;
+      return `st-outlook-padding-${this.paddingLeft}`;
     },
     width() {
       return this.component.button.styleOption.autoWidth
