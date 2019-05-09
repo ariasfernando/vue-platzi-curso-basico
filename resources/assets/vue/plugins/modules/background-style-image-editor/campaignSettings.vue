@@ -42,29 +42,7 @@ export default {
       overlayImages: [],
       image: {},
       isEdit: false,
-      moduleHeight: 0,
     };
-  },
-  computed: {
-    moduleElement() {
-      const moduleSelector = `[data-module-id='${this.moduleId}']`;
-
-      return this.buildingMode === 'desktop' ? $(moduleSelector) : $(this.iframe.contentDocument).find(moduleSelector);
-    },
-  },
-  watch: {
-    module: {
-      handler: _.debounce(function update() {
-        if (this.buildingMode === 'mobile') {
-          this.iframe.dispatchEvent(new Event('update-iframe'));
-          setTimeout(this.updateModuleHeight.bind(this), 150);
-        } else {
-          this.updateModuleHeight();
-        }
-      }, 100),
-      deep: true,
-      immediate: true,
-    },
   },
   created() {
     const ovGallery = _.get(this.plugin.config, 'sie-plugin-image-overlay_image.config.overlay_gallery.config.set_images.value');
@@ -149,18 +127,6 @@ export default {
         }
       }
       this.showImageEditor = true;
-    },
-    updateModuleHeight() {
-      const moduleHeight = this.moduleElement.height();
-
-      if (moduleHeight !== this.plugin.data.moduleHeight) {
-        this.saveElementInThisPluginData({
-          value: {
-            ...this.plugin.data,
-            moduleHeight,
-          },
-        });
-      }
     },
   },
 };

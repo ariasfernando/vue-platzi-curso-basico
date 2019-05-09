@@ -37,13 +37,21 @@ export default {
     Spacer,
     WrapperComment,
   },
-  props: ['element', 'width', 'plugin'],
+  props: ['element', 'width', 'module', 'moduleId'],
+  data() {
+    return {
+      moduleHeight: 0,
+    };
+  },
   computed: {
     backgroundHref() {
       return this.element.attribute.href ? `href="${this.element.attribute.href}"` : '';
     },
-    moduleHeight() {
-      return _.get(this.plugin, 'data.moduleHeight', 0);
+    buildingMode() {
+      return this.$store.getters['campaign/buildingMode'];
+    },
+    iframe() {
+      return document.getElementById('shadowRender');
     },
     height() {
       const attributeHeight = this.element.attribute.height || 0;
@@ -93,9 +101,35 @@ export default {
       return this.element.attribute.valign || 'top';
     },
   },
+  watch: {
+    module: {
+      handler: _.debounce(function update() {
+        if (!this.hasbackgroundImage) {
+          return false;
+        }
+
+        if (this.buildingMode === 'mobile') {
+          this.iframe.dispatchEvent(new Event('update-iframe'));
+          return setTimeout(this.updateModuleHeight.bind(this), 150);
+        }
+
+        return this.updateModuleHeight();
+      }, 100),
+      deep: true,
+      immediate: true,
+    },
+  },
   methods: {
     convertPxToPt(value) {
       return `${Math.ceil(parseFloat(value) * 0.75)}pt`;
+    },
+    getModuleElement() {
+      const moduleSelector = `[data-module-id='${this.moduleId}']`;
+
+      return this.buildingMode === 'desktop' ? $(moduleSelector) : $(this.iframe.contentDocument).find(moduleSelector);
+    },
+    updateModuleHeight() {
+      this.moduleHeight = this.getModuleElement().height();
     },
   },
 };
