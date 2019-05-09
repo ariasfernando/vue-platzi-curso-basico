@@ -329,6 +329,9 @@
         _.each(outlookPaddings, (outlookPadding) => {
           const styles = `
             <style type="text/css">
+              .st-outlook-disable-padding {
+								padding-left: 0px !important;
+              }
               .st-outlook-padding-${outlookPadding}{
                 margin-left: ${outlookPadding}px !important; 
                 padding-left: 0px !important;

@@ -30,7 +30,7 @@
             :bgcolor="component.button.attribute.bgcolor"
             :height="component.button.attribute.height"
             style="vertical-align: middle; width:100%;"
-            :class="outlookClass"
+            class="st-outlook-disable-padding"
             :style="elementBorderPaddingAndHeight(component.button)">
             <table
               cellpadding="0"
@@ -42,6 +42,7 @@
                 <td
                   :width="component.caret.attribute.url ? undefined : '100%'"
                   :align="component.button.attribute.align"
+                  :class="outlookClass"
                   :data-persist-styles="JSON.stringify({'mso-line-height-rule': 'exactly'})"
                   :style="fontStyles(component.button)"
                   :valign="component.button.attribute.valign || ''">
