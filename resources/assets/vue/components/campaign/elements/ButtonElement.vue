@@ -1,7 +1,7 @@
 <template>
-  <element-container :component="component" @select-component="selectComponentHandler">
+  <ElementContainer :component="component" @select-component="selectComponentHandler">
     <ButtonBorderRadiusComment
-      v-if="hasBorderRadius"
+      v-if="applyBorderRadiusComment"
       :component="component"
       :module="module"
       :module-id="moduleId"
@@ -9,7 +9,7 @@
       :column-id="columnId"
       :component-id="componentId"
       :editor-id="`idInstance-${module.idInstance}-componentId-${component.id}`" />
-    <div v-if="hasBorderRadius" class="stx-wrapper" v-html="notMsoStartingComment" />
+    <div v-if="applyBorderRadiusComment" class="stx-wrapper" v-html="notMsoStartingComment" />
     <a
       :data-contenteditable-href="component.button.attribute.href || ''"
       :target="component.button.attribute.target || '_blank'"
@@ -21,6 +21,7 @@
         cellpadding="0"
         cellspacing="0"
         border="0"
+        :data-persist-styles="persistStyles"
         :width="buttonContainerWidth"
         :style="tableStyles">
         <tr>
@@ -29,6 +30,7 @@
             :bgcolor="component.button.attribute.bgcolor"
             :height="component.button.attribute.height"
             style="vertical-align: middle; width:100%;"
+            class="st-outlook-disable-padding"
             :style="elementBorderPaddingAndHeight(component.button)">
             <table
               cellpadding="0"
@@ -40,16 +42,29 @@
                 <td
                   :width="component.caret.attribute.url ? undefined : '100%'"
                   :align="component.button.attribute.align"
+                  :class="outlookClass"
+                  :data-persist-styles="JSON.stringify({'mso-line-height-rule': 'exactly'})"
                   :style="fontStyles(component.button)"
                   :valign="component.button.attribute.valign || ''">
-                  <tiny-mce
-                    :editor-id="getTinyId(element.id, module.idInstance)"
-                    :font-styles="fontStyles(component.button)"
-                    :text="component.data.text"
-                    :text-dirty="component.data.textDirty"
-                    :type="component.type"
-                    :config="component.plugins.textOptions"
-                    @changeText="changeText" />
+                  <!-- this tag is used to enable clicking the button in Outlook -->
+                  <a
+                    :data-contenteditable-href="component.button.attribute.href || ''"
+                    :target="component.button.attribute.target || '_blank'"
+                    :data-persist-styles="JSON.stringify({'mso-line-height-rule': 'exactly', 'line-height': lineHeightCalculate(component.button)})"
+                    :style="component.button.style.textDecoration || 'text-decoration:none;'"
+                    class="stx-display-block stx-replace-p-tag"
+                    :title="component.button.attribute.title || ''"
+                    :data-description="component.button.attribute.dataDescription || ''"
+                    @click.prevent>
+                    <TinyMce
+                      :editor-id="getTinyId(element.id, module.idInstance)"
+                      :font-styles="fontStyles(component.button)"
+                      :text="component.data.text"
+                      :text-dirty="component.data.textDirty"
+                      :type="component.type"
+                      :config="component.plugins.textOptions"
+                      @changeText="changeText" />
+                  </a>
                 </td>
                 <td
                   v-if="component.caret.attribute.url"
@@ -75,8 +90,8 @@
         </tr>
       </table>
     </a>
-    <div v-if="hasBorderRadius" class="stx-wrapper" v-html="notMsoEndingComment" />
-  </element-container>
+    <div v-if="applyBorderRadiusComment" class="stx-wrapper" v-html="notMsoEndingComment" />
+  </ElementContainer>
 </template>
 
 <script>
@@ -95,6 +110,13 @@ export default {
   },
   mixins: [MobileStylesMixin, ElementMixin],
   computed: {
+    paddingLeft() {
+      return _.parseInt(this.component.button.style.paddingLeft || 0);
+    },
+    outlookClass() {
+      // this class is used to define specific styles for buttons in Outlook
+      return `st-outlook-padding-${this.paddingLeft}`;
+    },
     width() {
       return this.component.button.styleOption.autoWidth
         ? undefined
@@ -121,9 +143,9 @@ export default {
     },
     widthCaret() {
       return (
-        _.parseInt(this.component.caret.attribute.width) +
-          _.parseInt(this.component.caret.style.paddingLeft) ||
-        0 + _.parseInt(this.component.caret.style.paddingRight) ||
+        _.parseInt(this.component.caret.attribute.width, 10) +
+          _.parseInt(this.component.caret.style.paddingLeft, 10) ||
+        0 + _.parseInt(this.component.caret.style.paddingRight, 10) ||
         0
       );
     },
@@ -133,12 +155,25 @@ export default {
     notMsoEndingComment() {
       return '<!--<![endif]-->';
     },
+    moduleHasBackgroundImage() {
+      const pluginEnabled = _.get(this.module.plugins, 'backgroundStyleImageEditor.enabled');
+      const hasBackgroundImage = !!_.get(this.module.plugins, 'backgroundStyleImageEditor.data.img');
+
+      return pluginEnabled && hasBackgroundImage;
+    },
     hasBorderRadius() {
       if (this.component.button.style.borderRadius) {
-        const borderRadius = parseInt(this.component.button.style.borderRadius);
+        const borderRadius = parseInt(this.component.button.style.borderRadius, 10);
         return borderRadius !== 0;
       }
       return false;
+    },
+    /**
+     * Returns if button has to apply comment for outlook
+     * @returns {boolean}
+     */
+    applyBorderRadiusComment() {
+      return this.hasBorderRadius && !this.moduleHasBackgroundImage;
     },
     buttonContainerWidth() {
       const { behaviour } = this.component;
@@ -150,3 +185,8 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+  .stx-display-block {
+    display: block;
+  }
+</style>

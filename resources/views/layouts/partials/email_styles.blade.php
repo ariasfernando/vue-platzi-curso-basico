@@ -226,3 +226,11 @@
        }
     </style>
 <![endif]-->
+
+@if(isset($params['campaign_data']['style']['outlook']))
+    {!! $params['campaign_data']['style']['outlook'] !!}
+@endif
+{{-- Client Styles --}}
+@if(isset($params['campaign_data']['library_config']['propietaryCss']))
+    {!! $params['campaign_data']->getLibraryConfig('propietaryCss') !!}
+@endif

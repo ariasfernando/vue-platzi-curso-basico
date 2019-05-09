@@ -2,19 +2,19 @@
   <iframe
     id="shadowRender"
     :force="isRenderIframe"
-    @update-iframe="updateIframe"
-    ></iframe>
+    @update-iframe="updateIframe" />
 </template>
 
 <script>
 // The plugins that use it should updateIframe() it when it is necessary.
 // For a work correct in the plugin need a timeout for get the new render.
 import _ from 'lodash';
+
 export default {
-  name:'shadow-render',
+  name: 'ShadowRender',
   data() {
     return {
-      headEmail : ''
+      headEmail: '',
     };
   },
   computed: {
@@ -25,47 +25,42 @@ export default {
       return this.$store.getters['campaign/modules'];
     },
     isRenderIframe() {
-      if (!this.headEmail) {
-        this.setHeadEmail();
-      }
-    }
+      return this.setHeadEmail();
+    },
   },
   methods: {
     setHeadEmail() {
-      if (this.campaign.campaign_id) {
+      if (!this.headEmail && this.campaign.campaign_id) {
         const url = `/template/email-preview/${this.campaign.campaign_id}?no_body=true`;
         const request = Application.utils.doAjax(url, {
           type: 'GET',
-          dataType: "html",
+          dataType: 'html',
           data: {
-            campaign_id: this.campaign.campaign_id
-          }
+            campaign_id: this.campaign.campaign_id,
+          },
         });
         // Ajax: On Success
         request.done((response) => {
           this.headEmail = response;
         });
         // Ajax: On Fail
-        request.fail((jqXHR) => {
+        request.fail(() => {
         });
       }
     },
-    isRenderSetting(plugin, key) {
+    isRenderSetting(plugin) {
       return plugin.enabled && plugin.needShadowRender;
     },
-    updateIframe() {
-      setTimeout(() => {
-        let html = $('table#emailCanvas').clone();
-        html.find('.st-remove-element').remove();
-        html = Application.utils.removeWrappers(html);
-        this.headEmail
-          ? (html = this.headEmail.replace('</body>', html[0].outerHTML + '</body>'))
-          : (html = html[0].outerHTML);
-        document.getElementById('shadowRender').contentWindow.document.open();
-        document.getElementById('shadowRender').contentWindow.document.write(html);
-        document.getElementById('shadowRender').contentWindow.document.close();
-      }, 100);
-    }
+    updateIframe: _.debounce(function update() {
+      let html = $('table#emailCanvas').clone();
+      html.find('.st-remove-element').remove();
+      html = Application.utils.removeWrappers(html);
+      html = this.headEmail ? this.headEmail.replace('</body>', `${html[0].outerHTML}</body>`) : html[0].outerHTML;
+
+      document.getElementById('shadowRender').contentWindow.document.open();
+      document.getElementById('shadowRender').contentWindow.document.write(html);
+      document.getElementById('shadowRender').contentWindow.document.close();
+    }, 100),
   },
 };
 </script>

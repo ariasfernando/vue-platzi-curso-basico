@@ -5,6 +5,7 @@
       :style="{width:widthStyle(component.container.attribute.width || '100%')}"
       :valign="component.container.attribute.valign || 'top'"
       :align="component.container.attribute.align || 'left'"
+      :data-persist-styles="persistStyles"
       border="0"
       cellpadding="0"
       cellspacing="0">

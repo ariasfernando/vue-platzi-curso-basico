@@ -95,6 +95,10 @@ class CampaignManager
             $campaign->plain_text = self::replaceNormalText($campaign->mask_link_text);
         }
 
+        if (isset($inputs['style'])) {
+            $campaign->style = $inputs['style'];
+        }
+
         if (isset($inputs['tracking'])) {
             $campaign->tracking = $inputs['tracking'];
         }

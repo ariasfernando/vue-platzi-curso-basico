@@ -39,7 +39,12 @@
       :bgcolor="module.structure.attribute.bgcolor"
       :class=" { 'stx-show-error': hasErrors, [module.structure.attribute.classes]:module.structure.attribute.classes}"
       @mousedown.stop="onClickModule">
-      <background-image :key="modulebackgroundImage" :element="module.structure" :width="templateInnerWidth">
+      <background-image
+        :key="modulebackgroundImage"
+        :element="module.structure"
+        :width="templateInnerWidth"
+        :module="module"
+        :module-id="moduleId">
         <template :slot="modulebackgroundImage ? 'with-background-image': 'without-background-image' ">
           <template v-for="(row, rowIndex) in module.structure.rows">
             <RowContainer

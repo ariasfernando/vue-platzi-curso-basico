@@ -37,19 +37,34 @@ export default {
     Spacer,
     WrapperComment,
   },
-  props: ['element', 'width'],
+  props: ['element', 'width', 'module', 'moduleId'],
+  data() {
+    return {
+      moduleHeight: 0,
+    };
+  },
   computed: {
     backgroundHref() {
-      return this.element.attribute.href ? `href="${this.element.attribute.href}"` : null;
+      return this.element.attribute.href ? `href="${this.element.attribute.href}"` : '';
+    },
+    buildingMode() {
+      return this.$store.getters['campaign/buildingMode'];
+    },
+    iframe() {
+      return document.getElementById('shadowRender');
+    },
+    height() {
+      const attributeHeight = this.element.attribute.height || 0;
+      return Math.max(attributeHeight, this.moduleHeight);
     },
     msoStartingComment() {
       return `<!--[if gte mso 9]>
-                    <v:rect ${this.backgroundHref} xmlns:v="urn:schemas-microsoft-com:vml" fill="true" strokecolor="none" style="width:${this.convertPxToPt(this.width)}; height:${this.convertPxToPt(this.element.attribute.height)};" stroke="false">
+                    <v:rect ${this.backgroundHref} xmlns:v="urn:schemas-microsoft-com:vml" fill="true" strokecolor="none" style="width:${this.convertPxToPt(this.width)}; height:${this.convertPxToPt(this.height)};" stroke="false">
                     <v:fill type="frame" src="${this.element.style.backgroundImage}" ${this.MsoBgcolor} />
                     <v:textbox inset="0,0,0,0">
                       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
                           <tr>
-                            <td width="100%" style="height:${this.convertPxToPt(this.element.attribute.height)};" valign="${this.valign}">
+                            <td width="100%" style="height:${this.convertPxToPt(this.height)};" valign="${this.valign}">
                   <![endif]-->`;
     },
     msoEndingComment() {
@@ -86,9 +101,35 @@ export default {
       return this.element.attribute.valign || 'top';
     },
   },
+  watch: {
+    module: {
+      handler: _.debounce(function update() {
+        if (!this.hasbackgroundImage) {
+          return false;
+        }
+
+        if (this.buildingMode === 'mobile') {
+          this.iframe.dispatchEvent(new Event('update-iframe'));
+          return setTimeout(this.updateModuleHeight.bind(this), 150);
+        }
+
+        return this.updateModuleHeight();
+      }, 100),
+      deep: true,
+      immediate: true,
+    },
+  },
   methods: {
     convertPxToPt(value) {
       return `${Math.ceil(parseFloat(value) * 0.75)}pt`;
+    },
+    getModuleElement() {
+      const moduleSelector = `[data-module-id='${this.moduleId}']`;
+
+      return this.buildingMode === 'desktop' ? $(moduleSelector) : $(this.iframe.contentDocument).find(moduleSelector);
+    },
+    updateModuleHeight() {
+      this.moduleHeight = this.getModuleElement().height();
     },
   },
 };

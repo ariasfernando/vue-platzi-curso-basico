@@ -76,7 +76,7 @@ export default {
             this.updateProperty('attribute', 'height', data.state.outputSize.height);
           }
           if (this.plugin.config['background-style-image-editor'].config.addClassEqualHeight) {
-            this.addClassToElement({value:'st-equal-height'});
+            this.addClassToElement({ value: 'st-equal-height' });
           }
           const temp = {};
           temp.img = data.img;
