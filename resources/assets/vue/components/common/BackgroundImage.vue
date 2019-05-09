@@ -40,7 +40,7 @@ export default {
   props: ['element', 'width', 'plugin'],
   computed: {
     backgroundHref() {
-      return this.element.attribute.href ? `href="${this.element.attribute.href}"` : null;
+      return this.element.attribute.href ? `href="${this.element.attribute.href}"` : '';
     },
     moduleHeight() {
       return _.get(this.plugin, 'data.moduleHeight', 0);
