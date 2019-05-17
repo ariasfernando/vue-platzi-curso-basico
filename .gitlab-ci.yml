@@ -42,7 +42,7 @@ test_composer_vulnerabilities:
   stage: test
   # <<: *composer_install
   script:
-    # - php composer.phar install
+    - php composer.phar install
     - wget http://get.sensiolabs.org/security-checker.phar
     - php security-checker.phar security:check composer.lock
 
@@ -50,7 +50,7 @@ phpunit:
   stage: test
   # <<: *composer_install
   script:
-    # - php composer.phar install
+    - php composer.phar install
     # Enable xdebug for code coverage
     # - yum install php72-php-pecl-xdebug.x86_64 -y
     # - ln -s /opt/remi/php72/root/usr/lib64/php/modules/xdebug.so /usr/lib64/php/modules/xdebug.so
