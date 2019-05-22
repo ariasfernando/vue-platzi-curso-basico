@@ -36,7 +36,7 @@ test_composer_vulnerabilities:
 phpunit:
   stage: test
   script:
-    - php composer.phar install
+    - composer install
     - vendor/bin/phpunit --coverage-html ci/storage/tmp/be_coverage/ --colors=never
   artifacts:
     when: always
@@ -48,7 +48,7 @@ phpunit:
 phplint:
   stage: test
   script:
-    - cd ci/; php ../composer.phar install; cd ..
+    - cd ci/; composer install; cd ..
     - ci/vendor/bin/parallel-lint --no-colors --blame . --exclude vendor --exclude node_modules
       --exclude storage --exclude tmp --exclude ci > ci/storage/tmp/phplint.txt
   artifacts:
