@@ -1,6 +1,7 @@
 <template>
   <tr>
     <td
+      :class="customClass"
       width="100%"
       :valign="valign || 'top'"
       :align="align"
@@ -16,7 +17,7 @@
 <script>
 export default {
   name: 'Spacer',
-  props: ['valign', 'align', 'bgcolor', 'height'],
+  props: ['valign', 'align', 'bgcolor', 'height', 'customClass'],
   data() {
     return {
       dataPersistStyles: {
