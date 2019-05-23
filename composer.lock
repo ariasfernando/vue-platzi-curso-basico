@@ -4,11 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "content-hash": "e569fc527ec77186b8f94382fe1e88b2",
-=======
     "content-hash": "316c928cc1e579e1ad7e15dafe6514ac",
->>>>>>> origin/v2.28.4-dev
     "packages": [
         {
             "name": "akamai-open/edgegrid-auth",
@@ -123,18 +119,6 @@
         },
         {
             "name": "aws/aws-sdk-php",
-<<<<<<< HEAD
-            "version": "3.93.10",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "6ecd66087eb928b75ab1f645e57c85f597fd6548"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6ecd66087eb928b75ab1f645e57c85f597fd6548",
-                "reference": "6ecd66087eb928b75ab1f645e57c85f597fd6548",
-=======
             "version": "3.94.1",
             "source": {
                 "type": "git",
@@ -145,7 +129,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/759a565285324d2248b6ee783de541ce65bddd46",
                 "reference": "759a565285324d2248b6ee783de541ce65bddd46",
->>>>>>> origin/v2.28.4-dev
                 "shasum": ""
             },
             "require": {
@@ -215,11 +198,7 @@
                 "s3",
                 "sdk"
             ],
-<<<<<<< HEAD
-            "time": "2019-05-15T18:08:48+00:00"
-=======
             "time": "2019-05-21T18:29:47+00:00"
->>>>>>> origin/v2.28.4-dev
         },
         {
             "name": "bjeavons/zxcvbn-php",
@@ -1425,11 +1404,7 @@
         },
         {
             "name": "laravel/socialite",
-<<<<<<< HEAD
-            "version": "3.0.x-dev",
-=======
             "version": "v3.3.0",
->>>>>>> origin/v2.28.4-dev
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/socialite.git",
@@ -1621,18 +1596,6 @@
         },
         {
             "name": "league/flysystem",
-<<<<<<< HEAD
-            "version": "1.0.51",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "755ba7bf3fb9031e6581d091db84d78275874396"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/755ba7bf3fb9031e6581d091db84d78275874396",
-                "reference": "755ba7bf3fb9031e6581d091db84d78275874396",
-=======
             "version": "1.0.52",
             "source": {
                 "type": "git",
@@ -1643,7 +1606,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/c5a5097156387970e6f0ccfcdf03f752856f3391",
                 "reference": "c5a5097156387970e6f0ccfcdf03f752856f3391",
->>>>>>> origin/v2.28.4-dev
                 "shasum": ""
             },
             "require": {
@@ -1714,11 +1676,7 @@
                 "sftp",
                 "storage"
             ],
-<<<<<<< HEAD
-            "time": "2019-03-30T13:22:34+00:00"
-=======
             "time": "2019-05-20T20:21:14+00:00"
->>>>>>> origin/v2.28.4-dev
         },
         {
             "name": "league/flysystem-aws-s3-v3",
