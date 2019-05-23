@@ -7433,7 +7433,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "laravel/socialite": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
