@@ -49,6 +49,24 @@ return [
             'cly-stentul-emails-japan' => 23114,
             'cly-stentul-emails-partners' => 23113,
             'cly-stentul-emails-row' => 23112,            
+        ],
+        'folder_by_permission' => [
+            'access-marketo-folder-emails' => [
+                'folder_name' => 'Stensul Emails',
+                'folder_id' => 22983,
+            ],
+            'access-marketo-folder-emails-japan' => [
+                'folder_name' => 'Stensul Emails - Japan',
+                'folder_id' => 23114,
+            ],
+            'access-marketo-folder-emails-partners' => [
+                'folder_name' => 'Stensul Emails - Partners',
+                'folder_id' => 23113,
+            ],
+            'access-marketo-folder-emails-row' => [
+                'folder_name' => 'Stensul Emails - ROW',
+                'folder_id' => 23112,
+            ]           
         ]
     ],
 ];

@@ -19,11 +19,13 @@
             <responsys-upload
               v-else-if="espProviderConfig.title == 'Responsys'"
               :esp-provider-config="espProviderConfig" />
-            <default-upload
-              v-else
+            <marketo-upload
+              v-else-if="espProviderConfig.title == 'Marketo'"
               :esp-provider-config="espProviderConfig" />
+            <default-upload
+            v-else :esp-provider-config="espProviderConfig"/>
           </slot>
-          <slot name="footer" />
+          <slot name="footer"/>
         </div>
       </div>
     </div>
@@ -31,51 +33,53 @@
 </template>
 
 <script>
-  import configService from '../../../services/config';
-  import EloquaUpload from './partials/ModalEloquaUpload.vue';
-  import SilverpopUpload from './partials/ModalSilverpopUpload.vue';
-  import EpsilonUpload from './partials/ModalEpsilonUpload.vue';
-  import ResponsysUpload from './partials/ModalResponsysUpload.vue';
-  import DefaultUpload from './partials/ModalDefaultUpload.vue';
+import configService from '../../../services/config';
+import EloquaUpload from './partials/ModalEloquaUpload.vue';
+import SilverpopUpload from './partials/ModalSilverpopUpload.vue';
+import EpsilonUpload from './partials/ModalEpsilonUpload.vue';
+import ResponsysUpload from './partials/ModalResponsysUpload.vue';
+import DefaultUpload from './partials/ModalDefaultUpload.vue';
+import MarketoUpload from './partials/ModalMarketoUpload.vue';
 
-  export default {
-    components: {
-      EloquaUpload,
-      SilverpopUpload,
-      EpsilonUpload,
-      DefaultUpload,
-      ResponsysUpload,
+export default {
+  components: {
+    EloquaUpload,
+    SilverpopUpload,
+    EpsilonUpload,
+    DefaultUpload,
+    ResponsysUpload,
+    MarketoUpload,
+  },
+  data() {
+    return {
+      espProviderConfig: {},
+      uploadedSuccessfully: false,
+    };
+  },
+  computed: {
+    modalEsp() {
+      return this.$store.state.campaign.modalEsp;
     },
-    data() {
-      return {
-        espProviderConfig: {},
-        uploadedSuccessfully: false,
-      };
+    campaign() {
+      return this.$store.state.campaign.campaign;
     },
-    computed: {
-      modalEsp() {
-        return this.$store.state.campaign.modalEsp;
-      },
-      campaign() {
-        return this.$store.state.campaign.campaign;
-      },
-    },
-    created() {
-      if (this.campaign.library_config.espProvider) {
-        configService.getConfig(`api.${this.campaign.library_config.espProvider}`)
-          .then((response) => { this.espProviderConfig = response; });
-      }
-    },
-    methods: {
-      close() {
-        this.$store.commit('campaign/toggleModal', 'modalEsp');
-        window.location.href = '/#finished-campaign';
-      },
-    },
-    created () {
-      if (this.campaign.library_config.espProvider && this.campaign.library_config.espProvider !== 'none') {
-        configService.getConfig('api.' + this.campaign.library_config.espProvider).then((response) => this.espProviderConfig = response);
-      }
+  },
+  created() {
+    if (this.campaign.library_config.espProvider) {
+      configService.getConfig(`api.${this.campaign.library_config.espProvider}`)
+        .then((response) => { this.espProviderConfig = response; });
     }
-  };
+  },
+  methods: {
+    close() {
+      this.$store.commit('campaign/toggleModal', 'modalEsp');
+      window.location.href = '/#finished-campaign';
+    },
+  },
+  created() {
+    if (this.campaign.library_config.espProvider && this.campaign.library_config.espProvider !== 'none') {
+      configService.getConfig('api.' + this.campaign.library_config.espProvider).then((response) => (this.espProviderConfig = response));
+    }
+  },
+};
 </script>

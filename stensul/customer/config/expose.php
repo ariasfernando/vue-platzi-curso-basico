@@ -12,12 +12,16 @@ return [
     'view' => '*',
     'api' => [
         'marketo' => [
-            'title', 'class'
+            'title',
+            'class',
+            'folder_by_permission' 
         ],
     ],
     'esp' => [
         'marketo' => [
-            'title', 'class'
+            'title',
+            'class',
+            'folder_by_permission'
         ],
     ],
 ];

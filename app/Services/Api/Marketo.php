@@ -37,7 +37,8 @@ class Marketo implements ApiConnector
                 if ($this->access_token = $this->getToken()) {
                     $campaign_id = $request['campaign_id'];
                     // get folder
-                    if ($folder = $this->getFolder()) {
+                    $folder_id = isset($request['filename']) ? $request['folder_id'] : null;
+                    if ($folder = $this->getFolder($folder_id)) {
                         if (isset($folder['folderType']) && $folder['folderType'] === 'Email Template') {
                             $filename = Upload::versioningFilename($original_filename);
                             $resp = $this->call('upload_email', [
