@@ -1,6 +1,6 @@
 <template>
   <div class="modal-upload">
-    <h4>UUUpload to {{ espProviderConfig.title }}</h4>
+    <h4>Upload to {{ espProviderConfig.title }}</h4>
 
     <div class="modal-container-inner">
       <div v-if="uploadedSuccessfully" class="response-message response-message-success alert alert-success beta-alert beta-alert-success">
@@ -16,12 +16,12 @@
               placeholder="Enter a name for your campaign" data-validation='{ "required":"true" }'
               v-model="filename"/>
         </div>
-        <div class="form-group">
+        <div v-if="espProviderConfig.folder_by_permission && folders.length" class="form-group">
           <label>Folder to upload</label>
           <stui-select
             v-model="folder"
             :list="folders"
-            :placeholder="`Choose a folder`"
+            placeholder="Choose a folder"
             class="width-full" />
         </div>
         <div class="uploaded-data" data-info="filename">
@@ -82,22 +82,23 @@ export default {
     },
   },
   created() {
-    const folders = [];
-    let n = 0;
-    let folderByPermission = [];
+    if (this.espProviderConfig.folder_by_permission) {
+      const folders = [];
+      let n = 0;
+      let folderByPermission = [];
 
-    folderByPermission = Object.entries(this.espProviderConfig.folder_by_permission);
+      folderByPermission = Object.entries(this.espProviderConfig.folder_by_permission);
 
-    folderByPermission.forEach((folder) => {
-      if (this.$_app.config.permissions.indexOf(folder[0]) >= 0) {
-        folders[n++] = {
-          value: folder[1].folder_id,
-          label: folder[1].folder_name,
-        };
-      }
-    });
-    this.folders = folders;
-
+      folderByPermission.forEach((folder) => {
+        if (this.$_app.config.permissions.indexOf(folder[0]) >= 0) {
+          folders[n++] = {
+            value: folder[1].folder_id,
+            label: folder[1].folder_name,
+          };
+        }
+      });
+      this.folders = folders;
+    }
     this.updateUploadedTable();
   },
   methods: {
@@ -133,6 +134,11 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-
+<style lang="less">
+  .el-scrollbar {
+      z-index: 99999!important;
+  }
+  .el-select-dropdown {
+    z-index: 99999!important;
+  }
 </style>
