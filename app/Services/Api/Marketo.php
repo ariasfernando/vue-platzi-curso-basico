@@ -30,14 +30,14 @@ class Marketo implements ApiConnector
     public function uploadEmail($campaign = null, $request = null)
     {
         if (!is_null($campaign)) {
-            $original_filename = (is_null($request) || !isset($request['filename']))
-                ? $campaign->campaign_name : $request['filename'];
+            $original_filename = !empty($request['filename']) ? $request['filename'] : $campaign->campaign_name;
             if (strlen($original_filename)) {
                 // get token
                 if ($this->access_token = $this->getToken()) {
                     $campaign_id = $request['campaign_id'];
                     // get folder
-                    if ($folder = $this->getFolder()) {
+                    $folder_id = !empty($request['folder_id']) ? $request['folder_id'] : null;
+                    if ($folder = $this->getFolder($folder_id)) {
                         if (isset($folder['folderType']) && $folder['folderType'] === 'Email Template') {
                             $filename = Upload::versioningFilename($original_filename);
                             $resp = $this->call('upload_email', [
@@ -150,19 +150,10 @@ class Marketo implements ApiConnector
     private function getFolder($folder_id = null)
     {
         $folder = [];
+        $folder_config = $this->marketo_config['folder'];
 
         if (is_null($folder_id)) {
-        
-            $user = Auth::user();
-            $roles = array_intersect($user->roles, array_keys($this->marketo_config['folder_by_role']));
-
-            if(!empty($roles)) {
-                $role = array_pop($roles);
-                $folder_id = $this->marketo_config['folder_by_role'][$role];
-            } else {
-                $folder_config = $this->marketo_config['folder'];
-                $folder_id = $folder_config['id'];
-            }
+            $folder_id = $folder_config['id'];
         }
 
         if ($folder_id) {

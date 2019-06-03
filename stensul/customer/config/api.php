@@ -44,11 +44,23 @@ return [
             'type' => 'GET',
             'url' => '/rest/asset/v1/folders.json'
         ],       
-        'folder_by_role' => [
-            'cly-stentul-emails' => 22983,
-            'cly-stentul-emails-japan' => 23114,
-            'cly-stentul-emails-partners' => 23113,
-            'cly-stentul-emails-row' => 23112,            
+        'folder_by_permission' => [
+            'access-marketo-folder-emails' => [
+                'folder_name' => 'Stensul Emails',
+                'folder_id' => env('API_MARKETO_FOLDER_STENSUL'),
+            ],
+            'access-marketo-folder-emails-japan' => [
+                'folder_name' => 'Stensul Emails - Japan',
+                'folder_id' => env('API_MARKETO_FOLDER_JAPAN'),
+            ],
+            'access-marketo-folder-emails-partners' => [
+                'folder_name' => 'Stensul Emails - Partners',
+                'folder_id' => env('API_MARKETO_FOLDER_PARTNERS'),
+            ],
+            'access-marketo-folder-emails-row' => [
+                'folder_name' => 'Stensul Emails - ROW',
+                'folder_id' => env('API_MARKETO_FOLDER_ROW'),
+            ]           
         ]
     ],
 ];
