@@ -446,11 +446,9 @@
         });
 
         this.$store.commit('campaign/saveOutlookStyle', this.getOutlookStyles());
-        setTimeout(() => {
-          this._save(bodyHtml).then(response => {
-            this.$store.commit("campaign/toggleModal", 'modalPreview');
-          });
-        }, 10);
+        this._save(bodyHtml).then(response => {
+          this.$store.commit("campaign/toggleModal", 'modalPreview');
+        });
       },
       proof() {
         // Do not save if there are missing or wrong fields
