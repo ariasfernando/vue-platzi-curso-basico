@@ -444,6 +444,8 @@
         const bodyHtml = html_beautify(cleanHtml, {
           'indent_size': 2
         });
+
+        this.$store.commit('campaign/saveOutlookStyle', this.getOutlookStyles());
         this._save(bodyHtml).then(response => {
           this.$store.commit("campaign/toggleModal", 'modalPreview');
         });
