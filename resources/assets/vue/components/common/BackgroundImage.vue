@@ -41,6 +41,20 @@ export default {
   data() {
     return {
       moduleHeight: 0,
+      // a debounced handler per component instance
+      updateModuleHeightHandler: _.debounce(function update() {
+        if (!this.hasbackgroundImage) {
+          return false;
+        }
+
+        if (this.buildingMode === 'mobile') {
+          this.iframe.dispatchEvent(new Event('update-iframe'));
+          return setTimeout(this.updateModuleHeight.bind(this), 150);
+        }
+
+        return this.updateModuleHeight();
+      }, 100),
+
     };
   },
   computed: {
@@ -103,18 +117,9 @@ export default {
   },
   watch: {
     module: {
-      handler: _.debounce(function update() {
-        if (!this.hasbackgroundImage) {
-          return false;
-        }
-
-        if (this.buildingMode === 'mobile') {
-          this.iframe.dispatchEvent(new Event('update-iframe'));
-          return setTimeout(this.updateModuleHeight.bind(this), 150);
-        }
-
-        return this.updateModuleHeight();
-      }, 100),
+      handler() {
+        this.updateModuleHeightHandler();
+      },
       deep: true,
       immediate: true,
     },
