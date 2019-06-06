@@ -140,9 +140,58 @@
       },
       previewBodyClass () {
         return this.isPublic ? 'col-md-12' : 'col-md-8';
-      }
+      },
+      modules() {
+        return this.$store.getters["campaign/modules"];
+      },
     },
     methods: {
+      getOutlookPaddings() {
+        const outlookPaddings = [];
+        _.each(this.modules, (module) => {
+          _.each(module.structure.rows, (row) => {
+            _.each(row.columns, (column) => {
+              _.each(column.components, (component) => {
+                if (component.type === 'button-element') {
+                  const padding = _.parseInt(component.button.style.paddingLeft || 0);
+                  if (!outlookPaddings.includes(padding)) {
+                    outlookPaddings.push(padding);
+                  }
+                }
+              });
+            });
+          });
+        });
+        return outlookPaddings;
+      },
+      getOutlookStyles() {
+        const outlookPaddings = this.getOutlookPaddings();
+        let outlookStyles = '';
+        _.each(outlookPaddings, (outlookPadding) => {
+          const styles = `
+            <style type="text/css">
+              .st-outlook-disable-padding {
+								padding-left: 0px !important;
+              }
+              .st-outlook-padding-${outlookPadding}{
+                margin-left: ${outlookPadding}px !important; 
+                padding-left: 0px !important;
+              }
+            </style>
+          `;
+          const elementOutlookStyles = `
+            <!--[if mso 15]>
+              ${styles}
+            <![endif]-->
+              
+            <!--[if mso 16]>
+              ${styles}
+            <![endif]-->
+          `;
+          outlookStyles = `${outlookStyles} ${elementOutlookStyles}`;
+        });
+        return outlookStyles;
+      },
       close () {
         this.$store.commit("campaign/toggleModal", 'modalPreview');
         this.widthPreview = this.widthDesktop;
@@ -156,6 +205,8 @@
         const preheader = document.getElementById('send-preview-preheader')
           ? document.getElementById('send-preview-preheader').value
           : null;
+
+        this.$store.commit('campaign/saveOutlookStyle', this.getOutlookStyles());
 
         this.$store.commit("global/setLoader", true);
         this.$store.dispatch("campaign/sendPreview", {
