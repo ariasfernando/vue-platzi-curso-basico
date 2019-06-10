@@ -59,7 +59,7 @@ export default {
     changeStyles(tags, style, target) {
       const editor = tinymce.get(this.editorId);
       const targetElm = target || editor.targetElm;
-      const elements = targetElm.querySelectorAll(tags);
+      const elements = targetElm.querySelectorAll(tags) || [];
       if (elements.length) {
         elements.forEach((el) => {
           utils.setCssStyle(el, style);
