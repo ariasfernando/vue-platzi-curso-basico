@@ -1,5 +1,5 @@
 <template>
-  <line-comment :comment="content" />
+  <LineComment :comment="content" />
 </template>
 
 <script>
@@ -91,16 +91,13 @@ export default {
       return `<!--[if mso]>
           <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
             <tr>
-              <td width="100%" valign="top" align="${
-                this.buttonAlignment
-              }" style="padding: 0px; width: 100%; height:${
-        this.outerHeight
-      }pt;">
+              <td width="100%" valign="top" align="${this.buttonAlignment}" style="padding: 0px; width: 100%; height:${this.outerHeight}pt;">
                 <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
                   href="${this.href}"
-                  style="height:${this.height}pt; v-text-anchor:middle; width:${
-        this.width
-      }pt; mso-position-horizontal: ${this.buttonAlignment};"
+                  style="height:${this.height}pt;
+                  v-text-anchor:middle;
+                  width:${this.width}pt;
+                  mso-position-horizontal: ${this.buttonAlignment};"
                   arcsize="${this.arcSize}%"
                   strokecolor="${this.borderColor}"
                   strokeweight="${this.borderWidth}pt"
@@ -132,7 +129,7 @@ export default {
     },
   },
   watch: {
-    element: {
+    component: {
       handler() {
         this.setAll();
       },
@@ -191,7 +188,7 @@ export default {
       const $editorSpans = $(`#${this.editorId}`).find('span');
       const editorHighestLineHeight = Math.max(
         ...$editorSpans
-          .map(function() {
+          .map(function () {
             return $(this).height();
           })
           .get(),

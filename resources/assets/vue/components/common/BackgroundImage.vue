@@ -9,14 +9,15 @@
       :target="element.attribute.target || '_blank'"
       @click.prevent>
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
-       <spacer v-if="paddingTop" :height="paddingTop" />
+        <spacer v-if="paddingTop" :height="paddingTop" custom-class="st-bgi-top" />
+
         <slot name="with-background-image" />
 
       <wrapper-comment
         v-if="paddingBottom"
         start="<!--[if !gte mso 9]>--->"
         end="<!--<![endif]-->">
-        <spacer :height="paddingBottom" />
+        <spacer :height="paddingBottom" custom-class="st-bgi-bottom" />
       </wrapper-comment>
 
     </table>

@@ -4,6 +4,7 @@
 /public/js
 /public/fonts
 /public/images/campaigns
+/public/images/vendor
 /public/build
 /public/images/customer
 /public/mix-manifest.json
@@ -36,3 +37,4 @@ typings.json
 typings/
 ci/vendor/
 dump.rdb
+security-checker.*
