@@ -1,9 +1,10 @@
 /* eslint camelcase:0 */
 import Adapter from './tinymce/Adapter';
 import listStylesFix from './tinymce/listStyles.fix';
+import utils from './tinymce/utils';
 
 export default {
-  props: ['editor-id', 'textDirty', 'type', 'config', 'fontStyles', 'text', 'tinyClass'],
+  props: ['editor-id', 'textDirty', 'type', 'config', 'fontStyles', 'text', 'tinyClass', 'sync'],
   mixins: [
     Adapter,
   ],
@@ -55,17 +56,14 @@ export default {
       this.setListStyles();
       this.setLinkStyles();
     },
-    changeStyles(selector, styles) {
+    changeStyles(tags, style, target) {
       const editor = tinymce.get(this.editorId);
-      const editorLinks = $(editor.targetElm).find(selector);
-      if (editorLinks.length) {
-        for (let i = 0; i < editorLinks.length; i++) {
-          if (typeof styles === 'string') {
-            $(editorLinks[i]).css('cssText', styles);
-          } else {
-            $(editorLinks[i]).css(styles);
-          }
-        }
+      const targetElm = target || editor.targetElm;
+      const elements = targetElm.querySelectorAll(tags);
+      if (elements.length) {
+        elements.forEach((el) => {
+          utils.setCssStyle(el, style);
+        });
       }
     },
     setLinkStyles() {
@@ -147,7 +145,6 @@ export default {
       const ul_fixed_style = editor.settings.ul_fixed_style;
       const ol_fixed_style = editor.settings.ol_fixed_style;
       const li_fixed_style = editor.settings.li_fixed_style;
-      const li_keep_children_style = editor.settings.li_keep_children_style;
 
       if (ul_fixed_style) {
         this.changeStyles('ul', ul_fixed_style);
@@ -158,6 +155,7 @@ export default {
       if (li_fixed_style && Application.utils.isJsonString(li_fixed_style)) {
         this.changeStyles('li', JSON.parse(li_fixed_style));
       }
+      const li_keep_children_style = editor.settings.li_keep_children_style;
 
       if (li_keep_children_style) {
         const editorLists = $(editor.targetElm).find('li');
@@ -176,6 +174,91 @@ export default {
           }
         });
       }
+
+      const lists = editor.targetElm.querySelectorAll('ul, ol') || [];
+      lists.forEach((list) => {
+        const firstLi = list.firstElementChild;
+        this.setListAlignment(firstLi);
+      });
+    },
+    setListAlignment(listItem, alignment) {
+      const editor = tinymce.get(this.editorId);
+      const directionality = _.get(this.textOptions, 'config.settings.direction.content', 'ltr');
+      const list = listItem.parentElement;
+      const listItems = list.querySelectorAll('li');
+      const listItemStyle = {
+        textAlign: listItem.style.textAlign,
+      };
+
+
+      /**
+       * set listItem (LI) align and style-position
+       */
+      if (alignment) {
+        switch (alignment) {
+          case 'Justify':
+            listItemStyle.textAlign = 'justify';
+            break;
+          case 'JustifyCenter':
+            listItemStyle.textAlign = 'center';
+            break;
+          case 'JustifyRight':
+            listItemStyle.textAlign = 'right';
+            break;
+          default:
+            listItemStyle.textAlign = 'left';
+            break;
+        }
+      }
+
+      if (
+        (directionality === 'ltr' && listItemStyle.textAlign !== '' && 'center right'.includes(listItemStyle.textAlign)) ||
+        (directionality === 'rtl' && listItemStyle.textAlign !== '' && 'center left'.includes(listItemStyle.textAlign))
+      ) {
+        listItemStyle.listStylePosition = 'inside';
+        listItemStyle.marginLeft = '0px';
+        listItemStyle.marginRight = '0px';
+      } else {
+        listItemStyle.listStylePosition = '';
+      }
+      /**
+       * if listStylePosition is defined, change set all Paragraphs to display inline.
+       * else, restore default = ''
+       */
+      listItems.forEach((item) => {
+        if (listItemStyle.listStylePosition) {
+          item.querySelectorAll('p').forEach(p =>
+            utils.setCssStyle(p, { display: 'inline' }),
+          );
+        } else {
+          item.querySelectorAll('p').forEach(p =>
+            utils.setCssStyle(p, { display: '', textAlign: '' }),
+          );
+        }
+        utils.setCssStyle(item, listItemStyle);
+      });
+
+      /**
+       * Set List Style (UL, OL)
+       * if listStylePosition is defined, set margins to 0
+       * else, restore fixedStyles
+       */
+      const listStyle = {};
+      if (listItemStyle.listStylePosition) {
+        listStyle.marginLeft = 0;
+        listStyle.marginRight = 0;
+      } else {
+        const listFixedStyles = {
+          ul: _.mapKeys(utils.getCssObj(editor.settings.ul_fixed_style), (v, k) => _.camelCase(k)),
+          ol: _.mapKeys(utils.getCssObj(editor.settings.ol_fixed_style), (v, k) => _.camelCase(k)),
+        };
+
+        listStyle.marginLeft = list.nodeName === 'UL' ? listFixedStyles.ul.marginLeft : listFixedStyles.ol.marginLeft;
+        listStyle.marginRight = list.nodeName === 'UL' ? listFixedStyles.ul.marginRight : listFixedStyles.ol.marginRight;
+        listStyle.listStylePosition = '';
+      }
+
+      utils.setCssStyle(list, listStyle);
     },
     tinyMaxLines() {
       const editor = tinymce.get(this.editorId);
@@ -564,9 +647,15 @@ export default {
               _this.setStyles();
             })
             .on('ExecCommand', (e) => {
+              if (e.command.includes('Justify')) {
+                const selectedList = editor.dom.getParent(editor.selection.getStart(), 'li');
+                if (selectedList) _this.setListAlignment(selectedList, e.command);
+              }
               if (e.command === 'mceInsertContent' && $(e.value)[0].nodeName === 'A') {
                 _this.setLinkStyles();
               }
+              // Emit this event in order to update tiny content when styles are changed.
+              editor.bodyElement.dispatchEvent(new Event('tiny-style-change'));
             });
           listStylesFix(editor);
         },
