@@ -74,7 +74,7 @@ export default {
     msoStartingComment() {
       return `<!--[if gte mso 9]>
                     <v:rect ${this.backgroundHref} xmlns:v="urn:schemas-microsoft-com:vml" fill="true" strokecolor="none" style="width:${this.convertPxToPt(this.width)}; height:${this.convertPxToPt(this.height)};" stroke="false">
-                    <v:fill type="frame" src="${this.element.style.backgroundImage}" ${this.MsoBgcolor} />
+                    <v:fill type="frame" src="${this.$_app.config.imageUrl}${this.element.style.backgroundImage}" ${this.MsoBgcolor} />
                     <v:textbox inset="0,0,0,0">
                       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
                           <tr>
