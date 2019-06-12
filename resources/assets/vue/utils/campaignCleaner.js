@@ -547,4 +547,27 @@ export default {
     }
     return htmlStructure;
   },
+  fontFamilyUsed(selector) {
+    let $canvas = null;
+    let $cleanedHtml = null;
+
+    $canvas = $(selector);
+
+    // Clone content
+    $cleanedHtml = $canvas.clone(true);
+    const all = $cleanedHtml.find('p, span, div, h1, h2, h3, h4, h5, a, td');
+    let fontFamiliesUsed = [];
+    $.map(all, (el) => {
+      let elFontFamily = el.style.fontFamily;
+      if (elFontFamily.length > 0) {
+        elFontFamily = elFontFamily.split(',');
+        elFontFamily.forEach((value) => {
+          const font = value.replace(/'|"/g, '').trim();
+          fontFamiliesUsed.push(font);
+        });
+      }
+    });
+    fontFamiliesUsed = _.union(_.flattenDeep(fontFamiliesUsed));
+    return fontFamiliesUsed;
+  },
 };

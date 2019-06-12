@@ -441,6 +441,9 @@ function campaignStore() {
       saveOutlookStyle(state, style) {
         Vue.set(state.campaign.campaign_data, 'style', { ...state.style, outlook: style });
       },
+      setFontFamilyUsed(state, fontsUsed) {
+        Vue.set(state.campaign.campaign_data, 'campaign_fonts_used', fontsUsed);
+      },
     },
     actions: {
       updateCustomElement(context, payload) {

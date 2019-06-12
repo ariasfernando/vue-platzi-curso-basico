@@ -21,6 +21,7 @@ function Campaign(data) {
   this.style = data.campaign.campaign_data.style || {};
   // hack to save fonts
   this.campaign_fonts = Vue.prototype.$_app.config.fonts || {};
+  this.campaign_fonts_used = data.campaign.campaign_data.campaign_fonts_used || false;
 
   return this;
 }
