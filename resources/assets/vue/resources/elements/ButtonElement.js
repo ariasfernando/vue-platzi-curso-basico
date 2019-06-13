@@ -28,6 +28,7 @@ export default {
     styleOption: {
       autoWidth: true,
       isNormalLetterSpacing: false,
+      disableOutlookComment: false,
     },
     attribute: {
       width: '150',
