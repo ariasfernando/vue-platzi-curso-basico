@@ -173,6 +173,7 @@ export default {
      * @returns {boolean}
      */
     applyBorderRadiusComment() {
+      if (this.component.button.styleOption.disableOutlookComment) return false;
       return this.hasBorderRadius && !this.moduleHasBackgroundImage;
     },
     buttonContainerWidth() {
