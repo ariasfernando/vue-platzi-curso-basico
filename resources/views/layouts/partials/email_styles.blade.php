@@ -99,7 +99,7 @@
                 $fontPath = url('/') . "/fonts/";
 
                 foreach ($fonts as $a => $font) {
-                    if (isset($font['folder']) || (isset($font['source']) && $font['source'] === 'studio')) {
+                    if ((isset($font['folder']) || (isset($font['source']) && $font['source'] === 'studio')) && (empty($params['campaign_data']['campaign_fonts_used']) || in_array($font['name'], $params['campaign_data']['campaign_fonts_used']))) {
                         $definition = "";
                         $ie = "";
 

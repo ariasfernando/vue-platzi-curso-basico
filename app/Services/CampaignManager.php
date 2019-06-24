@@ -83,6 +83,10 @@ class CampaignManager
             $campaign->campaign_fonts = $inputs['campaign_fonts'];
         }
 
+        if (isset($inputs['campaign_fonts_used'])) {
+            $campaign->campaign_fonts_used = $inputs['campaign_fonts_used'];
+        }
+
         if (isset($inputs['body_html'])) {
             $campaign->body_html = $inputs['body_html'];
         }

@@ -384,6 +384,10 @@
 
         this.$store.commit('campaign/saveOutlookStyle', this.getOutlookStyles());
 
+        // Set font families used
+        var fontFamilyUsed = campaignCleaner.fontFamilyUsed(cleanHtml);
+        this.$store.commit("campaign/setFontFamilyUsed", fontFamilyUsed);
+
         // Save Request
         this._save(bodyHtml).then(() => {
           // Process Campaign
