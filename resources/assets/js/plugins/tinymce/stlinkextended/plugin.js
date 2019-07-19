@@ -58,12 +58,15 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                 tinymce.util.XHR.send({
                     url: linkList,
                     success: function (text) {
+                        console.log('entra por success')
                         callback(tinymce.util.JSON.parse(text), targetIsLink);
                     }
                 });
             } else if (typeof linkList == "function") {
+                console.log('entra por link list.');
                 linkList(callback);
             } else {
+                console.log('entra por else');
                 callback(linkList, targetIsLink);
             }
         };
