@@ -15,25 +15,56 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         stLinksExtended.running = true;
     }
     var linkButton = null;
+    var selected_color = null;
+
+    function isLink(elementSelection) {
+
+        var foundElement = 0;
+
+        var endParent = editor.dom.doc.activeElement;
+
+        var currentElement = elementSelection;
+
+        function findLinkInParents(element) {
+            if(!element instanceof HTMLElement)
+                return -1;
+            
+            if(element === endParent)
+                return -1;
+
+            if(element.parentNode instanceof HTMLAnchorElement)
+                return 1;
+
+            currentElement = element.parentNode;
+            return 0;
+            
+        }
+
+        while(foundElement === 0) {
+            foundElement = findLinkInParents(currentElement);
+        }
+
+        return foundElement > 0 ;
+
+
+    }
 
     function createLinkList(callback) {
         return function () {
             var linkList = editor.settings.link_list;
-
+            var targetIsLink = isLink(editor.selection.getEnd());
             if (typeof linkList == "string") {
                 tinymce.util.XHR.send({
                     url: linkList,
                     success: function (text) {
-                        callback(tinymce.util.JSON.parse(text));
+                        callback(tinymce.util.JSON.parse(text), targetIsLink);
                     }
                 });
             } else if (typeof linkList == "function") {
                 linkList(callback);
             } else {
-                callback(linkList);
+                callback(linkList, targetIsLink);
             }
-
-            editor.bodyElement.dispatchEvent(new Event('tiny-style-change'));
         };
     }
 
@@ -63,15 +94,15 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         return appendItems(inputList, startItems || []);
     }
 
-    function showDialog (linkList) {
+    function showDialog (linkList, isLink) {
 
         if (linkButton) {
             var textSelection = editor.selection.getContent({format : 'text'});
 
-            /* in case link button is fired with keyboard shortcut, we check if there is or not a text selection */
-            if (!textSelection || $.trim( editor.selection.getContent({format : 'text'})) == '') {
-                /* if there is no selection, and link button is not active (meaning that there is no link in current cursor position)
-                finish function here */
+        /* in case link button is fired with keyboard shortcut, we check if there is or not a text selection */
+        if (!textSelection || $.trim( editor.selection.getContent({format : 'text'})) == '') {
+            /* if there is no selection, and link button is not active (meaning that there is no link in current cursor position)
+            finish function here */
                 if (linkButton.active() == false) {
                     return false;
                 }
@@ -125,6 +156,8 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
             }
         }
 
+
+
         function urlChange(e) {
             var meta = e.meta || {};
 
@@ -141,6 +174,23 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
             }
 
             data.href = this.value();
+        }
+
+        function updateTitle(e) {
+            data.title = this.value();
+        }
+
+
+        function getColorList(color_list) {
+            var list = color_list.link_colors_list;
+            // Chek if palette from library is enabled
+            if(Object.prototype.hasOwnProperty.call(color_list, 'textcolor_from_library')){
+                var JsonList =  JSON.parse(vm.$store.state.campaign.campaign.library_config.colorPalettes)[Object.prototype.hasOwnProperty.call(color_list, 'palette_name') ? color_list.palette_name : 'default'];
+                list = _.chunk(JsonList,2).map(function (item) {
+                    return { text : '#' + item[0], value: '#' + item[0] };
+                });
+            }
+            return list;
         }
 
         function urlValidate(e) {
@@ -173,25 +223,25 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
             data.href = href;
         }
         function getSelectionContent() {
-          selectedElm = selection.getNode();
-          return (selectedElm.textContent === selection.getContent()) ? selectedElm.outerHTML : selection.getContent();
-        }
+            selectedElm = selection.getNode();
+            return (selectedElm.textContent === selection.getContent()) ? selectedElm.outerHTML : selection.getContent();
+          }
 
-        function validateDescription(target){
-            var description = target.value;
-            return validateNoSpaces( description );
-        }
+          function validateDescription(target){
+              var description = target.value;
+              return validateNoSpaces( description );
+          }
 
-        function validateNoSpaces( value ){
-            if( !value ){
-                return true;
-            }
+          function validateNoSpaces( value ){
+              if( !value ){
+                  return true;
+              }
 
-            if( value.indexOf(" ") >= 0 ){
-                return false;
-            }
+              if( value.indexOf(" ") >= 0 ){
+                  return false;
+              }
 
-            return true;
+              return true;
         }
 
         function getSelectionContent() {
@@ -204,11 +254,19 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
           // for that reason, we use the editor selection to insert the link executing the mceInsertLink.
           // and instead of using formatLinkContent, we check again the link_format.
           if(editor.settings.link_format.bold)
-            editor.formatter.toggle('bold');
+            editor.formatter.apply('bold');
           if(editor.settings.link_format.underline)
-            editor.formatter.toggle('underline');
+            editor.formatter.apply('underline');
           editor.execCommand('mceInsertLink', false, linkAttrs);
           setTimeout(function(){editor.selection.collapse()},100);
+        }
+        function mceUnLink(){
+            editor.execCommand('unlink');
+            if(editor.settings.link_format.bold)
+                editor.formatter.remove('bold');
+            if(editor.settings.link_format.underline)
+                editor.formatter.remove('underline');
+            editor.selection.getNode().style.color = null;
         }
 
         function isOnlyTextSelected(anchorElm) {
@@ -234,6 +292,39 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
             }
 
             return true;
+        }
+
+        function getGammaTitle() {
+            var title = 'Mask';
+            if (Application.globals.maskLinksTitle !== '') {
+                title = _.capitalize(Application.globals.maskLinksTitle + ' tag');
+            }
+            return title;
+        }
+
+        function hasStyle(styleObject, name) {
+            var has = false;
+            for (var i in styleObject) {
+                if (styleObject[i].name) {
+                    if (styleObject[i].name == name) {
+                        has = true;
+                    }
+                }
+            }
+            return has;
+        }
+
+        function getColor(defaultColor) {
+            var hexColor = defaultColor ? defaultColor.toUpperCase() : defaultColor;
+            if (!hexColor) {
+                var nodeSpan = editor.selection.getNode();
+                var $parentEl = $(nodeSpan).parents().filter(function () {
+                    return $(this).css('color');
+                });
+                var selectionColor = new tinyMCE.util.Color($parentEl.css('color'));
+                hexColor = selectionColor.toHex().toUpperCase();
+            }
+            return hexColor;
         }
 
         selectedElm = selection.getNode();
@@ -262,6 +353,8 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
 
         if ((value = dom.getAttrib(anchorElm, 'title'))) {
             data.title = value;
+        } else if (editor.settings.link_title) {
+            data.title = "";
         }
 
         if (editor.settings.link_text_to_display !== false && onlyText) {
@@ -283,10 +376,10 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                 values: buildListItems(
                     linkList,
                     function (item) {
-                        item.value = editor.convertURL(item.value || item.url, 'href');
-                    },
-                    [{ text: 'None', value: '' }]
-                    ),
+                  item.value = editor.convertURL(item.value || item.url, 'href');
+                },
+                [{ text: 'None', value: '' }]
+                ),
                 onselect: linkListChangeHandler,
                 value: editor.convertURL(data.href, 'href'),
                 onPostRender: function () {
@@ -321,7 +414,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                 name: 'data_description',
                 type: 'textbox',
                 size: 40,
-                label: 'Description',
+                label: getGammaTitle(),
                 value: data.dataDescription || '',
                 onfocusout: function (e) {
                     validateDescription(e.target);
@@ -354,6 +447,65 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
             };
         }
 
+        if (editor.settings.link_color_palette) {
+            var colorList = getColorList(editor.settings.link_color_palette);
+            var defaultColor = Object.prototype.hasOwnProperty.call(editor.settings, 'link_fixed_color') ? editor.settings.link_fixed_color : null;
+            colorsListCtrl = {
+                name: 'color',
+                type: 'buttongroup',
+                label: 'Link color',
+                classes: 'modal-link-colors',
+                items: colorList,
+                onPostRender: function () {
+                    selected_color = null;
+                    var $element = this.$el;
+                    if ($element.find('button').length > 0) {
+                        $element.find('button').each(function (index, button) {
+                            $(button).css('background-color', $(button).text()).data('color', $(button).text());
+                            $(button).attr('title', $(button).text()).data('color', $(button).text());
+                            if (getColor(defaultColor) === $(button).text().toUpperCase()){
+                                $(button).addClass('selected');
+                                selected_color = $(button).text().toUpperCase();
+                            }
+                            if (Application.utils.isTooDark($(button).text(), 200)) {
+                                $(button).css('color', '#FFFFFF');
+                            } else {
+                                $(button).css('color', '#000000');
+                            }
+
+                            $(button).on('click', function (event) {
+                                var self = this;
+                                $element.find('.selected').removeClass('selected');
+                                $(this).addClass('selected');
+                                data.style = data.style || [];
+                                if (!hasStyle(data.style, 'color')) {
+                                    data.style.push({
+                                        name: 'color',
+                                        value: $(self).data('color')
+                                    });
+                                } else {
+                                    data.style = data.style.map(function (item) {
+                                        if (item.name == 'color') {
+                                            item.value = $(self).data('color');
+                                        }
+                                        return item;
+                                    });
+                                }
+                                selected_color = data.style[0].value;
+                            });
+                        });
+                        if (data.style) {
+                            $.each(data.style, function (index, style) {
+                                if (style.name === 'color') {
+                                    $element.find('button:contains("' + style.value.toUpperCase() + '")').addClass('selected');
+                                }
+                            });
+                        }
+                    }
+                }
+            };
+        }
+
         if (editor.settings.link_class_list) {
             classListCtrl = {
                 name: 'class',
@@ -371,13 +523,13 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                     )
             };
         }
-
         if (editor.settings.link_title !== false) {
             linkTitleCtrl = {
                 name: 'title',
                 type: 'textbox',
                 label: 'Title',
-                value: data.title
+                value: data.title,
+                onkeyup: updateTitle,
             };
         }
 
@@ -408,6 +560,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                 targetListCtrl,
                 classListCtrl,
                 dataDescCtrl,
+                colorsListCtrl,
             ],
             onSubmit: function (e) {
 
@@ -416,12 +569,13 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
 
                 var validDescription = true;
                 // Validate data description format.
-                if( $('.mce-container-body .mce-textbox:eq(1)').length ){
-                    validDescription = validateDescription($('.mce-container-body .mce-textbox:eq(1)')[0]);
+                if(win.find('#data_description').length){
+                    validDescription = validateDescription(win.find('#data_description').value);
                 }
 
-                var href;
+                var href, title;
                 href = data.href;
+                title = data.title;
 
                 var dataDescription = e.data.data_description || undefined;
 
@@ -446,7 +600,9 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                         ")" +
                         "(?::\\d{2,5})?" +
                         "(?:[/?#]\\S*)?" +
-                        "$", "i"
+                        "$" +
+                        "|" +
+                        "^tel:" , "i"
                         );
                     return (pattern.test(url));
                 }
@@ -479,24 +635,24 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                     }
 
                     // Apply link fixed color
-                    if (editor.settings.link_force_color && editor.settings.link_fixed_color && /^#[0-9A-F]{6}$/i.test(editor.settings.link_fixed_color)) {
+                    if ((editor.settings.link_color_palette && selected_color) || (editor.settings.link_force_color && editor.settings.link_fixed_color && /^#[0-9A-F]{6}$/i.test(editor.settings.link_fixed_color))) {
                         var wrapper = document.createElement('span');
                         wrapper.innerHTML = (typeof formattedContent === 'object') ? formattedContent.outerHTML : formattedContent;
 
                         // if has html tags and has only one html element and if span, add style
                         if (wrapper.childElementCount === 1 && wrapper.childNodes[0].nodeName === "SPAN") {
-                            wrapper.firstChild.style.color = editor.settings.link_fixed_color;
+                            wrapper.firstChild.style.color = editor.settings.link_color_palette &&  selected_color ? selected_color : editor.settings.link_fixed_color;
                             // return inner span to avoid span duplication
                             formattedContent = wrapper.innerHTML;
                         }
 
                         // else, add color to wrapper and return
-                        wrapper.style.color = editor.settings.link_fixed_color;
+                        wrapper.style.color = editor.settings.link_color_palette &&  selected_color ? selected_color : editor.settings.link_fixed_color;
                         // force color in inner spans that have a color
                         var spans = wrapper.getElementsByTagName('span');
                         _.each(spans, function(span){
                             if (span.style.color) {
-                                span.style.color = editor.settings.link_fixed_color;
+                                span.style.color = editor.settings.link_color_palette &&  selected_color ? selected_color : editor.settings.link_fixed_color;
                             }
                         });
                         formattedContent = wrapper.outerHTML;
@@ -506,12 +662,18 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                 }
 
                 function insertLink() {
+
+                    var title = data.title ? data.title : null;
+                    if(editor.settings.link_title && data.title === ''){
+                         title = "";
+                    }
+
                     var linkAttrs = {
                         href: href,
                         target: data.target ? data.target : null,
                         rel: data.rel ? data.rel : null,
                         "class": data["class"] ? data["class"] : null,
-                        title: data.title ? data.title : null,
+                        title: title,
                         "data-mce-href": href
                     };
 
@@ -532,10 +694,17 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                         dom.setAttribs(anchorElm, linkAttrs);
                         anchorElm.href = linkAttrs.href;
 
+                        if(editor.settings.link_color_palette && selected_color) {
+                            anchorElm.style.color = selected_color;
+                            $(anchorElm).children().each(function (index, item) {
+                                $(item).css('color', selected_color);
+                            });
+                        }
+
                         selection.select(anchorElm);
                         editor.undoManager.add();
                     } else {
-                        if (onlyText) {
+                                              if (onlyText) {
 
                             var matches = [];
 
@@ -554,8 +723,8 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                     }
                 }
 
-                if (!href) {
-                    editor.execCommand('unlink');
+                if (!href && isLink) {
+                    mceUnLink();
                     return;
                 }
 
@@ -587,7 +756,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                         return false;
                     }
 
-                    if( !validDescription ){
+                    if(editor.settings.data_description && !validDescription ){
                         var noSpacesAllowTxt = 'Spaces are not allow.';
                         $('.mce-container-body .mce-textbox:eq(1)')
                             .addClass('error')
@@ -660,7 +829,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
                 insertLink();
 
                 /* After submitting, tinymce releases the selection, so we have to disable link button */
-                linkButton.disabled(true);
+               linkButton.disabled(true);
             }
         });
     }
@@ -682,10 +851,7 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         icon: 'unlink',
         tooltip: 'Remove link',
         cmd: 'unlink',
-        stateSelector: 'a[href]',
-        onclick: function() {
-          editor.bodyElement.dispatchEvent(new Event('tiny-style-change'));
-        },
+        stateSelector: 'a[href]'
     });
 
     editor.addShortcut('Meta+K', '', createLinkList(showDialog));
@@ -703,9 +869,9 @@ tinymce.PluginManager.add('stlinkextended', function (editor) {
         prependToContext: true
     });
 
-});
+  });
 
-var stLinksExtended = {
+  var stLinksExtended = {
     running: false,
     buttons: {},
     checkLinkButton: function() {
@@ -732,4 +898,4 @@ var stLinksExtended = {
             }
         }
     }
-};
+  };
