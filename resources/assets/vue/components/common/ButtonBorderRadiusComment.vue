@@ -93,7 +93,7 @@ export default {
             <tr>
               <td width="100%" valign="top" align="${this.buttonAlignment}" style="padding: 0px; width: 100%; height:${this.outerHeight}pt;">
                 <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
-                  href="${this.href}"
+                  data-outlook-href="${this.href}"
                   style="height:${this.height}pt;
                   v-text-anchor:middle;
                   width:${this.width}pt;

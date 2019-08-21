@@ -10,7 +10,7 @@
               <settings-container v-if="item.input_type !== 'hidden'" :key="key" :label="item.label" custom-class="field-Tags">
                 <template v-if="item.input_type === 'select'" slot="setting-bottom">
                   <stui-select
-                    v-validate="'required'"
+                    v-validate="`${isRequired(item)}`"
                     :name="`trk-${item.name}`"
                     :value="trackingData[`trk-${key}`]"
                     placeholder=""
@@ -33,7 +33,7 @@
                 </template>
                 <template v-else slot="setting-bottom">
                   <stui-input-text
-                    v-validate="'required'"
+                    v-validate="`${isRequired(item)}`"
                     :name="`trk-${item.name}`"
                     :value="trackingData[`trk-${key}`]"
                     :controls="false"
@@ -110,6 +110,9 @@
         if (inputType !== 'text_without_validation') {
           this.onInputChange(key, value.replace(/[\<\>\s]/g, ''));
         }
+      },
+      isRequired(item) {
+        return item.optional && item.optional === true ? '' : 'required';
       },
     },
   };

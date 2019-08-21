@@ -41,7 +41,8 @@ export default {
       Object.keys(this.trackingConfig).forEach((param) => {
         const key = `trk-${param}`;
 
-        if (typeof trackingData[key] === 'undefined' || trackingData[key] === '') {
+        if ((typeof this.trackingConfig[param].optional === 'undefined' || this.trackingConfig[param].optional !== true) &&
+          (typeof trackingData[key] === 'undefined' || trackingData[key] === '')) {
           $toast(
             `Error: ${this.trackingConfig[param].label} is required`,
             {
@@ -89,26 +90,7 @@ export default {
             return false;
           }
 
-          let anchor = '';
-          const anchorPos = linkHref.indexOf('#');
-
-          if (anchorPos !== -1) {
-            anchor = linkHref.substring(anchorPos);
-            linkHref = linkHref.replace(anchor, '');
-          }
-
-          if (linkHref.length > 0) {
-            Object.keys(trackingConfigGroups.replaceLinks).forEach((param) => {
-              const key = `trk-${param}`;
-              const separator = linkHref.indexOf('?') !== -1 ? '&' : '?';
-              const value = typeof trackingData[key] !== 'undefined' ? trackingData[key] : '';
-              linkHref += `${separator}${param}=${value}`;
-            });
-          }
-
-          if (anchor.length) {
-            linkHref += anchor;
-          }
+          linkHref = this.addTrackingParamsToHref(linkHref, trackingConfigGroups);
 
           link.setAttribute('href', linkHref);
         });
@@ -129,11 +111,55 @@ export default {
           tmpWrapper.appendChild(child);
         });
 
-        return tmpWrapper.innerHTML;
+        return this.replaceDataOutlookHref(tmpWrapper.innerHTML, trackingConfigGroups);
       }
 
       tmpWrapper.appendChild(dom.body.firstChild);
-      return tmpWrapper.innerHTML;
+      return this.replaceDataOutlookHref(tmpWrapper.innerHTML, trackingConfigGroups);
+    },
+    /**
+   * @param {string} href
+   * @param {Object} trackingConfigGroups
+   * @returns {string} href with tracking params
+   */
+    addTrackingParamsToHref(href, trackingConfigGroups) {
+      const trackingData = this.campaignData.tracking;
+      let linkHref = href;
+      let anchor = '';
+      const anchorPos = linkHref.indexOf('#');
+
+      if (anchorPos !== -1) {
+        anchor = linkHref.substring(anchorPos);
+        linkHref = linkHref.replace(anchor, '');
+      }
+
+      if (linkHref.length > 0) {
+        Object.keys(trackingConfigGroups.replaceLinks).forEach((param) => {
+          const key = `trk-${param}`;
+          const separator = linkHref.indexOf('?') !== -1 ? '&' : '?';
+          if (typeof trackingData[key] === 'undefined' || trackingData[key].length > 0) {
+            linkHref += `${separator}${param}=${trackingData[key]}`;
+          }
+        });
+      }
+
+      if (anchor.length) {
+        linkHref += anchor;
+      }
+
+      return linkHref;
+    },
+    /**
+     * Replace data-outlook-href with href and tracking params
+     * @param {string} html
+     * @param {Object} trackingConfigGroups
+     * @returns {string} html
+     */
+    replaceDataOutlookHref(html, trackingConfigGroups) {
+      return html.replace(
+        /data-outlook-href="([^"]+)"/g,
+        (match, hrefValue) => `href="${this.addTrackingParamsToHref(hrefValue, trackingConfigGroups)}"`,
+      );
     },
   },
 };
