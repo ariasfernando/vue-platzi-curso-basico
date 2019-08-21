@@ -41,7 +41,8 @@ export default {
       Object.keys(this.trackingConfig).forEach((param) => {
         const key = `trk-${param}`;
 
-        if (typeof trackingData[key] === 'undefined' || trackingData[key] === '') {
+        if ((typeof this.trackingConfig[param].optional === 'undefined' || this.trackingConfig[param].optional !== true) &&
+          (typeof trackingData[key] === 'undefined' || trackingData[key] === '')) {
           $toast(
             `Error: ${this.trackingConfig[param].label} is required`,
             {
@@ -102,6 +103,10 @@ export default {
               const key = `trk-${param}`;
               const separator = linkHref.indexOf('?') !== -1 ? '&' : '?';
               const value = typeof trackingData[key] !== 'undefined' ? trackingData[key] : '';
+              if (this.trackingConfig[param].optional === true &&
+                (typeof trackingData[key] === 'undefined' || trackingData[key] === '')) {
+                return false;
+              }
               linkHref += `${separator}${param}=${value}`;
             });
           }
