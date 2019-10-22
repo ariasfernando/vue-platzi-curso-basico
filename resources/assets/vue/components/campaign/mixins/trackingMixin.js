@@ -76,7 +76,7 @@ export default {
 
       const parser = new DOMParser();
       const dom = parser.parseFromString(html, 'text/html');
-      const links = Array.from(dom.querySelectorAll('a')).filter(link => !link.classList.contains('st-no-tracking') && !link.getAttribute('href').includes('mailto'));
+      const links = Array.from(dom.querySelectorAll('a')).filter(link => !link.classList.contains('st-no-tracking') && !link.getAttribute('href').startsWith('mailto'));
 
       if (Object.keys(trackingConfigGroups.replaceLinks).length > 0) {
         links.forEach((link) => {
