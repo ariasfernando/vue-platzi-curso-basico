@@ -6,12 +6,15 @@
                 <StuiSelect v-model="value" :placeholder="plugin.title" :list="skins" />
             </template>
         </SettingsContainer>
-        <SettingsContainer
-                label="Text color"
-                custom-class="generic-color">
+        <SettingsContainer label="Text color" custom-class="generic-color">
             <template slot="setting-right">
                 <StuiColorPicker v-model="colors" :palette="palette"/>
             </template>
+        </SettingsContainer>
+        <SettingsContainer custom-class="generic-color" label="Border color" v-if="plugin.data.skin !== 'Without borders'">
+          <template slot="setting-right">
+            <StuiColorPicker v-model="borderColors" />
+          </template>
         </SettingsContainer>
     </div>
 </template>
@@ -48,6 +51,19 @@ export default {
     borderColor() {
       return this.element.button.style.borderBottomColor;
     },
+    borderColors: {
+      get() {
+        return this.borderColor;
+      },
+      set(value) {
+        if (value.hex) value = value.hex;
+
+        if (!Application.utils.validateHexVal(value)) {
+          value === null ? '' : Application.utils.rgbToHex(value);
+        }
+        this.saveBorderColors(value);
+      },
+    },
     palette() {
       return this.plugin.config.options.color.palette.map((color) =>
         color[0] !== '#' ? `#${color.toUpperCase()}` : color.toUpperCase(),
@@ -72,11 +88,6 @@ export default {
             color: value,
           },
         });
-        // if (this.plugin.data.skin === 'With Borders') {
-        //   this.saveBorderColors('#2EEF37');
-        // } else {
-        //   this.saveBorderColors('transparent');
-        // }
         this.saveStyleInThisElement({ property: 'color', value });
         this.updateTiny();
       },
