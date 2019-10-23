@@ -55,13 +55,20 @@ export default {
       get() {
         return this.borderColor;
       },
-      set(value) {
-        if (value.hex) value = value.hex;
+      set(colorValue) {
 
-        if (!Application.utils.validateHexVal(value)) {
-          value === null ? '' : Application.utils.rgbToHex(value);
+        // When colorValue is false, set the default border color
+        if(!colorValue){
+          const activeSkin = _.find(this.skins, { name: this.value });
+          colorValue = activeSkin.style.borderBottomColor;
         }
-        this.saveBorderColors(value);
+
+        if (colorValue.hex) colorValue = colorValue.hex;
+        if (!Application.utils.validateHexVal(colorValue)) {
+          colorValue === null ? '' : Application.utils.rgbToHex(colorValue);
+        }
+
+        this.saveBorderColors(colorValue);
       },
     },
     palette() {
