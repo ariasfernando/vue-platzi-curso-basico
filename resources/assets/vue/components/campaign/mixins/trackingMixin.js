@@ -131,7 +131,7 @@ export default {
         linkHref = linkHref.replace(anchor, '');
       }
 
-      if (linkHref.length > 0) {
+      if (linkHref.length > 0 && !linkHref.startsWith('mailto')) {
         Object.keys(trackingConfigGroups.replaceLinks).forEach((param) => {
           const key = `trk-${param}`;
           const separator = linkHref.indexOf('?') !== -1 ? '&' : '?';
