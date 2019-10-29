@@ -73,6 +73,15 @@ return [
             'retry_after' => 60,
         ],
 
+
+        'redis-sentinel' => [
+            'driver' => 'redis-sentinel',
+            'connection' => 'queue',
+            'queue'  => env('QUEUE_NAME', 'default'),
+            'retry_after' => 90, // Laravel >= 5.4.30
+            'expire' => 90,      // Laravel < 5.4.30
+        ],
+
     ],
 
     /*

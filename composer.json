@@ -33,7 +33,8 @@
         "stensul/responsys-provider": "2.*",
         "wyrihaximus/html-compress": "^1.4",
         "stensul/html-to-pdf-service-provider": "3.*",
-        "stensul/okta-socialite": "^2.0"
+        "stensul/okta-socialite": "^2.0",
+        "monospice/laravel-redis-sentinel-drivers": "^2.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
