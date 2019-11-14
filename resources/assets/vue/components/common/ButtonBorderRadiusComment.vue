@@ -33,7 +33,7 @@ export default {
       return percent;
     },
     bgColor() {
-      const bgColor = this.component.button.attribute.bgcolor.length > 0 ? this.component.button.attribute.bgcolor.length : this.module.structure.attribute.bgcolor;
+      const bgColor = this.component.button.attribute.bgcolor !== '' ? this.component.button.attribute.bgcolor : this.module.structure.attribute.bgcolor;
       if (bgColor !== 'transparent') {
         return bgColor;
       }
