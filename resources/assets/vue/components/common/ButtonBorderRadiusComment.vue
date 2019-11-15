@@ -241,11 +241,14 @@ export default {
       // we get the text using jQuery instead of using component.data.text because the text is inside tinymce
       // tinymce only updates the store when the user makes text edits, and we have
       // some custom plugins that make changes to texts in tinymce without triggering a edition event
-      this.text = $(`#${this.editorId}`)
-        .html()
-        .replace(/<br>/g, '')
-        .replace(/<p/g, '<span')
-        .replace(/<\/p>/g, '</span>');
+      // i added the setTimeout because it was grabbin the old font-color
+      setTimeout(() => {
+        this.text = $(`#${this.editorId}`)
+          .html()
+          .replace(/<br>/g, '')
+          .replace(/<p/g, '<span')
+          .replace(/<\/p>/g, '</span>');
+      });
     },
     setWidth() {
       const style = this.component.button.style;
