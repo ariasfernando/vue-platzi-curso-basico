@@ -33,7 +33,7 @@ export default {
       return percent;
     },
     bgColor() {
-      const bgColor = this.component.button.attribute.bgcolor;
+      const bgColor = this.component.button.attribute.bgcolor !== '' ? this.component.button.attribute.bgcolor : this.module.structure.attribute.bgcolor;
       if (bgColor !== 'transparent') {
         return bgColor;
       }
@@ -75,7 +75,6 @@ export default {
     caret() {
       const { attribute } = this.component.caret;
       if (!attribute.url) return '';
-
       return `
         <img
           src="${this.$_app.config.imageUrl}${attribute.url}"
@@ -103,9 +102,7 @@ export default {
                   strokeweight="${this.borderWidth}pt"
                   fillcolor="${this.bgColor}">
                   <w:anchorlock/>
-                  <v:textbox inset="0,0,0,0"><center style="${
-                    this.textStyles
-                  }">${this.text}${this.caret}</center></v:textbox>
+                  <v:textbox inset="0,0,0,0"><center style="${this.textStyles}">${this.text}${this.caret}</center></v:textbox>
                 </v:roundrect>
               </td>
             </tr>
@@ -127,6 +124,9 @@ export default {
         line-height: ${this.lineHeight}px;`;
       return style;
     },
+    textColor() {
+      return this.component.button.style.color;
+    },
   },
   watch: {
     component: {
@@ -134,6 +134,9 @@ export default {
         this.setAll();
       },
       deep: true,
+    },
+    textColor() {
+      this.setText();
     },
   },
   mounted() {
@@ -238,7 +241,14 @@ export default {
       // we get the text using jQuery instead of using component.data.text because the text is inside tinymce
       // tinymce only updates the store when the user makes text edits, and we have
       // some custom plugins that make changes to texts in tinymce without triggering a edition event
-      this.text = $(`#${this.editorId}`).html().replace(/<p/g, '<span').replace(/<\/p>/g, '</span>');
+      // i added the setTimeout because it was grabbin the old font-color
+      setTimeout(() => {
+        this.text = $(`#${this.editorId}`)
+          .html()
+          .replace(/<br>/g, '')
+          .replace(/<p/g, '<span')
+          .replace(/<\/p>/g, '</span>');
+      });
     },
     setWidth() {
       const style = this.component.button.style;
