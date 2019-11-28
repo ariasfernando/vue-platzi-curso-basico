@@ -1,6 +1,6 @@
 <template id="proof-viewer">
   <div class="proof-viewer-container">
-    <st-style prefix="#emailCanvas" :content="proprietaryCss" />
+    <StStyle prefix="#emailCanvas" media-query-prefix="#emailCanvas.stx-mobile-mode" :content="proprietaryCss" />
     <div v-sticky="{ zIndex: 999, stickyTop: 0 }" class="proof-top-bar">
       <div class="col-md-offset-3 col-md-2 col-xs-2">
         <div class="switch">
@@ -33,7 +33,7 @@
         </div>
       </div>
       <div id="section-canvas-buttons-col" class="col-md-7 col-xs-10 text-right">
-        <proof-decision
+        <ProofDecision
           v-if="showDecision ? true : false"
           :decision="reviewer && reviewer.decision ? reviewer.decision : ''"
           :token="token"
@@ -51,7 +51,9 @@
         <div class="section-box-content section-canvas-container scrolled">
           <table cellpadding="0" cellspacing="0" width="100%">
             <tr v-if="campaign.length === 0">
-              <td align="center">loading...</td>
+              <td align="center">
+                loading...
+              </td>
             </tr>
             <tr>
               <td align="center" bgcolor="#FFFFFF" style="vertical-align:top;">
@@ -71,20 +73,20 @@
         </div>
       </section>
       <aside>
-        <proof-comments
+        <ProofComments
           ref="proofComments"
           :token="token"
           :campaign-finished="campaignFinished" />
       </aside>
     </div>
-    <modal-reviewer v-if="displayModal" @close="displayModal = false" @submit="goToLink">
+    <ModalReviewer v-if="displayModal" @close="displayModal = false" @submit="goToLink">
       <div slot="body">
         <div>{{ disclaimer }}<br><br></div>
         <div>
           <p>link: <b>{{ linkUrl }}</b></p>
         </div>
       </div>
-    </modal-reviewer>
+    </ModalReviewer>
   </div>
 </template>
 
@@ -133,6 +135,7 @@ export default {
     campaignHtml() {
       if ('body_html' in this.campaign) {
         // hide hack in Finished Emails.
+        /* eslint-disable-next-line */
         setTimeout(() => {
           $('.st-hide-hack').hide();
         }, 1000);
@@ -238,10 +241,12 @@ export default {
       right: 0;
       width: .4em;
       -webkit-transition: all .5s;
+      transition: all .5s;
       opacity: 1;
     }
     .section-canvas-email:hover .cover-bar {
       opacity: 0;
+      transition: all .5s;
       -webkit-transition: all .5s;
     }
   }
