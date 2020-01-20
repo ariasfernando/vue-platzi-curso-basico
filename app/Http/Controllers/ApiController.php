@@ -139,15 +139,21 @@ class ApiController extends Controller
 
         $client = new Client();
 
-        try {
-            $response = $client->get($request->input('url'));
+        $options = [
+            'referer' => true,
+                'headers' => array(
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+                    'Accept-Encoding' => 'gzip, deflate, br',
+                ),
+        ];
 
+        try {
+            $response = $client->request('GET', $request->input('url'), $options);
             if ($response && $response->getReasonPhrase() === 'OK') {
                 return ['is_valid' => true];
             }
         } catch (\Exception $e) {
         }
-
         return ['is_valid' => false];
     }
 
