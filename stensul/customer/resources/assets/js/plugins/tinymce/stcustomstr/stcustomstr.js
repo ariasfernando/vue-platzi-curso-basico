@@ -7,7 +7,8 @@ tinymce.PluginManager.add('stcustomstr', function(editor) {
     var str_values = [
       { "text" : "®",  "value" : "®",  "placeholder" : "®"  },
       { "text" : "™",  "value" : "™",  "placeholder" : "™"  },
-      { "text" : "©",  "value" : "©",  "placeholder" : "©"  }
+      { "text" : "©",  "value" : "©",  "placeholder" : "©"  },
+      { "text" : "—",  "value" : "—",  "placeholder" : "—"  }
     ]
     var tooltip = "Special character";
 
