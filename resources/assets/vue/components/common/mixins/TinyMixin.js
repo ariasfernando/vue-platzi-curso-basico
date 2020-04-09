@@ -638,6 +638,10 @@ export default {
             })
             .on('keyup change', (e) => {
               editor.bodyElement.dispatchEvent(new Event('tiny-change'));
+              // Is tab and it is editing a list
+              if (e.keyCode === 9 && editor.dom.getParent(editor.selection.getStart(), 'li')) {
+                _this.setListStyles();
+              }
 
               if (!(_this.tinyMax() || _this.tinyMaxLines() || _this.tinyMin())) {
                 // if truncate is NAN, returns and avoid validations
