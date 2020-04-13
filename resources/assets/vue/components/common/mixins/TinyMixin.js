@@ -439,14 +439,14 @@ export default {
         styles: {},
       };
 
-      const func = (prop, key) => {
+      const applyStyles = (prop, key) => {
         const keyBehaviour = prop.behaviour || loop.steps.behaviour;
         const unit = prop.unit || 'px';
         const result = runBehaviour(keyBehaviour, currentFontSize);
         format.styles[key] = `${result}${unit}`;
       };
 
-      const func2 = (prop, key) => {
+      const applySettings = (prop, key) => {
         format[key] = prop;
       };
 
@@ -455,9 +455,9 @@ export default {
           styles: {},
         };
 
-        _.forOwn(loop.styles, func);
+        _.forOwn(loop.styles, applyStyles);
 
-        _.forOwn(loop.settings, func2);
+        _.forOwn(loop.settings, applySettings);
 
         const fontSizeBehaviour = loop.styles.fontSize.behaviour || loop.steps.behaviour;
         const fontSizeUnit = loop.styles.fontSize.unit || 'px';
