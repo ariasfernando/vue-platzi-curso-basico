@@ -42,12 +42,12 @@ export default {
       }
       if (persist_styles && Application.utils.isJsonString(persist_styles)) {
         const persist_stylesJson = JSON.parse(persist_styles);
-        for (var i = 0; i < persist_stylesJson.length; i++) {
+        for (let i = 0; i < persist_stylesJson.length; i++) {
           const selector = Object.keys(persist_stylesJson[i])[0];
           const editorLinks = $(editor.targetElm).find(selector);
           if (editorLinks.length) {
-            for (var i = 0; i < editorLinks.length; i++) {
-              $(editorLinks[i]).attr('data-persist-styles', persist_stylesJson[i][selector]);
+            for (let j = 0; j < editorLinks.length; j++) {
+              $(editorLinks[j]).attr('data-persist-styles', persist_stylesJson[j][selector]);
             }
           }
         }
@@ -103,11 +103,11 @@ export default {
       } else if (editorLinks.length) {
         for (let i = 0; i < editorLinks.length; i++) {
           const $el = $(editorLinks[i]);
-            // return the first parent that has a color
+          // return the first parent that has a color
           const $parentEl = $el.parents().filter(function () {
             return $(this).css('color');
           });
-            // get the color of the parent and apply it to the link
+          // get the color of the parent and apply it to the link
           const parentColor = $parentEl.css('color');
           $el.css('color', parentColor);
         }
@@ -132,7 +132,7 @@ export default {
           const $el = $(el);
           $el.find('span').css('text-decoration', 'underline');
 
-          if (!($el.contents()[0] && $el.contents()[0].nodeName && $el.contents()[0].nodeName == 'SPAN')) {
+          if (!($el.contents()[0] && $el.contents()[0].nodeName && $el.contents()[0].nodeName === 'SPAN')) {
             let content = $el.html();
             content = $('<span style="text-decoration:underline;">').html(content);
             $el.html(content);
@@ -280,11 +280,11 @@ export default {
     },
     tinyMax() {
       const editor = tinymce.get(this.editorId);
-      return parseInt(editor.settings.max_chars) || undefined;
+      return parseInt(editor.settings.max_chars, 10) || undefined;
     },
     tinyMin() {
       const editor = tinymce.get(this.editorId);
-      return parseInt(editor.settings.min_chars) || undefined;
+      return parseInt(editor.settings.min_chars, 10) || undefined;
     },
     tinyLength() {
       // Remove "zero width no-break space" character
@@ -305,6 +305,7 @@ export default {
         return false;
       }
       this.clearError();
+      return true;
     },
     maxLinesValidation(event) {
       const divHeight = this.$textElement.height();
@@ -317,18 +318,18 @@ export default {
           firstTextNode = firstTextElement;
         }
 
-      let lineHeight = 0;
+        let lineHeight = 0;
 
-      if (firstTextNode.nodeName === 'SUP') {
+        if (firstTextNode.nodeName === 'SUP') {
         // if the first node is a superscript, we should check with the line-height of the container
-        lineHeight = parseInt(this.$textElement.css('line-height').replace('px', ''));
-      } else {
+          lineHeight = parseInt(this.$textElement.css('line-height').replace('px', ''), 10);
+        } else {
         // otherwise, check with the line-height of the first text
-        lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'));
-      }
+          lineHeight = parseInt(document.defaultView.getComputedStyle(firstTextNode).getPropertyValue('line-height'), 10);
+        }
 
-      // note: to perform the correct calculation, actualLines must be an integer
-      const actualLines = Math.floor(divHeight / lineHeight);
+        // note: to perform the correct calculation, actualLines must be an integer
+        const actualLines = Math.floor(divHeight / lineHeight);
 
         if (actualLines > this.tinyMaxLines()) {
           this.setError({
@@ -344,6 +345,7 @@ export default {
         }
         this.clearError();
       }
+      return true;
     },
     minCharsValidation(event) {
       if (this.tinyLength() < this.tinyMin()) {
@@ -398,9 +400,9 @@ export default {
       const rangeMax = Number(loop.steps.range.split(':')[1]);
 
       const runBehaviour = (behaviour, initialValue) => {
-        behaviour = behaviour.split(':');
-        const behaviourType = behaviour[0];
-        const behaviourFactor = Number(behaviour[1]);
+        const splitBehaviour = behaviour.split(':');
+        const behaviourType = splitBehaviour[0];
+        const behaviourFactor = Number(splitBehaviour[1]);
 
         let result = Number(initialValue);
 
@@ -433,21 +435,29 @@ export default {
         return template.replace('%stepVal', step);
       };
 
+      let format = {
+        styles: {},
+      };
+
+      const applyStyles = (prop, key) => {
+        const keyBehaviour = prop.behaviour || loop.steps.behaviour;
+        const unit = prop.unit || 'px';
+        const result = runBehaviour(keyBehaviour, currentFontSize);
+        format.styles[key] = `${result}${unit}`;
+      };
+
+      const applySettings = (prop, key) => {
+        format[key] = prop;
+      };
+
       while (step <= rangeMax) {
-        const format = {
+        format = {
           styles: {},
         };
 
-        _.forOwn(loop.styles, (prop, key) => {
-          const keyBehaviour = prop.behaviour || loop.steps.behaviour;
-          const unit = prop.unit || 'px';
-          const result = runBehaviour(keyBehaviour, currentFontSize);
-          format.styles[key] = `${result}${unit}`;
-        });
+        _.forOwn(loop.styles, applyStyles);
 
-        _.forOwn(loop.settings, (prop, key) => {
-          format[key] = prop;
-        });
+        _.forOwn(loop.settings, applySettings);
 
         const fontSizeBehaviour = loop.styles.fontSize.behaviour || loop.steps.behaviour;
         const fontSizeUnit = loop.styles.fontSize.unit || 'px';
@@ -536,7 +546,7 @@ export default {
           editor.paste_block_drop = true;
 
 
-          editor.on('focus', (e) => {
+          editor.on('focus', () => {
             // Change icon tiny
             // TODO  implement DRY.
             const $toolbar = $(editor.settings.fixed_toolbar_container);
@@ -628,6 +638,10 @@ export default {
             })
             .on('keyup change', (e) => {
               editor.bodyElement.dispatchEvent(new Event('tiny-change'));
+              // Is tab and it is editing a list
+              if (e.keyCode === 9 && editor.dom.getParent(editor.selection.getStart(), 'li')) {
+                _this.setListStyles();
+              }
 
               if (!(_this.tinyMax() || _this.tinyMaxLines() || _this.tinyMin())) {
                 // if truncate is NAN, returns and avoid validations
@@ -643,7 +657,7 @@ export default {
               // Check for Lines Limit
               _this.maxLinesValidation(e);
             })
-            .on('change', (e) => {
+            .on('change', () => {
               _this.setStyles();
             })
             .on('ExecCommand', (e) => {
