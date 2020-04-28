@@ -101,7 +101,7 @@ export default {
           value,
         });
       } else {
-        const columnId = this.getColumnIndexByelementId({ elementId: this.element.id, coordinate: 'columnId' });
+        const columnId = this.getColumnIndexByElementId({ elementId: this.element.id, coordinate: 'columnId' });
         this.saveAttributeInThisElement({
           elementId: columnId,
           subComponent: columnId ? 'container' : undefined,
@@ -123,7 +123,6 @@ export default {
           if (!targetContrastColor) return true;
 
           const ids = Array.isArray(target.id) ? target.id : [target.id];
-
           return ids.forEach((id) => {
             this.saveElementProperty({
               elementId: id,
@@ -132,8 +131,6 @@ export default {
               property: target.property || 'bgcolor',
               value: targetContrastColor,
             });
-
-            return this.updateTiny(target.id);
           });
         });
     },
@@ -149,17 +146,6 @@ export default {
        * Dispatch event to update the tiny of a component
        * @param {number} componentId
        */
-    updateTiny(componentId) {
-      const editorElement = document.getElementById(this.getEditorId(componentId));
-
-      setTimeout(() => {
-        if (editorElement) editorElement.dispatchEvent(new Event('tiny-style-reset'));
-      });
-
-      setTimeout(() => { // timeout for firefox
-        if (editorElement) editorElement.dispatchEvent(new Event('tiny-style-reset'));
-      }, 250);
-    },
   },
 };
 </script>
