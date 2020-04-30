@@ -4,6 +4,7 @@ import customToggleIncrement from './custom-toggle-increment';
 import customModulePaletteBackgroundColor from './custom-module-palette-background-color';
 import moduleRssFeed from './module-rss-feed';
 import customFooterImages from './custom-footer-images';
+import customPaletteBackgroundColor from './custom-palette-background-color';
 
 module.exports = {
   customBackgroundImageValidation,
@@ -12,4 +13,5 @@ module.exports = {
   customModulePaletteBackgroundColor,
   moduleRssFeed,
   customFooterImages,
+  customPaletteBackgroundColor,
 };
