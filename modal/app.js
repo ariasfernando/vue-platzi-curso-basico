@@ -1,26 +1,37 @@
-import Course from './course.model.js';
+Vue.component('modal', {
 
-new Vue({
-    el: '#app',
-
-    data() {
-        return {
-            courses: [
-            ],
-            title: '',
-            time: null
-        }
-    },
-
-    computed: {
-        totalTime() {
-            return this.courses.reduce( (hours, course) => hours + parseInt(course.time), 0);
-        }
-    },
+    props: ['title'],
 
     methods: {
-        saveCourse() {
-            this.courses.push( new Course(this.title, this.time) );
+        closeModal(){
+            this.$emit('close');
+        }
+    },
+    template: `
+      <div class="modal-mask">
+        <div class="modal-wrapper">
+          <div class="modal-container">
+            <h3>{{ title }}</h3>
+            <slot></slot>
+            <footer>
+              <button v-on:click="closeModal">Cerrar</button>
+            </footer>
+          </div>
+        </div>
+      </div>`
+  })
+  
+  new Vue({
+    el: '#app',
+    data() {
+        return {
+            showModal: false,
+            title: "Modal!"
+        }
+    },
+    methods: {
+        toggleModal() {
+            this.showModal = !this.showModal;
         }
     }
-})
+  })

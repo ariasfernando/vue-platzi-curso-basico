@@ -11,33 +11,14 @@
 
 <body>
     <div id="app">
-        <h1>
-            Mis Cursos de Platzi💚
-        </h1>
-        <p>
-            <input v-model="title" type="text" placeholder="Titulo del curso" />
-        </p>
-        <p>
-            <input v-model="time" type="number" placeholder="Horas" />
-        </p>
-        <p>
-            <button v-on:click="saveCourse">Guardar Curso</button>
-        </p>
-        </fieldset>
-        <div>
-            <h3>Lista de Cursos</h3>
-            <p class="red">Aun no has realizado cursos</p>
-            <div>
-                <ol>
-                    <li v-for="course in courses">{{ course.name }} - {{ course.time }}hs</li>
-                </ol>
-                <hr />
-                <p>
-                    Llevo <strong>{{ totalTime }}</strong> horas aprendiendo en Platzi.
-                    <b>#NuncaParesDeAprender 💚</b>
-                </p>
-            </div>
-        </div>
+        <button v-on:click="toggleModal">Show Modal</button>
+
+        <modal
+            v-if="showModal"
+            v-bind:title="title"
+            v-on:close="toggleModal">
+            <p>Este es el contenido del modal</p>
+        </modal>
     </div>
     <!--   <script src="node_modules/vue/dist/vue.js"></script>-->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
